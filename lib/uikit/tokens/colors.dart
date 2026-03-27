@@ -14,3 +14,7 @@ class AppColors {
   static Color lightGreen = Color(0xFFF5FCE8);
   static LinearGradient blackGradient = LinearGradient(colors: [Color(0x0ff3f3f6), Color(0xFF171717)]);
 }
+
+class TextColor {
+  static Color textColor = Color(0xFF021421);
+}
