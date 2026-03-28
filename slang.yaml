@@ -1,0 +1,14 @@
+base_locale: en
+fallback_base_config: true
+
+
+input_directory: lib/core/i18n
+input_file_pattern: .i18n.json
+
+
+output_directory: lib/core/i18n
+output_file_name: strings.g.dart
+
+
+namespaces: false # Agar bitta fayl bo'lsa false, bir nechta bo'lsa true
+interface: false # Murakkab mantiqlar uchun

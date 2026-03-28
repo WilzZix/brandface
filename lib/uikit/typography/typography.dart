@@ -1,9 +1,10 @@
-import 'dart:ui';
-
 import 'package:brandface/uikit/tokens/colors.dart';
+import 'package:flutter/material.dart';
 
-class Typography {
-  static TextStyle displayLarge = TextStyle(
+class Typographies {
+  const Typographies();
+
+  static final TextStyle displayLarge = TextStyle(
     fontSize: 57,
     color: TextColor.textColor,
     fontWeight: FontWeight.w400,
