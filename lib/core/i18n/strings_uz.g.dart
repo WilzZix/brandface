@@ -5,16 +5,20 @@
 // ignore_for_file: type=lint, unused_import
 // dart format off
 
-import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
-import 'package:slang/generated.dart';
-import 'strings.g.dart';
+part of 'strings.g.dart';
 
 // Path: <root>
-class TranslationsUz with BaseTranslations<AppLocale, Translations> implements Translations {
+typedef TranslationsUz = Translations; // ignore: unused_element
+class Translations with BaseTranslations<AppLocale, Translations> {
+	/// Returns the current translations of the given [context].
+	///
+	/// Usage:
+	/// final t = Translations.of(context);
+	static Translations of(BuildContext context) => InheritedLocaleData.of<AppLocale, Translations>(context).translations;
+
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsUz({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
+	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
 		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.uz,
@@ -29,25 +33,64 @@ class TranslationsUz with BaseTranslations<AppLocale, Translations> implements T
 	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
-	@override dynamic operator[](String key) => $meta.getTranslation(key);
+	dynamic operator[](String key) => $meta.getTranslation(key);
 
-	late final TranslationsUz _root = this; // ignore: unused_field
+	late final Translations _root = this; // ignore: unused_field
 
-	@override 
-	TranslationsUz $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsUz(meta: meta ?? this.$meta);
+	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
-	@override late final _TranslationsSplashUz splash = _TranslationsSplashUz._(_root);
+	late final TranslationsSplashUz splash = TranslationsSplashUz._(_root);
+	late final TranslationsOnboardingUz onboarding = TranslationsOnboardingUz._(_root);
+	late final TranslationsLoginUz login = TranslationsLoginUz._(_root);
 }
 
 // Path: splash
-class _TranslationsSplashUz implements TranslationsSplashEn {
-	_TranslationsSplashUz._(this._root);
+class TranslationsSplashUz {
+	TranslationsSplashUz._(this._root);
 
-	final TranslationsUz _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
-	@override String app_version({required Object version}) => 'Ilova versoyasi ${version}';
+
+	/// uz: 'App version $version'
+	String app_version({required Object version}) => 'App version ${version}';
+}
+
+// Path: onboarding
+class TranslationsOnboardingUz {
+	TranslationsOnboardingUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Continue'
+	String get kContinue => 'Continue';
+}
+
+// Path: login
+class TranslationsLoginUz {
+	TranslationsLoginUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Phone number'
+	String get phone_number => 'Phone number';
+
+	/// uz: 'Welcome to Findbrandface'
+	String get welcome_msg => 'Welcome to Findbrandface';
+
+	/// uz: 'By pressing Login i agree to all '
+	String get term_of_use_first => 'By pressing Login i agree to all ';
+
+	/// uz: 'terms of use'
+	String get term_of_use_second => 'terms of use';
+
+	/// uz: 'or login in with'
+	String get login_methods => 'or login in with';
 }
 
 /// The flat map containing all translations for locale <uz>.
@@ -55,10 +98,16 @@ class _TranslationsSplashUz implements TranslationsSplashEn {
 ///
 /// The Dart AOT compiler has issues with very large switch statements,
 /// so the map is split into smaller functions (512 entries each).
-extension on TranslationsUz {
+extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'splash.app_version' => ({required Object version}) => 'Ilova versoyasi ${version}',
+			'splash.app_version' => ({required Object version}) => 'App version ${version}',
+			'onboarding.kContinue' => 'Continue',
+			'login.phone_number' => 'Phone number',
+			'login.welcome_msg' => 'Welcome to Findbrandface',
+			'login.term_of_use_first' => 'By pressing Login i agree to all ',
+			'login.term_of_use_second' => 'terms of use',
+			'login.login_methods' => 'or login in with',
 			_ => null,
 		};
 	}

@@ -1,5 +1,15 @@
 {
   "splash": {
     "app_version": "Версия приложения $version"
+  },
+  "onboarding": {
+    "continue": "Продолжить"
+  },
+  "login": {
+    "phone_number": "Номер телефона",
+    "welcome_msg": "Добро пожаловать в Findbrandface",
+    "term_of_use_first": "Нажимая «Войти», я принимаю все ",
+    "term_of_use_second": "условия использования",
+    "login_methods": "или войти через"
   }
 }

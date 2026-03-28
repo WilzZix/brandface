@@ -38,16 +38,42 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 
 	// Translations
 	@override late final _TranslationsSplashRu splash = _TranslationsSplashRu._(_root);
+	@override late final _TranslationsOnboardingRu onboarding = _TranslationsOnboardingRu._(_root);
+	@override late final _TranslationsLoginRu login = _TranslationsLoginRu._(_root);
 }
 
 // Path: splash
-class _TranslationsSplashRu implements TranslationsSplashEn {
+class _TranslationsSplashRu implements TranslationsSplashUz {
 	_TranslationsSplashRu._(this._root);
 
 	final TranslationsRu _root; // ignore: unused_field
 
 	// Translations
 	@override String app_version({required Object version}) => 'Версия приложения ${version}';
+}
+
+// Path: onboarding
+class _TranslationsOnboardingRu implements TranslationsOnboardingUz {
+	_TranslationsOnboardingRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get kContinue => 'Продолжить';
+}
+
+// Path: login
+class _TranslationsLoginRu implements TranslationsLoginUz {
+	_TranslationsLoginRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get phone_number => 'Номер телефона';
+	@override String get welcome_msg => 'Добро пожаловать в Findbrandface';
+	@override String get term_of_use_first => 'Нажимая «Войти», я принимаю все ';
+	@override String get term_of_use_second => 'условия использования';
+	@override String get login_methods => 'или войти через';
 }
 
 /// The flat map containing all translations for locale <ru>.
@@ -59,6 +85,12 @@ extension on TranslationsRu {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'splash.app_version' => ({required Object version}) => 'Версия приложения ${version}',
+			'onboarding.kContinue' => 'Продолжить',
+			'login.phone_number' => 'Номер телефона',
+			'login.welcome_msg' => 'Добро пожаловать в Findbrandface',
+			'login.term_of_use_first' => 'Нажимая «Войти», я принимаю все ',
+			'login.term_of_use_second' => 'условия использования',
+			'login.login_methods' => 'или войти через',
 			_ => null,
 		};
 	}

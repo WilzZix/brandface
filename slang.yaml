@@ -1,4 +1,4 @@
-base_locale: en
+base_locale: uz
 fallback_base_config: true
 
 
@@ -10,5 +10,5 @@ output_directory: lib/core/i18n
 output_file_name: strings.g.dart
 
 
-namespaces: false # Agar bitta fayl bo'lsa false, bir nechta bo'lsa true
-interface: false # Murakkab mantiqlar uchun
+namespaces: false
+interface: false

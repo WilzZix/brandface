@@ -1,7 +1,9 @@
+import 'package:brandface/presentation/onboarding/onboarding.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_assets.dart';
 import '../../core/i18n/strings.g.dart';
@@ -19,7 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBg,
       body: Stack(
         children: [
           Padding(
@@ -32,7 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
               Center(child: SvgPicture.asset(AppAssets.icLogo)),
               Spacer(),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  context.push(Onboarding.tag);
+                },
                 child: Text(
                   t.splash.app_version(version: '1.0.0'),
                   style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),

@@ -1,4 +1,5 @@
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       locale: TranslationProvider.of(context).locale.flutterLocale,
       routerConfig: AppRouter.router,
-      theme: ThemeData(textTheme: GoogleFonts.interTextTheme()),
+      theme: ThemeData(textTheme: GoogleFonts.interTextTheme(), scaffoldBackgroundColor: AppColors.lightBg),
     );
   }
 }
