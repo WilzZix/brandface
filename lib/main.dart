@@ -6,9 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'core/di/app_di.dart';
 import 'core/router/app_router.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AppDi().init();
+  await AppDi().init();
   LocaleSettings.useDeviceLocale();
   runApp(TranslationProvider(child: const MyApp()));
 }

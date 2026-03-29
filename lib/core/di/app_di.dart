@@ -3,15 +3,23 @@ import 'package:brandface/data/data_source/network_data_source/network_data_sour
 import 'package:brandface/domain/repository/login_repository.dart';
 import 'package:brandface/domain/usecase/login_usecase.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
+import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/login_repository_impl.dart';
+import '../../utils/services/shared_pref_service.dart';
 
 final sl = GetIt.instance;
 
 class AppDi {
   Future<void> init() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+
+    sl.registerLazySingleton<IAuthLocalService>(() => AuthLocalService(sl()));
+    sl.registerFactory(() => InitAppCubit(sharedPrefService: sl()));
     sl.registerLazySingleton(() => Dio());
     sl.registerLazySingleton(() => DioClient(sl()));
     sl.registerLazySingleton<LoginRemoteDataSource>(() => LoginRemoteDataSourceImpl(sl()));
