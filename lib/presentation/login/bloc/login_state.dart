@@ -14,6 +14,7 @@ class LoginState with _$LoginState {
   ///Verify otp
   const factory LoginState.verifyingOtp() = _VerifyingOtp;
 
+  //TODO state params need add
   const factory LoginState.otpVerified() = _OtpVeiried;
 
   const factory LoginState.verifyingOtpFailure() = _VerifyingOtpFailure;

@@ -4,8 +4,8 @@ import 'package:dart_either/dart_either.dart';
 
 import '../../core/error/failures.dart';
 
-abstract class UseCase<Type, Params> {
-  Future<Either<Failures, Type>> call(Params params);
+abstract class UseCase<T, P> {
+  Future<Either<Failures, T>> call({required P params});
 }
 
 class SendOtpUseCase implements UseCase<OtpEntity, String> {
@@ -14,7 +14,7 @@ class SendOtpUseCase implements UseCase<OtpEntity, String> {
   SendOtpUseCase(this.repository);
 
   @override
-  Future<Either<Failures, OtpEntity>> call(String phone) async {
-    return await repository.sendOtp(phone: phone);
+  Future<Either<Failures, OtpEntity>> call({required String params}) async {
+    return await repository.sendOtp(phone: params);
   }
 }

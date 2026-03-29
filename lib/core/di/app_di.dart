@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/login_repository_impl.dart';
+import '../../domain/usecase/verify_otp_usecase.dart';
 import '../../utils/services/shared_pref_service.dart';
 
 final sl = GetIt.instance;
@@ -24,7 +25,8 @@ class AppDi {
     sl.registerLazySingleton(() => DioClient(sl()));
     sl.registerLazySingleton<LoginRemoteDataSource>(() => LoginRemoteDataSourceImpl(sl()));
     sl.registerLazySingleton(() => SendOtpUseCase(sl()));
+    sl.registerLazySingleton(() => VerifyOtpUsecase(repository: sl()));
     sl.registerLazySingleton<ILoginRepository>(() => LoginRepositoryImpl(remoteDataSource: sl()));
-    sl.registerFactory(() => LoginBloc(loginUseCase: sl()));
+    sl.registerFactory(() => LoginBloc(loginUseCase: sl(), verifyOtpUsecase: sl()));
   }
 }
