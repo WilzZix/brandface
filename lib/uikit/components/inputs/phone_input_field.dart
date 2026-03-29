@@ -6,7 +6,9 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../../core/i18n/strings.g.dart';
 
 class PhoneInputField extends StatefulWidget {
-  const PhoneInputField({super.key});
+  const PhoneInputField({super.key, required this.controller});
+
+  final TextEditingController controller;
 
   @override
   State<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -15,7 +17,8 @@ class PhoneInputField extends StatefulWidget {
 class _PhoneInputFieldState extends State<PhoneInputField> {
   final maskFormatter = MaskTextInputFormatter(mask: '## ### ## ##', filter: {"#": RegExp(r'[0-9]')});
   final FocusNode _phoneFocusNode = FocusNode();
-  final TextEditingController _controller = TextEditingController();
+
+  TextEditingController get _controller => widget.controller;
   bool _isFocused = false;
 
   @override

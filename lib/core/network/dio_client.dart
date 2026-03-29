@@ -1,4 +1,6 @@
+import 'package:brandface/core/network/interceptor/logger_interceptor.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class DioClient {
   final Dio _dio;
@@ -10,7 +12,7 @@ class DioClient {
       ..options.receiveTimeout = const Duration(seconds: 15)
       ..options.responseType = ResponseType.json
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
-      ..interceptors.add(InterceptorsWrapper());
+      ..interceptors.addAll([InterceptorsWrapper(), if (kDebugMode) LoggerInterceptor()]);
   }
 
   // GET request

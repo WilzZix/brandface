@@ -15,7 +15,7 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   @override
   Future<OtpModel> login({required String phone}) async {
     try {
-      final response = await _dioClient.post('auth/send-otp/', data: {'phone': phone});
+      final response = await _dioClient.post('auth/send-otp/', data: {'phone_number': phone});
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return OtpModel.fromJson(response.data);

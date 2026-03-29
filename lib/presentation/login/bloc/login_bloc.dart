@@ -19,7 +19,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _sendOtp(_SendOtp event, Emitter<LoginState> emit) async {
     emit(LoginState.otpReceiving());
-    final result = await _loginUseCase.call(event.phone);
+    final rawNumber = event.phone.replaceAll(RegExp(r'\D'), '');
+    final fullPhoneNumber = '+998$rawNumber';
+    final result = await _loginUseCase.call(fullPhoneNumber);
     result.fold(
       ifLeft: (failure) => emit(LoginState.otpReceivingFailure(msg: failure.message)),
       ifRight: (otpEntity) => emit(LoginState.otpReceived(otpEntity: otpEntity)),

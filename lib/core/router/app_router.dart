@@ -1,7 +1,9 @@
+import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
 import 'package:brandface/presentation/splash_screen/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../presentation/home_page/ui/home_page.dart';
+import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.dart';
 import '../../presentation/login/ui/login_page.dart';
 import '../../presentation/login/ui/term_of_use_page.dart';
 import '../../presentation/onboarding/onboarding.dart';
@@ -41,6 +43,11 @@ class AppRouter {
       GoRoute(path: LoginPage.tag, name: LoginPage.tag, builder: (_, _) => LoginPage()),
       GoRoute(path: TermOfUsePage.tag, name: TermOfUsePage.tag, builder: (_, _) => TermOfUsePage()),
       GoRoute(path: HomePage.tag, name: HomePage.tag, builder: (_, _) => HomePage()),
+      GoRoute(
+        path: SmsConfirmationPage.tag,
+        name: SmsConfirmationPage.tag,
+        builder: (_, state) => SmsConfirmationPage(arguments: state.extra as SmsConfirmationPageArguments),
+      ),
     ],
   );
 }
