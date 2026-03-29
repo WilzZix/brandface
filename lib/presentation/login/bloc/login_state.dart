@@ -10,4 +10,11 @@ class LoginState with _$LoginState {
   const factory LoginState.otpReceived({required OtpEntity otpEntity}) = _OtpReceived;
 
   const factory LoginState.otpReceivingFailure({required String msg}) = _OtpReceivingFailure;
+
+  ///Verify otp
+  const factory LoginState.verifyingOtp() = _VerifyingOtp;
+
+  const factory LoginState.otpVerified() = _OtpVeiried;
+
+  const factory LoginState.verifyingOtpFailure() = _VerifyingOtpFailure;
 }

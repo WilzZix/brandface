@@ -1,4 +1,4 @@
-import 'package:brandface/domain/entities/login_entity.dart';
+import 'package:brandface/domain/entities/otp_entity.dart';
 
 class OtpModel {
   String? message;

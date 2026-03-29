@@ -18,6 +18,14 @@ class SmsConfirmationPage extends StatefulWidget {
 }
 
 class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    _controller.text = widget.arguments.otpCode;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +45,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
             ),
             SizedBox(height: 24),
             Pinput(
+              controller: _controller,
               length: 6,
               defaultPinTheme: PinTheme(
                 decoration: BoxDecoration(
@@ -50,6 +59,14 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.primaryDark, width: 1),
+                ),
+                width: 64,
+                height: 64,
+              ),
+              errorPinTheme: PinTheme(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.red, width: 1),
                 ),
                 width: 64,
                 height: 64,
