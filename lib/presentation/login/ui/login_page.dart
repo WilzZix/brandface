@@ -1,14 +1,14 @@
-import 'package:brandface/presentation/login/term_of_use_page.dart';
+import 'package:brandface/presentation/login/ui/term_of_use_page.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/i18n/strings.g.dart';
-import '../../uikit/components/divider/login_divider.dart';
-import '../../uikit/components/divider/login_methods.dart';
-import '../../uikit/components/inputs/phone_input_field.dart';
+import '../../../core/i18n/strings.g.dart';
+import '../../../uikit/components/divider/login_divider.dart';
+import '../../../uikit/components/divider/login_methods.dart';
+import '../../../uikit/components/inputs/phone_input_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

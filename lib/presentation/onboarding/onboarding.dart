@@ -7,7 +7,7 @@ import '../../core/constants/app_assets.dart';
 import '../../core/i18n/strings.g.dart';
 import '../../uikit/components/buttons/buttons.dart';
 import '../../uikit/tokens/colors.dart';
-import '../login/login_page.dart';
+import '../login/ui/login_page.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});

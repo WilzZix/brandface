@@ -3,10 +3,12 @@ import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'core/di/app_di.dart';
 import 'core/router/app_router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  AppDi().init();
   LocaleSettings.useDeviceLocale();
   runApp(TranslationProvider(child: const MyApp()));
 }

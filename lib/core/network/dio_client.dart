@@ -9,7 +9,8 @@ class DioClient {
       ..options.connectTimeout = const Duration(seconds: 15)
       ..options.receiveTimeout = const Duration(seconds: 15)
       ..options.responseType = ResponseType.json
-      ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+      ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
+      ..interceptors.add(InterceptorsWrapper());
   }
 
   // GET request

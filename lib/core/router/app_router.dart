@@ -1,8 +1,8 @@
 import 'package:brandface/presentation/splash_screen/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../presentation/login/login_page.dart';
-import '../../presentation/login/term_of_use_page.dart';
+import '../../presentation/login/ui/login_page.dart';
+import '../../presentation/login/ui/term_of_use_page.dart';
 import '../../presentation/onboarding/onboarding.dart';
 
 class AppRouter {
