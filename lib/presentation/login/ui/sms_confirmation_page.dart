@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:brandface/presentation/home_page/ui/home_page.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../../core/di/app_di.dart';
 import '../../../core/i18n/strings.g.dart';
 import '../../../uikit/components/buttons/buttons.dart';
 import '../../../uikit/typography/typography.dart';
@@ -24,11 +25,52 @@ class SmsConfirmationPage extends StatefulWidget {
 
 class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
   final TextEditingController _controller = TextEditingController();
+  static const int _otpTimeSeconds = 60;
+  Timer? _otpTimer;
+  int _remainingSeconds = _otpTimeSeconds;
+  bool _isTimeExpired = false;
+
+  void _startOtpTimer() {
+    _otpTimer?.cancel();
+
+    setState(() {
+      _remainingSeconds = _otpTimeSeconds;
+      _isTimeExpired = false;
+    });
+
+    _otpTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+
+      setState(() {
+        if (_remainingSeconds <= 1) {
+          _remainingSeconds = 0;
+          _isTimeExpired = true;
+          timer.cancel();
+        } else {
+          _remainingSeconds--;
+        }
+      });
+    });
+  }
+
+  String _formatTime(int totalSeconds) {
+    final minutes = totalSeconds ~/ 60;
+    final seconds = totalSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
 
   @override
   void initState() {
     _controller.text = widget.arguments.otpCode;
     super.initState();
+    _startOtpTimer();
+  }
+
+  @override
+  void dispose() {
+    _otpTimer?.cancel();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,7 +81,12 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
           otpVerified: () {
             context.go(HomePage.tag);
           },
+          otpReceived: (otpEntity) {
+            _controller.text = otpEntity.code ?? '';
+            _startOtpTimer();
+          },
           verifyingOtpFailure: () {},
+          otpReceivingFailure: (_) {},
           orElse: () {},
         );
       },
@@ -59,43 +106,59 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                 style: Typographies.bodySmall,
               ),
               SizedBox(height: 24),
-              Pinput(
-                controller: _controller,
-                length: 6,
-                defaultPinTheme: PinTheme(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.borderColor, width: 1),
+              IgnorePointer(
+                ignoring: _isTimeExpired,
+                child: Pinput(
+                  controller: _controller,
+                  length: 6,
+                  defaultPinTheme: PinTheme(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.borderColor, width: 1),
+                    ),
+                    width: 64,
+                    height: 64,
                   ),
-                  width: 64,
-                  height: 64,
-                ),
-                focusedPinTheme: PinTheme(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primaryDark, width: 1),
+                  focusedPinTheme: PinTheme(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.primaryDark, width: 1),
+                    ),
+                    width: 64,
+                    height: 64,
                   ),
-                  width: 64,
-                  height: 64,
-                ),
-                errorPinTheme: PinTheme(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.red, width: 1),
+                  errorPinTheme: PinTheme(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.red, width: 1),
+                    ),
+                    width: 64,
+                    height: 64,
                   ),
-                  width: 64,
-                  height: 64,
                 ),
               ),
               SizedBox(height: 24),
-              Text('00:59', style: Typographies.bodyMedium),
+              _isTimeExpired
+                  ? GestureDetector(
+                      onTap: () {
+                        _controller.clear();
+                        context.read<LoginBloc>().add(LoginEvent.sendOtp(phone: widget.arguments.phoneNumber));
+                      },
+                      child: Text('Send code again', style: Typographies.titleSmall),
+                    )
+                  : Text(
+                      _formatTime(_remainingSeconds),
+                      style: Typographies.bodyMedium.copyWith(
+                        color: _isTimeExpired ? AppColors.red : Typographies.bodyMedium.color,
+                      ),
+                    ),
               Spacer(),
               AppButtons.primary(
                 title: t.onboarding.kContinue,
                 onTap: () {
-                  context.read<LoginBloc>().add(
-                    LoginEvent.verifyOtp(phone: widget.arguments.phoneNumber, otp: widget.arguments.otpCode),
-                  );
+                  final bloc = context.read<LoginBloc>();
+                  final otp = _controller.text.replaceAll(RegExp(r'\D'), '');
+                  bloc.add(LoginEvent.verifyOtp(phone: widget.arguments.phoneNumber, otp: otp));
                 },
               ),
               SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),
