@@ -8,4 +8,6 @@ class AppAssets {
   static String icInstagram = 'assets/icons/instagram.svg';
   static String icTelegram = 'assets/icons/telegram.svg';
   static String icFacebook = 'assets/icons/facebook.svg';
+  static String icArrowLeft = 'assets/icons/arrow-left.svg';
+  static String icArrowRight = 'assets/icons/arrow-right.svg';
 }
