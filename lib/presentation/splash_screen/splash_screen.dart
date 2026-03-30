@@ -25,42 +25,39 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<InitAppCubit>()..initApp(),
-      child: Scaffold(
-        body: BlocListener<InitAppCubit, InitAppState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              appInitialized: (isLoggedIn) {
-                if (isLoggedIn) {
-                  context.go(HomePage.tag);
-                } else {
-                  context.go(LoginPage.tag);
-                }
-              },
-              orElse: () {},
-            );
-          },
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 46 + MediaQuery.of(context).padding.top),
-                child: SvgPicture.asset(AppAssets.icSplashBg),
-              ),
-              Column(
-                children: [
-                  SizedBox(height: MediaQuery.of(context).size.height * .5),
-                  Center(child: SvgPicture.asset(AppAssets.icLogo)),
-                  Spacer(),
-                  Text(
-                    t.splash.app_version(version: '1.0.0'),
-                    style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
-                  ),
-                  SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),
-                ],
-              ),
-            ],
-          ),
+    return Scaffold(
+      body: BlocListener<InitAppCubit, InitAppState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            appInitialized: (isLoggedIn) {
+              if (isLoggedIn) {
+                context.go(HomePage.tag);
+              } else {
+                context.go(LoginPage.tag);
+              }
+            },
+            orElse: () {},
+          );
+        },
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 46 + MediaQuery.of(context).padding.top),
+              child: SvgPicture.asset(AppAssets.icSplashBg),
+            ),
+            Column(
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * .5),
+                Center(child: SvgPicture.asset(AppAssets.icLogo)),
+                Spacer(),
+                Text(
+                  t.splash.app_version(version: '1.0.0'),
+                  style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
+                ),
+                SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),
+              ],
+            ),
+          ],
         ),
       ),
     );

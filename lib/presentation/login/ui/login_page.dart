@@ -29,70 +29,67 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<LoginBloc>(),
-      child: BlocListener<LoginBloc, LoginState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            otpReceived: (otpEntity) {
-              context.push(
-                SmsConfirmationPage.tag,
-                extra: SmsConfirmationPageArguments(phoneNumber: _controller.text, otpCode: otpEntity.code ?? ''),
-              );
-            },
-            otpReceivingFailure: (msg) {
-              //TODO error handling
-            },
-            orElse: () {},
-          );
-        },
-        child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Spacer(),
-                Text(t.login.welcome_msg, style: Typographies.headlineSmall),
-                SizedBox(height: 24),
-                PhoneInputField(controller: _controller),
-                SizedBox(height: 24),
-                LoginDivider(),
-                SizedBox(height: 24),
-                LoginMethods(),
-                Spacer(),
-                BlocBuilder<LoginBloc, LoginState>(
-                  builder: (context, state) {
-                    return AppButtons.primary(
-                      title: t.onboarding.kContinue,
-                      onTap: () {
-                        context.read<LoginBloc>().add(LoginEvent.sendOtp(phone: _controller.text));
-                      },
-                    );
-                  },
-                ),
-                SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
-                    context.push(TermOfUsePage.tag);
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      text: t.login.term_of_use_first,
-                      style: Typographies.bodySmall,
-                      children: [
-                        TextSpan(
-                          text: t.login.term_of_use_second,
-                          style: Typographies.bodySmall.copyWith(color: AppColors.primaryDark),
-                        ),
-                      ],
-                    ),
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          otpReceived: (otpEntity) {
+            context.push(
+              SmsConfirmationPage.tag,
+              extra: SmsConfirmationPageArguments(phoneNumber: _controller.text, otpCode: otpEntity.code ?? ''),
+            );
+          },
+          otpReceivingFailure: (msg) {
+            //TODO error handling
+          },
+          orElse: () {},
+        );
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Spacer(),
+              Text(t.login.welcome_msg, style: Typographies.headlineSmall),
+              SizedBox(height: 24),
+              PhoneInputField(controller: _controller),
+              SizedBox(height: 24),
+              LoginDivider(),
+              SizedBox(height: 24),
+              LoginMethods(),
+              Spacer(),
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  return AppButtons.primary(
+                    title: t.onboarding.kContinue,
+                    onTap: () {
+                      context.read<LoginBloc>().add(LoginEvent.sendOtp(phone: _controller.text));
+                    },
+                  );
+                },
+              ),
+              SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  context.push(TermOfUsePage.tag);
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: t.login.term_of_use_first,
+                    style: Typographies.bodySmall,
+                    children: [
+                      TextSpan(
+                        text: t.login.term_of_use_second,
+                        style: Typographies.bodySmall.copyWith(color: AppColors.primaryDark),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),
-              ],
-            ),
+              ),
+              SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),
+            ],
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:brandface/domain/usecase/verify_otp_usecase.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/usecase/send_otp_usecase.dart';
+import '../../../utils/services/shared_pref_service.dart';
 
 part 'login_event.dart';
 
@@ -15,11 +16,16 @@ part 'login_bloc.freezed.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final SendOtpUseCase _loginUseCase;
   final VerifyOtpUsecase _verifyOtpUsecase;
+  final IAuthLocalService _localService;
 
-  LoginBloc({required SendOtpUseCase loginUseCase, required VerifyOtpUsecase verifyOtpUsecase})
-    : _verifyOtpUsecase = verifyOtpUsecase,
-      _loginUseCase = loginUseCase,
-      super(const LoginState.initial()) {
+  LoginBloc({
+    required SendOtpUseCase loginUseCase,
+    required VerifyOtpUsecase verifyOtpUsecase,
+    required IAuthLocalService localService,
+  }) : _localService = localService,
+       _verifyOtpUsecase = verifyOtpUsecase,
+       _loginUseCase = loginUseCase,
+       super(const LoginState.initial()) {
     on<_SendOtp>(_sendOtp);
     on<_VerifyOtp>(_verifyOtp);
   }
@@ -37,13 +43,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _verifyOtp(_VerifyOtp event, Emitter<LoginState> emit) async {
     emit(LoginState.verifyingOtp());
+    final rawNumber = event.phone.replaceAll(RegExp(r'\D'), '');
+    final fullPhoneNumber = '+998$rawNumber';
     final result = await _verifyOtpUsecase.call(
-      params: VerifyOtpParams(phone: event.phone, code: event.otp),
+      params: VerifyOtpParams(phone: fullPhoneNumber, code: event.otp),
     );
     //TODO state params need add
     result.fold(
       ifLeft: (failure) => emit(LoginState.verifyingOtpFailure()),
-      ifRight: (otpEntity) => emit(LoginState.otpVerified()),
+      ifRight: (otpEntity) {
+        _localService.saveTokens(accessToken: otpEntity.access ?? '', refreshToken: otpEntity.refresh ?? '');
+        emit(LoginState.otpVerified());
+      },
     );
   }
 }

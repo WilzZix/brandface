@@ -27,6 +27,6 @@ class AppDi {
     sl.registerLazySingleton(() => SendOtpUseCase(sl()));
     sl.registerLazySingleton(() => VerifyOtpUsecase(repository: sl()));
     sl.registerLazySingleton<ILoginRepository>(() => LoginRepositoryImpl(remoteDataSource: sl()));
-    sl.registerFactory(() => LoginBloc(loginUseCase: sl(), verifyOtpUsecase: sl()));
+    sl.registerFactory(() => LoginBloc(loginUseCase: sl(), verifyOtpUsecase: sl(), localService: sl()));
   }
 }
