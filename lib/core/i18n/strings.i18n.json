@@ -11,5 +11,13 @@
     "term_of_use_first": "By pressing Login i agree to all ",
     "term_of_use_second": "terms of use",
     "login_methods": "or login in with"
+  },
+  "registration": {
+    "title": "Registration",
+    "influencer": "Influencer",
+    "ambassador": "Ambassador",
+    "brand": "Brand",
+    "your_name": "Your name",
+    "your_surname": "Your surname"
   }
 }

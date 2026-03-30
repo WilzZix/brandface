@@ -1,5 +1,6 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
+import 'package:brandface/presentation/registration/bloc/registration_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'core/router/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppDi().init();
-  LocaleSettings.useDeviceLocale();
+  LocaleSettings.setLocale(AppLocale.ru);
   runApp(TranslationProvider(child: const MyApp()));
 }
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<LoginBloc>()),
+        BlocProvider(create: (context) => sl<RegistrationBloc>()),
         BlocProvider(create: (context) => InitAppCubit(sharedPrefService: sl())..initApp()),
       ],
       child: MaterialApp.router(

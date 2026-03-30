@@ -16,8 +16,19 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc({required RegistrationUsecase registrationUsecase})
     : _registrationUsecase = registrationUsecase,
       super(const RegistrationState.initial()) {
-    on<RegistrationEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<_Registration>(_registration);
+  }
+
+  Future<void> _registration(_Registration event, Emitter<RegistrationState> emit) async {
+    emit(RegistrationState.userRegistering());
+    final result = await _registrationUsecase.call(params: event.params);
+    result.fold(
+      ifLeft: (failure) {
+        emit(RegistrationState.userRegisterFailure(msg: failure.message));
+      },
+      ifRight: (registerEntity) {
+        emit(RegistrationState.userRegistered(registerEntity: registerEntity));
+      },
+    );
   }
 }

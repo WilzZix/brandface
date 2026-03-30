@@ -7,6 +7,7 @@ import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.da
 import '../../presentation/login/ui/login_page.dart';
 import '../../presentation/login/ui/term_of_use_page.dart';
 import '../../presentation/onboarding/onboarding.dart';
+import '../../presentation/registration/ui/fill_profile_information_page.dart';
 import '../../presentation/registration/ui/registration_page.dart';
 
 class AppRouter {
@@ -45,6 +46,7 @@ class AppRouter {
       GoRoute(path: TermOfUsePage.tag, name: TermOfUsePage.tag, builder: (_, _) => TermOfUsePage()),
       GoRoute(path: HomePage.tag, name: HomePage.tag, builder: (_, _) => HomePage()),
       GoRoute(path: RegistrationPage.tag, name: RegistrationPage.tag, builder: (_, _) => RegistrationPage()),
+      GoRoute(path: FillProfileInformationPage.tag, name: FillProfileInformationPage.tag, builder: (_, _) => FillProfileInformationPage()),
       GoRoute(
         path: SmsConfirmationPage.tag,
         name: SmsConfirmationPage.tag,

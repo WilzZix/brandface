@@ -43,6 +43,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsSplashUz splash = TranslationsSplashUz._(_root);
 	late final TranslationsOnboardingUz onboarding = TranslationsOnboardingUz._(_root);
 	late final TranslationsLoginUz login = TranslationsLoginUz._(_root);
+	late final TranslationsRegistrationUz registration = TranslationsRegistrationUz._(_root);
 }
 
 // Path: splash
@@ -93,6 +94,33 @@ class TranslationsLoginUz {
 	String get login_methods => 'or login in with';
 }
 
+// Path: registration
+class TranslationsRegistrationUz {
+	TranslationsRegistrationUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Registration'
+	String get title => 'Registration';
+
+	/// uz: 'Influencer'
+	String get influencer => 'Influencer';
+
+	/// uz: 'Ambassador'
+	String get ambassador => 'Ambassador';
+
+	/// uz: 'Brand'
+	String get brand => 'Brand';
+
+	/// uz: 'Your name'
+	String get your_name => 'Your name';
+
+	/// uz: 'Your surname'
+	String get your_surname => 'Your surname';
+}
+
 /// The flat map containing all translations for locale <uz>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -108,6 +136,12 @@ extension on Translations {
 			'login.term_of_use_first' => 'By pressing Login i agree to all ',
 			'login.term_of_use_second' => 'terms of use',
 			'login.login_methods' => 'or login in with',
+			'registration.title' => 'Registration',
+			'registration.influencer' => 'Influencer',
+			'registration.ambassador' => 'Ambassador',
+			'registration.brand' => 'Brand',
+			'registration.your_name' => 'Your name',
+			'registration.your_surname' => 'Your surname',
 			_ => null,
 		};
 	}

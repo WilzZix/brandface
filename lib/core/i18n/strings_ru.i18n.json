@@ -11,5 +11,13 @@
     "term_of_use_first": "Нажимая «Войти», я принимаю все ",
     "term_of_use_second": "условия использования",
     "login_methods": "или войти через"
+  },
+  "registration": {
+    "title": "Регистрация",
+    "influencer": "Инфлюенсер",
+    "ambassador": "Амбассадор",
+    "brand": "Бренд",
+    "your_name": "Ваше имя",
+    "your_surname": "Ваша фамилия"
   }
 }

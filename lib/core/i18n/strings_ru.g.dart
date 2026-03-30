@@ -40,6 +40,7 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsSplashRu splash = _TranslationsSplashRu._(_root);
 	@override late final _TranslationsOnboardingRu onboarding = _TranslationsOnboardingRu._(_root);
 	@override late final _TranslationsLoginRu login = _TranslationsLoginRu._(_root);
+	@override late final _TranslationsRegistrationRu registration = _TranslationsRegistrationRu._(_root);
 }
 
 // Path: splash
@@ -76,6 +77,21 @@ class _TranslationsLoginRu implements TranslationsLoginUz {
 	@override String get login_methods => 'или войти через';
 }
 
+// Path: registration
+class _TranslationsRegistrationRu implements TranslationsRegistrationUz {
+	_TranslationsRegistrationRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Регистрация';
+	@override String get influencer => 'Инфлюенсер';
+	@override String get ambassador => 'Амбассадор';
+	@override String get brand => 'Бренд';
+	@override String get your_name => 'Ваше имя';
+	@override String get your_surname => 'Ваша фамилия';
+}
+
 /// The flat map containing all translations for locale <ru>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -91,6 +107,12 @@ extension on TranslationsRu {
 			'login.term_of_use_first' => 'Нажимая «Войти», я принимаю все ',
 			'login.term_of_use_second' => 'условия использования',
 			'login.login_methods' => 'или войти через',
+			'registration.title' => 'Регистрация',
+			'registration.influencer' => 'Инфлюенсер',
+			'registration.ambassador' => 'Амбассадор',
+			'registration.brand' => 'Бренд',
+			'registration.your_name' => 'Ваше имя',
+			'registration.your_surname' => 'Ваша фамилия',
 			_ => null,
 		};
 	}
