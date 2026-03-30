@@ -125,12 +125,12 @@ return verifyOtp(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String phone)?  sendOtp,TResult Function( String phone,  String otp)?  verifyOtp,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String phone)?  sendOtp,TResult Function( VerifyOtpParams params)?  verifyOtp,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that.phone,_that.otp);case _:
+return verifyOtp(_that.params);case _:
   return orElse();
 
 }
@@ -148,12 +148,12 @@ return verifyOtp(_that.phone,_that.otp);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String phone)  sendOtp,required TResult Function( String phone,  String otp)  verifyOtp,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String phone)  sendOtp,required TResult Function( VerifyOtpParams params)  verifyOtp,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _SendOtp():
 return sendOtp(_that.phone);case _VerifyOtp():
-return verifyOtp(_that.phone,_that.otp);case _:
+return verifyOtp(_that.params);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +170,12 @@ return verifyOtp(_that.phone,_that.otp);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String phone)?  sendOtp,TResult? Function( String phone,  String otp)?  verifyOtp,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String phone)?  sendOtp,TResult? Function( VerifyOtpParams params)?  verifyOtp,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that.phone,_that.otp);case _:
+return verifyOtp(_that.params);case _:
   return null;
 
 }
@@ -285,11 +285,10 @@ as String,
 
 
 class _VerifyOtp implements LoginEvent {
-  const _VerifyOtp({required this.phone, required this.otp});
+  const _VerifyOtp({required this.params});
   
 
- final  String phone;
- final  String otp;
+ final  VerifyOtpParams params;
 
 /// Create a copy of LoginEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -301,16 +300,16 @@ _$VerifyOtpCopyWith<_VerifyOtp> get copyWith => __$VerifyOtpCopyWithImpl<_Verify
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VerifyOtp&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.otp, otp) || other.otp == otp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VerifyOtp&&(identical(other.params, params) || other.params == params));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,phone,otp);
+int get hashCode => Object.hash(runtimeType,params);
 
 @override
 String toString() {
-  return 'LoginEvent.verifyOtp(phone: $phone, otp: $otp)';
+  return 'LoginEvent.verifyOtp(params: $params)';
 }
 
 
@@ -321,7 +320,7 @@ abstract mixin class _$VerifyOtpCopyWith<$Res> implements $LoginEventCopyWith<$R
   factory _$VerifyOtpCopyWith(_VerifyOtp value, $Res Function(_VerifyOtp) _then) = __$VerifyOtpCopyWithImpl;
 @useResult
 $Res call({
- String phone, String otp
+ VerifyOtpParams params
 });
 
 
@@ -338,11 +337,10 @@ class __$VerifyOtpCopyWithImpl<$Res>
 
 /// Create a copy of LoginEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? phone = null,Object? otp = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? params = null,}) {
   return _then(_VerifyOtp(
-phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,otp: null == otp ? _self.otp : otp // ignore: cast_nullable_to_non_nullable
-as String,
+params: null == params ? _self.params : params // ignore: cast_nullable_to_non_nullable
+as VerifyOtpParams,
   ));
 }
 
@@ -475,7 +473,7 @@ return verifyingOtpFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  otpReceiving,TResult Function( OtpEntity otpEntity)?  otpReceived,TResult Function( String msg)?  otpReceivingFailure,TResult Function()?  verifyingOtp,TResult Function()?  otpVerified,TResult Function()?  verifyingOtpFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  otpReceiving,TResult Function( OtpEntity otpEntity)?  otpReceived,TResult Function( String msg)?  otpReceivingFailure,TResult Function()?  verifyingOtp,TResult Function()?  otpVerified,TResult Function( String msg)?  verifyingOtpFailure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _OtpReceiving() when otpReceiving != null:
@@ -484,7 +482,7 @@ return otpReceived(_that.otpEntity);case _OtpReceivingFailure() when otpReceivin
 return otpReceivingFailure(_that.msg);case _VerifyingOtp() when verifyingOtp != null:
 return verifyingOtp();case _OtpVeiried() when otpVerified != null:
 return otpVerified();case _VerifyingOtpFailure() when verifyingOtpFailure != null:
-return verifyingOtpFailure();case _:
+return verifyingOtpFailure(_that.msg);case _:
   return orElse();
 
 }
@@ -502,7 +500,7 @@ return verifyingOtpFailure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  otpReceiving,required TResult Function( OtpEntity otpEntity)  otpReceived,required TResult Function( String msg)  otpReceivingFailure,required TResult Function()  verifyingOtp,required TResult Function()  otpVerified,required TResult Function()  verifyingOtpFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  otpReceiving,required TResult Function( OtpEntity otpEntity)  otpReceived,required TResult Function( String msg)  otpReceivingFailure,required TResult Function()  verifyingOtp,required TResult Function()  otpVerified,required TResult Function( String msg)  verifyingOtpFailure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _OtpReceiving():
@@ -511,7 +509,7 @@ return otpReceived(_that.otpEntity);case _OtpReceivingFailure():
 return otpReceivingFailure(_that.msg);case _VerifyingOtp():
 return verifyingOtp();case _OtpVeiried():
 return otpVerified();case _VerifyingOtpFailure():
-return verifyingOtpFailure();case _:
+return verifyingOtpFailure(_that.msg);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -528,7 +526,7 @@ return verifyingOtpFailure();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  otpReceiving,TResult? Function( OtpEntity otpEntity)?  otpReceived,TResult? Function( String msg)?  otpReceivingFailure,TResult? Function()?  verifyingOtp,TResult? Function()?  otpVerified,TResult? Function()?  verifyingOtpFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  otpReceiving,TResult? Function( OtpEntity otpEntity)?  otpReceived,TResult? Function( String msg)?  otpReceivingFailure,TResult? Function()?  verifyingOtp,TResult? Function()?  otpVerified,TResult? Function( String msg)?  verifyingOtpFailure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _OtpReceiving() when otpReceiving != null:
@@ -537,7 +535,7 @@ return otpReceived(_that.otpEntity);case _OtpReceivingFailure() when otpReceivin
 return otpReceivingFailure(_that.msg);case _VerifyingOtp() when verifyingOtp != null:
 return verifyingOtp();case _OtpVeiried() when otpVerified != null:
 return otpVerified();case _VerifyingOtpFailure() when verifyingOtpFailure != null:
-return verifyingOtpFailure();case _:
+return verifyingOtpFailure(_that.msg);case _:
   return null;
 
 }
@@ -809,32 +807,66 @@ String toString() {
 
 
 class _VerifyingOtpFailure implements LoginState {
-  const _VerifyingOtpFailure();
+  const _VerifyingOtpFailure({required this.msg});
   
 
+ final  String msg;
 
-
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$VerifyingOtpFailureCopyWith<_VerifyingOtpFailure> get copyWith => __$VerifyingOtpFailureCopyWithImpl<_VerifyingOtpFailure>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VerifyingOtpFailure);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VerifyingOtpFailure&&(identical(other.msg, msg) || other.msg == msg));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,msg);
 
 @override
 String toString() {
-  return 'LoginState.verifyingOtpFailure()';
+  return 'LoginState.verifyingOtpFailure(msg: $msg)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$VerifyingOtpFailureCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory _$VerifyingOtpFailureCopyWith(_VerifyingOtpFailure value, $Res Function(_VerifyingOtpFailure) _then) = __$VerifyingOtpFailureCopyWithImpl;
+@useResult
+$Res call({
+ String msg
+});
 
 
+
+
+}
+/// @nodoc
+class __$VerifyingOtpFailureCopyWithImpl<$Res>
+    implements _$VerifyingOtpFailureCopyWith<$Res> {
+  __$VerifyingOtpFailureCopyWithImpl(this._self, this._then);
+
+  final _VerifyingOtpFailure _self;
+  final $Res Function(_VerifyingOtpFailure) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? msg = null,}) {
+  return _then(_VerifyingOtpFailure(
+msg: null == msg ? _self.msg : msg // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 // dart format on

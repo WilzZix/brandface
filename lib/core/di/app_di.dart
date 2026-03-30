@@ -1,7 +1,7 @@
 import 'package:brandface/core/network/dio_client.dart';
-import 'package:brandface/data/data_source/network_data_source/network_data_source.dart';
+import 'package:brandface/data/data_source/network_data_source/login/login_data_source.dart';
 import 'package:brandface/domain/repository/login_repository.dart';
-import 'package:brandface/domain/usecase/send_otp_usecase.dart';
+import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
 import 'package:dio/dio.dart';
@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/login_repository_impl.dart';
-import '../../domain/usecase/verify_otp_usecase.dart';
+import '../../domain/usecase/login/verify_otp_usecase.dart';
 import '../../utils/services/shared_pref_service.dart';
 
 final sl = GetIt.instance;

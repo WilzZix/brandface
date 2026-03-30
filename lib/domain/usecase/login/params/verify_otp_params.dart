@@ -3,4 +3,8 @@ class VerifyOtpParams {
   final String code;
 
   VerifyOtpParams({required this.phone, required this.code});
+
+  Map<String, dynamic> toJson() {
+    return {'phone_number': phone, 'code': code};
+  }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:brandface/presentation/home_page/ui/home_page.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -85,7 +86,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
             _controller.text = otpEntity.code ?? '';
             _startOtpTimer();
           },
-          verifyingOtpFailure: () {},
+          verifyingOtpFailure: (msg) {},
           otpReceivingFailure: (_) {},
           orElse: () {},
         );
@@ -158,7 +159,11 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                 onTap: () {
                   final bloc = context.read<LoginBloc>();
                   final otp = _controller.text.replaceAll(RegExp(r'\D'), '');
-                  bloc.add(LoginEvent.verifyOtp(phone: widget.arguments.phoneNumber, otp: otp));
+                  bloc.add(
+                    LoginEvent.verifyOtp(
+                      params: VerifyOtpParams(phone: widget.arguments.phoneNumber, code: otp),
+                    ),
+                  );
                 },
               ),
               SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),

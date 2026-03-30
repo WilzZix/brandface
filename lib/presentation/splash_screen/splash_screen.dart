@@ -12,6 +12,7 @@ import '../../core/constants/app_assets.dart';
 import '../../core/di/app_di.dart';
 import '../../core/i18n/strings.g.dart';
 import '../login/ui/login_page.dart';
+import '../registration/ui/registration_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,7 +32,9 @@ class _SplashScreenState extends State<SplashScreen> {
           state.maybeWhen(
             appInitialized: (isLoggedIn) {
               if (isLoggedIn) {
-                context.go(HomePage.tag);
+                //Return when registraion verstka done
+                // context.go(HomePage.tag);
+                context.go(RegistrationPage.tag);
               } else {
                 context.go(LoginPage.tag);
               }

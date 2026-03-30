@@ -1,6 +1,7 @@
-import 'package:brandface/data/data_source/network_data_source/network_data_source.dart';
+import 'package:brandface/data/data_source/network_data_source/login/login_data_source.dart';
 import 'package:brandface/domain/entities/otp_entity.dart';
 import 'package:brandface/domain/repository/login_repository.dart';
+import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:dart_either/dart_either.dart';
 
 import 'package:dio/dio.dart';
@@ -26,9 +27,9 @@ class LoginRepositoryImpl implements ILoginRepository {
   }
 
   @override
-  Future<Either<Failures, VerifyOtpEntity>> verifyOtp({required String phone, required String code}) async {
+  Future<Either<Failures, VerifyOtpEntity>> verifyOtp({required VerifyOtpParams params}) async {
     try {
-      final verifyOtpData = await remoteDataSource.verifyOtp(phone: phone, code: code);
+      final verifyOtpData = await remoteDataSource.verifyOtp(params: params);
       return Right(verifyOtpData.toEntity());
     } on DioException catch (e) {
       return Left(ServerFailure(e.message ?? 'Serverda kutilmagan xatolik'));

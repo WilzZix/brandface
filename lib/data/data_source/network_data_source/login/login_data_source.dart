@@ -1,13 +1,14 @@
+import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:dio/dio.dart';
 
-import '../../../core/network/dio_client.dart';
-import '../../models/otp_model.dart';
-import '../../models/verifying_otp_model.dart';
+import '../../../../core/network/dio_client.dart';
+import '../../../models/login/otp_model.dart';
+import '../../../models/login/verifying_otp_model.dart';
 
 abstract class LoginRemoteDataSource {
   Future<OtpModel> sendOtp({required String phone});
 
-  Future<VerifyOtpModel> verifyOtp({required String phone, required String code});
+  Future<VerifyOtpModel> verifyOtp({required VerifyOtpParams params});
 }
 
 class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
@@ -35,9 +36,9 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   }
 
   @override
-  Future<VerifyOtpModel> verifyOtp({required String phone, required String code}) async {
+  Future<VerifyOtpModel> verifyOtp({required VerifyOtpParams params}) async {
     try {
-      final response = await _dioClient.post('auth/verify-otp/', data: {'phone_number': phone, "code": code});
+      final response = await _dioClient.post('auth/verify-otp/', data: params.toJson());
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return VerifyOtpModel.fromJson(response.data);
