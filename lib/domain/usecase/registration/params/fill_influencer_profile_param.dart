@@ -94,28 +94,11 @@ class FillInfluencerProfileParam {
       "agency_representation": agencyRepresentation,
       "partners": partners,
       "contacts": contacts,
-      "category_ids": [0],
-      "service_ids": [0],
-      "language_ids": [0],
+      "category_ids": categoryIds,
+      "service_ids": serviceIds,
+      "language_ids": languageIds,
       "audience": audience?.toJson(),
-      "pricing": {
-        "available_for_long_term": true,
-        "works_on_net_model": true,
-        "open_to_similar_offers": true,
-        "hourly_rate_min_uzs": "459385435.6",
-        "hourly_rate_max_uzs": "0",
-        "hourly_rate_min_usd": "-",
-        "hourly_rate_max_usd": "-",
-        "daily_rate_min_uzs": "-319894942.",
-        "daily_rate_max_uzs": "020616932490",
-        "accepts_barter": true,
-        "payment_types": ["string"],
-        "exclusivity_available": true,
-        "campaign_fee": "3.3",
-        "campaign_fee_currency": "string",
-        "monthly_exclusivity_fee": "6.",
-        "event_appearance_fee": "64721",
-      },
+      "pricing": pricing?.toJson(),
     };
   }
 }
@@ -175,17 +158,17 @@ class Audience {
 
   Map<String, dynamic> toJson() {
     return {
-      "brand_segment": "mass",
-      "total_followers": 0,
-      "male_percent": "-353",
-      "female_percent": "-984.8",
-      "men_age_from": 0,
-      "men_age_to": 0,
-      "women_age_from": 0,
-      "women_age_to": 0,
-      "engagement_rate": "-",
-      "geography": ["string"],
-      "social_media_stats": ["string"],
+      "brand_segment": brandSegment,
+      "total_followers": totalFollowers,
+      "male_percent": malePercent,
+      "female_percent": femalePercent,
+      "men_age_from": menAgeFrom,
+      "men_age_to": menAgeTo,
+      "women_age_from": womenAgeFrom,
+      "women_age_to": womenAgeTo,
+      "engagement_rate": engagementRate,
+      "geography": geography,
+      "social_media_stats": socialMediaStats,
     };
   }
 }
@@ -275,4 +258,25 @@ class Pricing {
     monthlyExclusivityFee: monthlyExclusivityFee ?? this.monthlyExclusivityFee,
     eventAppearanceFee: eventAppearanceFee ?? this.eventAppearanceFee,
   );
+
+  Map<String, dynamic> toJson() {
+    return {
+      "available_for_long_term": availableForLongTerm,
+      "works_on_net_model": worksOnNetModel,
+      "open_to_similar_offers": openToSimilarOffers,
+      "hourly_rate_min_uzs": hourlyRateMinUzs,
+      "hourly_rate_max_uzs": hourlyRateMaxUzs,
+      "hourly_rate_min_usd": hourlyRateMaxUsd,
+      "hourly_rate_max_usd": hourlyRateMaxUsd,
+      "daily_rate_min_uzs": dailyRateMinUzs,
+      "daily_rate_max_uzs": dailyRateMaxUzs,
+      "accepts_barter": acceptsBarter,
+      "payment_types": paymentTypes,
+      "exclusivity_available": exclusivityAvailable,
+      "campaign_fee": campaignFee,
+      "campaign_fee_currency": campaignFeeCurrency,
+      "monthly_exclusivity_fee": monthlyExclusivityFee,
+      "event_appearance_fee": eventAppearanceFee,
+    };
+  }
 }
