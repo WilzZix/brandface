@@ -14,14 +14,12 @@ class FillProfileInformationPage extends StatefulWidget {
   static const String tag = '/fill_profile_information';
 
   @override
-  State<FillProfileInformationPage> createState() =>
-      _FillProfileInformationPageState();
+  State<FillProfileInformationPage> createState() => _FillProfileInformationPageState();
 }
 
-class _FillProfileInformationPageState
-    extends State<FillProfileInformationPage> {
+class _FillProfileInformationPageState extends State<FillProfileInformationPage> {
   List<Widget> fillProfileWidgets = [
-    SizedBox(child: GeneralInfoPageView()),
+    SizedBox(child: GeneralInfoPageView(key: PageStorageKey<String>('pageOne'))),
     SizedBox(child: Text('Second page')),
   ];
   PageController pageController = PageController();
@@ -30,11 +28,7 @@ class _FillProfileInformationPageState
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: MediaQuery.of(context).padding.bottom,
-        ),
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: MediaQuery.of(context).padding.bottom),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -78,9 +72,7 @@ class _FillProfileInformationPageState
                     child: Center(
                       child: Text(
                         'General info (1/6)',
-                        style: Typographies.labelMedium.copyWith(
-                          color: AppColors.lightBg,
-                        ),
+                        style: Typographies.labelMedium.copyWith(color: AppColors.lightBg),
                       ),
                     ),
                   ),

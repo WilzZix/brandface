@@ -1,9 +1,13 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
+import 'package:brandface/uikit/components/buttons/buttons.dart';
+import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'choose_spoken_language.dart';
 
 class GeneralInfoPageView extends StatefulWidget {
   const GeneralInfoPageView({super.key});
@@ -12,9 +16,14 @@ class GeneralInfoPageView extends StatefulWidget {
   State<GeneralInfoPageView> createState() => _GeneralInfoPageViewState();
 }
 
-class _GeneralInfoPageViewState extends State<GeneralInfoPageView> {
+class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
+    with AutomaticKeepAliveClientMixin<GeneralInfoPageView> {
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _profileInfoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,8 +67,63 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView> {
           ),
           SizedBox(height: 24),
           ProfileAvatarItem(onTap: (int p1) {}, items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+          SizedBox(height: 40),
+          ChooseSpokenLanguage(
+            title: 'Select',
+            label: 'Spoken languages',
+            onItemSelected: (String p1) {
+              //Params ga berib yuboraman p1ni
+            },
+          ),
+          SizedBox(height: 24),
+          ChooseSpokenLanguage(
+            title: 'DD.MM.YYYY',
+            label: 'Date of birth',
+            onItemSelected: (String p1) {
+              //Params ga berib yuboraman p1ni
+            },
+          ),
+          SizedBox(height: 24),
+          ChooseSpokenLanguage(
+            title: 'Select',
+            label: 'Gender',
+            onItemSelected: (String p1) {
+              //Params ga berib yuboraman p1ni
+            },
+          ),
+          SizedBox(height: 24),
+          ChooseSpokenLanguage(
+            title: 'Phone',
+            label: 'Contact details',
+            onItemSelected: (String p1) {
+              //Params ga berib yuboraman p1ni
+            },
+          ),
+          SizedBox(height: 8),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: CredInputField(controller: _phoneController, label: 'Write phone number'),
+              ),
+              SizedBox(width: 8),
+              AppButtons.primary(title: 'Apply', onTap: () {}),
+            ],
+          ),
+          SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('+99989 888 77 22', style: Typographies.bodyMedium),
+              Text('Delete', style: Typographies.labelLarge.copyWith(color: AppColors.red)),
+            ],
+          ),
+          SizedBox(height: 24),
         ],
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

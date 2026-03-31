@@ -14,4 +14,5 @@ class AppAssets {
   static String icTrashBin = 'assets/icons/trash-bin.svg';
   static String icCheckBox = 'assets/icons/ic_check_box.svg';
   static String icCheckBoxDisabled = 'assets/icons/ic_checkbox_disable.svg';
+  static String icArrowDown = 'assets/icons/chevron-down.svg';
 }
