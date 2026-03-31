@@ -10,4 +10,8 @@ class AppAssets {
   static String icFacebook = 'assets/icons/facebook.svg';
   static String icArrowLeft = 'assets/icons/arrow-left.svg';
   static String icArrowRight = 'assets/icons/arrow-right.svg';
+  static String icAttachFile = 'assets/icons/paper-clip.svg';
+  static String icTrashBin = 'assets/icons/trash-bin.svg';
+  static String icCheckBox = 'assets/icons/ic_check_box.svg';
+  static String icCheckBoxDisabled = 'assets/icons/ic_checkbox_disable.svg';
 }
