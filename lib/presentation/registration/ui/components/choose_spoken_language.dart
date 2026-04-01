@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 
 class ChooseSpokenLanguage extends StatefulWidget {
-  const ChooseSpokenLanguage({super.key, required this.title, required this.label, required this.onItemSelected});
+  const ChooseSpokenLanguage({
+    super.key,
+    required this.title,
+    required this.label,
+    required this.onItemSelected,
+  });
 
   final String title;
   final String label;
@@ -33,13 +39,27 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
         Text(widget.label, style: Typographies.titleSmall),
         SizedBox(height: 8),
         GestureDetector(
-          onTap: () {
-            /// bottomsheetdan tanlangan stringni callBack qilish
-            widget.onItemSelected(_selectedLang ?? '');
+          onTap: () async {
+            final result = await BrandfaceBottomSheet.openBottomSheet<String>(
+              context: context,
+              content: Column(
+                children: [
+                  Text("Spoken language"),
+                  Text("O'zbek"),
+                  Text("O'zbek"),
+                  Text("O'zbek"),
+                ],
+              ),
+            );
+            // _selectedLang = result;
+            // widget.onItemSelected(_selectedLang ?? '');
           },
           child: Container(
             padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(color: AppColors.lightBg2, borderRadius: BorderRadius.circular(999)),
+            decoration: BoxDecoration(
+              color: AppColors.lightBg2,
+              borderRadius: BorderRadius.circular(999),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

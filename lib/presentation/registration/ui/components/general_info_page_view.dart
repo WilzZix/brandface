@@ -35,7 +35,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
               SizedBox(
                 height: 96,
                 width: 96,
-                child: Image.asset('assets/images/im_person_avatar_sample.png', fit: BoxFit.cover),
+                child: Image.asset(
+                  'assets/images/im_person_avatar_sample.png',
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(width: 16),
               Column(
@@ -59,20 +62,27 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                   SizedBox(height: 8),
                   Text(
                     'SVG, PNG, JPG or GIF (MAX. 800x400px).',
-                    style: Typographies.bodySmall.copyWith(color: AppColors.grey),
+                    style: Typographies.bodySmall.copyWith(
+                      color: AppColors.grey,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
           SizedBox(height: 24),
-          ProfileAvatarItem(onTap: (int p1) {}, items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+          ProfileAvatarItem(
+            onTap: (int p1) {
+              print('selected icon id$p1');
+            },
+            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          ),
           SizedBox(height: 40),
           ChooseSpokenLanguage(
             title: 'Select',
             label: 'Spoken languages',
             onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+
             },
           ),
           SizedBox(height: 24),
@@ -104,7 +114,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
-                child: CredInputField(controller: _phoneController, label: 'Write phone number'),
+                child: CredInputField(
+                  controller: _phoneController,
+                  label: 'Write phone number',
+                ),
               ),
               SizedBox(width: 8),
               AppButtons.primary(title: 'Apply', onTap: () {}),
@@ -115,8 +128,27 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('+99989 888 77 22', style: Typographies.bodyMedium),
-              Text('Delete', style: Typographies.labelLarge.copyWith(color: AppColors.red)),
+              Text(
+                'Delete',
+                style: Typographies.labelLarge.copyWith(color: AppColors.red),
+              ),
             ],
+          ),
+          SizedBox(height: 24),
+          TextField(
+            controller: _profileInfoController,
+            maxLines: 4,
+            decoration: InputDecoration(
+              hintText: 'Write text here...',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: BorderSide(color: AppColors.borderColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: BorderSide(color: AppColors.primary),
+              ),
+            ),
           ),
           SizedBox(height: 24),
         ],
