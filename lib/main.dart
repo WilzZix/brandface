@@ -26,12 +26,20 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<LoginBloc>()),
         BlocProvider(create: (context) => sl<RegistrationBloc>()),
-        BlocProvider(create: (context) => InitAppCubit(sharedPrefService: sl())..initApp()),
+        BlocProvider(
+          create: (context) => InitAppCubit(sharedPrefService: sl())..initApp(),
+        ),
       ],
       child: MaterialApp.router(
         locale: TranslationProvider.of(context).locale.flutterLocale,
         routerConfig: AppRouter.router,
-        theme: ThemeData(textTheme: GoogleFonts.interTextTheme(), scaffoldBackgroundColor: AppColors.lightBg),
+        theme: ThemeData(
+          textTheme: GoogleFonts.interTextTheme(),
+          scaffoldBackgroundColor: AppColors.lightBg,
+          bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: AppColors.lightBg,
+          ),
+        ),
       ),
     );
   }

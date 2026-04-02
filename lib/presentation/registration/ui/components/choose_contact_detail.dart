@@ -6,9 +6,10 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
+import 'choose_spoken_language.dart';
 
-class ChooseSpokenLanguage extends StatefulWidget {
-  const ChooseSpokenLanguage({
+class ChooseContactDetail extends StatefulWidget {
+  const ChooseContactDetail({
     super.key,
     required this.title,
     required this.label,
@@ -20,16 +21,17 @@ class ChooseSpokenLanguage extends StatefulWidget {
   final Function(String) onItemSelected;
 
   @override
-  State<ChooseSpokenLanguage> createState() => _ChooseSpokenLanguageState();
+  State<ChooseContactDetail> createState() => _ChooseContactDetailState();
 }
 
-class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
+class _ChooseContactDetailState extends State<ChooseContactDetail> {
   String? _selectedLang;
   int _selectedLangId = 0;
   List<LangItemModel> langItems = [
-    LangItemModel(name: "O'zbek", id: 0),
-    LangItemModel(name: 'English', id: 1),
-    LangItemModel(name: 'Русский', id: 2),
+    LangItemModel(name: "Phone", id: 0),
+    LangItemModel(name: 'Email', id: 1),
+    LangItemModel(name: 'Telegram', id: 2),
+    LangItemModel(name: 'Instagram', id: 3),
   ];
 
   @override
@@ -79,10 +81,20 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
                         bottomState(() {});
                       },
                     ),
+                    ChooseLangItem(
+                      title: langItems[3].name,
+                      isSelected: langItems[3].id == _selectedLangId,
+                      onTap: () {
+                        _selectedLang = langItems[3].name;
+                        _selectedLangId = langItems[3].id;
+                        bottomState(() {});
+                      },
+                    ),
+
                   ],
                 );
               },
-              header: 'Spoken language',
+              header: 'Select contact detail',
               onConfirm: () {
                 widget.onItemSelected(_selectedLang ?? '');
                 setState(() {});
@@ -108,50 +120,4 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
       ],
     );
   }
-}
-
-class ChooseLangItem extends StatefulWidget {
-  const ChooseLangItem({
-    super.key,
-    required this.title,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String title;
-  final bool isSelected;
-  final Function() onTap;
-
-  @override
-  State<ChooseLangItem> createState() => _ChooseLangItemState();
-}
-
-class _ChooseLangItemState extends State<ChooseLangItem> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: widget.onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(widget.title, style: Typographies.labelLarge),
-              if (widget.isSelected) SvgPicture.asset(AppAssets.icCheck),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LangItemModel {
-  final String name;
-  final int id;
-
-  LangItemModel({required this.name, required this.id});
 }

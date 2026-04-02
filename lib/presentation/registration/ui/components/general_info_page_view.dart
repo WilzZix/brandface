@@ -7,6 +7,9 @@ import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'choose_contact_detail.dart';
+import 'choose_date_of_birthday.dart';
+import 'choose_gender.dart';
 import 'choose_spoken_language.dart';
 
 class GeneralInfoPageView extends StatefulWidget {
@@ -86,27 +89,27 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             },
           ),
           SizedBox(height: 24),
-          ChooseSpokenLanguage(
+          ChooseDateOfBirthday(
             title: 'DD.MM.YYYY',
             label: 'Date of birth',
             onItemSelected: (String p1) {
               //Params ga berib yuboraman p1ni
-            },
+            }, iconPath: AppAssets.icCalendar,
           ),
           SizedBox(height: 24),
-          ChooseSpokenLanguage(
+          ChooseGender(
             title: 'Select',
             label: 'Gender',
             onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+              print('selected gender $p1');
             },
           ),
           SizedBox(height: 24),
-          ChooseSpokenLanguage(
+          ChooseContactDetail(
             title: 'Phone',
             label: 'Contact details',
             onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+              print('selected gender $p1');
             },
           ),
           SizedBox(height: 8),
