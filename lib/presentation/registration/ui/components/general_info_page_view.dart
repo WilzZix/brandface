@@ -2,6 +2,7 @@ import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
+import 'package:brandface/uikit/components/inputs/phone_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class GeneralInfoPageView extends StatefulWidget {
 
 class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
     with AutomaticKeepAliveClientMixin<GeneralInfoPageView> {
-  final TextEditingController _phoneController = TextEditingController();
+
   final TextEditingController _profileInfoController = TextEditingController();
 
   @override
@@ -94,7 +95,8 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             label: 'Date of birth',
             onItemSelected: (String p1) {
               //Params ga berib yuboraman p1ni
-            }, iconPath: AppAssets.icCalendar,
+            },
+            iconPath: AppAssets.icCalendar,
           ),
           SizedBox(height: 24),
           ChooseGender(
@@ -108,35 +110,9 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ChooseContactDetail(
             title: 'Phone',
             label: 'Contact details',
-            onItemSelected: (String p1) {
-              print('selected gender $p1');
-            },
+            onItemSelected: (String p1) {},
           ),
-          SizedBox(height: 8),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: CredInputField(
-                  controller: _phoneController,
-                  label: 'Write phone number',
-                ),
-              ),
-              SizedBox(width: 8),
-              AppButtons.primary(title: 'Apply', onTap: () {}),
-            ],
-          ),
-          SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('+99989 888 77 22', style: Typographies.bodyMedium),
-              Text(
-                'Delete',
-                style: Typographies.labelLarge.copyWith(color: AppColors.red),
-              ),
-            ],
-          ),
+
           SizedBox(height: 24),
           TextField(
             controller: _profileInfoController,

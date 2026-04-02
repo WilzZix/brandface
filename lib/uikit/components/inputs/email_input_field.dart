@@ -3,52 +3,32 @@ import 'package:flutter/material.dart';
 import '../../tokens/colors.dart';
 import '../../typography/typography.dart';
 
-class CredInputField extends StatefulWidget {
-  const CredInputField({super.key, required this.controller, required this.label});
+class EmailInputField extends StatefulWidget {
+  const EmailInputField({super.key, required this.controller});
 
   final TextEditingController controller;
-  final String label;
 
   @override
-  State<CredInputField> createState() => _CredInputFieldState();
+  State<EmailInputField> createState() => _EmailInputFieldState();
 }
 
-class _CredInputFieldState extends State<CredInputField> {
-  final FocusNode _credFocusNode = FocusNode();
-
+class _EmailInputFieldState extends State<EmailInputField> {
   TextEditingController get _controller => widget.controller;
-  bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _credFocusNode.addListener(() {
-      setState(() {
-        _isFocused = _credFocusNode.hasFocus;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _credFocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      focusNode: _credFocusNode,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
         setState(() {});
       },
       decoration: InputDecoration(
-        labelText: widget.label,
-        labelStyle: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
-        hintText: widget.label,
+        labelText: 'Email',
+        labelStyle: Typographies.bodySmall.copyWith(
+          color: AppColors.mutedBlack,
+        ),
+        hintText: "Email",
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),
