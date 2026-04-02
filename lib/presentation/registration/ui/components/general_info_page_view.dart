@@ -82,7 +82,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             title: 'Select',
             label: 'Spoken languages',
             onItemSelected: (String p1) {
-
+              print('selected languagae $p1');
             },
           ),
           SizedBox(height: 24),
