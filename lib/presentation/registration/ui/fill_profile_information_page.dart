@@ -34,20 +34,32 @@ class _FillProfileInformationPageState
       child: GeneralInfoPageView(
         key: PageStorageKey<String>('pageOne'),
         onChanged: (FillInfluencerProfileParam p1) {
-          _finalParam = p1;
+          _finalParam = _finalParam.copyWith(
+            displayName: p1.displayName,
+            avatarId: p1.avatarId,
+            bio: p1.bio,
+            regionId: p1.regionId,
+            cityId: p1.cityId,
+            birthDate: p1.birthDate,
+            gender: p1.gender,
+          );
         },
       ),
     ),
     SizedBox(
       child: NichePageView(
         key: PageStorageKey<String>('pageSecond'),
-        onChanged: (FillInfluencerProfileParam p1) {},
+        onChanged: (FillInfluencerProfileParam p1) {
+          _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+        },
       ),
     ),
     SizedBox(
       child: ServicesPageView(
         key: PageStorageKey<String>('pageThird'),
-        onChanged: (FillInfluencerProfileParam p1) {},
+        onChanged: (FillInfluencerProfileParam p1) {
+          _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
+        },
       ),
     ),
     SizedBox(

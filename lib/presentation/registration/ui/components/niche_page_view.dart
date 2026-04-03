@@ -18,8 +18,6 @@ class NichePageView extends StatefulWidget {
 class _NichePageViewState extends State<NichePageView>
     with AutomaticKeepAliveClientMixin<NichePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
-
-  // Tanlangan barcha niche'larni shu yerda saqlaymiz
   List<LangItemModel> _selectedNichesItems = [];
 
   @override
