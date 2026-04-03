@@ -17,15 +17,16 @@ class ChooseSpokenLanguage extends StatefulWidget {
 
   final String title;
   final String label;
-  final Function(String) onItemSelected;
+  final Function(List<int>) onItemSelected;
 
   @override
   State<ChooseSpokenLanguage> createState() => _ChooseSpokenLanguageState();
 }
 
 class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
-  String? _selectedLang;
-  int _selectedLangId = 0;
+  String? _selectedLangLabel; // Tanlangan tillar nomini ko'rsatish uchun
+  List<int> _selectedLangIds = []; // Tanlangan ID'lar ro'yxati
+
   List<LangItemModel> langItems = [
     LangItemModel(name: "O'zbek", id: 0),
     LangItemModel(name: 'English', id: 1),
@@ -34,8 +35,29 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
 
   @override
   void initState() {
-    _selectedLang = widget.title;
+    _selectedLangLabel = widget.title;
     super.initState();
+  }
+
+  // Tanlash mantig'ini alohida funksiyaga chiqaramiz (toza kod uchun)
+  void _toggleLanguage(LangItemModel item, StateSetter bottomState) {
+    bottomState(() {
+      if (_selectedLangIds.contains(item.id)) {
+        _selectedLangIds.remove(item.id); // Bor bo'lsa, olib tashlaymiz
+      } else {
+        _selectedLangIds.add(item.id); // Yo'q bo'lsa, qo'shamiz
+      }
+
+      // UI uchun tanlangan tillar nomini birlashtiramiz
+      if (_selectedLangIds.isEmpty) {
+        _selectedLangLabel = widget.title;
+      } else {
+        _selectedLangLabel = langItems
+            .where((element) => _selectedLangIds.contains(element.id))
+            .map((e) => e.name)
+            .join(', ');
+      }
+    });
   }
 
   @override
@@ -44,54 +66,34 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.label, style: Typographies.titleSmall),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         GestureDetector(
           onTap: () async {
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
-              builder: (context, bottomState) {
-                return Column(
-                  children: [
-                    ChooseLangItem(
-                      title: langItems[0].name,
-                      isSelected: langItems[0].id == _selectedLangId,
-                      onTap: () {
-                        _selectedLang = langItems[0].name;
-                        _selectedLangId = langItems[0].id;
-                        bottomState(() {});
-                      },
-                    ),
-                    ChooseLangItem(
-                      title: langItems[1].name,
-                      isSelected: langItems[1].id == _selectedLangId,
-                      onTap: () {
-                        _selectedLang = langItems[1].name;
-                        _selectedLangId = langItems[1].id;
-                        bottomState(() {});
-                      },
-                    ),
-                    ChooseLangItem(
-                      title: langItems[2].name,
-                      isSelected: langItems[2].id == _selectedLangId,
-                      onTap: () {
-                        _selectedLang = langItems[2].name;
-                        _selectedLangId = langItems[2].id;
-                        bottomState(() {});
-                      },
-                    ),
-                  ],
-                );
-              },
               header: 'Spoken language',
               onConfirm: () {
-                widget.onItemSelected(_selectedLang ?? '');
-                setState(() {});
+                // Tanlangan barcha ID'larni yuboramiz
+                widget.onItemSelected(_selectedLangIds);
+                setState(() {}); // Asosiy UI'ni yangilash
                 context.pop();
+              },
+              builder: (context, bottomState) {
+                return Column(
+                  children: langItems.map((item) {
+                    return ChooseLangItem(
+                      title: item.name,
+                      // Ro'yxatda bor bo'lsa, belgilangan (check) bo'ladi
+                      isSelected: _selectedLangIds.contains(item.id),
+                      onTap: () => _toggleLanguage(item, bottomState),
+                    );
+                  }).toList(),
+                );
               },
             );
           },
           child: Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.lightBg2,
               borderRadius: BorderRadius.circular(999),
@@ -99,7 +101,14 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(_selectedLang ?? '', style: Typographies.labelLarge),
+                // Tanlangan tillar ro'yxati uzun bo'lsa sig'ishi uchun Expanded
+                Expanded(
+                  child: Text(
+                    _selectedLangLabel ?? '',
+                    style: Typographies.labelLarge,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 SvgPicture.asset(AppAssets.icArrowDown),
               ],
             ),

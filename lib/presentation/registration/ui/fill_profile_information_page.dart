@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/app_assets.dart';
+import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/general_info_page_view.dart';
 
 class FillProfileInformationPage extends StatefulWidget {
@@ -14,25 +15,45 @@ class FillProfileInformationPage extends StatefulWidget {
   static const String tag = '/fill_profile_information';
 
   @override
-  State<FillProfileInformationPage> createState() => _FillProfileInformationPageState();
+  State<FillProfileInformationPage> createState() =>
+      _FillProfileInformationPageState();
 }
 
-class _FillProfileInformationPageState extends State<FillProfileInformationPage> {
-  List<Widget> fillProfileWidgets = [
-    SizedBox(child: GeneralInfoPageView(key: PageStorageKey<String>('pageOne'))),
+class _FillProfileInformationPageState
+    extends State<FillProfileInformationPage> {
+  List<Widget> get fillProfileWidgets => [
+    SizedBox(
+      child: GeneralInfoPageView(
+        key: PageStorageKey<String>('pageOne'),
+        onChanged: (FillInfluencerProfileParam p1) {
+          _finalParam = p1;
+          print('final param ${_finalParam.toJson()}');
+        },
+      ),
+    ),
     SizedBox(child: Text('Second page')),
   ];
   PageController pageController = PageController();
+  FillInfluencerProfileParam _finalParam = FillInfluencerProfileParam();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, bottom: MediaQuery.of(context).padding.bottom),
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: MediaQuery.of(context).padding.bottom,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppButtons.primary(title: t.onboarding.kContinue, onTap: () {}),
+            AppButtons.primary(
+              title: t.onboarding.kContinue,
+              onTap: () {
+                print('final param ${_finalParam.toJson()}');
+              },
+            ),
             SizedBox(height: 8),
             Text('Save and continue later', style: Typographies.labelLarge),
           ],
@@ -72,7 +93,9 @@ class _FillProfileInformationPageState extends State<FillProfileInformationPage>
                     child: Center(
                       child: Text(
                         'General info (1/6)',
-                        style: Typographies.labelMedium.copyWith(color: AppColors.lightBg),
+                        style: Typographies.labelMedium.copyWith(
+                          color: AppColors.lightBg,
+                        ),
                       ),
                     ),
                   ),

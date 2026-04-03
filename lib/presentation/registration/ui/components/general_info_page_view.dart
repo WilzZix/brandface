@@ -8,13 +8,17 @@ import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../uikit/components/inputs/bio_input_field.dart';
 import 'choose_contact_detail.dart';
 import 'choose_date_of_birthday.dart';
 import 'choose_gender.dart';
 import 'choose_spoken_language.dart';
 
 class GeneralInfoPageView extends StatefulWidget {
-  const GeneralInfoPageView({super.key});
+  const GeneralInfoPageView({super.key, required this.onChanged});
+
+  final Function(FillInfluencerProfileParam) onChanged;
 
   @override
   State<GeneralInfoPageView> createState() => _GeneralInfoPageViewState();
@@ -22,8 +26,9 @@ class GeneralInfoPageView extends StatefulWidget {
 
 class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
     with AutomaticKeepAliveClientMixin<GeneralInfoPageView> {
-
   final TextEditingController _profileInfoController = TextEditingController();
+  FillInfluencerProfileParam _fillInfluencerProfileParam =
+      FillInfluencerProfileParam();
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +82,9 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           SizedBox(height: 24),
           ProfileAvatarItem(
             onTap: (int p1) {
-              print('selected icon id$p1');
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(avatarId: p1);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
             items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           ),
@@ -85,16 +92,20 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ChooseSpokenLanguage(
             title: 'Select',
             label: 'Spoken languages',
-            onItemSelected: (String p1) {
-              print('selected languagae $p1');
+            onItemSelected: (List<int> ids) {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(languageIds: ids);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
           ),
           SizedBox(height: 24),
           ChooseDateOfBirthday(
             title: 'DD.MM.YYYY',
             label: 'Date of birth',
-            onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+            onItemSelected: (DateTime date) {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(birthDate: date);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
             iconPath: AppAssets.icCalendar,
           ),
@@ -103,31 +114,30 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             title: 'Select',
             label: 'Gender',
             onItemSelected: (String p1) {
-              print('selected gender $p1');
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(gender: p1);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
           ),
           SizedBox(height: 24),
           ChooseContactDetail(
             title: 'Phone',
             label: 'Contact details',
-            onItemSelected: (String p1) {},
+            onItemSelected: (List<Contact> contacts) {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(contacts: contacts);
+              widget.onChanged(_fillInfluencerProfileParam);
+            },
           ),
-
           SizedBox(height: 24),
-          TextField(
+          BioInputField(
             controller: _profileInfoController,
-            maxLines: 4,
-            decoration: InputDecoration(
-              hintText: 'Write text here...',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-                borderSide: BorderSide(color: AppColors.borderColor),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-            ),
+            label: 'Profile information',
+            onChanged: () {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(bio: _profileInfoController.text);
+              widget.onChanged(_fillInfluencerProfileParam);
+            },
           ),
           SizedBox(height: 24),
         ],

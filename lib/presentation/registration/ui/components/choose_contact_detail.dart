@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../uikit/components/buttons/buttons.dart';
 import '../../../../uikit/components/inputs/email_input_field.dart';
@@ -22,7 +23,7 @@ class ChooseContactDetail extends StatefulWidget {
 
   final String title;
   final String label;
-  final Function(String) onItemSelected;
+  final Function(List<Contact>) onItemSelected;
 
   @override
   State<ChooseContactDetail> createState() => _ChooseContactDetailState();
@@ -39,15 +40,19 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
     LangItemModel(name: 'Telegram', id: 2),
     LangItemModel(name: 'Instagram', id: 3),
   ];
-  List<String> contactItems = [];
+  List<Contact> contactItems = [];
 
   void _onApply() {
     final value = _controller.text.trim();
     if (value.isNotEmpty) {
       setState(() {
-        contactItems.add(value);
+        contactItems.add(
+          Contact(type: value, value: _inputFieldType.id.toString()),
+        );
         _controller.clear();
       });
+
+      widget.onItemSelected(contactItems);
     }
   }
 
@@ -116,7 +121,6 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
               },
               header: 'Select contact detail',
               onConfirm: () {
-                widget.onItemSelected(_selectedLang ?? '');
                 setState(() {});
                 context.pop();
               },
@@ -149,29 +153,39 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
             AppButtons.primary(title: 'Apply', onTap: _onApply),
           ],
         ),
-        SizedBox(height: 24),
+        SizedBox(height: 8),
         if (contactItems.isNotEmpty)
           ListView.builder(
             itemCount: contactItems.length,
             shrinkWrap: true,
+            padding: EdgeInsets.zero,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(contactItems[index], style: Typographies.bodyMedium),
-                  GestureDetector(
-                    onTap: () {
-                      contactItems.remove(contactItems[index]);
-                    },
-                    child: Text(
-                      'Delete',
-                      style: Typographies.labelLarge.copyWith(
-                        color: AppColors.red,
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      contactItems[index].type ?? '',
+                      style: Typographies.bodyMedium,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          contactItems.removeAt(index);
+                        });
+                        widget.onItemSelected(contactItems);
+                      },
+                      child: Text(
+                        'Delete',
+                        style: Typographies.labelLarge.copyWith(
+                          color: AppColors.red,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),
@@ -224,4 +238,14 @@ class _ContactInputFieldProviderState extends State<ContactInputFieldProvider> {
   }
 }
 
-enum InputFieldType { phone, email, telegram, instagram }
+enum InputFieldType {
+  phone(0),
+  email(1),
+  telegram(2),
+  instagram(3);
+
+  final int id;
+
+  // Konstruktor
+  const InputFieldType(this.id);
+}

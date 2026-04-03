@@ -13,13 +13,14 @@ class ChooseDateOfBirthday extends StatefulWidget {
     super.key,
     required this.title,
     required this.label,
-    required this.onItemSelected, required this.iconPath,
+    required this.onItemSelected,
+    required this.iconPath,
   });
 
   final String title;
   final String label;
   final String iconPath;
-  final Function(String) onItemSelected;
+  final Function(DateTime) onItemSelected;
 
   @override
   State<ChooseDateOfBirthday> createState() => _ChooseDateOfBirthdayState();
@@ -27,6 +28,7 @@ class ChooseDateOfBirthday extends StatefulWidget {
 
 class _ChooseDateOfBirthdayState extends State<ChooseDateOfBirthday> {
   String? _selectedLang;
+  DateTime? _selectedDate;
 
   @override
   void initState() {
@@ -53,6 +55,7 @@ class _ChooseDateOfBirthdayState extends State<ChooseDateOfBirthday> {
                     // Faqat sana (kun, oy, yil)
                     initialDateTime: DateTime(2008, 12, 11),
                     onDateTimeChanged: (DateTime newDate) {
+                      _selectedDate = newDate;
                       _selectedLang = DateFormat('dd.MM.yyyy').format(newDate);
                     },
                     use24hFormat: true,
@@ -63,7 +66,7 @@ class _ChooseDateOfBirthdayState extends State<ChooseDateOfBirthday> {
               },
               header: 'Select date of birth',
               onConfirm: () {
-                widget.onItemSelected(_selectedLang ?? '');
+                widget.onItemSelected(_selectedDate ?? DateTime.now());
                 setState(() {});
                 context.pop();
               },
