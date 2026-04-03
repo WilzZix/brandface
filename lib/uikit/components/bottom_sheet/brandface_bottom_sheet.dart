@@ -90,4 +90,38 @@ class BrandfaceBottomSheet {
       },
     );
   }
+
+  static Future openFailureBottomSheet({
+    required BuildContext context,
+    required String message,
+  }) async {
+    return await showModalBottomSheet(
+      context: context,
+      constraints: const BoxConstraints(maxWidth: double.infinity),
+      builder: (context) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: .5, sigmaY: .5),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 96, width: 96, child: Icon(Icons.error)),
+                SizedBox(height: 24),
+                Text(message, style: Typographies.titleMedium),
+                SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

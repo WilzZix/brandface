@@ -1,5 +1,5 @@
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
-import 'package:brandface/presentation/registration/bloc/registration_bloc.dart';
+import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
