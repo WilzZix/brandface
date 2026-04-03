@@ -15,6 +15,7 @@ import '../../../core/di/app_di.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/audience_and_followers_page_view.dart';
 import 'components/choose_services.dart';
+import 'components/experience_page_view.dart';
 import 'components/general_info_page_view.dart';
 import 'components/niche_page_view.dart';
 
@@ -66,13 +67,17 @@ class _FillProfileInformationPageState
     SizedBox(
       child: AudienceAndFollowersPageView(
         key: PageStorageKey<String>('pageFour'),
-        onChanged: (FillInfluencerProfileParam p1) {},
+        onChanged: (FillInfluencerProfileParam p1) {
+          _finalParam = _finalParam.copyWith(audience: p1.audience);
+        },
       ),
     ),
     SizedBox(
-      child: NichePageView(
+      child: ExperiencePageView(
         key: PageStorageKey<String>('pageFive'),
-        onChanged: (FillInfluencerProfileParam p1) {},
+        onChanged: (FillInfluencerProfileParam p1) {
+
+        },
       ),
     ),
     SizedBox(
