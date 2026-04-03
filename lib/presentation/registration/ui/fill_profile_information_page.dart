@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import 'components/audience_and_followers_page_view.dart';
 import 'components/choose_services.dart';
 import 'components/general_info_page_view.dart';
 import 'components/niche_page_view.dart';
@@ -63,7 +64,7 @@ class _FillProfileInformationPageState
       ),
     ),
     SizedBox(
-      child: NichePageView(
+      child: AudienceAndFollowersPageView(
         key: PageStorageKey<String>('pageFour'),
         onChanged: (FillInfluencerProfileParam p1) {},
       ),

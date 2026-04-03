@@ -4,7 +4,11 @@ import '../../tokens/colors.dart';
 import '../../typography/typography.dart';
 
 class CredInputField extends StatefulWidget {
-  const CredInputField({super.key, required this.controller, required this.label});
+  const CredInputField({
+    super.key,
+    required this.controller,
+    required this.label,
+  });
 
   final TextEditingController controller;
   final String label;
@@ -17,18 +21,6 @@ class _CredInputFieldState extends State<CredInputField> {
   final FocusNode _credFocusNode = FocusNode();
 
   TextEditingController get _controller => widget.controller;
-  bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _credFocusNode.addListener(() {
-      setState(() {
-        _isFocused = _credFocusNode.hasFocus;
-      });
-    });
-  }
 
   @override
   void dispose() {
@@ -47,7 +39,9 @@ class _CredInputFieldState extends State<CredInputField> {
       },
       decoration: InputDecoration(
         labelText: widget.label,
-        labelStyle: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
+        labelStyle: Typographies.bodySmall.copyWith(
+          color: AppColors.mutedBlack,
+        ),
         hintText: widget.label,
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
         border: OutlineInputBorder(
