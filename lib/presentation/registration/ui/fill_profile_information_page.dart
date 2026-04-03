@@ -42,6 +42,30 @@ class _FillProfileInformationPageState
         onChanged: (FillInfluencerProfileParam p1) {},
       ),
     ),
+    SizedBox(
+      child: NichePageView(
+        key: PageStorageKey<String>('pageThird'),
+        onChanged: (FillInfluencerProfileParam p1) {},
+      ),
+    ),
+    SizedBox(
+      child: NichePageView(
+        key: PageStorageKey<String>('pageFour'),
+        onChanged: (FillInfluencerProfileParam p1) {},
+      ),
+    ),
+    SizedBox(
+      child: NichePageView(
+        key: PageStorageKey<String>('pageFive'),
+        onChanged: (FillInfluencerProfileParam p1) {},
+      ),
+    ),
+    SizedBox(
+      child: NichePageView(
+        key: PageStorageKey<String>('pageSix'),
+        onChanged: (FillInfluencerProfileParam p1) {},
+      ),
+    ),
   ];
 
   PageController pageController = PageController();
@@ -54,6 +78,14 @@ class _FillProfileInformationPageState
         return 'General info (1/6)';
       case 1:
         return 'Niche (2/6)';
+      case 2:
+        return 'Services (3/6)';
+      case 3:
+        return 'Audience and followers (4/6)';
+      case 4:
+        return 'Experience (5/6)';
+      case 5:
+        return 'My Pricing/Tariffs (6/6)';
       default:
         return 'General info (1/6)';
     }
