@@ -8,26 +8,24 @@ import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_spoken_language.dart';
 
-class ChooseNiche extends StatefulWidget {
-  const ChooseNiche({super.key, required this.onItemSelected});
+class ChooseServices extends StatefulWidget {
+  const ChooseServices({super.key, required this.onItemSelected});
 
   final Function(LangItemModel) onItemSelected;
 
   @override
-  State<ChooseNiche> createState() => _ChooseNicheState();
+  State<ChooseServices> createState() => _ChooseServicesState();
 }
 
-class _ChooseNicheState extends State<ChooseNiche> {
+class _ChooseServicesState extends State<ChooseServices> {
   String? _selectedText;
   int? _selectedId;
 
   final List<LangItemModel> nicheItems = [
-    LangItemModel(name: "Business", id: 0),
-    LangItemModel(name: 'Fashion', id: 1),
-    LangItemModel(name: 'Finance', id: 2),
-    LangItemModel(name: 'Marketing', id: 3),
-    LangItemModel(name: 'Movies', id: 4),
-    LangItemModel(name: 'Rap', id: 5),
+    LangItemModel(name: "Youtube videos", id: 0),
+    LangItemModel(name: 'Advertising', id: 1),
+    LangItemModel(name: 'Videos', id: 2),
+    LangItemModel(name: 'Podcasts', id: 3),
   ];
 
   @override
@@ -35,7 +33,6 @@ class _ChooseNicheState extends State<ChooseNiche> {
     _selectedText = 'Select niche';
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,18 +42,14 @@ class _ChooseNicheState extends State<ChooseNiche> {
           onTap: () async {
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
-              header: 'Select niche',
+              header: 'Select service',
               onConfirm: () {
                 if (_selectedId != null) {
-                  // Tanlangan obyektni topamiz
+
                   final selectedItem = nicheItems.firstWhere(
-                    (item) => item.id == _selectedId,
+                        (item) => item.id == _selectedId,
                   );
-
-                  // Ota-onaga yuboramiz
                   widget.onItemSelected(selectedItem);
-
-                  // UI ni yangilaymiz
                   setState(() {
                     _selectedText = selectedItem.name;
                   });
@@ -74,7 +67,7 @@ class _ChooseNicheState extends State<ChooseNiche> {
                         _selectedText = item.name;
                         _selectedId = item.id;
                         bottomState(
-                          () {},
+                              () {},
                         ); // Faqat bottomSheet UI'ni yangilaydi
                       },
                     );

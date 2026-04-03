@@ -1,5 +1,6 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
+import 'package:brandface/presentation/registration/ui/components/services_page_view.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -12,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import 'components/choose_services.dart';
 import 'components/general_info_page_view.dart';
 import 'components/niche_page_view.dart';
 
@@ -43,7 +45,7 @@ class _FillProfileInformationPageState
       ),
     ),
     SizedBox(
-      child: NichePageView(
+      child: ServicesPageView(
         key: PageStorageKey<String>('pageThird'),
         onChanged: (FillInfluencerProfileParam p1) {},
       ),
