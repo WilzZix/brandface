@@ -1,5 +1,6 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
+import 'package:brandface/presentation/registration/ui/components/services_page_view.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -12,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import 'components/choose_services.dart';
 import 'components/general_info_page_view.dart';
 import 'components/niche_page_view.dart';
 
@@ -32,13 +34,49 @@ class _FillProfileInformationPageState
       child: GeneralInfoPageView(
         key: PageStorageKey<String>('pageOne'),
         onChanged: (FillInfluencerProfileParam p1) {
-          _finalParam = p1;
+          _finalParam = _finalParam.copyWith(
+            displayName: p1.displayName,
+            avatarId: p1.avatarId,
+            bio: p1.bio,
+            regionId: p1.regionId,
+            cityId: p1.cityId,
+            birthDate: p1.birthDate,
+            gender: p1.gender,
+          );
         },
       ),
     ),
     SizedBox(
       child: NichePageView(
         key: PageStorageKey<String>('pageSecond'),
+        onChanged: (FillInfluencerProfileParam p1) {
+          _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+        },
+      ),
+    ),
+    SizedBox(
+      child: ServicesPageView(
+        key: PageStorageKey<String>('pageThird'),
+        onChanged: (FillInfluencerProfileParam p1) {
+          _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
+        },
+      ),
+    ),
+    SizedBox(
+      child: NichePageView(
+        key: PageStorageKey<String>('pageFour'),
+        onChanged: (FillInfluencerProfileParam p1) {},
+      ),
+    ),
+    SizedBox(
+      child: NichePageView(
+        key: PageStorageKey<String>('pageFive'),
+        onChanged: (FillInfluencerProfileParam p1) {},
+      ),
+    ),
+    SizedBox(
+      child: NichePageView(
+        key: PageStorageKey<String>('pageSix'),
         onChanged: (FillInfluencerProfileParam p1) {},
       ),
     ),
@@ -54,6 +92,14 @@ class _FillProfileInformationPageState
         return 'General info (1/6)';
       case 1:
         return 'Niche (2/6)';
+      case 2:
+        return 'Services (3/6)';
+      case 3:
+        return 'Audience and followers (4/6)';
+      case 4:
+        return 'Experience (5/6)';
+      case 5:
+        return 'My Pricing/Tariffs (6/6)';
       default:
         return 'General info (1/6)';
     }

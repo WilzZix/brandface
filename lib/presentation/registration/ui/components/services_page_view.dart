@@ -1,24 +1,33 @@
-import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
-import 'choose_niche.dart';
+import 'choose_services.dart';
 import 'choose_spoken_language.dart';
 
-class NichePageView extends StatefulWidget {
-  const NichePageView({super.key, required this.onChanged});
+class ServicesPageView extends StatefulWidget {
+  const ServicesPageView({super.key, required this.onChanged});
 
   final Function(FillInfluencerProfileParam) onChanged;
 
   @override
-  State<NichePageView> createState() => _NichePageViewState();
+  State<ServicesPageView> createState() => _ServicesPageViewState();
 }
 
-class _NichePageViewState extends State<NichePageView>
-    with AutomaticKeepAliveClientMixin<NichePageView> {
+class _ServicesPageViewState extends State<ServicesPageView>
+    with AutomaticKeepAliveClientMixin<ServicesPageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
+
+  // Tanlangan barcha niche'larni shu yerda saqlaymiz
   List<LangItemModel> _selectedNichesItems = [];
+
+  void _updateData() {
+    _param = _param.copyWith(
+      categoryIds: _selectedNichesItems.map((e) => e.id).toList(),
+    );
+    widget.onChanged(_param);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +36,7 @@ class _NichePageViewState extends State<NichePageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Niches', style: Typographies.titleMedium),
+          Text('Services', style: Typographies.titleMedium),
           const SizedBox(height: 24),
           SizedBox(
             height: 24,
@@ -46,7 +55,10 @@ class _NichePageViewState extends State<NichePageView>
                     borderRadius: BorderRadius.circular(999),
                   ),
 
-                  child: Text('Business', style: Typographies.labelMedium),
+                  child: Text(
+                    'Creating reels',
+                    style: Typographies.labelMedium,
+                  ),
                 );
               },
 
@@ -56,7 +68,7 @@ class _NichePageViewState extends State<NichePageView>
             ),
           ),
           SizedBox(height: 16),
-          ChooseNiche(
+          ChooseServices(
             onItemSelected: (LangItemModel item) {
               setState(() {
                 if (!_selectedNichesItems.any((e) => e.id == item.id)) {
@@ -111,13 +123,6 @@ class _NichePageViewState extends State<NichePageView>
         ],
       ),
     );
-  }
-
-  void _updateData() {
-    _param = _param.copyWith(
-      categoryIds: _selectedNichesItems.map((e) => e.id).toList(),
-    );
-    widget.onChanged(_param);
   }
 
   @override
