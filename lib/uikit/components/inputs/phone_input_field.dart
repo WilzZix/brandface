@@ -15,7 +15,10 @@ class PhoneInputField extends StatefulWidget {
 }
 
 class _PhoneInputFieldState extends State<PhoneInputField> {
-  final maskFormatter = MaskTextInputFormatter(mask: '## ### ## ##', filter: {"#": RegExp(r'[0-9]')});
+  final maskFormatter = MaskTextInputFormatter(
+    mask: '## ### ## ##',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
   final FocusNode _phoneFocusNode = FocusNode();
 
   TextEditingController get _controller => widget.controller;
@@ -35,7 +38,6 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
   @override
   void dispose() {
     _phoneFocusNode.dispose();
-    _controller.dispose();
     super.dispose();
   }
 
@@ -58,7 +60,9 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
               )
             : null,
         labelText: t.login.phone_number,
-        labelStyle: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
+        labelStyle: Typographies.bodySmall.copyWith(
+          color: AppColors.mutedBlack,
+        ),
         hintText: t.login.phone_number,
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
         border: OutlineInputBorder(

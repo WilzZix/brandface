@@ -2,15 +2,23 @@ import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
+import 'package:brandface/uikit/components/inputs/phone_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../uikit/components/inputs/bio_input_field.dart';
+import 'choose_contact_detail.dart';
+import 'choose_date_of_birthday.dart';
+import 'choose_gender.dart';
 import 'choose_spoken_language.dart';
 
 class GeneralInfoPageView extends StatefulWidget {
-  const GeneralInfoPageView({super.key});
+  const GeneralInfoPageView({super.key, required this.onChanged});
+
+  final Function(FillInfluencerProfileParam) onChanged;
 
   @override
   State<GeneralInfoPageView> createState() => _GeneralInfoPageViewState();
@@ -18,8 +26,9 @@ class GeneralInfoPageView extends StatefulWidget {
 
 class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
     with AutomaticKeepAliveClientMixin<GeneralInfoPageView> {
-  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _profileInfoController = TextEditingController();
+  FillInfluencerProfileParam _fillInfluencerProfileParam =
+      FillInfluencerProfileParam();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +44,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
               SizedBox(
                 height: 96,
                 width: 96,
-                child: Image.asset('assets/images/im_person_avatar_sample.png', fit: BoxFit.cover),
+                child: Image.asset(
+                  'assets/images/im_person_avatar_sample.png',
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(width: 16),
               Column(
@@ -59,64 +71,73 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                   SizedBox(height: 8),
                   Text(
                     'SVG, PNG, JPG or GIF (MAX. 800x400px).',
-                    style: Typographies.bodySmall.copyWith(color: AppColors.grey),
+                    style: Typographies.bodySmall.copyWith(
+                      color: AppColors.grey,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
           SizedBox(height: 24),
-          ProfileAvatarItem(onTap: (int p1) {}, items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+          ProfileAvatarItem(
+            onTap: (int p1) {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(avatarId: p1);
+              widget.onChanged(_fillInfluencerProfileParam);
+            },
+            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          ),
           SizedBox(height: 40),
           ChooseSpokenLanguage(
             title: 'Select',
             label: 'Spoken languages',
-            onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+            onItemSelected: (List<int> ids) {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(languageIds: ids);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
           ),
           SizedBox(height: 24),
-          ChooseSpokenLanguage(
+          ChooseDateOfBirthday(
             title: 'DD.MM.YYYY',
             label: 'Date of birth',
-            onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+            onItemSelected: (DateTime date) {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(birthDate: date);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
+            iconPath: AppAssets.icCalendar,
           ),
           SizedBox(height: 24),
-          ChooseSpokenLanguage(
+          ChooseGender(
             title: 'Select',
             label: 'Gender',
             onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(gender: p1);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
           ),
           SizedBox(height: 24),
-          ChooseSpokenLanguage(
+          ChooseContactDetail(
             title: 'Phone',
             label: 'Contact details',
-            onItemSelected: (String p1) {
-              //Params ga berib yuboraman p1ni
+            onItemSelected: (List<Contact> contacts) {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(contacts: contacts);
+              widget.onChanged(_fillInfluencerProfileParam);
             },
           ),
-          SizedBox(height: 8),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: CredInputField(controller: _phoneController, label: 'Write phone number'),
-              ),
-              SizedBox(width: 8),
-              AppButtons.primary(title: 'Apply', onTap: () {}),
-            ],
-          ),
           SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('+99989 888 77 22', style: Typographies.bodyMedium),
-              Text('Delete', style: Typographies.labelLarge.copyWith(color: AppColors.red)),
-            ],
+          BioInputField(
+            controller: _profileInfoController,
+            label: 'Profile information',
+            onChanged: () {
+              _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                  .copyWith(bio: _profileInfoController.text);
+              widget.onChanged(_fillInfluencerProfileParam);
+            },
           ),
           SizedBox(height: 24),
         ],

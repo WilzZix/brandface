@@ -15,4 +15,6 @@ class AppAssets {
   static String icCheckBox = 'assets/icons/ic_check_box.svg';
   static String icCheckBoxDisabled = 'assets/icons/ic_checkbox_disable.svg';
   static String icArrowDown = 'assets/icons/chevron-down.svg';
+  static String icCheck = 'assets/icons/check.svg';
+  static String icCalendar = 'assets/icons/calendar-month.svg';
 }
