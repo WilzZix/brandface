@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
+import '../../../core/enums/enums.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/audience_and_followers_page_view.dart';
 import 'components/choose_services.dart';
@@ -21,9 +22,10 @@ import 'components/my_pricing_tariffs_page_view.dart';
 import 'components/niche_page_view.dart';
 
 class FillProfileInformationPage extends StatefulWidget {
-  const FillProfileInformationPage({super.key});
+  const FillProfileInformationPage({super.key, required this.userRole});
 
   static const String tag = '/fill_profile_information';
+  final UserRole userRole;
 
   @override
   State<FillProfileInformationPage> createState() =>
@@ -32,6 +34,7 @@ class FillProfileInformationPage extends StatefulWidget {
 
 class _FillProfileInformationPageState
     extends State<FillProfileInformationPage> {
+
   List<Widget> get fillProfileWidgets => [
     SizedBox(
       child: GeneralInfoPageView(
@@ -76,9 +79,7 @@ class _FillProfileInformationPageState
     SizedBox(
       child: ExperiencePageView(
         key: PageStorageKey<String>('pageFive'),
-        onChanged: (FillInfluencerProfileParam p1) {
-
-        },
+        onChanged: (FillInfluencerProfileParam p1) {},
       ),
     ),
     SizedBox(

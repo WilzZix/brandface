@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
               if (isLoggedIn) {
                 //Return when registraion verstka done
                 // context.go(HomePage.tag);
-                context.go(FillProfileInformationPage.tag);
+                context.go(RegistrationPage.tag);
               } else {
                 context.go(LoginPage.tag);
               }
