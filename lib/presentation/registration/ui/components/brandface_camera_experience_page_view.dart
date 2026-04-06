@@ -38,6 +38,12 @@ class _BrandfaceCameraExperiencePageViewState
           CredInputField(
             controller: _yearsController,
             label: 'Write years of experience',
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 24),
           Text('Optional experience', style: Typographies.titleMedium),
@@ -45,6 +51,12 @@ class _BrandfaceCameraExperiencePageViewState
           CredInputField(
             controller: _optionalExperienceController,
             label: 'Describe optional experience',
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 24),
           Container(

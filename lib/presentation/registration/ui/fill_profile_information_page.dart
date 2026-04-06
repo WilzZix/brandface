@@ -38,7 +38,6 @@ class FillProfileInformationPage extends StatefulWidget {
 
 class _FillProfileInformationPageState
     extends State<FillProfileInformationPage> {
-
   List<Widget> get fillProfileWidgets {
     switch (widget.userRole) {
       case UserRole.influencer:
@@ -238,14 +237,14 @@ class _FillProfileInformationPageState
 
   int get _totalPages => fillProfileWidgets.length;
 
-  String pageViewTitle() {
+  String pageViewTitle(BuildContext context) {
     switch (widget.userRole) {
       case UserRole.influencer:
         const titles = [
           'General info',
           'Niche',
           'Services',
-          'Audience & followers',
+          'Audience and followers',
           'Experience',
           'My Pricing/Tariffs',
         ];
@@ -258,7 +257,7 @@ class _FillProfileInformationPageState
           'Services',
           'Audience & followers',
           'Experience',
-          'Availability',
+          'My Pricing/Tariffs',
         ];
         return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
 
@@ -267,17 +266,14 @@ class _FillProfileInformationPageState
           'General info',
           'Niche',
           'Services',
-          'Brand segment & geography',
-          'Camera experience',
-          'Exclusivity & pricing',
+          'Audience and followers',
+          'Experience',
+          'My Pricing/Tariffs',
         ];
         return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
 
       case UserRole.brand:
-        const titles = [
-          'Region, city & sphere',
-          'Categories',
-        ];
+        const titles = ['General info', 'Categories'];
         return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
     }
   }
@@ -386,7 +382,7 @@ class _FillProfileInformationPageState
                       ),
                       child: Center(
                         child: Text(
-                          pageViewTitle(),
+                          pageViewTitle(context),
                           style: Typographies.labelMedium.copyWith(
                             color: AppColors.lightBg,
                           ),

@@ -62,6 +62,12 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView> {
           CredInputField(
             controller: _paymentByProjectController,
             label: 'Write starting price',
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
           SizedBox(height: 16),
           Text('Payment types', style: Typographies.titleMedium),

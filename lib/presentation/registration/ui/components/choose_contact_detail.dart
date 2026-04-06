@@ -225,6 +225,12 @@ class _ContactInputFieldProviderState extends State<ContactInputFieldProvider> {
         child: CredInputField(
           controller: widget.controller,
           label: 'Telegram user name',
+          validator: (String? value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          },
         ),
       ),
 
@@ -232,6 +238,12 @@ class _ContactInputFieldProviderState extends State<ContactInputFieldProvider> {
         child: CredInputField(
           controller: widget.controller,
           label: 'Instagram account',
+          validator: (String? value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          },
         ),
       ),
     };
