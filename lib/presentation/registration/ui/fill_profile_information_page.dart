@@ -1,5 +1,12 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
+import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
+import 'package:brandface/presentation/registration/ui/components/ambassador_experience_page_view.dart';
+import 'package:brandface/presentation/registration/ui/components/brand_categories_page_view.dart';
+import 'package:brandface/presentation/registration/ui/components/brand_info_page_view.dart';
+import 'package:brandface/presentation/registration/ui/components/brandface_camera_experience_page_view.dart';
+import 'package:brandface/presentation/registration/ui/components/brandface_pricing_page_view.dart';
+import 'package:brandface/presentation/registration/ui/components/brandface_segment_page_view.dart';
 import 'package:brandface/presentation/registration/ui/components/services_page_view.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
@@ -32,81 +39,246 @@ class FillProfileInformationPage extends StatefulWidget {
 class _FillProfileInformationPageState
     extends State<FillProfileInformationPage> {
 
-  List<Widget> get fillProfileWidgets => [
-    SizedBox(
-      child: GeneralInfoPageView(
-        key: PageStorageKey<String>('pageOne'),
-        onChanged: (FillInfluencerProfileParam p1) {
-          _finalParam = _finalParam.copyWith(
-            displayName: p1.displayName,
-            avatarId: p1.avatarId,
-            bio: p1.bio,
-            regionId: p1.regionId,
-            cityId: p1.cityId,
-            birthDate: p1.birthDate,
-            gender: p1.gender,
-          );
-        },
-      ),
-    ),
-    SizedBox(
-      child: NichePageView(
-        key: PageStorageKey<String>('pageSecond'),
-        onChanged: (FillInfluencerProfileParam p1) {
-          _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
-        },
-      ),
-    ),
-    SizedBox(
-      child: ServicesPageView(
-        key: PageStorageKey<String>('pageThird'),
-        onChanged: (FillInfluencerProfileParam p1) {
-          _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
-        },
-      ),
-    ),
-    SizedBox(
-      child: AudienceAndFollowersPageView(
-        key: PageStorageKey<String>('pageFour'),
-        onChanged: (FillInfluencerProfileParam p1) {
-          _finalParam = _finalParam.copyWith(audience: p1.audience);
-        },
-      ),
-    ),
-    SizedBox(
-      child: ExperiencePageView(
-        key: PageStorageKey<String>('pageFive'),
-        onChanged: (FillInfluencerProfileParam p1) {},
-      ),
-    ),
-    SizedBox(
-      child: MyPricingTariffsPageView(
-        key: PageStorageKey<String>('pageSix'),
-        onChanged: (FillInfluencerProfileParam p1) {},
-      ),
-    ),
-  ];
+  List<Widget> get fillProfileWidgets {
+    switch (widget.userRole) {
+      case UserRole.influencer:
+        return [
+          SizedBox(
+            child: GeneralInfoPageView(
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(
+                  displayName: p1.displayName,
+                  avatarId: p1.avatarId,
+                  bio: p1.bio,
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  birthDate: p1.birthDate,
+                  gender: p1.gender,
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            child: NichePageView(
+              key: const PageStorageKey<String>('pageTwo'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+              },
+            ),
+          ),
+          SizedBox(
+            child: ServicesPageView(
+              key: const PageStorageKey<String>('pageThree'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
+              },
+            ),
+          ),
+          SizedBox(
+            child: AudienceAndFollowersPageView(
+              key: const PageStorageKey<String>('pageFour'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(audience: p1.audience);
+              },
+            ),
+          ),
+          SizedBox(
+            child: ExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (FillInfluencerProfileParam p1) {},
+            ),
+          ),
+          SizedBox(
+            child: MyPricingTariffsPageView(
+              key: const PageStorageKey<String>('pageSix'),
+              onChanged: (FillInfluencerProfileParam p1) {},
+            ),
+          ),
+        ];
+
+      case UserRole.ambassador:
+        return [
+          SizedBox(
+            child: GeneralInfoPageView(
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(
+                  displayName: p1.displayName,
+                  avatarId: p1.avatarId,
+                  bio: p1.bio,
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  birthDate: p1.birthDate,
+                  gender: p1.gender,
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            child: NichePageView(
+              key: const PageStorageKey<String>('pageTwo'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+              },
+            ),
+          ),
+          SizedBox(
+            child: ServicesPageView(
+              key: const PageStorageKey<String>('pageThree'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
+              },
+            ),
+          ),
+          SizedBox(
+            child: AudienceAndFollowersPageView(
+              key: const PageStorageKey<String>('pageFour'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(audience: p1.audience);
+              },
+            ),
+          ),
+          SizedBox(
+            child: AmbassadorExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (FillInfluencerProfileParam p1) {},
+            ),
+          ),
+          SizedBox(
+            child: AmbassadorContractPageView(
+              key: const PageStorageKey<String>('pageSix'),
+              onChanged: (FillInfluencerProfileParam p1) {},
+            ),
+          ),
+        ];
+
+      case UserRole.brandface:
+        return [
+          SizedBox(
+            child: GeneralInfoPageView(
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(
+                  displayName: p1.displayName,
+                  avatarId: p1.avatarId,
+                  bio: p1.bio,
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  birthDate: p1.birthDate,
+                  gender: p1.gender,
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            child: NichePageView(
+              key: const PageStorageKey<String>('pageTwo'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+              },
+            ),
+          ),
+          SizedBox(
+            child: ServicesPageView(
+              key: const PageStorageKey<String>('pageThree'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
+              },
+            ),
+          ),
+          SizedBox(
+            child: BrandfaceSegmentPageView(
+              key: const PageStorageKey<String>('pageFour'),
+              onChanged: (FillInfluencerProfileParam p1) {},
+            ),
+          ),
+          SizedBox(
+            child: BrandfaceCameraExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (FillInfluencerProfileParam p1) {},
+            ),
+          ),
+          SizedBox(
+            child: BrandfacePricingPageView(
+              key: const PageStorageKey<String>('pageSix'),
+              onChanged: (FillInfluencerProfileParam p1) {},
+            ),
+          ),
+        ];
+
+      case UserRole.brand:
+        return [
+          SizedBox(
+            child: BrandInfoPageView(
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            child: BrandCategoriesPageView(
+              key: const PageStorageKey<String>('pageTwo'),
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+              },
+            ),
+          ),
+        ];
+    }
+  }
 
   PageController pageController = PageController();
   FillInfluencerProfileParam _finalParam = FillInfluencerProfileParam();
   int _currentPage = 0;
 
+  int get _totalPages => fillProfileWidgets.length;
+
   String pageViewTitle() {
-    switch (_currentPage) {
-      case 0:
-        return 'General info (1/6)';
-      case 1:
-        return 'Niche (2/6)';
-      case 2:
-        return 'Services (3/6)';
-      case 3:
-        return 'Audience and followers (4/6)';
-      case 4:
-        return 'Experience (5/6)';
-      case 5:
-        return 'My Pricing/Tariffs (6/6)';
-      default:
-        return 'General info (1/6)';
+    switch (widget.userRole) {
+      case UserRole.influencer:
+        const titles = [
+          'General info',
+          'Niche',
+          'Services',
+          'Audience & followers',
+          'Experience',
+          'My Pricing/Tariffs',
+        ];
+        return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
+
+      case UserRole.ambassador:
+        const titles = [
+          'General info',
+          'Niche',
+          'Services',
+          'Audience & followers',
+          'Experience',
+          'Availability',
+        ];
+        return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
+
+      case UserRole.brandface:
+        const titles = [
+          'General info',
+          'Niche',
+          'Services',
+          'Brand segment & geography',
+          'Camera experience',
+          'Exclusivity & pricing',
+        ];
+        return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
+
+      case UserRole.brand:
+        const titles = [
+          'Region, city & sphere',
+          'Categories',
+        ];
+        return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
     }
   }
 
@@ -146,7 +318,6 @@ class _FillProfileInformationPageState
                   if (_currentPage < fillProfileWidgets.length - 1) {
                     pageController.nextPage(
                       duration: const Duration(milliseconds: 400),
-                      // 400ms - optimal vaqt
                       curve: Curves.easeInOut,
                     );
                   }
@@ -179,14 +350,27 @@ class _FillProfileInformationPageState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(999),
-                      color: AppColors.lightBg2,
+                  GestureDetector(
+                    onTap: () {
+                      if (_currentPage > 0) {
+                        pageController.previousPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(999),
+                        color: AppColors.lightBg2,
+                      ),
+                      child: SvgPicture.asset(AppAssets.icArrowLeft),
                     ),
-                    child: SvgPicture.asset(AppAssets.icArrowLeft),
                   ),
                   SizedBox(width: 8),
                   Expanded(
@@ -211,14 +395,27 @@ class _FillProfileInformationPageState
                     ),
                   ),
                   SizedBox(width: 8),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(999),
-                      color: AppColors.lightBg2,
+                  GestureDetector(
+                    onTap: () {
+                      if (_currentPage < fillProfileWidgets.length - 1) {
+                        pageController.nextPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(999),
+                        color: AppColors.lightBg2,
+                      ),
+                      child: SvgPicture.asset(AppAssets.icArrowRight),
                     ),
-                    child: SvgPicture.asset(AppAssets.icArrowRight),
                   ),
                 ],
               ),

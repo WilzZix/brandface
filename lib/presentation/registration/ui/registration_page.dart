@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/enums/enums.dart';
 import '../../../core/i18n/strings.g.dart';
 import '../../../uikit/components/inputs/cred_input_field.dart';
 import 'components/select_role.dart';
@@ -21,7 +22,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  String? selectedRole;
+  UserRole _selectedUserRole = UserRole.influencer;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
 
@@ -32,7 +33,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
         listener: (context, state) {
           state.maybeWhen(
             userRegistered: (registerEntity) {
-              context.push(FillProfileInformationPage.tag);
+              context.push(
+                FillProfileInformationPage.tag,
+                extra: _selectedUserRole,
+              );
             },
             userRegisterFailure: (msg) {},
             orElse: () {},
@@ -49,7 +53,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(height: 24),
               SelectRole(
                 onRoleSelected: (role) {
-                  selectedRole = role;
+                  _selectedUserRole = _roleFromString(role);
                 },
               ),
               SizedBox(height: 24),
@@ -60,10 +64,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
               AppButtons.primary(
                 title: t.onboarding.kContinue,
                 onTap: () {
+                  context.push(
+                    FillProfileInformationPage.tag,
+                    extra: _selectedUserRole,
+                  );
                   context.read<RegistrationBloc>().add(
                     RegistrationEvent.registration(
                       params: RegistrationParams(
-                        role: selectedRole ?? '',
+                        role: _selectedUserRole.name,
                         firstName: _nameController.text,
                         lastName: _surnameController.text,
                       ),
@@ -77,5 +85,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ),
       ),
     );
+  }
+
+  UserRole _roleFromString(String role) {
+    switch (role.toLowerCase()) {
+      case 'ambassador':
+        return UserRole.ambassador;
+      case 'brandface':
+        return UserRole.brandface;
+      case 'brand':
+        return UserRole.brand;
+      default:
+        return UserRole.influencer;
+    }
   }
 }

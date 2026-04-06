@@ -16,14 +16,27 @@ class AppButtons extends StatefulWidget {
 }
 
 class _AppButtonsState extends State<AppButtons> {
+  bool _isPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(999)),
-        child: Center(child: Text(widget.title, style: Typographies.labelLarge)),
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.96 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          decoration: BoxDecoration(
+            color: _isPressed ? AppColors.primary.withValues(alpha: 0.85) : AppColors.primary,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Center(child: Text(widget.title, style: Typographies.labelLarge)),
+        ),
       ),
     );
   }

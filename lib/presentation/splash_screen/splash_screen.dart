@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_assets.dart';
 import '../../core/i18n/strings.g.dart';
-import '../login/ui/login_page.dart';
 import '../registration/ui/registration_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,13 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           state.maybeWhen(
             appInitialized: (isLoggedIn) {
-              if (isLoggedIn) {
-                //Return when registraion verstka done
-                // context.go(HomePage.tag);
-                context.go(RegistrationPage.tag);
-              } else {
-                context.go(LoginPage.tag);
-              }
+              context.go(RegistrationPage.tag);
             },
             orElse: () {},
           );
