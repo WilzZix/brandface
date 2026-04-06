@@ -40,6 +40,12 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
           CredInputField(
             controller: _experienceController,
             label: "Write years of experience",
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
           SizedBox(height: 16),
           Text('Partners', style: Typographies.titleMedium),
@@ -61,6 +67,12 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
                     child: CredInputField(
                       controller: _awardController,
                       label: 'Write award info here',
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   SizedBox(width: 8),

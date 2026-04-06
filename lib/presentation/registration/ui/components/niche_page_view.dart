@@ -18,7 +18,7 @@ class NichePageView extends StatefulWidget {
 class _NichePageViewState extends State<NichePageView>
     with AutomaticKeepAliveClientMixin<NichePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
-  List<LangItemModel> _selectedNichesItems = [];
+  final List<LangItemModel> _selectedNichesItems = [];
 
   @override
   Widget build(BuildContext context) {

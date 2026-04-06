@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/di/app_di.dart';
 import '../../../core/i18n/strings.g.dart';
 import '../../../uikit/components/divider/login_divider.dart';
 import '../../../uikit/components/divider/login_methods.dart';
@@ -35,7 +34,10 @@ class _LoginPageState extends State<LoginPage> {
           otpReceived: (otpEntity) {
             context.push(
               SmsConfirmationPage.tag,
-              extra: SmsConfirmationPageArguments(phoneNumber: _controller.text, otpCode: otpEntity.code ?? ''),
+              extra: SmsConfirmationPageArguments(
+                phoneNumber: _controller.text,
+                otpCode: otpEntity.code ?? '',
+              ),
             );
           },
           otpReceivingFailure: (msg) {
@@ -65,7 +67,9 @@ class _LoginPageState extends State<LoginPage> {
                   return AppButtons.primary(
                     title: t.onboarding.kContinue,
                     onTap: () {
-                      context.read<LoginBloc>().add(LoginEvent.sendOtp(phone: _controller.text));
+                      context.read<LoginBloc>().add(
+                        LoginEvent.sendOtp(phone: _controller.text),
+                      );
                     },
                   );
                 },
@@ -82,7 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextSpan(
                         text: t.login.term_of_use_second,
-                        style: Typographies.bodySmall.copyWith(color: AppColors.primaryDark),
+                        style: Typographies.bodySmall.copyWith(
+                          color: AppColors.primaryDark,
+                        ),
                       ),
                     ],
                   ),

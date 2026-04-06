@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../tokens/colors.dart';
 import '../../typography/typography.dart';
 
@@ -8,10 +7,13 @@ class CredInputField extends StatefulWidget {
     super.key,
     required this.controller,
     required this.label,
+    required this.validator,
   });
 
   final TextEditingController controller;
   final String label;
+
+  final String? Function(String?)? validator;
 
   @override
   State<CredInputField> createState() => _CredInputFieldState();
@@ -19,8 +21,6 @@ class CredInputField extends StatefulWidget {
 
 class _CredInputFieldState extends State<CredInputField> {
   final FocusNode _credFocusNode = FocusNode();
-
-  TextEditingController get _controller => widget.controller;
 
   @override
   void dispose() {
@@ -30,13 +30,12 @@ class _CredInputFieldState extends State<CredInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
+    return TextFormField(
+      validator: widget.validator,
+      controller: widget.controller,
       focusNode: _credFocusNode,
       keyboardType: TextInputType.text,
-      onChanged: (value) {
-        setState(() {});
-      },
+
       decoration: InputDecoration(
         labelText: widget.label,
         labelStyle: Typographies.bodySmall.copyWith(
@@ -44,23 +43,24 @@ class _CredInputFieldState extends State<CredInputField> {
         ),
         hintText: widget.label,
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(999),
-          borderSide: BorderSide(width: 1, color: AppColors.borderColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(999),
-          borderSide: BorderSide(width: 1, color: AppColors.borderColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(999),
-          borderSide: BorderSide(width: 1, color: AppColors.primary),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(999),
-          borderSide: BorderSide(width: 1, color: AppColors.red),
-        ),
+
+        // Refactored borders to be more concise
+        border: _buildBorder(AppColors.borderColor),
+        enabledBorder: _buildBorder(AppColors.borderColor),
+        focusedBorder: _buildBorder(AppColors.primary),
+        errorBorder: _buildBorder(AppColors.red),
+        focusedErrorBorder: _buildBorder(
+          AppColors.red,
+        ), // Added for consistency
       ),
+    );
+  }
+
+  // Helper method to keep the code DRY
+  OutlineInputBorder _buildBorder(Color color) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(999),
+      borderSide: BorderSide(width: 1, color: color),
     );
   }
 }

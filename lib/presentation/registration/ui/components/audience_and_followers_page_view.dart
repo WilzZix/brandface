@@ -123,6 +123,12 @@ class _AudienceAndFollowersPageViewState
                     child: CredInputField(
                       controller: _controllerSocial,
                       label: 'Paste link here',
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   SizedBox(width: 8),

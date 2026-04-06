@@ -1,8 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
-import 'package:brandface/uikit/components/buttons/buttons.dart';
-import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
-import 'package:brandface/uikit/components/inputs/phone_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
