@@ -20,7 +20,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
 
   // Tanlangan barcha niche'larni shu yerda saqlaymiz
-  List<LangItemModel> _selectedNichesItems = [];
+  final List<LangItemModel> _selectedNichesItems = [];
 
   void _updateData() {
     _param = _param.copyWith(

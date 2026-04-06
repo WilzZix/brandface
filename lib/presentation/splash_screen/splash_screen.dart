@@ -1,5 +1,3 @@
-import 'package:brandface/presentation/home_page/ui/home_page.dart';
-import 'package:brandface/presentation/onboarding/onboarding.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -9,10 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_assets.dart';
-import '../../core/di/app_di.dart';
 import '../../core/i18n/strings.g.dart';
 import '../login/ui/login_page.dart';
-import '../registration/ui/fill_profile_information_page.dart';
 import '../registration/ui/registration_page.dart';
 
 class SplashScreen extends StatefulWidget {

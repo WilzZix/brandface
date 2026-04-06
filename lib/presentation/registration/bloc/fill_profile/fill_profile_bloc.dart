@@ -4,7 +4,6 @@ import 'package:brandface/domain/usecase/registration/params/fill_influencer_pro
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../domain/usecase/registration/params/fill_profile_request_params.dart';
-import '../../../../domain/usecase/registration/registration_usecase.dart';
 
 part 'fill_profile_event.dart';
 

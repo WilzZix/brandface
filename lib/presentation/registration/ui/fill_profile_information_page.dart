@@ -8,14 +8,11 @@ import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_assets.dart';
-import '../../../core/di/app_di.dart';
 import '../../../core/enums/enums.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/audience_and_followers_page_view.dart';
-import 'components/choose_services.dart';
 import 'components/experience_page_view.dart';
 import 'components/general_info_page_view.dart';
 import 'components/my_pricing_tariffs_page_view.dart';

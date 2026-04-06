@@ -25,7 +25,7 @@ class ChooseSpokenLanguage extends StatefulWidget {
 
 class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
   String? _selectedLangLabel; // Tanlangan tillar nomini ko'rsatish uchun
-  List<int> _selectedLangIds = []; // Tanlangan ID'lar ro'yxati
+  final List<int> _selectedLangIds = []; // Tanlangan ID'lar ro'yxati
 
   List<LangItemModel> langItems = [
     LangItemModel(name: "O'zbek", id: 0),
