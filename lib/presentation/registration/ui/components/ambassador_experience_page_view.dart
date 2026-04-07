@@ -177,29 +177,36 @@ class ChooseOptionWidget extends StatefulWidget {
 }
 
 class _ChooseOptionWidgetState extends State<ChooseOptionWidget> {
-  bool? _selected = false;
+  bool _selected = false;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          visualDensity: VisualDensity.compact,
-          side: BorderSide(
-            color: _selected! ? Color(0xFF497D00) : AppColors.borderColor,
-            // Your custom border color
-            width: 1.0, // Optional: thickness
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selected = !_selected;
+        });
+      },
+      child: Row(
+        children: [
+          Checkbox(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
+            side: BorderSide(
+              color: _selected ? Color(0xFF497D00) : AppColors.borderColor,
+              // Your custom border color
+              width: 1.0, // Optional: thickness
+            ),
+            activeColor: AppColors.primary,
+            value: _selected,
+            onChanged: (value) {
+              _selected = value!;
+              setState(() {});
+            },
           ),
-          activeColor: AppColors.primary,
-          value: _selected,
-          onChanged: (value) {
-            _selected = value;
-            setState(() {});
-          },
-        ),
-        Text(widget.title, style: Typographies.labelLarge),
-      ],
+          Text(widget.title, style: Typographies.labelLarge),
+        ],
+      ),
     );
   }
 }
