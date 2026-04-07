@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:brandface/presentation/home_page/ui/home_page.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
+import 'package:brandface/presentation/registration/ui/registration_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,7 +81,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
       listener: (context, state) {
         state.maybeWhen(
           otpVerified: () {
-            context.go(HomePage.tag);
+            context.go(RegistrationPage.tag);
           },
           otpReceived: (otpEntity) {
             _controller.text = otpEntity.code ?? '';
@@ -115,7 +116,10 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                   defaultPinTheme: PinTheme(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.borderColor, width: 1),
+                      border: Border.all(
+                        color: AppColors.borderColor,
+                        width: 1,
+                      ),
                     ),
                     width: 64,
                     height: 64,
@@ -123,7 +127,10 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                   focusedPinTheme: PinTheme(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primaryDark, width: 1),
+                      border: Border.all(
+                        color: AppColors.primaryDark,
+                        width: 1,
+                      ),
                     ),
                     width: 64,
                     height: 64,
@@ -143,14 +150,23 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                   ? GestureDetector(
                       onTap: () {
                         _controller.clear();
-                        context.read<LoginBloc>().add(LoginEvent.sendOtp(phone: widget.arguments.phoneNumber));
+                        context.read<LoginBloc>().add(
+                          LoginEvent.sendOtp(
+                            phone: widget.arguments.phoneNumber,
+                          ),
+                        );
                       },
-                      child: Text('Send code again', style: Typographies.titleSmall),
+                      child: Text(
+                        'Send code again',
+                        style: Typographies.titleSmall,
+                      ),
                     )
                   : Text(
                       _formatTime(_remainingSeconds),
                       style: Typographies.bodyMedium.copyWith(
-                        color: _isTimeExpired ? AppColors.red : Typographies.bodyMedium.color,
+                        color: _isTimeExpired
+                            ? AppColors.red
+                            : Typographies.bodyMedium.color,
                       ),
                     ),
               Spacer(),
@@ -161,7 +177,10 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                   final otp = _controller.text.replaceAll(RegExp(r'\D'), '');
                   bloc.add(
                     LoginEvent.verifyOtp(
-                      params: VerifyOtpParams(phone: widget.arguments.phoneNumber, code: otp),
+                      params: VerifyOtpParams(
+                        phone: widget.arguments.phoneNumber,
+                        code: otp,
+                      ),
                     ),
                   );
                 },

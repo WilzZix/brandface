@@ -85,13 +85,17 @@ class _FillProfileInformationPageState
           SizedBox(
             child: ExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                ///TODO
+              },
             ),
           ),
           SizedBox(
             child: MyPricingTariffsPageView(
               key: const PageStorageKey<String>('pageSix'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(pricing: p1.pricing);
+              },
             ),
           ),
         ];
@@ -147,7 +151,9 @@ class _FillProfileInformationPageState
           SizedBox(
             child: AmbassadorContractPageView(
               key: const PageStorageKey<String>('pageSix'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(pricing: p1.pricing);
+              },
             ),
           ),
         ];
@@ -189,7 +195,9 @@ class _FillProfileInformationPageState
           SizedBox(
             child: BrandfaceSegmentPageView(
               key: const PageStorageKey<String>('pageFour'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(audience: p1.audience);
+              },
             ),
           ),
           SizedBox(
@@ -201,7 +209,9 @@ class _FillProfileInformationPageState
           SizedBox(
             child: BrandfacePricingPageView(
               key: const PageStorageKey<String>('pageSix'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(pricing: p1.pricing);
+              },
             ),
           ),
         ];

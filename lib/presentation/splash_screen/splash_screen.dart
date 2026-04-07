@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_assets.dart';
 import '../../core/i18n/strings.g.dart';
+import '../home_page/ui/home_page.dart';
+import '../login/ui/login_page.dart';
 import '../registration/ui/registration_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           state.maybeWhen(
             appInitialized: (isLoggedIn) {
-              context.go(RegistrationPage.tag);
+              context.go(LoginPage.tag);
             },
             orElse: () {},
           );
@@ -35,7 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 46 + MediaQuery.of(context).padding.top),
+              padding: EdgeInsets.only(
+                top: 46 + MediaQuery.of(context).padding.top,
+              ),
               child: SvgPicture.asset(AppAssets.icSplashBg),
             ),
             Column(
@@ -45,7 +49,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 Spacer(),
                 Text(
                   t.splash.app_version(version: '1.0.0'),
-                  style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
+                  style: Typographies.bodySmall.copyWith(
+                    color: AppColors.mutedBlack,
+                  ),
                 ),
                 SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),
               ],
