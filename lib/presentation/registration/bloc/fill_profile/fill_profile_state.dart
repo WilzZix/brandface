@@ -8,6 +8,6 @@ class FillProfileState with _$FillProfileState {
 
   const factory FillProfileState.filled() = _FillProfileFilled;
 
-  const factory FillProfileState.fillingFailure({required String msg}) =
+  const factory FillProfileState.fillingFailure({required Failure failure}) =
       _FillProfileFailure;
 }

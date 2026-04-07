@@ -11,7 +11,7 @@ class FillProfileInfoUsecase implements UseCase<void, FillProfileParams> {
   FillProfileInfoUsecase(this.repository);
 
   @override
-  Future<Either<Failures, void>> call({
+  Future<Either<Failure, void>> call({
     required FillProfileParams params,
   }) async {
     return await repository.fillProfileInfo(

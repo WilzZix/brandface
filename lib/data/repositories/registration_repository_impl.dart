@@ -18,7 +18,7 @@ class RegistrationRepositoryImpl implements IRegistrationRepository {
     : _dataSource = dataSource;
 
   @override
-  Future<Either<Failures, RegistrationEntity>> registration({
+  Future<Either<Failure, RegistrationEntity>> registration({
     required RegistrationParams params,
   }) async {
     try {
@@ -32,7 +32,7 @@ class RegistrationRepositoryImpl implements IRegistrationRepository {
   }
 
   @override
-  Future<Either<Failures, void>> fillProfileInfo({
+  Future<Either<Failure, void>> fillProfileInfo({
     required FillInfluencerProfileParam params,
     required String profileId,
   }) async {

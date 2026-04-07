@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 class ProfileRepositoryImpl implements IProfileRepository {
   @override
-  Future<Either<Failures, CategoryEntity>> getCategories() {
+  Future<Either<Failure, CategoryEntity>> getCategories() {
     // TODO: implement getCategories
     throw UnimplementedError();
   }

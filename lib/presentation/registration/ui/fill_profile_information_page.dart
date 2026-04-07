@@ -1,3 +1,4 @@
+import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
@@ -296,7 +297,7 @@ class _FillProfileInformationPageState
           fillingFailure: (failure) {
             BrandfaceBottomSheet.openFailureBottomSheet(
               context: context,
-              message: failure,
+              message: failure.localized,
             );
           },
           orElse: () {},

@@ -15,7 +15,7 @@ class LoginRepositoryImpl implements ILoginRepository {
   LoginRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failures, OtpEntity>> sendOtp({required String phone}) async {
+  Future<Either<Failure, OtpEntity>> sendOtp({required String phone}) async {
     try {
       final otpModel = await remoteDataSource.sendOtp(phone: phone);
       return Right(otpModel.toEntity());
@@ -27,7 +27,7 @@ class LoginRepositoryImpl implements ILoginRepository {
   }
 
   @override
-  Future<Either<Failures, VerifyOtpEntity>> verifyOtp({required VerifyOtpParams params}) async {
+  Future<Either<Failure, VerifyOtpEntity>> verifyOtp({required VerifyOtpParams params}) async {
     try {
       final verifyOtpData = await remoteDataSource.verifyOtp(params: params);
       return Right(verifyOtpData.toEntity());

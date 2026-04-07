@@ -394,13 +394,13 @@ return fillingFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  filled,TResult Function( String msg)?  fillingFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  filled,TResult Function( Failure failure)?  fillingFailure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _FillProfileLoading() when loading != null:
 return loading();case _FillProfileFilled() when filled != null:
 return filled();case _FillProfileFailure() when fillingFailure != null:
-return fillingFailure(_that.msg);case _:
+return fillingFailure(_that.failure);case _:
   return orElse();
 
 }
@@ -418,13 +418,13 @@ return fillingFailure(_that.msg);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  filled,required TResult Function( String msg)  fillingFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  filled,required TResult Function( Failure failure)  fillingFailure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _FillProfileLoading():
 return loading();case _FillProfileFilled():
 return filled();case _FillProfileFailure():
-return fillingFailure(_that.msg);case _:
+return fillingFailure(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -441,13 +441,13 @@ return fillingFailure(_that.msg);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  filled,TResult? Function( String msg)?  fillingFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  filled,TResult? Function( Failure failure)?  fillingFailure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _FillProfileLoading() when loading != null:
 return loading();case _FillProfileFilled() when filled != null:
 return filled();case _FillProfileFailure() when fillingFailure != null:
-return fillingFailure(_that.msg);case _:
+return fillingFailure(_that.failure);case _:
   return null;
 
 }
@@ -555,10 +555,10 @@ String toString() {
 
 
 class _FillProfileFailure implements FillProfileState {
-  const _FillProfileFailure({required this.msg});
+  const _FillProfileFailure({required this.failure});
   
 
- final  String msg;
+ final  Failure failure;
 
 /// Create a copy of FillProfileState
 /// with the given fields replaced by the non-null parameter values.
@@ -570,16 +570,16 @@ _$FillProfileFailureCopyWith<_FillProfileFailure> get copyWith => __$FillProfile
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FillProfileFailure&&(identical(other.msg, msg) || other.msg == msg));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FillProfileFailure&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,msg);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'FillProfileState.fillingFailure(msg: $msg)';
+  return 'FillProfileState.fillingFailure(failure: $failure)';
 }
 
 
@@ -590,7 +590,7 @@ abstract mixin class _$FillProfileFailureCopyWith<$Res> implements $FillProfileS
   factory _$FillProfileFailureCopyWith(_FillProfileFailure value, $Res Function(_FillProfileFailure) _then) = __$FillProfileFailureCopyWithImpl;
 @useResult
 $Res call({
- String msg
+ Failure failure
 });
 
 
@@ -607,10 +607,10 @@ class __$FillProfileFailureCopyWithImpl<$Res>
 
 /// Create a copy of FillProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? msg = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_FillProfileFailure(
-msg: null == msg ? _self.msg : msg // ignore: cast_nullable_to_non_nullable
-as String,
+failure: null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as Failure,
   ));
 }
 

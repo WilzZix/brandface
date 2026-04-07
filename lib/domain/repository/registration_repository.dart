@@ -5,11 +5,11 @@ import 'package:brandface/domain/usecase/registration/params/registration_params
 import 'package:dart_either/dart_either.dart';
 
 abstract class IRegistrationRepository {
-  Future<Either<Failures, RegistrationEntity>> registration({
+  Future<Either<Failure, RegistrationEntity>> registration({
     required RegistrationParams params,
   });
 
-  Future<Either<Failures, void>> fillProfileInfo({
+  Future<Either<Failure, void>> fillProfileInfo({
     required FillInfluencerProfileParam params,
     required String profileId,
   });

@@ -8,8 +8,8 @@ class DioClient {
   DioClient(this._dio) {
     _dio
       ..options.baseUrl = 'https://api.influerax.com/api/accounts/v1/'
-      ..options.connectTimeout = const Duration(seconds: 15)
-      ..options.receiveTimeout = const Duration(seconds: 15)
+      ..options.connectTimeout = const Duration(seconds: 5)
+      ..options.receiveTimeout = const Duration(seconds: 5)
       ..options.responseType = ResponseType.json
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
       ..interceptors.addAll([

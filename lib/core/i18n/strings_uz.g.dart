@@ -44,6 +44,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsOnboardingUz onboarding = TranslationsOnboardingUz._(_root);
 	late final TranslationsLoginUz login = TranslationsLoginUz._(_root);
 	late final TranslationsRegistrationUz registration = TranslationsRegistrationUz._(_root);
+	late final TranslationsErrorsUz errors = TranslationsErrorsUz._(_root);
 }
 
 // Path: splash
@@ -121,6 +122,50 @@ class TranslationsRegistrationUz {
 	String get your_surname => 'Your surname';
 }
 
+// Path: errors
+class TranslationsErrorsUz {
+	TranslationsErrorsUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Network connection problem, please check your internet'
+	String get network => 'Network connection problem, please check your internet';
+
+	/// uz: 'Data processing error'
+	String get parsing => 'Data processing error';
+
+	/// uz: 'An unknown error occurred'
+	String get unknown => 'An unknown error occurred';
+
+	late final TranslationsErrorsServerUz server = TranslationsErrorsServerUz._(_root);
+}
+
+// Path: errors.server
+class TranslationsErrorsServerUz {
+	TranslationsErrorsServerUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Server error ($code)'
+	String defaultMsg({required Object code}) => 'Server error (${code})';
+
+	/// uz: 'Bad request'
+	String get badRequest => 'Bad request';
+
+	/// uz: 'Session expired, please log in again'
+	String get unauthorized => 'Session expired, please log in again';
+
+	/// uz: 'Resource not found'
+	String get notFound => 'Resource not found';
+
+	/// uz: 'User with this email already exists'
+	String get userExists => 'User with this email already exists';
+}
+
 /// The flat map containing all translations for locale <uz>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -142,6 +187,14 @@ extension on Translations {
 			'registration.brand' => 'Brand',
 			'registration.your_name' => 'Your name',
 			'registration.your_surname' => 'Your surname',
+			'errors.network' => 'Network connection problem, please check your internet',
+			'errors.parsing' => 'Data processing error',
+			'errors.unknown' => 'An unknown error occurred',
+			'errors.server.defaultMsg' => ({required Object code}) => 'Server error (${code})',
+			'errors.server.badRequest' => 'Bad request',
+			'errors.server.unauthorized' => 'Session expired, please log in again',
+			'errors.server.notFound' => 'Resource not found',
+			'errors.server.userExists' => 'User with this email already exists',
 			_ => null,
 		};
 	}

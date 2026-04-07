@@ -6,7 +6,7 @@ import '../../core/error/failures.dart';
 import '../entities/verify_otp_entity.dart';
 
 abstract class ILoginRepository {
-  Future<Either<Failures, OtpEntity>> sendOtp({required String phone});
+  Future<Either<Failure, OtpEntity>> sendOtp({required String phone});
 
-  Future<Either<Failures, VerifyOtpEntity>> verifyOtp({required VerifyOtpParams params});
+  Future<Either<Failure, VerifyOtpEntity>> verifyOtp({required VerifyOtpParams params});
 }

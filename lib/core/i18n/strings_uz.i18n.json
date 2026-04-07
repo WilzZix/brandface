@@ -19,5 +19,17 @@
     "brand": "Brand",
     "your_name": "Ismingiz",
     "your_surname": "Familiyangiz"
+  },
+  "errors": {
+    "network": "Internet bilan bog'lanishda muammo, aloqani tekshiring",
+    "parsing": "Ma'lumotlarni qayta ishlashda xatolik",
+    "unknown": "Noma'lum xatolik yuz berdi",
+    "server": {
+      "defaultMsg": "Server xatoligi ($code)",
+      "badRequest": "Noto'g'ri so'rov",
+      "unauthorized": "Seans muddati tugadi, qaytadan kiring",
+      "notFound": "Ma'lumot topilmadi",
+      "userExists": "Bunday emailga ega foydalanuvchi allaqachon mavjud"
+    }
   }
 }
