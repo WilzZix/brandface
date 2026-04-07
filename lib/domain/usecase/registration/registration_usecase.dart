@@ -11,7 +11,7 @@ class RegistrationUsecase implements UseCase<RegistrationEntity, RegistrationPar
   RegistrationUsecase(this.repository);
 
   @override
-  Future<Either<Failures, RegistrationEntity>> call({required RegistrationParams params}) async {
+  Future<Either<Failure, RegistrationEntity>> call({required RegistrationParams params}) async {
     return await repository.registration(params: params);
   }
 }

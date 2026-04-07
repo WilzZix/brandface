@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../uikit/components/buttons/buttons.dart';
+import '../../../../uikit/components/inputs/cred_input_field.dart';
+import '../../../../uikit/components/inputs/from_to_input_field.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_geography.dart';
@@ -20,7 +23,11 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
   final FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final List<LangItemModel> _selectedSegments = [];
   final List<LangItemModel> _selectedGeographies = [];
-
+  final TextEditingController _controllerFrom = TextEditingController();
+  final TextEditingController _controllerTo = TextEditingController();
+  final TextEditingController _controllerFromWomen = TextEditingController();
+  final TextEditingController _controllerToWomen = TextEditingController();
+  final TextEditingController _controllerSocial = TextEditingController();
   final List<LangItemModel> _segments = [
     LangItemModel(name: 'Luxury', id: 0),
     LangItemModel(name: 'Premium', id: 1),
@@ -44,8 +51,9 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
             spacing: 8,
             runSpacing: 8,
             children: _segments.map((segment) {
-              final isSelected =
-                  _selectedSegments.any((e) => e.id == segment.id);
+              final isSelected = _selectedSegments.any(
+                (e) => e.id == segment.id,
+              );
               return GestureDetector(
                 onTap: () {
                   setState(() {
@@ -74,8 +82,7 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
                   child: Text(
                     segment.name,
                     style: Typographies.labelMedium.copyWith(
-                      color:
-                          isSelected ? AppColors.lightBg : AppColors.black,
+                      color: isSelected ? AppColors.lightBg : AppColors.black,
                     ),
                   ),
                 ),
@@ -132,6 +139,48 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
               },
             ),
           ],
+          SizedBox(height: 16),
+          FromToInputField(
+            controllerFrom: _controllerFrom,
+            controllerTo: _controllerTo,
+            title: 'Men',
+            labelFrom: 'Age from',
+            labelTo: 'Age to',
+          ),
+          SizedBox(height: 16),
+          FromToInputField(
+            controllerFrom: _controllerFromWomen,
+            controllerTo: _controllerToWomen,
+            title: 'Women',
+            labelFrom: 'Age from',
+            labelTo: 'Age to',
+          ),
+          SizedBox(height: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Social media accounts', style: Typographies.titleSmall),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: CredInputField(
+                      controller: _controllerSocial,
+                      label: 'Paste link here',
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  AppButtons.primary(title: 'Apply', onTap: () {}),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
     );

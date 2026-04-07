@@ -12,7 +12,10 @@ class DioClient {
       ..options.receiveTimeout = const Duration(seconds: 5)
       ..options.responseType = ResponseType.json
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
-      ..interceptors.addAll([InterceptorsWrapper(), if (kDebugMode) LoggerInterceptor()]);
+      ..interceptors.addAll([
+        InterceptorsWrapper(),
+        if (kDebugMode) LoggerInterceptor(),
+      ]);
   }
 
   // GET request

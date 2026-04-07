@@ -41,6 +41,7 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsOnboardingRu onboarding = _TranslationsOnboardingRu._(_root);
 	@override late final _TranslationsLoginRu login = _TranslationsLoginRu._(_root);
 	@override late final _TranslationsRegistrationRu registration = _TranslationsRegistrationRu._(_root);
+	@override late final _TranslationsErrorsRu errors = _TranslationsErrorsRu._(_root);
 }
 
 // Path: splash
@@ -92,6 +93,33 @@ class _TranslationsRegistrationRu implements TranslationsRegistrationUz {
 	@override String get your_surname => 'Ваша фамилия';
 }
 
+// Path: errors
+class _TranslationsErrorsRu implements TranslationsErrorsUz {
+	_TranslationsErrorsRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get network => 'Проблемы с интернетом, проверьте соединение';
+	@override String get parsing => 'Ошибка обработки данных';
+	@override String get unknown => 'Произошла неизвестная ошибка';
+	@override late final _TranslationsErrorsServerRu server = _TranslationsErrorsServerRu._(_root);
+}
+
+// Path: errors.server
+class _TranslationsErrorsServerRu implements TranslationsErrorsServerUz {
+	_TranslationsErrorsServerRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String defaultMsg({required Object code}) => 'Ошибка сервера (${code})';
+	@override String get badRequest => 'Некорректный запрос';
+	@override String get unauthorized => 'Сессия истекла, войдите снова';
+	@override String get notFound => 'Ресурс не найден';
+	@override String get userExists => 'Пользователь с таким email уже есть';
+}
+
 /// The flat map containing all translations for locale <ru>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -113,6 +141,14 @@ extension on TranslationsRu {
 			'registration.brand' => 'Бренд',
 			'registration.your_name' => 'Ваше имя',
 			'registration.your_surname' => 'Ваша фамилия',
+			'errors.network' => 'Проблемы с интернетом, проверьте соединение',
+			'errors.parsing' => 'Ошибка обработки данных',
+			'errors.unknown' => 'Произошла неизвестная ошибка',
+			'errors.server.defaultMsg' => ({required Object code}) => 'Ошибка сервера (${code})',
+			'errors.server.badRequest' => 'Некорректный запрос',
+			'errors.server.unauthorized' => 'Сессия истекла, войдите снова',
+			'errors.server.notFound' => 'Ресурс не найден',
+			'errors.server.userExists' => 'Пользователь с таким email уже есть',
 			_ => null,
 		};
 	}

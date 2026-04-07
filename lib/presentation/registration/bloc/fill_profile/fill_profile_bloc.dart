@@ -3,6 +3,7 @@ import 'package:brandface/domain/usecase/registration/fill_profile_info_usecase.
 import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../core/error/failures.dart';
 import '../../../../domain/usecase/registration/params/fill_profile_request_params.dart';
 
 part 'fill_profile_event.dart';
@@ -34,7 +35,7 @@ class FillProfileBloc extends Bloc<FillProfileEvent, FillProfileState> {
     );
     result.fold(
       ifLeft: (failure) {
-        emit(FillProfileState.fillingFailure(msg: failure.message));
+        emit(FillProfileState.fillingFailure(failure: failure));
       },
       ifRight: (_) {
         emit(FillProfileState.filled());

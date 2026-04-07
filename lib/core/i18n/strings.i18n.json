@@ -19,5 +19,17 @@
     "brand": "Brand",
     "your_name": "Your name",
     "your_surname": "Your surname"
+  },
+  "errors": {
+    "network": "Network connection problem, please check your internet",
+    "parsing": "Data processing error",
+    "unknown": "An unknown error occurred",
+    "server": {
+      "defaultMsg": "Server error ($code)",
+      "badRequest": "Bad request",
+      "unauthorized": "Session expired, please log in again",
+      "notFound": "Resource not found",
+      "userExists": "User with this email already exists"
+    }
   }
 }

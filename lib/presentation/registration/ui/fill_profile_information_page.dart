@@ -1,3 +1,4 @@
+import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
@@ -85,13 +86,17 @@ class _FillProfileInformationPageState
           SizedBox(
             child: ExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                ///TODO
+              },
             ),
           ),
           SizedBox(
             child: MyPricingTariffsPageView(
               key: const PageStorageKey<String>('pageSix'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(pricing: p1.pricing);
+              },
             ),
           ),
         ];
@@ -147,7 +152,9 @@ class _FillProfileInformationPageState
           SizedBox(
             child: AmbassadorContractPageView(
               key: const PageStorageKey<String>('pageSix'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(pricing: p1.pricing);
+              },
             ),
           ),
         ];
@@ -189,7 +196,9 @@ class _FillProfileInformationPageState
           SizedBox(
             child: BrandfaceSegmentPageView(
               key: const PageStorageKey<String>('pageFour'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(audience: p1.audience);
+              },
             ),
           ),
           SizedBox(
@@ -201,7 +210,9 @@ class _FillProfileInformationPageState
           SizedBox(
             child: BrandfacePricingPageView(
               key: const PageStorageKey<String>('pageSix'),
-              onChanged: (FillInfluencerProfileParam p1) {},
+              onChanged: (FillInfluencerProfileParam p1) {
+                _finalParam = _finalParam.copyWith(pricing: p1.pricing);
+              },
             ),
           ),
         ];
@@ -286,7 +297,7 @@ class _FillProfileInformationPageState
           fillingFailure: (failure) {
             BrandfaceBottomSheet.openFailureBottomSheet(
               context: context,
-              message: failure,
+              message: failure.localized,
             );
           },
           orElse: () {},
