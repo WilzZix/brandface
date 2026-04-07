@@ -25,8 +25,6 @@ class _AmbassadorExperiencePageViewState
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final TextEditingController _promoExperienceController =
       TextEditingController();
-  final TextEditingController _optionalExperienceController =
-      TextEditingController();
   final TextEditingController _awardController = TextEditingController();
   final List<LangItemModel> _selectedNichesItems = [];
 

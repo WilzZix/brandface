@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/inputs/cred_input_field.dart';
-import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'ambassador_experience_page_view.dart';
 import 'choose_currency.dart';
@@ -21,7 +20,6 @@ class BrandfacePricingPageView extends StatefulWidget {
 
 class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
   final FillInfluencerProfileParam _param = FillInfluencerProfileParam();
-  bool _exclusivityAvailability = false;
   final TextEditingController _hourlyRateFrom = TextEditingController();
   final TextEditingController _hourlyRateTo = TextEditingController();
   final TextEditingController _paymentByProjectController =
@@ -42,7 +40,6 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
           const SizedBox(height: 8),
           YesNoWidget(
             onItemTaped: (value) {
-              setState(() => _exclusivityAvailability = value);
               _updateData();
             },
           ),

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/buttons/buttons.dart';
-import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_spoken_language.dart';
 
@@ -23,11 +22,8 @@ class _BrandfaceCameraExperiencePageViewState
     extends State<BrandfaceCameraExperiencePageView> {
   final FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final TextEditingController _yearsController = TextEditingController();
-  final TextEditingController _optionalExperienceController =
-      TextEditingController();
   final TextEditingController _awardController = TextEditingController();
 
-  bool _exclusivityAvailability = false;
 
   void _updateData() {
     widget.onChanged(_param);

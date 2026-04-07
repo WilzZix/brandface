@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/inputs/cred_input_field.dart';
 import '../../../../uikit/components/inputs/from_to_input_field.dart';
-import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_currency.dart';
 import 'choose_spoken_language.dart';
