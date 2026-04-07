@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../uikit/components/inputs/cred_input_field.dart';
+import '../../../../uikit/components/inputs/from_to_input_field.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
+import 'choose_currency.dart';
+import 'choose_spoken_language.dart';
 
 class AmbassadorContractPageView extends StatefulWidget {
   const AmbassadorContractPageView({super.key, required this.onChanged});
@@ -20,7 +24,10 @@ class _AmbassadorContractPageViewState
   bool _longTermContract = false;
   bool _kpiBasedModel = false;
   bool _offlineEvents = false;
-
+  final TextEditingController _hourlyRateFrom = TextEditingController();
+  final TextEditingController _hourlyRateTo = TextEditingController();
+  final TextEditingController _paymentByProjectController =
+  TextEditingController();
   void _updateData() {
     widget.onChanged(_param);
   }
@@ -57,6 +64,44 @@ class _AmbassadorContractPageViewState
               _updateData();
             },
           ),
+          SizedBox(height: 16),
+          Text(
+            'Projectly payment starting price',
+            style: Typographies.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          CredInputField(
+            controller: _paymentByProjectController,
+            label: 'Write starting price',
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 16,),
+          Text('Currency', style: Typographies.titleMedium),
+          const SizedBox(height: 8),
+          ChooseCurrency(
+            onItemSelected: (LangItemModel p1) {
+              _updateData();
+            },
+          ),
+          SizedBox(height: 16),
+          FromToInputField(
+            controllerFrom: _hourlyRateFrom,
+            controllerTo: _hourlyRateTo,
+            labelFrom: 'Min',
+            labelTo: 'Max',
+            title: 'Write your hourly rate',
+          ),
+          SizedBox(height: 16),
+
+          SizedBox(height: 16),
+          Text('Payment types', style: Typographies.titleMedium),
+          const SizedBox(height: 8),
+          ChooseCurrency(onItemSelected: (LangItemModel p1) {}),
         ],
       ),
     );
