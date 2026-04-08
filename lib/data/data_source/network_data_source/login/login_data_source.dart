@@ -1,3 +1,4 @@
+import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:dio/dio.dart';
 
@@ -19,7 +20,11 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   @override
   Future<OtpModel> sendOtp({required String phone}) async {
     try {
-      final response = await _dioClient.post('auth/send-otp/', data: {'phone_number': phone});
+      final response = await _dioClient.post(
+        ApiRoutes.sendOtp,
+        //TODO change to param
+        data: {'phone_number': phone},
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return OtpModel.fromJson(response.data);
@@ -38,7 +43,10 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   @override
   Future<VerifyOtpModel> verifyOtp({required VerifyOtpParams params}) async {
     try {
-      final response = await _dioClient.post('auth/verify-otp/', data: params.toJson());
+      final response = await _dioClient.post(
+        ApiRoutes.verifyOtp,
+        data: params.toJson(),
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return VerifyOtpModel.fromJson(response.data);

@@ -1,5 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_experience_page_view.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants/app_assets.dart';
+import '../../../core/di/app_di.dart';
 import '../../../core/enums/enums.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/audience_and_followers_page_view.dart';
@@ -60,11 +62,16 @@ class _FillProfileInformationPageState
             ),
           ),
           SizedBox(
-            child: NichePageView(
-              key: const PageStorageKey<String>('pageTwo'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
-              },
+            child: BlocProvider(
+              create: (context) => sl<CategoryCubit>(),
+              child: NichePageView(
+                key: const PageStorageKey<String>('pageTwo'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(
+                    categoryIds: p1.categoryIds,
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(

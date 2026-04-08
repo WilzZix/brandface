@@ -1,3 +1,4 @@
+import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
 import 'package:dio/dio.dart';
@@ -27,7 +28,7 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
   }) async {
     try {
       final response = await _dioClient.post(
-        'register/influencer/',
+        ApiRoutes.registration,
         data: params.toJson(),
       );
 
@@ -52,7 +53,7 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
   }) async {
     try {
       final response = await _dioClient.patch(
-        'register/influencer/$profileId/',
+        ApiRoutes.fillProfile(profileId),
         data: params.toJson(),
       );
       if (kDebugMode) debugPrint(response.toString());

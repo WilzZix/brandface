@@ -2,12 +2,14 @@ import 'package:brandface/core/network/interceptor/logger_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../constants/api_routes.dart';
+
 class DioClient {
   final Dio _dio;
 
   DioClient(this._dio) {
     _dio
-      ..options.baseUrl = 'https://api.influerax.com/api/accounts/v1/'
+      ..options.baseUrl = ApiRoutes.baseUrl
       ..options.connectTimeout = const Duration(seconds: 5)
       ..options.receiveTimeout = const Duration(seconds: 5)
       ..options.responseType = ResponseType.json
