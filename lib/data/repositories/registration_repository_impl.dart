@@ -25,7 +25,12 @@ class RegistrationRepositoryImpl implements IRegistrationRepository {
       final registrationData = await _dataSource.registration(params: params);
       return Right(registrationData.toEntity());
     } on DioException catch (e) {
-      return Left(ServerFailure(e.message ?? 'Serverda kutilmagan xatolik'));
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
     }
@@ -43,7 +48,12 @@ class RegistrationRepositoryImpl implements IRegistrationRepository {
       );
       return Right(registrationData);
     } on DioException catch (e) {
-      return Left(ServerFailure(e.message ?? 'Serverda kutilmagan xatolik'));
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
     }

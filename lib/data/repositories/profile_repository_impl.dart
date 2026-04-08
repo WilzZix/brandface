@@ -21,7 +21,12 @@ class ProfileRepositoryImpl implements IProfileRepository {
           .toList();
       return Right(entities);
     } on DioException catch (e) {
-      return Left(ServerFailure(e.message ?? 'Serverda kutilmagan xatolik'));
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
     }
