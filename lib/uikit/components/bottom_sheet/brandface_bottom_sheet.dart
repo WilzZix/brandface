@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -60,7 +61,7 @@ class BrandfaceBottomSheet {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: AppButtons.primary(
-                        title: 'Confirm',
+                        title: t.common.confirm,
                         onTap: onConfirm,
                       ),
                     ),
@@ -76,7 +77,7 @@ class BrandfaceBottomSheet {
                       child: Container(
                         padding: EdgeInsetsGeometry.only(bottom: 24),
                         child: Center(
-                          child: Text('Cancel', style: Typographies.labelLarge),
+                          child: Text(t.common.cancel, style: Typographies.labelLarge),
                         ),
                       ),
                     ),

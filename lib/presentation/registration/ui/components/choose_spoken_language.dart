@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -71,7 +72,7 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
           onTap: () async {
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
-              header: 'Spoken language',
+              header: t.choose.spoken_language,
               onConfirm: () {
                 // Tanlangan barcha ID'larni yuboramiz
                 widget.onItemSelected(_selectedLangIds);

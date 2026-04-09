@@ -1,4 +1,5 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ class _ChooseNicheState extends State<ChooseNiche> {
 
   @override
   void initState() {
-    _selectedText = 'Select niche';
+    _selectedText = t.choose.select_niche;
     context.read<CategoryCubit>().getCategory();
     super.initState();
   }
@@ -40,42 +41,51 @@ class _ChooseNicheState extends State<ChooseNiche> {
           children: [
             GestureDetector(
               onTap: () async {
-                await BrandfaceBottomSheet.openBottomSheet(
-                  context: context,
-                  header: 'Select niche',
-                  onConfirm: () {
-                    context.pop();
+                state.maybeWhen(
+                  categoryLoadFailure: (failure) {
+                    BrandfaceBottomSheet.openFailureBottomSheet(
+                      context: context,
+                      message: failure.localized,
+                    );
                   },
-                  builder: (context, bottomState) {
-                    return state.maybeWhen(
-                      loading: () => const SizedBox(
-                        height: 200,
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      categoryLoaded: (categories) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: categories.map((item) {
-                            return ChooseLangItem(
-                              title: item.nameUz,
-                              isSelected: item.id == _selectedId,
-                              onTap: () {
-                                setState(() {
-                                  _selectedId = item.id;
-                                  _selectedText = item.nameUz;
-                                });
-                                widget.onItemSelected(
-                                  LangItemModel(name: item.nameUz, id: item.id),
+                  orElse: () async {
+                    await BrandfaceBottomSheet.openBottomSheet(
+                      context: context,
+                      header: t.choose.select_niche,
+                      onConfirm: () => context.pop(),
+                      builder: (context, bottomState) {
+                        return state.maybeWhen(
+                          loading: () => const SizedBox(
+                            height: 200,
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                          categoryLoaded: (categories) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: categories.map((item) {
+                                return ChooseLangItem(
+                                  title: item.nameUz,
+                                  isSelected: item.id == _selectedId,
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedId = item.id;
+                                      _selectedText = item.nameUz;
+                                    });
+                                    widget.onItemSelected(
+                                      LangItemModel(
+                                        name: item.nameUz,
+                                        id: item.id,
+                                      ),
+                                    );
+                                    bottomState(() {});
+                                  },
                                 );
-                                bottomState(() {});
-                              },
+                              }).toList(),
                             );
-                          }).toList(),
+                          },
+                          orElse: () => const SizedBox.shrink(),
                         );
                       },
-                      categoryLoadFailure: (failure) =>
-                          Center(child: Text(failure.localized)),
-                      orElse: () => const SizedBox.shrink(),
                     );
                   },
                 );

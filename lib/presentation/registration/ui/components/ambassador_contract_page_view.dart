@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_experience_page_view.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,7 @@ class _AmbassadorContractPageViewState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Available for long-term contract?',
+            t.registration.available_for_long_term_contract,
             style: Typographies.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -47,30 +48,30 @@ class _AmbassadorContractPageViewState
             },
           ),
           const SizedBox(height: 16),
-          Text('KPI-based model', style: Typographies.titleMedium),
+          Text(t.registration.kpi_based_model, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseOptionWidget(title: 'Willing to work on KPI-based model'),
+          ChooseOptionWidget(title: t.optional_items.willing_to_work_kpi),
           const SizedBox(height: 16),
-          Text('Available for offline events', style: Typographies.titleMedium),
+          Text(t.registration.available_for_offline_events, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           YesNoWidget(onItemTaped: (value) {}),
           Text(
-            'Projectly payment starting price',
+            t.registration.projectly_payment_starting_price,
             style: Typographies.titleMedium,
           ),
           const SizedBox(height: 8),
           CredInputField(
             controller: _paymentByProjectController,
-            label: 'Write starting price',
+            label: t.registration.write_starting_price,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return t.common.please_enter_text;
               }
               return null;
             },
           ),
           SizedBox(height: 16),
-          Text('Currency', style: Typographies.titleMedium),
+          Text(t.registration.currency, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(
             onItemSelected: (LangItemModel p1) {
@@ -81,12 +82,12 @@ class _AmbassadorContractPageViewState
           FromToInputField(
             controllerFrom: _hourlyRateFrom,
             controllerTo: _hourlyRateTo,
-            labelFrom: 'Min',
-            labelTo: 'Max',
-            title: 'Write your hourly rate',
+            labelFrom: t.registration.min,
+            labelTo: t.registration.max,
+            title: t.registration.write_hourly_rate,
           ),
           SizedBox(height: 16),
-          Text('Payment types', style: Typographies.titleMedium),
+          Text(t.registration.payment_types, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(onItemSelected: (LangItemModel p1) {}),
         ],

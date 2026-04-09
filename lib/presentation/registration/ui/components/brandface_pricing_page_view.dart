@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/from_to_input_field.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,7 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 16),
-          Text('Exclusivity availability', style: Typographies.bodyMedium),
+          Text(t.registration.exclusivity_availability, style: Typographies.bodyMedium),
           const SizedBox(height: 8),
           YesNoWidget(
             onItemTaped: (value) {
@@ -45,29 +46,29 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
           ),
 
           const SizedBox(height: 24),
-          Text('Pricing options', style: Typographies.titleMedium),
+          Text(t.registration.pricing_options, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseOptionWidget(title: 'Willing to work on KPI-based model'),
-          ChooseOptionWidget(title: 'Campaign-based fee'),
-          ChooseOptionWidget(title: 'Event appearance fee'),
+          ChooseOptionWidget(title: t.optional_items.willing_to_work_kpi),
+          ChooseOptionWidget(title: t.optional_items.campaign_based_fee),
+          ChooseOptionWidget(title: t.optional_items.event_appearance_fee),
           const SizedBox(height: 16),
           Text(
-            'Projectly payment starting price',
+            t.registration.projectly_payment_starting_price,
             style: Typographies.titleMedium,
           ),
           const SizedBox(height: 8),
           CredInputField(
             controller: _paymentByProjectController,
-            label: 'Write starting price',
+            label: t.registration.write_starting_price,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return t.common.please_enter_text;
               }
               return null;
             },
           ),
           SizedBox(height: 16),
-          Text('Currency', style: Typographies.titleMedium),
+          Text(t.registration.currency, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(
             onItemSelected: (LangItemModel p1) {
@@ -78,12 +79,12 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
           FromToInputField(
             controllerFrom: _hourlyRateFrom,
             controllerTo: _hourlyRateTo,
-            labelFrom: 'Min',
-            labelTo: 'Max',
-            title: 'Write your hourly rate',
+            labelFrom: t.registration.min,
+            labelTo: t.registration.max,
+            title: t.registration.write_hourly_rate,
           ),
           SizedBox(height: 16),
-          Text('Payment types', style: Typographies.titleMedium),
+          Text(t.registration.payment_types, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(onItemSelected: (LangItemModel p1) {}),
         ],

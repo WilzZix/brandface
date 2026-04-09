@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
 import 'package:brandface/uikit/components/inputs/bio_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -71,7 +72,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Upload profile picture', style: Typographies.titleMedium),
+          Text(t.registration.upload_profile_picture, style: Typographies.titleMedium),
           const SizedBox(height: 24),
           Row(
             children: [
@@ -101,13 +102,13 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
                       children: [
                         SvgPicture.asset(AppAssets.icAttachFile),
                         const SizedBox(width: 8),
-                        Text('Choose file', style: Typographies.bodyMedium),
+                        Text(t.registration.choose_file, style: Typographies.bodyMedium),
                       ],
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'SVG, PNG, JPG or GIF (MAX. 800x400px).',
+                    t.registration.file_format_hint,
                     style: Typographies.bodySmall.copyWith(
                       color: AppColors.grey,
                     ),
@@ -125,15 +126,15 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
             items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           ),
           const SizedBox(height: 40),
-          Text('Region', style: Typographies.titleMedium),
+          Text(t.registration.region, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           _DropdownField(
-            selectedText: _selectedRegionName ?? 'Select region',
+            selectedText: _selectedRegionName ?? t.choose.select_region,
             isSelected: _selectedRegionId != null,
             onTap: () async {
               await BrandfaceBottomSheet.openBottomSheet<String>(
                 context: context,
-                header: 'Select region',
+                header: t.choose.select_region,
                 onConfirm: () {
                   _updateData();
                   context.pop();
@@ -160,15 +161,15 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
             },
           ),
           const SizedBox(height: 24),
-          Text('City', style: Typographies.titleMedium),
+          Text(t.registration.city, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           _DropdownField(
-            selectedText: _selectedCityName ?? 'Select city',
+            selectedText: _selectedCityName ?? t.choose.select_city,
             isSelected: _selectedCityId != null,
             onTap: () async {
               await BrandfaceBottomSheet.openBottomSheet<String>(
                 context: context,
-                header: 'Select city',
+                header: t.choose.select_city,
                 onConfirm: () {
                   _updateData();
                   context.pop();
@@ -195,15 +196,15 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
             },
           ),
           const SizedBox(height: 24),
-          Text('Sphere', style: Typographies.titleMedium),
+          Text(t.registration.sphere, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           _DropdownField(
-            selectedText: _selectedSphereName ?? 'Select sphere',
+            selectedText: _selectedSphereName ?? t.choose.select_sphere,
             isSelected: _selectedSphereId != null,
             onTap: () async {
               await BrandfaceBottomSheet.openBottomSheet<String>(
                 context: context,
-                header: 'Select sphere',
+                header: t.choose.select_sphere,
                 onConfirm: () {
                   _updateData();
                   context.pop();
@@ -232,7 +233,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
           const SizedBox(height: 24),
           BioInputField(
             controller: _bioController,
-            label: 'Profile information',
+            label: t.registration.profile_information,
             onChanged: () {
               _updateData();
             },

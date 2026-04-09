@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,7 @@ class _ChooseGeographyState extends State<ChooseGeography> {
 
   @override
   void initState() {
-    _selectedText = 'Select';
+    _selectedText = t.common.select;
     super.initState();
   }
 
@@ -43,7 +44,7 @@ class _ChooseGeographyState extends State<ChooseGeography> {
           onTap: () async {
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
-              header: 'Select geography',
+              header: t.choose.select_geography,
               onConfirm: () {
                 if (_selectedId != null) {
                   final selectedItem = nicheItems.firstWhere(
@@ -84,7 +85,7 @@ class _ChooseGeographyState extends State<ChooseGeography> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _selectedText ?? 'Select',
+                  _selectedText ?? t.common.select,
                   style: Typographies.labelLarge.copyWith(
                     color: _selectedId == null
                         ? AppColors.grey

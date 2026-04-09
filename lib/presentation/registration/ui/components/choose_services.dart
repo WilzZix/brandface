@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,7 @@ class _ChooseServicesState extends State<ChooseServices> {
 
   @override
   void initState() {
-    _selectedText = 'Select niche';
+    _selectedText = t.choose.select_niche;
     super.initState();
   }
   @override
@@ -42,7 +43,7 @@ class _ChooseServicesState extends State<ChooseServices> {
           onTap: () async {
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
-              header: 'Select service',
+              header: t.choose.select_service,
               onConfirm: () {
                 if (_selectedId != null) {
 
@@ -86,7 +87,7 @@ class _ChooseServicesState extends State<ChooseServices> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _selectedText ?? 'Select',
+                  _selectedText ?? t.common.select,
                   style: Typographies.labelLarge.copyWith(
                     color: _selectedId == null
                         ? AppColors.grey

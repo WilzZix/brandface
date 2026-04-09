@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_experience_page_view.dart';
 import 'package:brandface/presentation/registration/ui/components/choose_partners.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
@@ -35,26 +36,26 @@ class _BrandfaceCameraExperiencePageViewState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Years of camera experience', style: Typographies.titleMedium),
+          Text(t.registration.years_of_camera_experience, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           CredInputField(
             controller: _yearsController,
-            label: 'Write years of experience',
+            label: t.registration.write_years_of_experience,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return t.common.please_enter_text;
               }
               return null;
             },
           ),
           const SizedBox(height: 24),
-          Text('Optional experience', style: Typographies.titleMedium),
+          Text(t.registration.optional_experience, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseOptionWidget(title: 'TV/Ad Experience'),
-          ChooseOptionWidget(title: 'Press Mentions'),
-          ChooseOptionWidget(title: 'Agency Representation'),
+          ChooseOptionWidget(title: t.optional_items.tv_ad_experience),
+          ChooseOptionWidget(title: t.optional_items.press_mentions),
+          ChooseOptionWidget(title: t.optional_items.agency_representation),
           SizedBox(height: 16),
-          Text('Partners', style: Typographies.titleMedium),
+          Text(t.registration.partners, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
@@ -62,31 +63,31 @@ class _BrandfaceCameraExperiencePageViewState
             },
           ),
           SizedBox(height: 16),
-          Text('Exclusivity availability', style: Typographies.bodyMedium),
+          Text(t.registration.exclusivity_availability, style: Typographies.bodyMedium),
           const SizedBox(height: 8),
           YesNoWidget(onItemTaped: (value) {}),
           SizedBox(height: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Social media accounts', style: Typographies.titleSmall),
+              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
               SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: CredInputField(
                       controller: _awardController,
-                      label: 'Write award info here',
+                      label: t.registration.write_award_info,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return t.common.please_enter_text;
                         }
                         return null;
                       },
                     ),
                   ),
                   SizedBox(width: 8),
-                  AppButtons.primary(title: 'Apply', onTap: () {}),
+                  AppButtons.primary(title: t.common.apply, onTap: () {}),
                 ],
               ),
             ],

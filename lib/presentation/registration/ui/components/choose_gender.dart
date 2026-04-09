@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -27,9 +28,9 @@ class ChooseGender extends StatefulWidget {
 class _ChooseGenderState extends State<ChooseGender> {
   String? _selectedLang;
   int _selectedLangId = 0;
-  List<LangItemModel> langItems = [
-    LangItemModel(name: "Male", id: 0),
-    LangItemModel(name: 'Female', id: 1),
+  List<LangItemModel> get langItems => [
+    LangItemModel(name: t.registration.male, id: 0),
+    LangItemModel(name: t.registration.female, id: 1),
   ];
 
   @override
@@ -73,7 +74,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                   ],
                 );
               },
-              header: 'Select gender',
+              header: t.choose.select_gender,
               onConfirm: () {
                 widget.onItemSelected(_selectedLang ?? '');
                 setState(() {});

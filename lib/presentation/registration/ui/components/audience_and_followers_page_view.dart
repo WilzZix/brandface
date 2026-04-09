@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class _AudienceAndFollowersPageViewState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Geography', style: Typographies.titleMedium),
+          Text(t.registration.geography, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseGeography(
             onItemSelected: (LangItemModel item) {
@@ -59,7 +60,7 @@ class _AudienceAndFollowersPageViewState
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Selected geography', style: Typographies.titleSmall),
+                Text(t.registration.selected_geography, style: Typographies.titleSmall),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,
@@ -83,7 +84,7 @@ class _AudienceAndFollowersPageViewState
                               });
                             },
                             child: Text(
-                              'Delete',
+                              t.common.delete,
                               style: Typographies.labelLarge.copyWith(
                                 color: AppColors.red,
                               ),
@@ -99,40 +100,40 @@ class _AudienceAndFollowersPageViewState
           FromToInputField(
             controllerFrom: _controllerFrom,
             controllerTo: _controllerTo,
-            title: 'Men',
-            labelFrom: 'Age from',
-            labelTo: 'Age to',
+            title: t.registration.men,
+            labelFrom: t.registration.age_from,
+            labelTo: t.registration.age_to,
           ),
           SizedBox(height: 16),
           FromToInputField(
             controllerFrom: _controllerFromWomen,
             controllerTo: _controllerToWomen,
-            title: 'Women',
-            labelFrom: 'Age from',
-            labelTo: 'Age to',
+            title: t.registration.women,
+            labelFrom: t.registration.age_from,
+            labelTo: t.registration.age_to,
           ),
           SizedBox(height: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Social media accounts', style: Typographies.titleSmall),
+              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
               SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: CredInputField(
                       controller: _controllerSocial,
-                      label: 'Paste link here',
+                      label: t.registration.paste_link_here,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return t.common.please_enter_text;
                         }
                         return null;
                       },
                     ),
                   ),
                   SizedBox(width: 8),
-                  AppButtons.primary(title: 'Apply', onTap: () {}),
+                  AppButtons.primary(title: t.common.apply, onTap: () {}),
                 ],
               ),
             ],

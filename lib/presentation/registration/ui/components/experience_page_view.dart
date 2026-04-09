@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:flutter/material.dart';
 
@@ -35,20 +36,20 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Years of experience', style: Typographies.titleMedium),
+          Text(t.registration.years_of_experience, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           CredInputField(
             controller: _experienceController,
-            label: "Write years of experience",
+            label: t.registration.write_years_of_experience,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return t.common.please_enter_text;
               }
               return null;
             },
           ),
           SizedBox(height: 16),
-          Text('Partners', style: Typographies.titleMedium),
+          Text(t.registration.partners, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
@@ -59,24 +60,24 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Social media accounts', style: Typographies.titleSmall),
+              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
               SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: CredInputField(
                       controller: _awardController,
-                      label: 'Write award info here',
+                      label: t.registration.write_award_info,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return t.common.please_enter_text;
                         }
                         return null;
                       },
                     ),
                   ),
                   SizedBox(width: 8),
-                  AppButtons.primary(title: 'Apply', onTap: () {}),
+                  AppButtons.primary(title: t.common.apply, onTap: () {}),
                 ],
               ),
             ],

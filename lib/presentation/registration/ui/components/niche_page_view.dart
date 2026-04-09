@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class _NichePageViewState extends State<NichePageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Niches', style: Typographies.titleMedium),
+          Text(t.registration.niches, style: Typographies.titleMedium),
           const SizedBox(height: 24),
           SizedBox(
             height: 24,
@@ -70,7 +71,7 @@ class _NichePageViewState extends State<NichePageView>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Selected niches', style: Typographies.titleSmall),
+                Text(t.registration.selected_niches, style: Typographies.titleSmall),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,
@@ -94,7 +95,7 @@ class _NichePageViewState extends State<NichePageView>
                               });
                             },
                             child: Text(
-                              'Delete',
+                              t.common.delete,
                               style: Typographies.labelLarge.copyWith(
                                 color: AppColors.red,
                               ),

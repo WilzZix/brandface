@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
@@ -45,7 +46,7 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Brand segment fit', style: Typographies.titleMedium),
+          Text(t.registration.brand_segment_fit, style: Typographies.titleMedium),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
@@ -90,7 +91,7 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
             }).toList(),
           ),
           const SizedBox(height: 24),
-          Text('Geography', style: Typographies.titleMedium),
+          Text(t.registration.geography, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseGeography(
             onItemSelected: (LangItemModel item) {
@@ -104,7 +105,7 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
           ),
           if (_selectedGeographies.isNotEmpty) ...[
             const SizedBox(height: 16),
-            Text('Selected geography', style: Typographies.titleSmall),
+            Text(t.registration.selected_geography, style: Typographies.titleSmall),
             const SizedBox(height: 8),
             ListView.builder(
               shrinkWrap: true,
@@ -127,7 +128,7 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
                           });
                         },
                         child: Text(
-                          'Delete',
+                          t.common.delete,
                           style: Typographies.labelLarge.copyWith(
                             color: AppColors.red,
                           ),
@@ -143,40 +144,40 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView> {
           FromToInputField(
             controllerFrom: _controllerFrom,
             controllerTo: _controllerTo,
-            title: 'Men',
-            labelFrom: 'Age from',
-            labelTo: 'Age to',
+            title: t.registration.men,
+            labelFrom: t.registration.age_from,
+            labelTo: t.registration.age_to,
           ),
           SizedBox(height: 16),
           FromToInputField(
             controllerFrom: _controllerFromWomen,
             controllerTo: _controllerToWomen,
-            title: 'Women',
-            labelFrom: 'Age from',
-            labelTo: 'Age to',
+            title: t.registration.women,
+            labelFrom: t.registration.age_from,
+            labelTo: t.registration.age_to,
           ),
           SizedBox(height: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Social media accounts', style: Typographies.titleSmall),
+              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
               SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: CredInputField(
                       controller: _controllerSocial,
-                      label: 'Paste link here',
+                      label: t.registration.paste_link_here,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return t.common.please_enter_text;
                         }
                         return null;
                       },
                     ),
                   ),
                   SizedBox(width: 8),
-                  AppButtons.primary(title: 'Apply', onTap: () {}),
+                  AppButtons.primary(title: t.common.apply, onTap: () {}),
                 ],
               ),
             ],

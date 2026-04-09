@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
@@ -35,7 +36,7 @@ class _BrandCategoriesPageViewState extends State<BrandCategoriesPageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Categories', style: Typographies.titleMedium),
+          Text(t.registration.categories, style: Typographies.titleMedium),
           const SizedBox(height: 24),
           ChooseNiche(
             onItemSelected: (LangItemModel item) {
@@ -49,7 +50,7 @@ class _BrandCategoriesPageViewState extends State<BrandCategoriesPageView>
           ),
           if (_selectedCategories.isNotEmpty) ...[
             const SizedBox(height: 32),
-            Text('Selected categories', style: Typographies.titleSmall),
+            Text(t.registration.selected_categories, style: Typographies.titleSmall),
             const SizedBox(height: 8),
             ListView.builder(
               shrinkWrap: true,
@@ -72,7 +73,7 @@ class _BrandCategoriesPageViewState extends State<BrandCategoriesPageView>
                           });
                         },
                         child: Text(
-                          'Delete',
+                          t.common.delete,
                           style: Typographies.labelLarge.copyWith(
                             color: AppColors.red,
                           ),

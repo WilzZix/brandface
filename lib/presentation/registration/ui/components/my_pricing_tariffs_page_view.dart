@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/components/inputs/from_to_input_field.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Currency', style: Typographies.titleMedium),
+          Text(t.registration.currency, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(
             onItemSelected: (LangItemModel p1) {
@@ -49,28 +50,28 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView> {
           FromToInputField(
             controllerFrom: _hourlyRateFrom,
             controllerTo: _hourlyRateTo,
-            labelFrom: 'Min',
-            labelTo: 'Max',
-            title: 'Write your hourly rate',
+            labelFrom: t.registration.min,
+            labelTo: t.registration.max,
+            title: t.registration.write_hourly_rate,
           ),
           SizedBox(height: 16),
           Text(
-            'Projectly payment starting price',
+            t.registration.projectly_payment_starting_price,
             style: Typographies.titleMedium,
           ),
           const SizedBox(height: 8),
           CredInputField(
             controller: _paymentByProjectController,
-            label: 'Write starting price',
+            label: t.registration.write_starting_price,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return t.common.please_enter_text;
               }
               return null;
             },
           ),
           SizedBox(height: 16),
-          Text('Payment types', style: Typographies.titleMedium),
+          Text(t.registration.payment_types, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(onItemSelected: (LangItemModel p1) {}),
         ],

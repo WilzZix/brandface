@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import '../../tokens/colors.dart';
 import '../../typography/typography.dart';
@@ -51,7 +52,7 @@ class _BioInputFieldState extends State<BioInputField> {
             widget.onChanged();
           },
           decoration: InputDecoration(
-            hintText: 'Write text here...',
+            hintText: t.common.write_text_here,
             hintStyle: Typographies.bodyMedium.copyWith(color: AppColors.grey),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
