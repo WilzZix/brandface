@@ -392,7 +392,7 @@ return userRegisterFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( RegistrationEntity registerEntity)?  userRegistered,TResult Function()?  userRegistering,TResult Function( String msg)?  userRegisterFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( RegistrationEntity registerEntity)?  userRegistered,TResult Function()?  userRegistering,TResult Function( Failure msg)?  userRegisterFailure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _UserRegistered() when userRegistered != null:
@@ -416,7 +416,7 @@ return userRegisterFailure(_that.msg);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( RegistrationEntity registerEntity)  userRegistered,required TResult Function()  userRegistering,required TResult Function( String msg)  userRegisterFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( RegistrationEntity registerEntity)  userRegistered,required TResult Function()  userRegistering,required TResult Function( Failure msg)  userRegisterFailure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _UserRegistered():
@@ -439,7 +439,7 @@ return userRegisterFailure(_that.msg);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( RegistrationEntity registerEntity)?  userRegistered,TResult? Function()?  userRegistering,TResult? Function( String msg)?  userRegisterFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( RegistrationEntity registerEntity)?  userRegistered,TResult? Function()?  userRegistering,TResult? Function( Failure msg)?  userRegisterFailure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _UserRegistered() when userRegistered != null:
@@ -590,7 +590,7 @@ class _UserRegisterFailure implements RegistrationState {
   const _UserRegisterFailure({required this.msg});
   
 
- final  String msg;
+ final  Failure msg;
 
 /// Create a copy of RegistrationState
 /// with the given fields replaced by the non-null parameter values.
@@ -622,7 +622,7 @@ abstract mixin class _$UserRegisterFailureCopyWith<$Res> implements $Registratio
   factory _$UserRegisterFailureCopyWith(_UserRegisterFailure value, $Res Function(_UserRegisterFailure) _then) = __$UserRegisterFailureCopyWithImpl;
 @useResult
 $Res call({
- String msg
+ Failure msg
 });
 
 
@@ -642,7 +642,7 @@ class __$UserRegisterFailureCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? msg = null,}) {
   return _then(_UserRegisterFailure(
 msg: null == msg ? _self.msg : msg // ignore: cast_nullable_to_non_nullable
-as String,
+as Failure,
   ));
 }
 

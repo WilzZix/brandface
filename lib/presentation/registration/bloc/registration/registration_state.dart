@@ -11,6 +11,6 @@ class RegistrationState with _$RegistrationState {
 
   const factory RegistrationState.userRegistering() = _UserRegistering;
 
-  const factory RegistrationState.userRegisterFailure({required String msg}) =
+  const factory RegistrationState.userRegisterFailure({required Failure msg}) =
       _UserRegisterFailure;
 }
