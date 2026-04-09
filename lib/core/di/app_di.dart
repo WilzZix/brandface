@@ -32,7 +32,7 @@ class AppDi {
     sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
     sl.registerLazySingleton<IAuthLocalService>(() => AuthLocalService(sl()));
     sl.registerLazySingleton(() => Dio());
-    sl.registerLazySingleton(() => DioClient(sl()));
+    sl.registerLazySingleton(() => DioClient(sl(), sharedPrefService: sl()));
 
     ///Datasource
     sl.registerLazySingleton<LoginRemoteDataSource>(

@@ -86,10 +86,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   title: t.onboarding.kContinue,
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      context.push(
-                        FillProfileInformationPage.tag,
-                        extra: _selectedUserRole,
-                      );
                       context.read<RegistrationBloc>().add(
                         RegistrationEvent.registration(
                           params: RegistrationParams(
