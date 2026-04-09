@@ -1,3 +1,4 @@
+import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
 
 import '../../../../core/network/dio_client.dart';
@@ -12,8 +13,12 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   ProfileDataSourceImpl(this._dioClient);
 
   @override
-  Future<CategoryModel> getCategories() {
-    // TODO: implement getCategories
-    throw UnimplementedError();
+  Future<CategoryModel> getCategories() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.categories);
+      return CategoryModel.fromJson(result.data);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

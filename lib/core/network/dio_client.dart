@@ -2,15 +2,23 @@ import 'package:brandface/core/network/interceptor/logger_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../utils/services/shared_pref_service.dart';
+import '../constants/api_routes.dart';
+
 class DioClient {
   final Dio _dio;
+  final IAuthLocalService _sharedPrefService;
 
-  DioClient(this._dio) {
+  DioClient(this._dio, {required IAuthLocalService sharedPrefService})
+    : _sharedPrefService = sharedPrefService {
     _dio
-      ..options.baseUrl = 'https://api.influerax.com/api/accounts/v1/'
+      ..options.baseUrl = ApiRoutes.baseUrl
       ..options.connectTimeout = const Duration(seconds: 5)
       ..options.receiveTimeout = const Duration(seconds: 5)
       ..options.responseType = ResponseType.json
+      ..options.headers.addAll({
+        'Authorization': "Bearer ${_sharedPrefService.getAccessToken()}",
+      })
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
       ..interceptors.addAll([
         InterceptorsWrapper(),

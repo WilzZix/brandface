@@ -37,7 +37,6 @@ class _NichePageViewState extends State<NichePageView>
               itemBuilder: (context, index) {
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-
                   decoration: BoxDecoration(
                     color: AppColors.lightGreen,
 

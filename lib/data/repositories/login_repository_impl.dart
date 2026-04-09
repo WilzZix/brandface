@@ -20,19 +20,31 @@ class LoginRepositoryImpl implements ILoginRepository {
       final otpModel = await remoteDataSource.sendOtp(phone: phone);
       return Right(otpModel.toEntity());
     } on DioException catch (e) {
-      return Left(ServerFailure(e.message ?? 'Serverda kutilmagan xatolik'));
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
     }
   }
 
   @override
-  Future<Either<Failure, VerifyOtpEntity>> verifyOtp({required VerifyOtpParams params}) async {
+  Future<Either<Failure, VerifyOtpEntity>> verifyOtp({
+    required VerifyOtpParams params,
+  }) async {
     try {
       final verifyOtpData = await remoteDataSource.verifyOtp(params: params);
       return Right(verifyOtpData.toEntity());
     } on DioException catch (e) {
-      return Left(ServerFailure(e.message ?? 'Serverda kutilmagan xatolik'));
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
     }
