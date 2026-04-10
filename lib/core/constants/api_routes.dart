@@ -13,4 +13,5 @@ class ApiRoutes {
 
   ///Catalog public routes
   static String categories = 'admin/v1/catalog/categories/';
+  static String serviceType = 'admin/v1/catalog/service-types/';
 }

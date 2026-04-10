@@ -1,10 +1,13 @@
 import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
+import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 
 import '../../../../core/network/dio_client.dart';
 
 abstract class ProfileDataSource {
   Future<CategoryModel> getCategories();
+
+  Future<ServiceTypeModel> getServices();
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -17,6 +20,16 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     try {
       final result = await _dioClient.get(ApiRoutes.categories);
       return CategoryModel.fromJson(result.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ServiceTypeModel> getServices() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.serviceType);
+      return ServiceTypeModel.fromJson(result.data);
     } catch (e) {
       rethrow;
     }
