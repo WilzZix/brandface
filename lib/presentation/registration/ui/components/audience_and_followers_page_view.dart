@@ -60,7 +60,10 @@ class _AudienceAndFollowersPageViewState
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(t.registration.selected_geography, style: Typographies.titleSmall),
+                Text(
+                  t.registration.selected_geography,
+                  style: Typographies.titleSmall,
+                ),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,
@@ -95,6 +98,7 @@ class _AudienceAndFollowersPageViewState
                     );
                   },
                 ),
+                const SizedBox(height: 16),
               ],
             ),
           FromToInputField(
@@ -116,7 +120,10 @@ class _AudienceAndFollowersPageViewState
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
+              Text(
+                t.registration.social_media_accounts,
+                style: Typographies.titleSmall,
+              ),
               SizedBox(height: 8),
               Row(
                 children: [

@@ -12,6 +12,8 @@ class ApiRoutes {
       'accounts/v1/register/influencer/$profileId/';
 
   ///Catalog public routes
-  static String categories = 'admin/v1/catalog/categories/';
-  static String serviceType = 'admin/v1/catalog/service-types/';
+  static String categories = 'catalog/v1/categories/';
+  static String serviceType = 'catalog/v1/service-types/';
+  static String regions = 'catalog/v1/regions/';
+  static String cities = 'catalog/v1/cities/';
 }
