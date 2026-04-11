@@ -7,11 +7,13 @@ import 'package:brandface/data/repositories/registration_repository_impl.dart';
 import 'package:brandface/domain/repository/login_repository.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/domain/repository/registration_repository.dart';
+import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:brandface/domain/usecase/registration/registration_usecase.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
@@ -54,6 +56,7 @@ class AppDi {
     sl.registerLazySingleton(() => FillProfileInfoUsecase(sl()));
     sl.registerLazySingleton(() => CategoryUseCase(repository: sl()));
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
+    sl.registerLazySingleton(() => RegionUseCase(repository: sl()));
 
     ///Repository
     sl.registerLazySingleton<ILoginRepository>(
@@ -79,5 +82,6 @@ class AppDi {
     sl.registerFactory(() => FillProfileBloc(fillProfileInfoUsecase: sl()));
     sl.registerFactory(() => CategoryCubit(categoryUseCase: sl()));
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));
+    sl.registerFactory(() => RegionCubit(regionUseCase: sl()));
   }
 }

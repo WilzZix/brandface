@@ -1,6 +1,7 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
@@ -87,11 +88,14 @@ class _FillProfileInformationPageState
             ),
           ),
           SizedBox(
-            child: AudienceAndFollowersPageView(
-              key: const PageStorageKey<String>('pageFour'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(audience: p1.audience);
-              },
+            child: BlocProvider(
+              create: (context) => sl<RegionCubit>(),
+              child: AudienceAndFollowersPageView(
+                key: const PageStorageKey<String>('pageFour'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(audience: p1.audience);
+                },
+              ),
             ),
           ),
           SizedBox(

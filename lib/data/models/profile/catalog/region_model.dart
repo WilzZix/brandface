@@ -1,3 +1,5 @@
+import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
+
 class RegionModel {
   final String? message;
   final List<RegionData>? data;
@@ -23,5 +25,9 @@ class RegionData {
 
   factory RegionData.fromJson(Map<String, dynamic> json) {
     return RegionData(id: json['id'], name: json['name'], code: json['code']);
+  }
+
+  RegionEntity toEntity() {
+    return RegionEntity(id: id, name: name, code: code);
   }
 }

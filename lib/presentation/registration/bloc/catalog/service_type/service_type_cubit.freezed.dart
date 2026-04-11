@@ -55,13 +55,13 @@ extension ServiceTypeStatePatterns on ServiceTypeState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _ServiceTypeLoaded value)?  categoryLoaded,TResult Function( _ServiceTypeLoadFailure value)?  serviceTypeLoadedLoadFailure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _ServiceTypeLoaded value)?  serviceTypeLoaded,TResult Function( _ServiceTypeLoadFailure value)?  serviceTypeLoadedLoadFailure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _ServiceTypeLoaded() when categoryLoaded != null:
-return categoryLoaded(_that);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
+return loading(_that);case _ServiceTypeLoaded() when serviceTypeLoaded != null:
+return serviceTypeLoaded(_that);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
 return serviceTypeLoadedLoadFailure(_that);case _:
   return orElse();
 
@@ -80,13 +80,13 @@ return serviceTypeLoadedLoadFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _ServiceTypeLoaded value)  categoryLoaded,required TResult Function( _ServiceTypeLoadFailure value)  serviceTypeLoadedLoadFailure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _ServiceTypeLoaded value)  serviceTypeLoaded,required TResult Function( _ServiceTypeLoadFailure value)  serviceTypeLoadedLoadFailure,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _ServiceTypeLoaded():
-return categoryLoaded(_that);case _ServiceTypeLoadFailure():
+return serviceTypeLoaded(_that);case _ServiceTypeLoadFailure():
 return serviceTypeLoadedLoadFailure(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -104,13 +104,13 @@ return serviceTypeLoadedLoadFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _ServiceTypeLoaded value)?  categoryLoaded,TResult? Function( _ServiceTypeLoadFailure value)?  serviceTypeLoadedLoadFailure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _ServiceTypeLoaded value)?  serviceTypeLoaded,TResult? Function( _ServiceTypeLoadFailure value)?  serviceTypeLoadedLoadFailure,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _ServiceTypeLoaded() when categoryLoaded != null:
-return categoryLoaded(_that);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
+return loading(_that);case _ServiceTypeLoaded() when serviceTypeLoaded != null:
+return serviceTypeLoaded(_that);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
 return serviceTypeLoadedLoadFailure(_that);case _:
   return null;
 
@@ -128,12 +128,12 @@ return serviceTypeLoadedLoadFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ServiceTypeEntity> data)?  categoryLoaded,TResult Function( Failure failure)?  serviceTypeLoadedLoadFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ServiceTypeEntity> data)?  serviceTypeLoaded,TResult Function( Failure failure)?  serviceTypeLoadedLoadFailure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
-return loading();case _ServiceTypeLoaded() when categoryLoaded != null:
-return categoryLoaded(_that.data);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
+return loading();case _ServiceTypeLoaded() when serviceTypeLoaded != null:
+return serviceTypeLoaded(_that.data);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
 return serviceTypeLoadedLoadFailure(_that.failure);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return serviceTypeLoadedLoadFailure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ServiceTypeEntity> data)  categoryLoaded,required TResult Function( Failure failure)  serviceTypeLoadedLoadFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ServiceTypeEntity> data)  serviceTypeLoaded,required TResult Function( Failure failure)  serviceTypeLoadedLoadFailure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _ServiceTypeLoaded():
-return categoryLoaded(_that.data);case _ServiceTypeLoadFailure():
+return serviceTypeLoaded(_that.data);case _ServiceTypeLoadFailure():
 return serviceTypeLoadedLoadFailure(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return serviceTypeLoadedLoadFailure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ServiceTypeEntity> data)?  categoryLoaded,TResult? Function( Failure failure)?  serviceTypeLoadedLoadFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ServiceTypeEntity> data)?  serviceTypeLoaded,TResult? Function( Failure failure)?  serviceTypeLoadedLoadFailure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
-return loading();case _ServiceTypeLoaded() when categoryLoaded != null:
-return categoryLoaded(_that.data);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
+return loading();case _ServiceTypeLoaded() when serviceTypeLoaded != null:
+return serviceTypeLoaded(_that.data);case _ServiceTypeLoadFailure() when serviceTypeLoadedLoadFailure != null:
 return serviceTypeLoadedLoadFailure(_that.failure);case _:
   return null;
 
@@ -287,7 +287,7 @@ int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(
 
 @override
 String toString() {
-  return 'ServiceTypeState.categoryLoaded(data: $data)';
+  return 'ServiceTypeState.serviceTypeLoaded(data: $data)';
 }
 
 

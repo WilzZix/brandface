@@ -1,5 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
+import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/service_type_entity.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:dart_either/src/dart_either.dart';
@@ -38,6 +39,26 @@ class ProfileRepositoryImpl implements IProfileRepository {
     try {
       final servicesData = await _dataSource.getServices();
       final List<ServiceTypeEntity> entities = servicesData.data!
+          .map((model) => model.toEntity())
+          .toList();
+      return Right(entities);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RegionEntity>>> getRegions() async {
+    try {
+      final servicesData = await _dataSource.getRegions();
+      final List<RegionEntity> entities = servicesData.data!
           .map((model) => model.toEntity())
           .toList();
       return Right(entities);

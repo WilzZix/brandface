@@ -62,7 +62,7 @@ class _ChooseServicesState extends State<ChooseServices> {
                             child: Center(child: CircularProgressIndicator()),
                           ),
                           orElse: () => const SizedBox.shrink(),
-                          categoryLoaded: (serviceTypes) {
+                          serviceTypeLoaded: (serviceTypes) {
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: serviceTypes.map((item) {
