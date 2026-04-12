@@ -26,7 +26,7 @@ import '../../domain/usecase/catalog/category/category_use_case.dart';
 import '../../domain/usecase/login/verify_otp_usecase.dart';
 import '../../domain/usecase/registration/fill_profile_info_usecase.dart';
 import '../../presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
-import '../../utils/services/shared_pref_service.dart';
+import '../../utils/services/app_auth_local_service.dart';
 
 final sl = GetIt.instance;
 

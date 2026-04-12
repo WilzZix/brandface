@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import 'notifications_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -59,32 +61,35 @@ class _HomePageState extends State<HomePage> {
                     style: Typographies.titleMedium,
                   ),
                   actions: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.lightGreen,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24.0,
-                          vertical: 12,
+                    GestureDetector(
+                      onTap: () => context.pushNamed(NotificationsPage.tag),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.lightGreen,
+                          borderRadius: BorderRadius.circular(999),
                         ),
-                        child: Stack(
-                          children: [
-                            SvgPicture.asset(AppAssets.icBell),
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: Container(
-                                height: 8,
-                                width: 8,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.orange,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0,
+                            vertical: 12,
+                          ),
+                          child: Stack(
+                            children: [
+                              SvgPicture.asset(AppAssets.icBell),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Container(
+                                  height: 8,
+                                  width: 8,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.orange,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
