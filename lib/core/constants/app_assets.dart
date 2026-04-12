@@ -19,5 +19,6 @@ class AppAssets {
   static String icBars = 'assets/icons/bars.svg';
   static String icClose = 'assets/icons/close.svg';
   static String icBell = 'assets/icons/bell.svg';
+  static String icChevronRight = 'assets/icons/chevron-right.svg';
   static String icCalendar = 'assets/icons/calendar-month.svg';
 }

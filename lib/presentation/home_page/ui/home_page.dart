@@ -27,61 +27,70 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () => context.pushNamed(ProfilePage.tag),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-            child: SizedBox(
-              height: 40,
-              width: 40,
-              child: Image.asset(
-                'assets/images/im_person_avatar_sample.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-        title: Text("Yo'ldoshev Usmon", style: Typographies.titleMedium),
-        actions: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.lightGreen,
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 12,
-              ),
-              child: Stack(
-                children: [
-                  SvgPicture.asset(AppAssets.icBell),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      height: 8,
-                      width: 8,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.orange,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-        ],
-      ),
       body: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: CustomScrollView(
               slivers: [
+                SliverAppBar(
+                  scrolledUnderElevation: 0,
+                  backgroundColor: AppColors.lightBg,
+                  pinned: true,
+                  leading: GestureDetector(
+                    onTap: () => context.pushNamed(ProfilePage.tag),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 10,
+                      ),
+                      child: SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: Image.asset(
+                          'assets/images/im_person_avatar_sample.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    "Yo'ldoshev Usmon",
+                    style: Typographies.titleMedium,
+                  ),
+                  actions: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.lightGreen,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0,
+                          vertical: 12,
+                        ),
+                        child: Stack(
+                          children: [
+                            SvgPicture.asset(AppAssets.icBell),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                height: 8,
+                                width: 8,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.orange,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                  ],
+                ),
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
                   child: Text(
@@ -206,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               Spacer(),
-                              SvgPicture.asset(AppAssets.icArrowRight),
+                              SvgPicture.asset(AppAssets.icChevronRight),
                             ],
                           ),
                         ],
@@ -231,11 +240,51 @@ class _HomePageState extends State<HomePage> {
               duration: Duration(milliseconds: 300),
               opacity: _isOpen ? 1.0 : 0.0,
               child: Container(
-                color: Colors.black.withOpacity(0.9), // Fonni xiralashtirish
-                child: Center(
-                  child: Text(
-                    "Menu Page Content",
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                color: AppColors.lightBg,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 56 + MediaQuery.of(context).padding.top),
+                      Center(child: SvgPicture.asset(AppAssets.icLogo)),
+                      SizedBox(height: 24),
+                      Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
+                      SizedBox(height: 24),
+                      Text('Menu', style: Typographies.headlineSmall),
+                      SizedBox(height: 32),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Offers from brands',
+                            style: Typographies.titleMedium,
+                          ),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Recommended for You',
+                            style: Typographies.titleMedium,
+                          ),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Messages', style: Typographies.titleMedium),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
