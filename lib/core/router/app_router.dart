@@ -3,6 +3,7 @@ import 'package:brandface/presentation/splash_screen/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../presentation/home_page/ui/home_page.dart';
+import '../../presentation/home_page/ui/profile_page.dart';
 import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.dart';
 import '../../presentation/login/ui/login_page.dart';
 import '../../presentation/login/ui/term_of_use_page.dart';
@@ -61,6 +62,11 @@ class AppRouter {
         path: HomePage.tag,
         name: HomePage.tag,
         builder: (_, _) => HomePage(),
+      ),
+      GoRoute(
+        path: ProfilePage.tag,
+        name: ProfilePage.tag,
+        builder: (_, _) => ProfilePage(),
       ),
       GoRoute(
         path: RegistrationPage.tag,

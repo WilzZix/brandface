@@ -1,5 +1,7 @@
+import 'package:brandface/presentation/registration/ui/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../tokens/colors.dart';
@@ -18,7 +20,10 @@ class _LoginMethodsState extends State<LoginMethods> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        LoginMethodItem(iconPath: AppAssets.icGoogle),
+        GestureDetector(
+          child: LoginMethodItem(iconPath: AppAssets.icGoogle),
+          onTap: () => context.pushNamed(RegistrationPage.tag),
+        ),
         LoginMethodItem(iconPath: AppAssets.icLinkedin),
         LoginMethodItem(iconPath: AppAssets.icApple),
         LoginMethodItem(iconPath: AppAssets.icInstagram),

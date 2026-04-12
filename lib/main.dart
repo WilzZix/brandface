@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         locale: TranslationProvider.of(context).locale.flutterLocale,
         routerConfig: AppRouter.router,
         theme: ThemeData(
+          appBarTheme: AppBarTheme(backgroundColor: AppColors.lightBg),
           textTheme: GoogleFonts.interTextTheme(),
           scaffoldBackgroundColor: AppColors.lightBg,
           bottomSheetTheme: BottomSheetThemeData(
