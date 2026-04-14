@@ -29,7 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           state.maybeWhen(
             appInitialized: (isLoggedIn) {
-              context.go(LoginPage.tag);
+              if (isLoggedIn) {
+                context.go(HomePage.tag);
+              } else {
+                context.go(LoginPage.tag);
+              }
             },
             orElse: () {},
           );

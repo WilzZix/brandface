@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../utils/services/shared_pref_service.dart';
+import '../../../utils/services/app_auth_local_service.dart';
 
 part 'init_app_state.dart';
 

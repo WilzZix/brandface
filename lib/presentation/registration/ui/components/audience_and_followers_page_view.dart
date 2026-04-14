@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:flutter/material.dart';
 
@@ -37,12 +38,87 @@ class _AudienceAndFollowersPageViewState
   }
 
   @override
+  void initState() {
+    super.initState();
+    _controllerFrom.addListener(_handleManAgeFromChange);
+    _controllerTo.addListener(_handleManAgeToChange);
+    _controllerFromWomen.addListener(_handleWomanAgeFromChange);
+    _controllerToWomen.addListener(_handleWomanAgeToChange);
+    _controllerSocial.addListener(_handleSocialChange);
+  }
+
+  void _handleSocialChange() {
+    final text = _controllerSocial.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(socialMediaStats: [text]),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleManAgeFromChange() {
+    final text = _controllerFrom.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(menAgeFrom: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleManAgeToChange() {
+    final text = _controllerTo.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(menAgeTo: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleWomanAgeFromChange() {
+    final text = _controllerFromWomen.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(womenAgeFrom: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleWomanAgeToChange() {
+    final text = _controllerToWomen.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(womenAgeTo: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Geography', style: Typographies.titleMedium),
+          Text(t.registration.geography, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseGeography(
             onItemSelected: (LangItemModel item) {
@@ -59,7 +135,10 @@ class _AudienceAndFollowersPageViewState
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Selected geography', style: Typographies.titleSmall),
+                Text(
+                  t.registration.selected_geography,
+                  style: Typographies.titleSmall,
+                ),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,
@@ -83,7 +162,7 @@ class _AudienceAndFollowersPageViewState
                               });
                             },
                             child: Text(
-                              'Delete',
+                              t.common.delete,
                               style: Typographies.labelLarge.copyWith(
                                 color: AppColors.red,
                               ),
@@ -94,45 +173,49 @@ class _AudienceAndFollowersPageViewState
                     );
                   },
                 ),
+                const SizedBox(height: 16),
               ],
             ),
           FromToInputField(
             controllerFrom: _controllerFrom,
             controllerTo: _controllerTo,
-            title: 'Men',
-            labelFrom: 'Age from',
-            labelTo: 'Age to',
+            title: t.registration.men,
+            labelFrom: t.registration.age_from,
+            labelTo: t.registration.age_to,
           ),
           SizedBox(height: 16),
           FromToInputField(
             controllerFrom: _controllerFromWomen,
             controllerTo: _controllerToWomen,
-            title: 'Women',
-            labelFrom: 'Age from',
-            labelTo: 'Age to',
+            title: t.registration.women,
+            labelFrom: t.registration.age_from,
+            labelTo: t.registration.age_to,
           ),
           SizedBox(height: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Social media accounts', style: Typographies.titleSmall),
+              Text(
+                t.registration.social_media_accounts,
+                style: Typographies.titleSmall,
+              ),
               SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: CredInputField(
                       controller: _controllerSocial,
-                      label: 'Paste link here',
+                      label: t.registration.paste_link_here,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return t.common.please_enter_text;
                         }
                         return null;
                       },
                     ),
                   ),
                   SizedBox(width: 8),
-                  AppButtons.primary(title: 'Apply', onTap: () {}),
+                  AppButtons.primary(title: t.common.apply, onTap: () {}),
                 ],
               ),
             ],

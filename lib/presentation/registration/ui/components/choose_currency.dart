@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +38,7 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
           onTap: () async {
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
-              header: 'Select currency',
+              header: t.choose.select_currency,
               onConfirm: () {
                 if (_selectedId != null) {
                   final selectedItem = nicheItems.firstWhere(
@@ -78,7 +79,7 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _selectedText ?? 'Select',
+                  _selectedText ?? t.common.select,
                   style: Typographies.labelLarge.copyWith(
                     color: _selectedId == null
                         ? AppColors.grey

@@ -36,7 +36,7 @@ class CategoryData {
   factory CategoryData.fromJson(Map<String, dynamic> json) {
     return CategoryData(
       id: json['id'],
-      nameUz: json['name_uz'],
+      nameUz: json['name'],
       nameRu: json['name_ru'],
       nameEn: json['name_en'],
       icon: json['icon'],

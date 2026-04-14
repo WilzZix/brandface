@@ -22,3 +22,22 @@ class LoginDivider extends StatelessWidget {
     );
   }
 }
+
+class RegistrationDivider extends StatelessWidget {
+  const RegistrationDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(width: 70, child: Divider(color: AppColors.borderColor)),
+        SizedBox(width: 18),
+        Text('do not have account', style: Typographies.titleSmall),
+        SizedBox(width: 18),
+        SizedBox(width: 70, child: Divider(color: AppColors.borderColor)),
+      ],
+    );
+  }
+}

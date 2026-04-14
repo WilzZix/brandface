@@ -2,7 +2,7 @@ import 'package:brandface/core/network/interceptor/logger_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../utils/services/shared_pref_service.dart';
+import '../../utils/services/app_auth_local_service.dart';
 import '../constants/api_routes.dart';
 
 class DioClient {

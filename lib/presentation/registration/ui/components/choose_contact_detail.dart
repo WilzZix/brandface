@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,11 +35,11 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
   int _selectedLangId = 0;
   InputFieldType _inputFieldType = InputFieldType.phone;
   final TextEditingController _controller = TextEditingController();
-  List<LangItemModel> langItems = [
-    LangItemModel(name: "Phone", id: 0),
-    LangItemModel(name: 'Email', id: 1),
-    LangItemModel(name: 'Telegram', id: 2),
-    LangItemModel(name: 'Instagram', id: 3),
+  List<LangItemModel> get langItems => [
+    LangItemModel(name: t.contact.phone, id: 0),
+    LangItemModel(name: t.common.email, id: 1),
+    LangItemModel(name: t.contact.telegram, id: 2),
+    LangItemModel(name: t.contact.instagram, id: 3),
   ];
   List<Contact> contactItems = [];
 
@@ -119,7 +120,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
                   ],
                 );
               },
-              header: 'Select contact detail',
+              header: t.choose.select_contact_detail,
               onConfirm: () {
                 setState(() {});
                 context.pop();
@@ -150,7 +151,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
               controller: _controller,
             ),
             SizedBox(width: 8),
-            AppButtons.primary(title: 'Apply', onTap: _onApply),
+            AppButtons.primary(title: t.common.apply, onTap: _onApply),
           ],
         ),
         SizedBox(height: 8),
@@ -178,7 +179,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
                         widget.onItemSelected(contactItems);
                       },
                       child: Text(
-                        'Delete',
+                        t.common.delete,
                         style: Typographies.labelLarge.copyWith(
                           color: AppColors.red,
                         ),
@@ -224,10 +225,10 @@ class _ContactInputFieldProviderState extends State<ContactInputFieldProvider> {
       InputFieldType.telegram => Expanded(
         child: CredInputField(
           controller: widget.controller,
-          label: 'Telegram user name',
+          label: t.contact.telegram_user_name,
           validator: (String? value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter some text';
+              return t.common.please_enter_text;
             }
             return null;
           },
@@ -237,10 +238,10 @@ class _ContactInputFieldProviderState extends State<ContactInputFieldProvider> {
       InputFieldType.instagram => Expanded(
         child: CredInputField(
           controller: widget.controller,
-          label: 'Instagram account',
+          label: t.contact.instagram_account,
           validator: (String? value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter some text';
+              return t.common.please_enter_text;
             }
             return null;
           },

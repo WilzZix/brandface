@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 
 import '../../tokens/colors.dart';
@@ -24,11 +25,11 @@ class _EmailInputFieldState extends State<EmailInputField> {
         setState(() {});
       },
       decoration: InputDecoration(
-        labelText: 'Email',
+        labelText: t.common.email,
         labelStyle: Typographies.bodySmall.copyWith(
           color: AppColors.mutedBlack,
         ),
-        hintText: "Email",
+        hintText: t.common.email,
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),

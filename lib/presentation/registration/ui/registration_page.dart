@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/enums/enums.dart';
+import '../../../core/error/failures.dart';
 import '../../../core/i18n/strings.g.dart';
+import '../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../uikit/components/inputs/cred_input_field.dart';
 import 'components/select_role.dart';
 import 'fill_profile_information_page.dart';
@@ -39,7 +41,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 extra: _selectedUserRole,
               );
             },
-            userRegisterFailure: (msg) {},
+            userRegisterFailure: (msg) {
+              BrandfaceBottomSheet.openFailureBottomSheet(
+                context: context,
+                message: msg.localized,
+              );
+            },
             orElse: () {},
           );
         },

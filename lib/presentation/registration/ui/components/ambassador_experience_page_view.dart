@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
@@ -41,20 +42,20 @@ class _AmbassadorExperiencePageViewState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Years of experience', style: Typographies.titleMedium),
+          Text(t.registration.years_of_experience, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           CredInputField(
             controller: _promoExperienceController,
-            label: 'Describe your experience',
+            label: t.registration.describe_your_experience,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return t.common.please_enter_text;
               }
               return null;
             },
           ),
           SizedBox(height: 16),
-          Text('Partners', style: Typographies.titleMedium),
+          Text(t.registration.partners, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
@@ -63,41 +64,41 @@ class _AmbassadorExperiencePageViewState
           ),
           const SizedBox(height: 24),
           Text(
-            'Experience in referral/promo code campaigns?',
+            t.registration.experience_in_referral,
             style: Typographies.titleMedium,
           ),
           const SizedBox(height: 8),
           YesNoWidget(onItemTaped: (bool p1) {}),
           const SizedBox(height: 16),
-          Text('Optional experience', style: Typographies.titleMedium),
+          Text(t.registration.optional_experience, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseOptionWidget(title: 'Previous brand collaborations'),
+          ChooseOptionWidget(title: t.optional_items.previous_brand_collaborations),
           const SizedBox(height: 16),
-          ChooseOptionWidget(title: 'Case study link or screenshot'),
+          ChooseOptionWidget(title: t.optional_items.case_study_link),
           const SizedBox(height: 16),
-          ChooseOptionWidget(title: 'Conversion metrics (if available)'),
+          ChooseOptionWidget(title: t.optional_items.conversion_metrics),
           SizedBox(height: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Social media accounts', style: Typographies.titleSmall),
+              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
               SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: CredInputField(
                       controller: _awardController,
-                      label: 'Write award info here',
+                      label: t.registration.write_award_info,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return t.common.please_enter_text;
                         }
                         return null;
                       },
                     ),
                   ),
                   SizedBox(width: 8),
-                  AppButtons.primary(title: 'Apply', onTap: () {}),
+                  AppButtons.primary(title: t.common.apply, onTap: () {}),
                 ],
               ),
             ],
@@ -138,7 +139,7 @@ class _YesNoWidgetState extends State<YesNoWidget> {
                     ? SvgPicture.asset(AppAssets.icCheckBox)
                     : SvgPicture.asset(AppAssets.icCheckBoxDisabled),
                 SizedBox(width: 8),
-                Text('Yes', style: Typographies.labelLarge),
+                Text(t.common.yes, style: Typographies.labelLarge),
               ],
             ),
           ),
@@ -155,7 +156,7 @@ class _YesNoWidgetState extends State<YesNoWidget> {
                     ? SvgPicture.asset(AppAssets.icCheckBoxDisabled)
                     : SvgPicture.asset(AppAssets.icCheckBox),
                 SizedBox(width: 8),
-                Text('No', style: Typographies.labelLarge),
+                Text(t.common.no, style: Typographies.labelLarge),
               ],
             ),
           ),

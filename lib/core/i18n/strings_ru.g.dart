@@ -41,6 +41,10 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsOnboardingRu onboarding = _TranslationsOnboardingRu._(_root);
 	@override late final _TranslationsLoginRu login = _TranslationsLoginRu._(_root);
 	@override late final _TranslationsRegistrationRu registration = _TranslationsRegistrationRu._(_root);
+	@override late final _TranslationsCommonRu common = _TranslationsCommonRu._(_root);
+	@override late final _TranslationsChooseRu choose = _TranslationsChooseRu._(_root);
+	@override late final _TranslationsContactRu contact = _TranslationsContactRu._(_root);
+	@override late final _TranslationsOptionalItemsRu optional_items = _TranslationsOptionalItemsRu._(_root);
 	@override late final _TranslationsErrorsRu errors = _TranslationsErrorsRu._(_root);
 }
 
@@ -91,6 +95,125 @@ class _TranslationsRegistrationRu implements TranslationsRegistrationUz {
 	@override String get brand => 'Бренд';
 	@override String get your_name => 'Ваше имя';
 	@override String get your_surname => 'Ваша фамилия';
+	@override String get upload_profile_picture => 'Загрузить фото профиля';
+	@override String get choose_file => 'Выбрать файл';
+	@override String get file_format_hint => 'SVG, PNG, JPG или GIF (MAX. 800x400px).';
+	@override String get spoken_languages => 'Разговорные языки';
+	@override String get date_of_birth => 'Дата рождения';
+	@override String get gender => 'Пол';
+	@override String get male => 'Мужской';
+	@override String get female => 'Женский';
+	@override String get contact_details => 'Контактные данные';
+	@override String get profile_information => 'Информация о профиле';
+	@override String get brand_segment_fit => 'Сегмент бренда';
+	@override String get geography => 'География';
+	@override String get selected_geography => 'Выбранная география';
+	@override String get social_media_accounts => 'Аккаунты в соцсетях';
+	@override String get paste_link_here => 'Вставьте ссылку';
+	@override String get men => 'Мужчины';
+	@override String get women => 'Женщины';
+	@override String get age_from => 'Возраст от';
+	@override String get age_to => 'Возраст до';
+	@override String get years_of_camera_experience => 'Опыт работы с камерой (лет)';
+	@override String get write_years_of_experience => 'Введите годы опыта';
+	@override String get optional_experience => 'Дополнительный опыт';
+	@override String get partners => 'Партнёры';
+	@override String get exclusivity_availability => 'Наличие эксклюзивности';
+	@override String get write_award_info => 'Введите информацию о наградах';
+	@override String get years_of_experience => 'Лет опыта';
+	@override String get niches => 'Ниши';
+	@override String get selected_niches => 'Выбранные ниши';
+	@override String get services => 'Услуги';
+	@override String get currency => 'Валюта';
+	@override String get min => 'Мин';
+	@override String get max => 'Макс';
+	@override String get write_hourly_rate => 'Укажите почасовую ставку';
+	@override String get projectly_payment_starting_price => 'Начальная цена за проект';
+	@override String get write_starting_price => 'Введите начальную цену';
+	@override String get payment_types => 'Типы оплаты';
+	@override String get categories => 'Категории';
+	@override String get selected_categories => 'Выбранные категории';
+	@override String get experience_in_referral => 'Есть ли опыт в реферальных/промо кампаниях?';
+	@override String get describe_your_experience => 'Опишите ваш опыт';
+	@override String get region => 'Регион';
+	@override String get city => 'Город';
+	@override String get sphere => 'Сфера';
+	@override String get available_for_long_term_contract => 'Доступны для долгосрочного контракта?';
+	@override String get kpi_based_model => 'Модель на основе KPI';
+	@override String get available_for_offline_events => 'Доступны для офлайн мероприятий';
+	@override String get pricing_options => 'Варианты ценообразования';
+}
+
+// Path: common
+class _TranslationsCommonRu implements TranslationsCommonUz {
+	_TranslationsCommonRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get select => 'Выбрать';
+	@override String get confirm => 'Подтвердить';
+	@override String get cancel => 'Отмена';
+	@override String get apply => 'Применить';
+	@override String get delete => 'Удалить';
+	@override String get yes => 'Да';
+	@override String get no => 'Нет';
+	@override String get write_text_here => 'Напишите текст...';
+	@override String get please_enter_text => 'Пожалуйста, введите текст';
+	@override String get email => 'Email';
+}
+
+// Path: choose
+class _TranslationsChooseRu implements TranslationsChooseUz {
+	_TranslationsChooseRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get select_niche => 'Выбрать нишу';
+	@override String get select_gender => 'Выбрать пол';
+	@override String get select_geography => 'Выбрать географию';
+	@override String get select_currency => 'Выбрать валюту';
+	@override String get select_partners => 'Выбрать партнёров';
+	@override String get select_service => 'Выбрать услугу';
+	@override String get select_date_of_birth => 'Выбрать дату рождения';
+	@override String get select_contact_detail => 'Выбрать контакт';
+	@override String get spoken_language => 'Разговорный язык';
+	@override String get select_region => 'Выбрать регион';
+	@override String get select_city => 'Выбрать город';
+	@override String get select_sphere => 'Выбрать сферу';
+}
+
+// Path: contact
+class _TranslationsContactRu implements TranslationsContactUz {
+	_TranslationsContactRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get phone => 'Телефон';
+	@override String get telegram => 'Telegram';
+	@override String get instagram => 'Instagram';
+	@override String get telegram_user_name => 'Имя пользователя Telegram';
+	@override String get instagram_account => 'Аккаунт Instagram';
+}
+
+// Path: optional_items
+class _TranslationsOptionalItemsRu implements TranslationsOptionalItemsUz {
+	_TranslationsOptionalItemsRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get tv_ad_experience => 'Опыт в ТВ/рекламе';
+	@override String get press_mentions => 'Упоминания в прессе';
+	@override String get agency_representation => 'Представительство агентства';
+	@override String get previous_brand_collaborations => 'Предыдущие коллаборации с брендами';
+	@override String get case_study_link => 'Ссылка на кейс или скриншот';
+	@override String get conversion_metrics => 'Показатели конверсии (если есть)';
+	@override String get willing_to_work_kpi => 'Готов работать по модели KPI';
+	@override String get campaign_based_fee => 'Оплата на основе кампании';
+	@override String get event_appearance_fee => 'Оплата за участие в мероприятии';
 }
 
 // Path: errors
@@ -141,6 +264,89 @@ extension on TranslationsRu {
 			'registration.brand' => 'Бренд',
 			'registration.your_name' => 'Ваше имя',
 			'registration.your_surname' => 'Ваша фамилия',
+			'registration.upload_profile_picture' => 'Загрузить фото профиля',
+			'registration.choose_file' => 'Выбрать файл',
+			'registration.file_format_hint' => 'SVG, PNG, JPG или GIF (MAX. 800x400px).',
+			'registration.spoken_languages' => 'Разговорные языки',
+			'registration.date_of_birth' => 'Дата рождения',
+			'registration.gender' => 'Пол',
+			'registration.male' => 'Мужской',
+			'registration.female' => 'Женский',
+			'registration.contact_details' => 'Контактные данные',
+			'registration.profile_information' => 'Информация о профиле',
+			'registration.brand_segment_fit' => 'Сегмент бренда',
+			'registration.geography' => 'География',
+			'registration.selected_geography' => 'Выбранная география',
+			'registration.social_media_accounts' => 'Аккаунты в соцсетях',
+			'registration.paste_link_here' => 'Вставьте ссылку',
+			'registration.men' => 'Мужчины',
+			'registration.women' => 'Женщины',
+			'registration.age_from' => 'Возраст от',
+			'registration.age_to' => 'Возраст до',
+			'registration.years_of_camera_experience' => 'Опыт работы с камерой (лет)',
+			'registration.write_years_of_experience' => 'Введите годы опыта',
+			'registration.optional_experience' => 'Дополнительный опыт',
+			'registration.partners' => 'Партнёры',
+			'registration.exclusivity_availability' => 'Наличие эксклюзивности',
+			'registration.write_award_info' => 'Введите информацию о наградах',
+			'registration.years_of_experience' => 'Лет опыта',
+			'registration.niches' => 'Ниши',
+			'registration.selected_niches' => 'Выбранные ниши',
+			'registration.services' => 'Услуги',
+			'registration.currency' => 'Валюта',
+			'registration.min' => 'Мин',
+			'registration.max' => 'Макс',
+			'registration.write_hourly_rate' => 'Укажите почасовую ставку',
+			'registration.projectly_payment_starting_price' => 'Начальная цена за проект',
+			'registration.write_starting_price' => 'Введите начальную цену',
+			'registration.payment_types' => 'Типы оплаты',
+			'registration.categories' => 'Категории',
+			'registration.selected_categories' => 'Выбранные категории',
+			'registration.experience_in_referral' => 'Есть ли опыт в реферальных/промо кампаниях?',
+			'registration.describe_your_experience' => 'Опишите ваш опыт',
+			'registration.region' => 'Регион',
+			'registration.city' => 'Город',
+			'registration.sphere' => 'Сфера',
+			'registration.available_for_long_term_contract' => 'Доступны для долгосрочного контракта?',
+			'registration.kpi_based_model' => 'Модель на основе KPI',
+			'registration.available_for_offline_events' => 'Доступны для офлайн мероприятий',
+			'registration.pricing_options' => 'Варианты ценообразования',
+			'common.select' => 'Выбрать',
+			'common.confirm' => 'Подтвердить',
+			'common.cancel' => 'Отмена',
+			'common.apply' => 'Применить',
+			'common.delete' => 'Удалить',
+			'common.yes' => 'Да',
+			'common.no' => 'Нет',
+			'common.write_text_here' => 'Напишите текст...',
+			'common.please_enter_text' => 'Пожалуйста, введите текст',
+			'common.email' => 'Email',
+			'choose.select_niche' => 'Выбрать нишу',
+			'choose.select_gender' => 'Выбрать пол',
+			'choose.select_geography' => 'Выбрать географию',
+			'choose.select_currency' => 'Выбрать валюту',
+			'choose.select_partners' => 'Выбрать партнёров',
+			'choose.select_service' => 'Выбрать услугу',
+			'choose.select_date_of_birth' => 'Выбрать дату рождения',
+			'choose.select_contact_detail' => 'Выбрать контакт',
+			'choose.spoken_language' => 'Разговорный язык',
+			'choose.select_region' => 'Выбрать регион',
+			'choose.select_city' => 'Выбрать город',
+			'choose.select_sphere' => 'Выбрать сферу',
+			'contact.phone' => 'Телефон',
+			'contact.telegram' => 'Telegram',
+			'contact.instagram' => 'Instagram',
+			'contact.telegram_user_name' => 'Имя пользователя Telegram',
+			'contact.instagram_account' => 'Аккаунт Instagram',
+			'optional_items.tv_ad_experience' => 'Опыт в ТВ/рекламе',
+			'optional_items.press_mentions' => 'Упоминания в прессе',
+			'optional_items.agency_representation' => 'Представительство агентства',
+			'optional_items.previous_brand_collaborations' => 'Предыдущие коллаборации с брендами',
+			'optional_items.case_study_link' => 'Ссылка на кейс или скриншот',
+			'optional_items.conversion_metrics' => 'Показатели конверсии (если есть)',
+			'optional_items.willing_to_work_kpi' => 'Готов работать по модели KPI',
+			'optional_items.campaign_based_fee' => 'Оплата на основе кампании',
+			'optional_items.event_appearance_fee' => 'Оплата за участие в мероприятии',
 			'errors.network' => 'Проблемы с интернетом, проверьте соединение',
 			'errors.parsing' => 'Ошибка обработки данных',
 			'errors.unknown' => 'Произошла неизвестная ошибка',

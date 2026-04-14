@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/usecase/login/params/verify_otp_params.dart';
 import '../../../domain/usecase/login/send_otp_usecase.dart';
-import '../../../utils/services/shared_pref_service.dart';
+import '../../../utils/services/app_auth_local_service.dart';
 
 part 'login_event.dart';
 

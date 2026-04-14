@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/registration/registration_entity.dart';
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
 import 'package:brandface/domain/usecase/registration/registration_usecase.dart';
@@ -24,7 +25,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     final result = await _registrationUsecase.call(params: event.params);
     result.fold(
       ifLeft: (failure) {
-        emit(RegistrationState.userRegisterFailure(msg: failure.message));
+        emit(RegistrationState.userRegisterFailure(msg: failure));
       },
       ifRight: (registerEntity) {
         emit(RegistrationState.userRegistered(registerEntity: registerEntity));

@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
@@ -36,7 +37,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Services', style: Typographies.titleMedium),
+          Text(t.registration.services, style: Typographies.titleMedium),
           const SizedBox(height: 24),
           SizedBox(
             height: 24,
@@ -83,7 +84,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Selected niches', style: Typographies.titleSmall),
+                Text(t.registration.selected_niches, style: Typographies.titleSmall),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,
@@ -107,7 +108,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
                               });
                             },
                             child: Text(
-                              'Delete',
+                              t.common.delete,
                               style: Typographies.labelLarge.copyWith(
                                 color: AppColors.red,
                               ),

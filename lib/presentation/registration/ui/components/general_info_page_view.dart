@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -34,7 +35,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Upload profile picture', style: Typographies.titleMedium),
+          Text(t.registration.upload_profile_picture, style: Typographies.titleMedium),
           SizedBox(height: 24),
           Row(
             children: [
@@ -61,13 +62,13 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                       children: [
                         SvgPicture.asset(AppAssets.icAttachFile),
                         SizedBox(width: 8),
-                        Text('Choose file', style: Typographies.bodyMedium),
+                        Text(t.registration.choose_file, style: Typographies.bodyMedium),
                       ],
                     ),
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'SVG, PNG, JPG or GIF (MAX. 800x400px).',
+                    t.registration.file_format_hint,
                     style: Typographies.bodySmall.copyWith(
                       color: AppColors.grey,
                     ),
@@ -87,8 +88,8 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 40),
           ChooseSpokenLanguage(
-            title: 'Select',
-            label: 'Spoken languages',
+            title: t.common.select,
+            label: t.registration.spoken_languages,
             onItemSelected: (List<int> ids) {
               _fillInfluencerProfileParam = _fillInfluencerProfileParam
                   .copyWith(languageIds: ids);
@@ -98,7 +99,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           SizedBox(height: 24),
           ChooseDateOfBirthday(
             title: 'DD.MM.YYYY',
-            label: 'Date of birth',
+            label: t.registration.date_of_birth,
             onItemSelected: (DateTime date) {
               _fillInfluencerProfileParam = _fillInfluencerProfileParam
                   .copyWith(birthDate: date);
@@ -108,8 +109,8 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseGender(
-            title: 'Select',
-            label: 'Gender',
+            title: t.common.select,
+            label: t.registration.gender,
             onItemSelected: (String p1) {
               _fillInfluencerProfileParam = _fillInfluencerProfileParam
                   .copyWith(gender: p1);
@@ -118,8 +119,8 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseContactDetail(
-            title: 'Phone',
-            label: 'Contact details',
+            title: t.contact.phone,
+            label: t.registration.contact_details,
             onItemSelected: (List<Contact> contacts) {
               _fillInfluencerProfileParam = _fillInfluencerProfileParam
                   .copyWith(contacts: contacts);
@@ -129,7 +130,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           SizedBox(height: 24),
           BioInputField(
             controller: _profileInfoController,
-            label: 'Profile information',
+            label: t.registration.profile_information,
             onChanged: () {
               _fillInfluencerProfileParam = _fillInfluencerProfileParam
                   .copyWith(bio: _profileInfoController.text);
