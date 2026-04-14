@@ -95,7 +95,7 @@ class _FillProfileInformationPageState
               child: AudienceAndFollowersPageView(
                 key: const PageStorageKey<String>('pageFour'),
                 onChanged: (FillInfluencerProfileParam p1) {
-                  _finalParam = _finalParam.copyWith(regionId: p1.regionId);
+                  _finalParam = _finalParam.copyWith(audience: p1.audience);
                 },
               ),
             ),
@@ -360,7 +360,7 @@ class _FillProfileInformationPageState
                 onTap: () {
                   context.read<FillProfileBloc>().add(
                     FillProfileEvent.fillProfile(
-                      profile: '3',
+                      profile: '1',
                       params: _finalParam,
                     ),
                   );

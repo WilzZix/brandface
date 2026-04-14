@@ -86,8 +86,8 @@ class FillInfluencerProfileParam {
       "bio": bio,
       "region_id": regionId,
       "city_id": cityId,
-      "birth_date": birthDate?.toIso8601String(),
-      "gender": gender,
+      "birth_date": birthDate?.toIso8601String().split('T').first,
+      "gender": gender == "Мужской" ? "male" : "female",
       "years_of_experience": yearsOfExperience,
       "has_ad_experience": hasAdExperience,
       "press_mentions": pressMentions,
@@ -99,7 +99,7 @@ class FillInfluencerProfileParam {
       "language_ids": languageIds,
       "audience": audience?.toJson(),
       "pricing": pricing?.toJson(),
-    };
+    }..removeWhere((key, value) => value == null);
   }
 }
 
@@ -179,7 +179,8 @@ class Contact {
 
   Contact({this.type, this.value});
 
-  Contact copyWith({String? type, String? value}) => Contact(type: type ?? this.type, value: value ?? this.value);
+  Contact copyWith({String? type, String? value}) =>
+      Contact(type: type ?? this.type, value: value ?? this.value);
 
   Map<String, dynamic> toJson() {
     return {"type": type, "value": value};

@@ -25,7 +25,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
 
   void _updateData() {
     _param = _param.copyWith(
-      categoryIds: _selectedNichesItems.map((e) => e.id).toList(),
+      serviceIds: _selectedNichesItems.map((e) => e.id).toList(),
     );
     widget.onChanged(_param);
   }
