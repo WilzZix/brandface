@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +21,36 @@ class ExperiencePageView extends StatefulWidget {
 
 class _ExperiencePageViewState extends State<ExperiencePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
-  final List<LangItemModel> _selectedNichesItems = [];
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
 
-  void _updateData() {
-    _param = _param.copyWith(
-      categoryIds: _selectedNichesItems.map((e) => e.id).toList(),
-    );
-    widget.onChanged(_param);
+  @override
+  void initState() {
+    super.initState();
+    _experienceController.addListener(_handleExperienceChange);
+    _awardController.addListener(_handleExperienceChange);
+  }
+
+  void _handleExperienceChange() {
+    final text = _experienceController.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(yearsOfExperience: years);
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleAwardChange() {
+    final text = _experienceController.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        //  _param = _param.copyWith(a: years);
+        widget.onChanged(_param);
+      }
+    }
   }
 
   @override
@@ -36,7 +59,10 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(t.registration.years_of_experience, style: Typographies.titleMedium),
+          Text(
+            t.registration.years_of_experience,
+            style: Typographies.titleMedium,
+          ),
           const SizedBox(height: 8),
           CredInputField(
             controller: _experienceController,
@@ -53,14 +79,18 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
-              _updateData();
+              _param = _param.copyWith(partners: [p1.id.toString()]);
+              widget.onChanged(_param);
             },
           ),
           SizedBox(height: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
+              Text(
+                t.registration.write_award_info,
+                style: Typographies.titleSmall,
+              ),
               SizedBox(height: 8),
               Row(
                 children: [
@@ -85,5 +115,13 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _experienceController.removeListener(_handleExperienceChange);
+    _experienceController.dispose();
+    _awardController.dispose();
+    super.dispose();
   }
 }

@@ -38,6 +38,81 @@ class _AudienceAndFollowersPageViewState
   }
 
   @override
+  void initState() {
+    super.initState();
+    _controllerFrom.addListener(_handleManAgeFromChange);
+    _controllerTo.addListener(_handleManAgeToChange);
+    _controllerFromWomen.addListener(_handleWomanAgeFromChange);
+    _controllerToWomen.addListener(_handleWomanAgeToChange);
+    _controllerSocial.addListener(_handleSocialChange);
+  }
+
+  void _handleSocialChange() {
+    final text = _controllerSocial.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(socialMediaStats: [text]),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleManAgeFromChange() {
+    final text = _controllerFrom.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(menAgeFrom: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleManAgeToChange() {
+    final text = _controllerTo.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(menAgeTo: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleWomanAgeFromChange() {
+    final text = _controllerFromWomen.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(womenAgeFrom: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  void _handleWomanAgeToChange() {
+    final text = _controllerToWomen.text;
+    if (text.isNotEmpty) {
+      final years = int.tryParse(text);
+      if (years != null) {
+        _param = _param.copyWith(
+          audience: Audience().copyWith(womenAgeTo: int.parse(text)),
+        );
+        widget.onChanged(_param);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(

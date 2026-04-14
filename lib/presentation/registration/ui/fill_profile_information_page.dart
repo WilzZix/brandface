@@ -95,7 +95,7 @@ class _FillProfileInformationPageState
               child: AudienceAndFollowersPageView(
                 key: const PageStorageKey<String>('pageFour'),
                 onChanged: (FillInfluencerProfileParam p1) {
-                  _finalParam = _finalParam.copyWith(audience: p1.audience);
+                  _finalParam = _finalParam.copyWith(regionId: p1.regionId);
                 },
               ),
             ),
@@ -104,7 +104,10 @@ class _FillProfileInformationPageState
             child: ExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
               onChanged: (FillInfluencerProfileParam p1) {
-                ///TODO
+                _finalParam = _finalParam.copyWith(
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                );
               },
             ),
           ),
@@ -137,27 +140,38 @@ class _FillProfileInformationPageState
             ),
           ),
           SizedBox(
-            child: NichePageView(
-              key: const PageStorageKey<String>('pageTwo'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
-              },
+            child: BlocProvider(
+              create: (context) => sl<CategoryCubit>(),
+              child: NichePageView(
+                key: const PageStorageKey<String>('pageTwo'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(
+                    categoryIds: p1.categoryIds,
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(
-            child: ServicesPageView(
-              key: const PageStorageKey<String>('pageThree'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
-              },
+            child: BlocProvider(
+              create: (context) => sl<ServiceTypeCubit>(),
+              child: ServicesPageView(
+                key: const PageStorageKey<String>('pageThree'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
+                },
+              ),
             ),
           ),
           SizedBox(
-            child: AudienceAndFollowersPageView(
-              key: const PageStorageKey<String>('pageFour'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(audience: p1.audience);
-              },
+            child: BlocProvider(
+              create: (context) => sl<RegionCubit>(),
+              child: AudienceAndFollowersPageView(
+                key: const PageStorageKey<String>('pageFour'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(audience: p1.audience);
+                },
+              ),
             ),
           ),
           SizedBox(
@@ -195,27 +209,38 @@ class _FillProfileInformationPageState
             ),
           ),
           SizedBox(
-            child: NichePageView(
-              key: const PageStorageKey<String>('pageTwo'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
-              },
+            child: BlocProvider(
+              create: (context) => sl<CategoryCubit>(),
+              child: NichePageView(
+                key: const PageStorageKey<String>('pageTwo'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(
+                    categoryIds: p1.categoryIds,
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(
-            child: ServicesPageView(
-              key: const PageStorageKey<String>('pageThree'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
-              },
+            child: BlocProvider(
+              create: (context) => sl<ServiceTypeCubit>(),
+              child: ServicesPageView(
+                key: const PageStorageKey<String>('pageThree'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
+                },
+              ),
             ),
           ),
           SizedBox(
-            child: BrandfaceSegmentPageView(
-              key: const PageStorageKey<String>('pageFour'),
-              onChanged: (FillInfluencerProfileParam p1) {
-                _finalParam = _finalParam.copyWith(audience: p1.audience);
-              },
+            child: BlocProvider(
+              create: (context) => sl<RegionCubit>(),
+              child: BrandfaceSegmentPageView(
+                key: const PageStorageKey<String>('pageFour'),
+                onChanged: (FillInfluencerProfileParam p1) {
+                  _finalParam = _finalParam.copyWith(audience: p1.audience);
+                },
+              ),
             ),
           ),
           SizedBox(
