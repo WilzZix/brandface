@@ -38,7 +38,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             userRegistered: (registerEntity) {
               context.push(
                 FillProfileInformationPage.tag,
-                extra: _selectedUserRole,
+                extra: registerEntity,
               );
             },
             userRegisterFailure: (msg) {

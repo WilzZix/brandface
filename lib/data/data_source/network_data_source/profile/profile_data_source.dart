@@ -4,8 +4,11 @@ import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 
 import '../../../../core/network/dio_client.dart';
+import '../../../models/profile/profile_model.dart';
 
 abstract class ProfileDataSource {
+  Future<ProfileModel> getProfile({required String profileId});
+
   Future<CategoryModel> getCategories();
 
   Future<ServiceTypeModel> getServices();
@@ -39,10 +42,20 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   }
 
   @override
-  Future<RegionModel> getRegions() async{
+  Future<RegionModel> getRegions() async {
     try {
       final result = await _dioClient.get(ApiRoutes.regions);
       return RegionModel.fromJson(result.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ProfileModel> getProfile({required String profileId}) async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.profile(profileId));
+      return ProfileModel.fromJson(result.data['data']);
     } catch (e) {
       rethrow;
     }

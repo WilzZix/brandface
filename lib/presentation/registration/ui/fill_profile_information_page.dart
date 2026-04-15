@@ -5,6 +5,7 @@ import 'package:brandface/presentation/registration/bloc/catalog/category/catego
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
+import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_experience_page_view.dart';
 import 'package:brandface/presentation/registration/ui/components/brand_categories_page_view.dart';
@@ -25,6 +26,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
 import '../../../core/enums/enums.dart';
+import '../../../domain/entities/registration/registration_entity.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/audience_and_followers_page_view.dart';
 import 'components/experience_page_view.dart';
@@ -33,10 +35,12 @@ import 'components/my_pricing_tariffs_page_view.dart';
 import 'components/niche_page_view.dart';
 
 class FillProfileInformationPage extends StatefulWidget {
-  const FillProfileInformationPage({super.key, required this.userRole});
+  const FillProfileInformationPage({
+    super.key,    required this.registrationEntity,
+  });
 
   static const String tag = '/fill_profile_information';
-  final UserRole userRole;
+  final RegistrationEntity registrationEntity;
 
   @override
   State<FillProfileInformationPage> createState() =>
@@ -45,12 +49,21 @@ class FillProfileInformationPage extends StatefulWidget {
 
 class _FillProfileInformationPageState
     extends State<FillProfileInformationPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<GetProfileCubit>().getProfile(
+      profileId: widget.registrationEntity.profileId.toString(),
+    );
+  }
+
   List<Widget> get fillProfileWidgets {
-    switch (widget.userRole) {
-      case UserRole.influencer:
+    switch (widget.registrationEntity.role) {
+      case 'influencer':
         return [
           SizedBox(
             child: GeneralInfoPageView(
+              initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (FillInfluencerProfileParam p1) {
                 _finalParam = _finalParam.copyWith(
@@ -121,10 +134,11 @@ class _FillProfileInformationPageState
           ),
         ];
 
-      case UserRole.ambassador:
+      case 'ambassador':
         return [
           SizedBox(
             child: GeneralInfoPageView(
+              initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (FillInfluencerProfileParam p1) {
                 _finalParam = _finalParam.copyWith(
@@ -190,10 +204,11 @@ class _FillProfileInformationPageState
           ),
         ];
 
-      case UserRole.brandface:
+      case 'brandface':
         return [
           SizedBox(
             child: GeneralInfoPageView(
+              initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (FillInfluencerProfileParam p1) {
                 _finalParam = _finalParam.copyWith(
@@ -259,7 +274,7 @@ class _FillProfileInformationPageState
           ),
         ];
 
-      case UserRole.brand:
+      case 'brand':
         return [
           SizedBox(
             child: BrandInfoPageView(
@@ -281,6 +296,9 @@ class _FillProfileInformationPageState
             ),
           ),
         ];
+
+      default:
+        return [];
     }
   }
 
@@ -291,8 +309,8 @@ class _FillProfileInformationPageState
   int get _totalPages => fillProfileWidgets.length;
 
   String pageViewTitle(BuildContext context) {
-    switch (widget.userRole) {
-      case UserRole.influencer:
+    switch (widget.registrationEntity.role) {
+      case 'influencer':
         const titles = [
           'General info',
           'Niche',
@@ -303,7 +321,7 @@ class _FillProfileInformationPageState
         ];
         return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
 
-      case UserRole.ambassador:
+      case 'ambassador':
         const titles = [
           'General info',
           'Niche',
@@ -314,7 +332,7 @@ class _FillProfileInformationPageState
         ];
         return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
 
-      case UserRole.brandface:
+      case 'brandface':
         const titles = [
           'General info',
           'Niche',
@@ -325,26 +343,45 @@ class _FillProfileInformationPageState
         ];
         return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
 
-      case UserRole.brand:
+      case 'brand':
         const titles = ['General info', 'Categories'];
         return '${titles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
+
+      default:
+        return '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FillProfileBloc, FillProfileState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          fillingFailure: (failure) {
-            BrandfaceBottomSheet.openFailureBottomSheet(
-              context: context,
-              message: failure.localized,
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<FillProfileBloc, FillProfileState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              fillingFailure: (failure) {
+                BrandfaceBottomSheet.openFailureBottomSheet(
+                  context: context,
+                  message: failure.localized,
+                );
+              },
+              orElse: () {},
             );
           },
-          orElse: () {},
-        );
-      },
+        ),
+        BlocListener<GetProfileCubit, GetProfileState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () {},
+              profileLoaded: (data) {
+                setState(() {
+                  _finalParam = data.toParam();
+                });
+              },
+            );
+          },
+        ),
+      ],
       child: Scaffold(
         bottomNavigationBar: Container(
           padding: EdgeInsets.only(

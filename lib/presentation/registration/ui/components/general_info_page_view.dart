@@ -14,9 +14,14 @@ import 'choose_gender.dart';
 import 'choose_spoken_language.dart';
 
 class GeneralInfoPageView extends StatefulWidget {
-  const GeneralInfoPageView({super.key, required this.onChanged});
+  const GeneralInfoPageView({
+    super.key,
+    required this.onChanged,
+    this.initialParam,
+  });
 
   final Function(FillInfluencerProfileParam) onChanged;
+  final FillInfluencerProfileParam? initialParam;
 
   @override
   State<GeneralInfoPageView> createState() => _GeneralInfoPageViewState();
@@ -29,13 +34,22 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
       FillInfluencerProfileParam();
 
   @override
+  void initState() {
+    _profileInfoController.text = widget.initialParam?.bio ?? '';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(t.registration.upload_profile_picture, style: Typographies.titleMedium),
+          Text(
+            t.registration.upload_profile_picture,
+            style: Typographies.titleMedium,
+          ),
           SizedBox(height: 24),
           Row(
             children: [
@@ -62,7 +76,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                       children: [
                         SvgPicture.asset(AppAssets.icAttachFile),
                         SizedBox(width: 8),
-                        Text(t.registration.choose_file, style: Typographies.bodyMedium),
+                        Text(
+                          t.registration.choose_file,
+                          style: Typographies.bodyMedium,
+                        ),
                       ],
                     ),
                   ),
@@ -88,6 +105,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 40),
           ChooseSpokenLanguage(
+            initialValue: widget.initialParam?.languageIds,
             title: t.common.select,
             label: t.registration.spoken_languages,
             onItemSelected: (List<int> ids) {

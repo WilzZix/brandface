@@ -1,7 +1,10 @@
 import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
+import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/splash_screen/splash_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/entities/registration/registration_entity.dart';
 import '../../presentation/home_page/ui/home_page.dart';
 import '../../presentation/home_page/ui/notifications_page.dart';
 import '../../presentation/home_page/ui/profile_page.dart';
@@ -11,6 +14,7 @@ import '../../presentation/login/ui/term_of_use_page.dart';
 import '../../presentation/onboarding/onboarding.dart';
 import '../../presentation/registration/ui/fill_profile_information_page.dart';
 import '../../presentation/registration/ui/registration_page.dart';
+import '../di/app_di.dart';
 import '../enums/enums.dart';
 
 class AppRouter {
@@ -77,8 +81,10 @@ class AppRouter {
       GoRoute(
         path: FillProfileInformationPage.tag,
         name: FillProfileInformationPage.tag,
-        builder: (_, state) =>
-            FillProfileInformationPage(userRole: state.extra as UserRole),
+        builder: (_, state) => BlocProvider(
+          create: (context) => GetProfileCubit(getProfileUseCase: sl()),
+          child: FillProfileInformationPage(registrationEntity: state.extra as RegistrationEntity),
+        ),
       ),
       GoRoute(
         path: SmsConfirmationPage.tag,

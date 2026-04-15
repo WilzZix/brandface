@@ -4,8 +4,13 @@ import 'package:brandface/domain/entities/profile/catalog/service_type_entity.da
 import 'package:dart_either/dart_either.dart';
 
 import '../../core/error/failures.dart';
+import '../entities/profile/profile_entity.dart';
 
 abstract class IProfileRepository {
+  Future<Either<Failure, ProfileEntity>> getProfile({
+    required String profileId,
+  });
+
   Future<Either<Failure, List<CategoryItemEntity>>> getCategories();
 
   Future<Either<Failure, List<ServiceTypeEntity>>> getServices();
