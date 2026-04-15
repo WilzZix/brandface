@@ -84,7 +84,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(t.registration.selected_niches, style: Typographies.titleSmall),
+                Text(t.registration.services, style: Typographies.titleSmall),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,

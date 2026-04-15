@@ -21,7 +21,8 @@ class AudienceAndFollowersPageView extends StatefulWidget {
 }
 
 class _AudienceAndFollowersPageViewState
-    extends State<AudienceAndFollowersPageView> {
+    extends State<AudienceAndFollowersPageView>
+    with AutomaticKeepAliveClientMixin<AudienceAndFollowersPageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam(
     audience: Audience(),
   );
@@ -62,7 +63,11 @@ class _AudienceAndFollowersPageViewState
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,6 +1,8 @@
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/typography/typography.dart';
@@ -8,9 +10,14 @@ import 'choose_niche.dart';
 import 'choose_spoken_language.dart';
 
 class NichePageView extends StatefulWidget {
-  const NichePageView({super.key, required this.onChanged});
+  const NichePageView({
+    super.key,
+    required this.onChanged,
+    this.initialCategoryIds,
+  });
 
   final Function(FillInfluencerProfileParam) onChanged;
+  final List<int>? initialCategoryIds;
 
   @override
   State<NichePageView> createState() => _NichePageViewState();
@@ -20,6 +27,7 @@ class _NichePageViewState extends State<NichePageView>
     with AutomaticKeepAliveClientMixin<NichePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final List<LangItemModel> _selectedNichesItems = [];
+  bool _prefilledFromInitial = false;
 
   @override
   Widget build(BuildContext context) {
