@@ -4,6 +4,7 @@ import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profi
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
+import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +37,10 @@ class MyApp extends StatelessWidget {
         locale: TranslationProvider.of(context).locale.flutterLocale,
         routerConfig: AppRouter.router,
         theme: ThemeData(
-          appBarTheme: AppBarTheme(backgroundColor: AppColors.lightBg),
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColors.lightBg,
+            titleTextStyle: Typographies.titleLarge,
+          ),
           textTheme: GoogleFonts.interTextTheme(),
           scaffoldBackgroundColor: AppColors.lightBg,
           bottomSheetTheme: BottomSheetThemeData(

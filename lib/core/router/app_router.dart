@@ -7,7 +7,10 @@ import 'package:go_router/go_router.dart';
 import '../../domain/entities/registration/registration_entity.dart';
 import '../../presentation/home_page/ui/home_page.dart';
 import '../../presentation/home_page/ui/notifications_page.dart';
+import '../../presentation/home_page/ui/offers/offer_detail_page.dart';
+import '../../presentation/home_page/ui/offers/offers_from_brands_page.dart';
 import '../../presentation/home_page/ui/profile_page.dart';
+import '../../presentation/home_page/ui/recomendations.dart';
 import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.dart';
 import '../../presentation/login/ui/login_page.dart';
 import '../../presentation/login/ui/term_of_use_page.dart';
@@ -83,7 +86,9 @@ class AppRouter {
         name: FillProfileInformationPage.tag,
         builder: (_, state) => BlocProvider(
           create: (context) => GetProfileCubit(getProfileUseCase: sl()),
-          child: FillProfileInformationPage(registrationEntity: state.extra as RegistrationEntity),
+          child: FillProfileInformationPage(
+            registrationEntity: state.extra as RegistrationEntity,
+          ),
         ),
       ),
       GoRoute(
@@ -98,6 +103,21 @@ class AppRouter {
         path: NotificationsPage.tag,
         name: NotificationsPage.tag,
         builder: (_, _) => NotificationsPage(),
+      ),
+      GoRoute(
+        path: OffersFromBrandsPage.tag,
+        name: OffersFromBrandsPage.tag,
+        builder: (_, _) => OffersFromBrandsPage(),
+      ),
+      GoRoute(
+        path: Recommendation.tag,
+        name: Recommendation.tag,
+        builder: (_, _) => Recommendation(),
+      ),
+      GoRoute(
+        path: OfferDetailPage.tag,
+        name: OfferDetailPage.tag,
+        builder: (_, _) => OfferDetailPage(),
       ),
     ],
   );

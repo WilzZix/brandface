@@ -21,4 +21,6 @@ class AppAssets {
   static String icBell = 'assets/icons/bell.svg';
   static String icChevronRight = 'assets/icons/chevron-right.svg';
   static String icCalendar = 'assets/icons/calendar-month.svg';
+  static String icSort = 'assets/icons/sort.svg';
+  static String icFilter = 'assets/icons/filter.svg';
 }

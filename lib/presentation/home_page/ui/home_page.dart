@@ -1,5 +1,6 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/presentation/home_page/ui/profile_page.dart';
+import 'package:brandface/presentation/home_page/ui/recomendations.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'notifications_page.dart';
+import 'offers/offers_from_brands_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -258,27 +260,36 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 24),
                       Text('Menu', style: Typographies.headlineSmall),
                       SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Offers from brands',
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () =>
+                            context.pushNamed(OffersFromBrandsPage.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Offers from brands',
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
                       ),
                       Divider(color: AppColors.borderColor),
                       SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Recommended for You',
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(Recommendation.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Recommended for You',
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
                       ),
                       Divider(color: AppColors.borderColor),
                       SizedBox(height: 18),
