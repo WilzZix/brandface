@@ -14,10 +14,12 @@ class ChooseSpokenLanguage extends StatefulWidget {
     required this.title,
     required this.label,
     required this.onItemSelected,
+    this.initialValue,
   });
 
   final String title;
   final String label;
+  final List<int>? initialValue;
   final Function(List<int>) onItemSelected;
 
   @override
@@ -36,20 +38,30 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
 
   @override
   void initState() {
-    _selectedLangLabel = widget.title;
     super.initState();
+    if (widget.initialValue != null && widget.initialValue!.isNotEmpty) {
+      final selectedLangs = langItems
+          .where((item) => widget.initialValue!.contains(item.id))
+          .map((item) => item.name)
+          .toList();
+      if (selectedLangs.isNotEmpty) {
+        _selectedLangLabel = selectedLangs.join(', ');
+      } else {
+        _selectedLangLabel = widget.title;
+      }
+    } else {
+      _selectedLangLabel = widget.title;
+    }
   }
 
-  // Tanlash mantig'ini alohida funksiyaga chiqaramiz (toza kod uchun)
   void _toggleLanguage(LangItemModel item, StateSetter bottomState) {
     bottomState(() {
       if (_selectedLangIds.contains(item.id)) {
-        _selectedLangIds.remove(item.id); // Bor bo'lsa, olib tashlaymiz
+        _selectedLangIds.remove(item.id);
       } else {
-        _selectedLangIds.add(item.id); // Yo'q bo'lsa, qo'shamiz
+        _selectedLangIds.add(item.id);
       }
 
-      // UI uchun tanlangan tillar nomini birlashtiramiz
       if (_selectedLangIds.isEmpty) {
         _selectedLangLabel = widget.title;
       } else {

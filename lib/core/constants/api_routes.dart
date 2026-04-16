@@ -16,4 +16,7 @@ class ApiRoutes {
   static String serviceType = 'catalog/v1/service-types/';
   static String regions = 'catalog/v1/regions/';
   static String cities = 'catalog/v1/cities/';
+
+  static String profile(String profileId) =>
+      'profiles/v1/influencers/$profileId/';
 }

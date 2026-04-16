@@ -21,99 +21,53 @@ class AudienceAndFollowersPageView extends StatefulWidget {
 }
 
 class _AudienceAndFollowersPageViewState
-    extends State<AudienceAndFollowersPageView> {
-  FillInfluencerProfileParam _param = FillInfluencerProfileParam();
-  final List<LangItemModel> _selectedNichesItems = [];
+    extends State<AudienceAndFollowersPageView>
+    with AutomaticKeepAliveClientMixin<AudienceAndFollowersPageView> {
+  FillInfluencerProfileParam _param = FillInfluencerProfileParam(
+    audience: Audience(),
+  );
+  final List<LangItemModel> _selectedGeographyItems = [];
   final TextEditingController _controllerFrom = TextEditingController();
   final TextEditingController _controllerTo = TextEditingController();
   final TextEditingController _controllerFromWomen = TextEditingController();
   final TextEditingController _controllerToWomen = TextEditingController();
   final TextEditingController _controllerSocial = TextEditingController();
 
-  void _updateData() {
+  @override
+  void initState() {
+    super.initState();
+    _controllerFrom.addListener(_handleUpdate);
+    _controllerTo.addListener(_handleUpdate);
+    _controllerFromWomen.addListener(_handleUpdate);
+    _controllerToWomen.addListener(_handleUpdate);
+    _controllerSocial.addListener(_handleUpdate);
+  }
+
+  void _handleUpdate() {
+    final currentAudience = _param.audience ?? Audience();
+
     _param = _param.copyWith(
-      categoryIds: _selectedNichesItems.map((e) => e.id).toList(),
+      audience: currentAudience.copyWith(
+        menAgeFrom: int.tryParse(_controllerFrom.text),
+        menAgeTo: int.tryParse(_controllerTo.text),
+        womenAgeFrom: int.tryParse(_controllerFromWomen.text),
+        womenAgeTo: int.tryParse(_controllerToWomen.text),
+        socialMediaStats: _controllerSocial.text.isNotEmpty
+            ? [_controllerSocial.text]
+            : [],
+        geography: _selectedGeographyItems.map((e) => e.id.toString()).toList(),
+      ),
     );
+
     widget.onChanged(_param);
   }
 
   @override
-  void initState() {
-    super.initState();
-    _controllerFrom.addListener(_handleManAgeFromChange);
-    _controllerTo.addListener(_handleManAgeToChange);
-    _controllerFromWomen.addListener(_handleWomanAgeFromChange);
-    _controllerToWomen.addListener(_handleWomanAgeToChange);
-    _controllerSocial.addListener(_handleSocialChange);
-  }
-
-  void _handleSocialChange() {
-    final text = _controllerSocial.text;
-    if (text.isNotEmpty) {
-      final years = int.tryParse(text);
-      if (years != null) {
-        _param = _param.copyWith(
-          audience: Audience().copyWith(socialMediaStats: [text]),
-        );
-        widget.onChanged(_param);
-      }
-    }
-  }
-
-  void _handleManAgeFromChange() {
-    final text = _controllerFrom.text;
-    if (text.isNotEmpty) {
-      final years = int.tryParse(text);
-      if (years != null) {
-        _param = _param.copyWith(
-          audience: Audience().copyWith(menAgeFrom: int.parse(text)),
-        );
-        widget.onChanged(_param);
-      }
-    }
-  }
-
-  void _handleManAgeToChange() {
-    final text = _controllerTo.text;
-    if (text.isNotEmpty) {
-      final years = int.tryParse(text);
-      if (years != null) {
-        _param = _param.copyWith(
-          audience: Audience().copyWith(menAgeTo: int.parse(text)),
-        );
-        widget.onChanged(_param);
-      }
-    }
-  }
-
-  void _handleWomanAgeFromChange() {
-    final text = _controllerFromWomen.text;
-    if (text.isNotEmpty) {
-      final years = int.tryParse(text);
-      if (years != null) {
-        _param = _param.copyWith(
-          audience: Audience().copyWith(womenAgeFrom: int.parse(text)),
-        );
-        widget.onChanged(_param);
-      }
-    }
-  }
-
-  void _handleWomanAgeToChange() {
-    final text = _controllerToWomen.text;
-    if (text.isNotEmpty) {
-      final years = int.tryParse(text);
-      if (years != null) {
-        _param = _param.copyWith(
-          audience: Audience().copyWith(womenAgeTo: int.parse(text)),
-        );
-        widget.onChanged(_param);
-      }
-    }
-  }
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,15 +77,15 @@ class _AudienceAndFollowersPageViewState
           ChooseGeography(
             onItemSelected: (LangItemModel item) {
               setState(() {
-                if (!_selectedNichesItems.any((e) => e.id == item.id)) {
-                  _selectedNichesItems.add(item);
-                  _updateData();
+                if (!_selectedGeographyItems.any((e) => e.id == item.id)) {
+                  _selectedGeographyItems.add(item);
+                  _handleUpdate();
                 }
               });
             },
           ),
           const SizedBox(height: 32),
-          if (_selectedNichesItems.isNotEmpty)
+          if (_selectedGeographyItems.isNotEmpty)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -144,10 +98,10 @@ class _AudienceAndFollowersPageViewState
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _selectedNichesItems.length,
+                  itemCount: _selectedGeographyItems.length,
 
                   itemBuilder: (context, index) {
-                    final niche = _selectedNichesItems[index];
+                    final niche = _selectedGeographyItems[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Row(
@@ -157,8 +111,8 @@ class _AudienceAndFollowersPageViewState
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedNichesItems.removeAt(index);
-                                _updateData();
+                                _selectedGeographyItems.removeAt(index);
+                                _handleUpdate();
                               });
                             },
                             child: Text(
@@ -223,5 +177,15 @@ class _AudienceAndFollowersPageViewState
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controllerFrom.dispose();
+    _controllerTo.dispose();
+    _controllerFromWomen.dispose();
+    _controllerToWomen.dispose();
+    _controllerSocial.dispose();
+    super.dispose();
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,8 @@ class ExperiencePageView extends StatefulWidget {
   State<ExperiencePageView> createState() => _ExperiencePageViewState();
 }
 
-class _ExperiencePageViewState extends State<ExperiencePageView> {
+class _ExperiencePageViewState extends State<ExperiencePageView>
+    with AutomaticKeepAliveClientMixin<ExperiencePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
@@ -28,7 +27,7 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
   void initState() {
     super.initState();
     _experienceController.addListener(_handleExperienceChange);
-    _awardController.addListener(_handleExperienceChange);
+    _awardController.addListener(_handleAwardChange);
   }
 
   void _handleExperienceChange() {
@@ -43,18 +42,18 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
   }
 
   void _handleAwardChange() {
-    final text = _experienceController.text;
+    final text = _awardController.text;
     if (text.isNotEmpty) {
-      final years = int.tryParse(text);
-      if (years != null) {
-        //  _param = _param.copyWith(a: years);
-        widget.onChanged(_param);
-      }
+      widget.onChanged(_param);
     }
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,6 +119,7 @@ class _ExperiencePageViewState extends State<ExperiencePageView> {
   @override
   void dispose() {
     _experienceController.removeListener(_handleExperienceChange);
+    _awardController.removeListener(_handleAwardChange);
     _experienceController.dispose();
     _awardController.dispose();
     super.dispose();

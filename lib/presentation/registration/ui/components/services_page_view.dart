@@ -25,7 +25,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
 
   void _updateData() {
     _param = _param.copyWith(
-      categoryIds: _selectedNichesItems.map((e) => e.id).toList(),
+      serviceIds: _selectedNichesItems.map((e) => e.id).toList(),
     );
     widget.onChanged(_param);
   }
@@ -84,7 +84,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(t.registration.selected_niches, style: Typographies.titleSmall),
+                Text(t.registration.services, style: Typographies.titleSmall),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,

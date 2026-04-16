@@ -18,7 +18,8 @@ class MyPricingTariffsPageView extends StatefulWidget {
       _MyPricingTariffsPageViewState();
 }
 
-class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView> {
+class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
+    with AutomaticKeepAliveClientMixin<MyPricingTariffsPageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final List<LangItemModel> _selectedNichesItems = [];
   final TextEditingController _hourlyRateFrom = TextEditingController();
@@ -34,7 +35,11 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

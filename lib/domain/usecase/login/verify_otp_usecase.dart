@@ -12,7 +12,9 @@ class VerifyOtpUsecase implements UseCase<VerifyOtpEntity, VerifyOtpParams> {
   VerifyOtpUsecase({required this.repository});
 
   @override
-  Future<Either<Failure, VerifyOtpEntity>> call({required VerifyOtpParams params}) async {
+  Future<Either<Failure, VerifyOtpEntity>> call({
+    required VerifyOtpParams params,
+  }) async {
     return await repository.verifyOtp(params: params);
   }
 }
