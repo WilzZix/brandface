@@ -135,7 +135,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                                     ),
                                     decoration: BoxDecoration(
                                       color: AppColors.lightBg2,
-                                      borderRadius: BorderRadius.circular(16),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
                                       'Cars',

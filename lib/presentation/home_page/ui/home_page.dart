@@ -1,5 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
-import 'package:brandface/presentation/home_page/ui/profile_page.dart';
+import 'package:brandface/presentation/home_page/ui/profile/profile_page.dart';
 import 'package:brandface/presentation/home_page/ui/recomendations.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';

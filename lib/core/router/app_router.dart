@@ -9,7 +9,8 @@ import '../../presentation/home_page/ui/home_page.dart';
 import '../../presentation/home_page/ui/notifications_page.dart';
 import '../../presentation/home_page/ui/offers/offer_detail_page.dart';
 import '../../presentation/home_page/ui/offers/offers_from_brands_page.dart';
-import '../../presentation/home_page/ui/profile_page.dart';
+import '../../presentation/home_page/ui/profile/profile_information_page.dart';
+import '../../presentation/home_page/ui/profile/profile_page.dart';
 import '../../presentation/home_page/ui/recomendations.dart';
 import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.dart';
 import '../../presentation/login/ui/login_page.dart';
@@ -119,6 +120,12 @@ class AppRouter {
         name: OfferDetailPage.tag,
         builder: (_, _) => OfferDetailPage(),
       ),
+      GoRoute(
+        path: ProfileInformationPage.tag,
+        name: ProfileInformationPage.tag,
+        builder: (_, _) => ProfileInformationPage(),
+      ),
+
     ],
   );
 }

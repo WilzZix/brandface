@@ -1,3 +1,4 @@
+import 'package:brandface/presentation/home_page/ui/profile/profile_information_page.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -5,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constants/app_assets.dart';
-import '../../../core/di/app_di.dart';
-import '../../../core/i18n/strings.g.dart';
-import '../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
-import '../../../utils/services/app_language_service.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/di/app_di.dart';
+import '../../../../core/i18n/strings.g.dart';
+import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
+import '../../../../utils/services/app_language_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -39,13 +40,16 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Profile information', style: Typographies.titleMedium),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
+            GestureDetector(
+              onTap: () => context.pushNamed(ProfileInformationPage.tag),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Profile information', style: Typographies.titleMedium),
+                  Spacer(),
+                  SvgPicture.asset(AppAssets.icChevronRight),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
