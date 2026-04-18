@@ -27,7 +27,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
   UserRole _selectedUserRole = UserRole.influencer;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
+  final TextEditingController _brandNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _surnameController.dispose();
+    _brandNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,31 +72,46 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 SizedBox(height: 24),
                 SelectRole(
                   onRoleSelected: (role) {
-                    _selectedUserRole = _roleFromString(role);
+                    setState(() {
+                      _selectedUserRole = _roleFromString(role);
+                    });
                   },
                 ),
                 SizedBox(height: 24),
-                CredInputField(
-                  controller: _nameController,
-                  label: t.registration.your_name,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CredInputField(
-                  controller: _surnameController,
-                  label: t.registration.your_surname,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
+                if (_selectedUserRole == UserRole.brand) ...[
+                  CredInputField(
+                    controller: _brandNameController,
+                    label: t.registration.brand_name,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                ] else ...[
+                  CredInputField(
+                    controller: _nameController,
+                    label: t.registration.your_name,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  CredInputField(
+                    controller: _surnameController,
+                    label: t.registration.your_surname,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
                 Spacer(),
                 AppButtons.primary(
                   title: t.onboarding.kContinue,
@@ -95,11 +119,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (_formKey.currentState!.validate()) {
                       context.read<RegistrationBloc>().add(
                         RegistrationEvent.registration(
-                          params: RegistrationParams(
-                            role: _selectedUserRole.name,
-                            firstName: _nameController.text,
-                            lastName: _surnameController.text,
-                          ),
+                          params: _selectedUserRole == UserRole.brand
+                              ? RegistrationParams(
+                                  role: _selectedUserRole.name,
+                                  brandName: _brandNameController.text,
+                                )
+                              : RegistrationParams(
+                                  role: _selectedUserRole.name,
+                                  firstName: _nameController.text,
+                                  lastName: _surnameController.text,
+                                ),
                         ),
                       );
                     }

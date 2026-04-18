@@ -19,6 +19,7 @@
     "brand": "Brand",
     "your_name": "Your name",
     "your_surname": "Your surname",
+    "brand_name": "Brand name",
     "upload_profile_picture": "Upload profile picture",
     "choose_file": "Choose file",
     "file_format_hint": "SVG, PNG, JPG or GIF (MAX. 800x400px).",

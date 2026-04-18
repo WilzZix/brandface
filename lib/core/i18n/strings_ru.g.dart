@@ -95,6 +95,7 @@ class _TranslationsRegistrationRu implements TranslationsRegistrationUz {
 	@override String get brand => 'Бренд';
 	@override String get your_name => 'Ваше имя';
 	@override String get your_surname => 'Ваша фамилия';
+	@override String get brand_name => 'Название бренда';
 	@override String get upload_profile_picture => 'Загрузить фото профиля';
 	@override String get choose_file => 'Выбрать файл';
 	@override String get file_format_hint => 'SVG, PNG, JPG или GIF (MAX. 800x400px).';
@@ -264,6 +265,7 @@ extension on TranslationsRu {
 			'registration.brand' => 'Бренд',
 			'registration.your_name' => 'Ваше имя',
 			'registration.your_surname' => 'Ваша фамилия',
+			'registration.brand_name' => 'Название бренда',
 			'registration.upload_profile_picture' => 'Загрузить фото профиля',
 			'registration.choose_file' => 'Выбрать файл',
 			'registration.file_format_hint' => 'SVG, PNG, JPG или GIF (MAX. 800x400px).',

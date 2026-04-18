@@ -19,6 +19,7 @@
     "brand": "Бренд",
     "your_name": "Ваше имя",
     "your_surname": "Ваша фамилия",
+    "brand_name": "Название бренда",
     "upload_profile_picture": "Загрузить фото профиля",
     "choose_file": "Выбрать файл",
     "file_format_hint": "SVG, PNG, JPG или GIF (MAX. 800x400px).",
