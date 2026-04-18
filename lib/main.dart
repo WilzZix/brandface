@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         routerConfig: AppRouter.router,
         theme: ThemeData(
           appBarTheme: AppBarTheme(
+            scrolledUnderElevation: 0,
             backgroundColor: AppColors.lightBg,
             titleTextStyle: Typographies.titleLarge,
           ),

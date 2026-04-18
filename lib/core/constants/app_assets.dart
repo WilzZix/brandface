@@ -24,4 +24,8 @@ class AppAssets {
   static String icSort = 'assets/icons/sort.svg';
   static String icFilter = 'assets/icons/filter.svg';
   static String icPen = 'assets/icons/pen.svg';
+  static String icStar = 'assets/icons/star.svg';
+  static String icVisa = 'assets/icons/Visa.svg';
+  static String icAdd = 'assets/icons/plus.svg';
+  static String icDownload = 'assets/icons/download.svg';
 }

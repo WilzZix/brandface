@@ -15,7 +15,8 @@ class _AppContainerState extends State<AppContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 24, left: 16, right: 16, top: 16),
+      width: double.infinity,
+      padding: EdgeInsets.only(bottom: 16, left: 16, right: 16, top: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: AppColors.lightBg3,
