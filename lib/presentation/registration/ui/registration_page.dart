@@ -1,4 +1,6 @@
+import 'package:brandface/domain/usecase/registration/params/brand_registration_params.dart';
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
+import 'package:brandface/presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -41,24 +43,47 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<RegistrationBloc, RegistrationState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            userRegistered: (registerEntity) {
-              context.push(
-                FillProfileInformationPage.tag,
-                extra: registerEntity,
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<RegistrationBloc, RegistrationState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                userRegistered: (registerEntity) {
+                  context.push(
+                    FillProfileInformationPage.tag,
+                    extra: registerEntity,
+                  );
+                },
+                userRegisterFailure: (msg) {
+                  BrandfaceBottomSheet.openFailureBottomSheet(
+                    context: context,
+                    message: msg.localized,
+                  );
+                },
+                orElse: () {},
               );
             },
-            userRegisterFailure: (msg) {
-              BrandfaceBottomSheet.openFailureBottomSheet(
-                context: context,
-                message: msg.localized,
+          ),
+          BlocListener<BrandRegistrationBloc, BrandRegistrationState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                registered: (entity) {
+                  context.push(
+                    FillProfileInformationPage.tag,
+                    extra: entity,
+                  );
+                },
+                failure: (failure) {
+                  BrandfaceBottomSheet.openFailureBottomSheet(
+                    context: context,
+                    message: failure.localized,
+                  );
+                },
+                orElse: () {},
               );
             },
-            orElse: () {},
-          );
-        },
+          ),
+        ],
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Form(
@@ -117,20 +142,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   title: t.onboarding.kContinue,
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<RegistrationBloc>().add(
-                        RegistrationEvent.registration(
-                          params: _selectedUserRole == UserRole.brand
-                              ? RegistrationParams(
-                                  role: _selectedUserRole.name,
-                                  brandName: _brandNameController.text,
-                                )
-                              : RegistrationParams(
-                                  role: _selectedUserRole.name,
-                                  firstName: _nameController.text,
-                                  lastName: _surnameController.text,
-                                ),
-                        ),
-                      );
+                      if (_selectedUserRole == UserRole.brand) {
+                        context.read<BrandRegistrationBloc>().add(
+                          BrandRegistrationEvent.register(
+                            params: BrandRegistrationParams(
+                              brandName: _brandNameController.text,
+                            ),
+                          ),
+                        );
+                      } else {
+                        context.read<RegistrationBloc>().add(
+                          RegistrationEvent.registration(
+                            params: RegistrationParams(
+                              role: _selectedUserRole.name,
+                              firstName: _nameController.text,
+                              lastName: _surnameController.text,
+                            ),
+                          ),
+                        );
+                      }
                     }
                   },
                 ),

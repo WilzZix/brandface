@@ -7,9 +7,13 @@ class ApiRoutes {
 
   ///Registration
   static String registration = 'accounts/v1/register/influencer/';
+  static String brandRegistration = 'accounts/v1/register/brand/';
 
   static String fillProfile(String profileId) =>
       'accounts/v1/register/influencer/$profileId/';
+
+  static String fillBrandProfile(String profileId) =>
+      'accounts/v1/register/brand/$profileId/';
 
   ///Catalog public routes
   static String categories = 'catalog/v1/categories/';

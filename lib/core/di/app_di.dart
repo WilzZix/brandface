@@ -26,7 +26,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/repositories/login_repository_impl.dart';
 import '../../domain/usecase/catalog/category/category_use_case.dart';
 import '../../domain/usecase/login/verify_otp_usecase.dart';
+import '../../domain/usecase/registration/brand_registration_usecase.dart';
+import '../../domain/usecase/registration/fill_brand_profile_usecase.dart';
 import '../../domain/usecase/registration/fill_profile_info_usecase.dart';
+import '../../presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
+import '../../presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import '../../presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import '../../utils/services/app_auth_local_service.dart';
 
@@ -55,7 +59,9 @@ class AppDi {
     sl.registerLazySingleton(() => SendOtpUseCase(sl()));
     sl.registerLazySingleton(() => VerifyOtpUsecase(repository: sl()));
     sl.registerLazySingleton(() => RegistrationUsecase(sl()));
+    sl.registerLazySingleton(() => BrandRegistrationUsecase(sl()));
     sl.registerLazySingleton(() => FillProfileInfoUsecase(sl()));
+    sl.registerLazySingleton(() => FillBrandProfileUsecase(sl()));
     sl.registerLazySingleton(() => CategoryUseCase(repository: sl()));
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
     sl.registerLazySingleton(() => RegionUseCase(repository: sl()));
@@ -82,7 +88,13 @@ class AppDi {
       ),
     );
     sl.registerFactory(() => RegistrationBloc(registrationUsecase: sl()));
+    sl.registerFactory(
+      () => BrandRegistrationBloc(brandRegistrationUsecase: sl()),
+    );
     sl.registerFactory(() => FillProfileBloc(fillProfileInfoUsecase: sl()));
+    sl.registerFactory(
+      () => FillBrandProfileBloc(fillBrandProfileUsecase: sl()),
+    );
     sl.registerFactory(() => CategoryCubit(categoryUseCase: sl()));
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));
     sl.registerFactory(() => RegionCubit(regionUseCase: sl()));
