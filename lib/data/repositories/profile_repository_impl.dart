@@ -2,18 +2,24 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/service_type_entity.dart';
+import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:dart_either/src/dart_either.dart';
 import 'package:dio/dio.dart';
 
+import '../../utils/services/profile_service.dart';
 import '../data_source/network_data_source/profile/profile_data_source.dart';
 
 class ProfileRepositoryImpl implements IProfileRepository {
   final ProfileDataSource _dataSource;
+  final ProfileService _profileService;
 
-  ProfileRepositoryImpl({required ProfileDataSource dataSource})
-    : _dataSource = dataSource;
+  ProfileRepositoryImpl({
+    required ProfileDataSource dataSource,
+    required ProfileService profileService,
+  }) : _profileService = profileService,
+       _dataSource = dataSource;
 
   @override
   Future<Either<Failure, List<CategoryItemEntity>>> getCategories() async {
@@ -91,6 +97,35 @@ class ProfileRepositoryImpl implements IProfileRepository {
       );
     } catch (e) {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, InfluencerProfileInformationEntity>>
+  getInfluencerProfile() async {
+    try {
+      final profileId = _profileService.getProfileId();
+
+      if (profileId == null) {
+        return const Left(
+          ServerFailure('Profile ID topilmadi. Iltimos, qayta kiring.'),
+        );
+      }
+
+      final profileModel = await _dataSource.getInfluencerProfile();
+
+      return Right(profileModel.toEntity());
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
     }
   }
 }

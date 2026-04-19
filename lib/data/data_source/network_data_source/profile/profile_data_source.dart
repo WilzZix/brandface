@@ -4,10 +4,13 @@ import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 
 import '../../../../core/network/dio_client.dart';
+import '../../../models/profile/catalog/influencer_profile_information_model.dart';
 import '../../../models/profile/profile_model.dart';
 
 abstract class ProfileDataSource {
   Future<ProfileModel> getProfile({required String profileId});
+
+  Future<InfluencerProfileInformationModel> getInfluencerProfile();
 
   Future<CategoryModel> getCategories();
 
@@ -56,6 +59,16 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     try {
       final result = await _dioClient.get(ApiRoutes.profile(profileId));
       return ProfileModel.fromJson(result.data['data']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<InfluencerProfileInformationModel> getInfluencerProfile() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.myProfile);
+      return InfluencerProfileInformationModel.fromJson(result.data['data']);
     } catch (e) {
       rethrow;
     }

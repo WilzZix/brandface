@@ -9,7 +9,9 @@ import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/domain/repository/registration_repository.dart';
 import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
+import 'package:brandface/domain/usecase/login/get_me_use_case.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
+import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_profile_use_case.dart';
 import 'package:brandface/domain/usecase/registration/registration_usecase.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
@@ -29,10 +31,12 @@ import '../../domain/usecase/login/verify_otp_usecase.dart';
 import '../../domain/usecase/registration/brand_registration_usecase.dart';
 import '../../domain/usecase/registration/fill_brand_profile_usecase.dart';
 import '../../domain/usecase/registration/fill_profile_info_usecase.dart';
+import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import '../../presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
 import '../../presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import '../../presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import '../../utils/services/app_auth_local_service.dart';
+import '../../utils/services/profile_service.dart';
 
 final sl = GetIt.instance;
 
@@ -41,6 +45,7 @@ class AppDi {
     final sharedPrefs = await SharedPreferences.getInstance();
     sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
     sl.registerLazySingleton<IAuthLocalService>(() => AuthLocalService(sl()));
+    sl.registerLazySingleton(() => ProfileService(sl()));
     sl.registerLazySingleton(() => Dio());
     sl.registerLazySingleton(() => DioClient(sl(), sharedPrefService: sl()));
 
@@ -66,6 +71,10 @@ class AppDi {
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
     sl.registerLazySingleton(() => RegionUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetProfileUseCase(repository: sl()));
+    sl.registerLazySingleton(
+      () => GetInfluencerProfileUseCase(repository: sl()),
+    );
+    sl.registerLazySingleton(() => GetMeUseCase(iLoginRepository: sl()));
 
     ///Repository
     sl.registerLazySingleton<ILoginRepository>(
@@ -75,7 +84,7 @@ class AppDi {
       () => RegistrationRepositoryImpl(dataSource: sl()),
     );
     sl.registerLazySingleton<IProfileRepository>(
-      () => ProfileRepositoryImpl(dataSource: sl()),
+      () => ProfileRepositoryImpl(dataSource: sl(), profileService: sl()),
     );
 
     ///Bloc
@@ -85,9 +94,13 @@ class AppDi {
         loginUseCase: sl(),
         verifyOtpUsecase: sl(),
         localService: sl(),
+        getMeUseCase: sl(),
+        profileService: sl(),
       ),
     );
-    sl.registerFactory(() => RegistrationBloc(registrationUsecase: sl()));
+    sl.registerFactory(
+      () => RegistrationBloc(registrationUsecase: sl(), profileService: sl()),
+    );
     sl.registerFactory(
       () => BrandRegistrationBloc(brandRegistrationUsecase: sl()),
     );
@@ -99,5 +112,11 @@ class AppDi {
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));
     sl.registerFactory(() => RegionCubit(regionUseCase: sl()));
     sl.registerFactory(() => GetProfileCubit(getProfileUseCase: sl()));
+    sl.registerFactory(
+      () => ProfileInformationCubit(
+        influencerProfileUseCase: sl(),
+        profileService: sl(),
+      ),
+    );
   }
 }

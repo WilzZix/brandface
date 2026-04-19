@@ -42,6 +42,7 @@ class ProfileEntity extends Equatable {
     this.audience,
     this.pricing,
   });
+
   FillInfluencerProfileParam toParam() {
     return FillInfluencerProfileParam(
       displayName: displayName,
@@ -57,54 +58,72 @@ class ProfileEntity extends Equatable {
       agencyRepresentation: agencyRepresentation,
       partners: partners,
       // ContactEntity -> Contact (Model) o'girish
-      contacts: contacts?.map((e) => Contact(
-        type: e.type,
-        value: e.value,
-      )).toList(),
+      contacts: contacts
+          ?.map((e) => Contact(type: e.type, value: e.value))
+          .toList(),
       categoryIds: categoryIds,
       serviceIds: serviceIds,
       languageIds: languageIds,
       // AudienceEntity -> Audience (Model) o'girish
-      audience: audience != null ? Audience(
-        brandSegment: audience!.brandSegment,
-        totalFollowers: audience!.totalFollowers,
-        malePercent: audience!.malePercent,
-        femalePercent: audience!.femalePercent,
-        menAgeFrom: audience!.menAgeFrom,
-        menAgeTo: audience!.menAgeTo,
-        womenAgeFrom: audience!.womenAgeFrom,
-        womenAgeTo: audience!.womenAgeTo,
-        engagementRate: audience!.engagementRate,
-        geography: audience!.geography,
-        socialMediaStats: audience!.socialMediaStats,
-      ) : null,
+      audience: audience != null
+          ? Audience(
+              brandSegment: audience!.brandSegment,
+              totalFollowers: audience!.totalFollowers,
+              malePercent: audience!.malePercent,
+              femalePercent: audience!.femalePercent,
+              menAgeFrom: audience!.menAgeFrom,
+              menAgeTo: audience!.menAgeTo,
+              womenAgeFrom: audience!.womenAgeFrom,
+              womenAgeTo: audience!.womenAgeTo,
+              engagementRate: audience!.engagementRate,
+              geography: audience!.geography,
+              socialMediaStats: audience!.socialMediaStats,
+            )
+          : null,
       // PricingEntity -> Pricing (Model) o'girish
-      pricing: pricing != null ? Pricing(
-        availableForLongTerm: pricing!.availableForLongTerm,
-        worksOnNetModel: pricing!.worksOnNetModel,
-        openToSimilarOffers: pricing!.openToSimilarOffers,
-        hourlyRateMinUzs: pricing!.hourlyRateMinUzs,
-        hourlyRateMaxUzs: pricing!.hourlyRateMaxUzs,
-        hourlyRateMinUsd: pricing!.hourlyRateMinUsd,
-        hourlyRateMaxUsd: pricing!.hourlyRateMaxUsd,
-        dailyRateMinUzs: pricing!.dailyRateMinUzs,
-        dailyRateMaxUzs: pricing!.dailyRateMaxUzs,
-        acceptsBarter: pricing!.acceptsBarter,
-        paymentTypes: pricing!.paymentTypes,
-        exclusivityAvailable: pricing!.exclusivityAvailable,
-        campaignFee: pricing!.campaignFee,
-        campaignFeeCurrency: pricing!.campaignFeeCurrency,
-        monthlyExclusivityFee: pricing!.monthlyExclusivityFee,
-        eventAppearanceFee: pricing!.eventAppearanceFee,
-      ) : null,
+      pricing: pricing != null
+          ? Pricing(
+              availableForLongTerm: pricing!.availableForLongTerm,
+              worksOnNetModel: pricing!.worksOnNetModel,
+              openToSimilarOffers: pricing!.openToSimilarOffers,
+              hourlyRateMinUzs: pricing!.hourlyRateMinUzs,
+              hourlyRateMaxUzs: pricing!.hourlyRateMaxUzs,
+              hourlyRateMinUsd: pricing!.hourlyRateMinUsd,
+              hourlyRateMaxUsd: pricing!.hourlyRateMaxUsd,
+              dailyRateMinUzs: pricing!.dailyRateMinUzs,
+              dailyRateMaxUzs: pricing!.dailyRateMaxUzs,
+              acceptsBarter: pricing!.acceptsBarter,
+              paymentTypes: pricing!.paymentTypes,
+              exclusivityAvailable: pricing!.exclusivityAvailable,
+              campaignFee: pricing!.campaignFee,
+              campaignFeeCurrency: pricing!.campaignFeeCurrency,
+              monthlyExclusivityFee: pricing!.monthlyExclusivityFee,
+              eventAppearanceFee: pricing!.eventAppearanceFee,
+            )
+          : null,
     );
   }
+
   @override
   List<Object?> get props => [
-    displayName, avatarId, bio, regionId, cityId, birthDate,
-    gender, yearsOfExperience, hasAdExperience, pressMentions,
-    agencyRepresentation, partners, contacts, categoryIds,
-    serviceIds, languageIds, audience, pricing,
+    displayName,
+    avatarId,
+    bio,
+    regionId,
+    cityId,
+    birthDate,
+    gender,
+    yearsOfExperience,
+    hasAdExperience,
+    pressMentions,
+    agencyRepresentation,
+    partners,
+    contacts,
+    categoryIds,
+    serviceIds,
+    languageIds,
+    audience,
+    pricing,
   ];
 }
 
@@ -135,11 +154,39 @@ class AudienceEntity extends Equatable {
     this.socialMediaStats,
   });
 
+  factory AudienceEntity.fromJson(Map<String, dynamic> json) {
+    return AudienceEntity(
+      brandSegment: json['brand_segment'],
+      totalFollowers: json['total_followers'],
+      malePercent: json['male_percent']?.toString(),
+      femalePercent: json['female_percent']?.toString(),
+      menAgeFrom: json['men_age_from'],
+      menAgeTo: json['men_age_to'],
+      womenAgeFrom: json['women_age_from'],
+      womenAgeTo: json['women_age_to'],
+      engagementRate: json['engagement_rate']?.toString(),
+      geography: json['geography'] != null
+          ? List<String>.from(json['geography'])
+          : null,
+      socialMediaStats: json['social_media_stats'] != null
+          ? List<String>.from(json['social_media_stats'])
+          : null,
+    );
+  }
+
   @override
   List<Object?> get props => [
-    brandSegment, totalFollowers, malePercent, femalePercent,
-    menAgeFrom, menAgeTo, womenAgeFrom, womenAgeTo,
-    engagementRate, geography, socialMediaStats,
+    brandSegment,
+    totalFollowers,
+    malePercent,
+    femalePercent,
+    menAgeFrom,
+    menAgeTo,
+    womenAgeFrom,
+    womenAgeTo,
+    engagementRate,
+    geography,
+    socialMediaStats,
   ];
 }
 
@@ -190,13 +237,46 @@ class PricingEntity extends Equatable {
     this.eventAppearanceFee,
   });
 
+  factory PricingEntity.fromJson(Map<String, dynamic> json) {
+    return PricingEntity(
+      availableForLongTerm: json['available_for_long_term'],
+      worksOnNetModel: json['works_on_net_model'],
+      openToSimilarOffers: json['open_to_similar_offers'],
+      hourlyRateMinUzs: json['hourly_rate_min_uzs']?.toString(),
+      hourlyRateMaxUzs: json['hourly_rate_max_uzs']?.toString(),
+      hourlyRateMinUsd: json['hourly_rate_min_usd']?.toString(),
+      hourlyRateMaxUsd: json['hourly_rate_max_usd']?.toString(),
+      dailyRateMinUzs: json['daily_rate_min_uzs']?.toString(),
+      dailyRateMaxUzs: json['daily_rate_max_uzs']?.toString(),
+      acceptsBarter: json['accepts_barter'],
+      paymentTypes: json['payment_types'] != null
+          ? List<String>.from(json['payment_types'])
+          : null,
+      exclusivityAvailable: json['exclusivity_available'],
+      campaignFee: json['campaign_fee']?.toString(),
+      campaignFeeCurrency: json['campaign_fee_currency'],
+      monthlyExclusivityFee: json['monthly_exclusivity_fee']?.toString(),
+      eventAppearanceFee: json['event_appearance_fee']?.toString(),
+    );
+  }
+
   @override
   List<Object?> get props => [
-    availableForLongTerm, worksOnNetModel, openToSimilarOffers,
-    hourlyRateMinUzs, hourlyRateMaxUzs, hourlyRateMinUsd,
-    hourlyRateMaxUsd, dailyRateMinUzs, dailyRateMaxUzs,
-    acceptsBarter, paymentTypes, exclusivityAvailable,
-    campaignFee, campaignFeeCurrency, monthlyExclusivityFee,
+    availableForLongTerm,
+    worksOnNetModel,
+    openToSimilarOffers,
+    hourlyRateMinUzs,
+    hourlyRateMaxUzs,
+    hourlyRateMinUsd,
+    hourlyRateMaxUsd,
+    dailyRateMinUzs,
+    dailyRateMaxUzs,
+    acceptsBarter,
+    paymentTypes,
+    exclusivityAvailable,
+    campaignFee,
+    campaignFeeCurrency,
+    monthlyExclusivityFee,
     eventAppearanceFee,
   ];
 }

@@ -4,6 +4,7 @@ class ApiRoutes {
   ///Login
   static String sendOtp = 'accounts/v1/auth/send-otp/';
   static String verifyOtp = 'accounts/v1/auth/verify-otp/';
+  static String me = 'accounts/v1/auth/me/';
 
   ///Registration
   static String registration = 'accounts/v1/register/influencer/';
@@ -23,4 +24,6 @@ class ApiRoutes {
 
   static String profile(String profileId) =>
       'profiles/v1/influencers/$profileId/';
+
+  static String myProfile = 'profiles/v1/my/';
 }

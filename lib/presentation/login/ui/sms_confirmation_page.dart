@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
-import 'package:brandface/presentation/home_page/ui/home_page.dart';
+import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/ui/registration_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -81,7 +81,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
       listener: (context, state) {
         state.maybeWhen(
           otpVerified: () {
-            context.go(RegistrationPage.tag);
+            context.go(HomePage.tag);
           },
           otpReceived: (otpEntity) {
             _controller.text = otpEntity.code ?? '';

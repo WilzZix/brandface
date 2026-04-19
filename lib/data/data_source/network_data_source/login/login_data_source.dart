@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/data/models/login/get_me_model.dart';
 import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:dio/dio.dart';
 
@@ -10,6 +11,8 @@ abstract class LoginRemoteDataSource {
   Future<OtpModel> sendOtp({required String phone});
 
   Future<VerifyOtpModel> verifyOtp({required VerifyOtpParams params});
+
+  Future<UserModel> getMe();
 }
 
 class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
@@ -50,6 +53,25 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return VerifyOtpModel.fromJson(response.data);
+      } else {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          type: DioExceptionType.badResponse,
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserModel> getMe() async {
+    try {
+      final response = await _dioClient.get(ApiRoutes.me);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return UserModel.fromJson(response.data['data']);
       } else {
         throw DioException(
           requestOptions: response.requestOptions,
