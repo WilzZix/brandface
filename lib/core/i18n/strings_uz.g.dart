@@ -125,6 +125,9 @@ class TranslationsRegistrationUz {
 	/// uz: 'Your surname'
 	String get your_surname => 'Your surname';
 
+	/// uz: 'Brand nomi'
+	String get brand_name => 'Brand nomi';
+
 	/// uz: 'Upload profile picture'
 	String get upload_profile_picture => 'Upload profile picture';
 
@@ -476,6 +479,7 @@ extension on Translations {
 			'registration.brand' => 'Brand',
 			'registration.your_name' => 'Your name',
 			'registration.your_surname' => 'Your surname',
+			'registration.brand_name' => 'Brand nomi',
 			'registration.upload_profile_picture' => 'Upload profile picture',
 			'registration.choose_file' => 'Choose file',
 			'registration.file_format_hint' => 'SVG, PNG, JPG or GIF (MAX. 800x400px).',

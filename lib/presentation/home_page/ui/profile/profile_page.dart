@@ -1,4 +1,5 @@
 import 'package:brandface/presentation/home_page/ui/profile/profile_information_page.dart';
+import 'package:brandface/presentation/home_page/ui/profile/reviews.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -11,6 +12,7 @@ import '../../../../core/di/app_di.dart';
 import '../../../../core/i18n/strings.g.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../utils/services/app_language_service.dart';
+import 'billing.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -53,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -63,16 +66,20 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Reviews', style: Typographies.titleMedium),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
+            GestureDetector(
+              onTap: () => context.pushNamed(Reviews.tag),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Reviews', style: Typographies.titleMedium),
+                  Spacer(),
+                  SvgPicture.asset(AppAssets.icChevronRight),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -83,6 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -93,16 +101,21 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Billing', style: Typographies.titleMedium),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
+            SizedBox(height: 16),
+            GestureDetector(
+              onTap: () => context.pushNamed(Billing.tag),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Billing', style: Typographies.titleMedium),
+                  Spacer(),
+                  SvgPicture.asset(AppAssets.icChevronRight),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -113,6 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
+            SizedBox(height: 16),
             GestureDetector(
               onTap: () async {
                 await BrandfaceBottomSheet.openBottomSheet<String>(
@@ -171,6 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

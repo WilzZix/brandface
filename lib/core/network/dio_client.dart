@@ -1,3 +1,4 @@
+import 'package:brandface/core/network/interceptor/auth_interceptor.dart';
 import 'package:brandface/core/network/interceptor/logger_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -16,9 +17,7 @@ class DioClient {
       ..options.connectTimeout = const Duration(seconds: 5)
       ..options.receiveTimeout = const Duration(seconds: 5)
       ..options.responseType = ResponseType.json
-      ..options.headers.addAll({
-        'Authorization': "Bearer ${_sharedPrefService.getAccessToken()}",
-      })
+      ..interceptors.add(AuthInterceptor(_sharedPrefService))
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
       ..interceptors.addAll([
         InterceptorsWrapper(),

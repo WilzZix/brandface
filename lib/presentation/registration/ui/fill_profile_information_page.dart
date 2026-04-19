@@ -278,11 +278,14 @@ class _FillProfileInformationPageState
               );
             },
           ),
-          BrandCategoriesPageView(
-            key: const PageStorageKey<String>('pageTwo'),
-            onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
-            },
+          BlocProvider(
+            create: (context) => sl<CategoryCubit>(),
+            child: BrandCategoriesPageView(
+              key: const PageStorageKey<String>('pageTwo'),
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+              },
+            ),
           ),
         ];
 

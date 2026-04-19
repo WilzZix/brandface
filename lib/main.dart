@@ -1,5 +1,7 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
+import 'package:brandface/presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
+import 'package:brandface/presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
@@ -28,7 +30,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<LoginBloc>()),
         BlocProvider(create: (context) => sl<RegistrationBloc>()),
+        BlocProvider(create: (context) => sl<BrandRegistrationBloc>()),
         BlocProvider(create: (context) => sl<FillProfileBloc>()),
+        BlocProvider(create: (context) => sl<FillBrandProfileBloc>()),
         BlocProvider(
           create: (context) => InitAppCubit(sharedPrefService: sl())..initApp(),
         ),
@@ -38,6 +42,7 @@ class MyApp extends StatelessWidget {
         routerConfig: AppRouter.router,
         theme: ThemeData(
           appBarTheme: AppBarTheme(
+            scrolledUnderElevation: 0,
             backgroundColor: AppColors.lightBg,
             titleTextStyle: Typographies.titleLarge,
           ),

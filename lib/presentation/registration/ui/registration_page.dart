@@ -1,4 +1,6 @@
+import 'package:brandface/domain/usecase/registration/params/brand_registration_params.dart';
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
+import 'package:brandface/presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -27,29 +29,61 @@ class _RegistrationPageState extends State<RegistrationPage> {
   UserRole _selectedUserRole = UserRole.influencer;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
+  final TextEditingController _brandNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _surnameController.dispose();
+    _brandNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<RegistrationBloc, RegistrationState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            userRegistered: (registerEntity) {
-              context.push(
-                FillProfileInformationPage.tag,
-                extra: registerEntity,
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<RegistrationBloc, RegistrationState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                userRegistered: (registerEntity) {
+                  context.push(
+                    FillProfileInformationPage.tag,
+                    extra: registerEntity,
+                  );
+                },
+                userRegisterFailure: (msg) {
+                  BrandfaceBottomSheet.openFailureBottomSheet(
+                    context: context,
+                    message: msg.localized,
+                  );
+                },
+                orElse: () {},
               );
             },
-            userRegisterFailure: (msg) {
-              BrandfaceBottomSheet.openFailureBottomSheet(
-                context: context,
-                message: msg.localized,
+          ),
+          BlocListener<BrandRegistrationBloc, BrandRegistrationState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                registered: (entity) {
+                  context.push(
+                    FillProfileInformationPage.tag,
+                    extra: entity,
+                  );
+                },
+                failure: (failure) {
+                  BrandfaceBottomSheet.openFailureBottomSheet(
+                    context: context,
+                    message: failure.localized,
+                  );
+                },
+                orElse: () {},
               );
             },
-            orElse: () {},
-          );
-        },
+          ),
+        ],
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Form(
@@ -63,45 +97,70 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 SizedBox(height: 24),
                 SelectRole(
                   onRoleSelected: (role) {
-                    _selectedUserRole = _roleFromString(role);
+                    setState(() {
+                      _selectedUserRole = _roleFromString(role);
+                    });
                   },
                 ),
                 SizedBox(height: 24),
-                CredInputField(
-                  controller: _nameController,
-                  label: t.registration.your_name,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                CredInputField(
-                  controller: _surnameController,
-                  label: t.registration.your_surname,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
+                if (_selectedUserRole == UserRole.brand) ...[
+                  CredInputField(
+                    controller: _brandNameController,
+                    label: t.registration.brand_name,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                ] else ...[
+                  CredInputField(
+                    controller: _nameController,
+                    label: t.registration.your_name,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  CredInputField(
+                    controller: _surnameController,
+                    label: t.registration.your_surname,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
                 Spacer(),
                 AppButtons.primary(
                   title: t.onboarding.kContinue,
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<RegistrationBloc>().add(
-                        RegistrationEvent.registration(
-                          params: RegistrationParams(
-                            role: _selectedUserRole.name,
-                            firstName: _nameController.text,
-                            lastName: _surnameController.text,
+                      if (_selectedUserRole == UserRole.brand) {
+                        context.read<BrandRegistrationBloc>().add(
+                          BrandRegistrationEvent.register(
+                            params: BrandRegistrationParams(
+                              brandName: _brandNameController.text,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        context.read<RegistrationBloc>().add(
+                          RegistrationEvent.registration(
+                            params: RegistrationParams(
+                              role: _selectedUserRole.name,
+                              firstName: _nameController.text,
+                              lastName: _surnameController.text,
+                            ),
+                          ),
+                        );
+                      }
                     }
                   },
                 ),
