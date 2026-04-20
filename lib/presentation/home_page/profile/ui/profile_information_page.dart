@@ -1,10 +1,15 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/registration/registration_entity.dart';
+import 'package:brandface/presentation/registration/ui/fill_profile_information_page.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
+import 'package:brandface/utils/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/app_di.dart';
 import '../bloc/profile_information/profile_information_cubit.dart';
 import 'components/profile_information_body.dart';
 import 'components/profile_shimmer.dart';
@@ -33,7 +38,15 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
         centerTitle: false,
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context.pushNamed(
+                FillProfileInformationPage.tag,
+                extra: RegistrationEntity(
+                  role: sl<ProfileService>().getRole() ?? 'influencer',
+                  profileId: sl<ProfileService>().getProfileId() ?? 1,
+                ),
+              );
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SvgPicture.asset(AppAssets.icPen),
@@ -46,16 +59,17 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
         child: SingleChildScrollView(
           child: BlocConsumer<ProfileInformationCubit, ProfileInformationState>(
             builder: (context, state) {
-              state.maybeWhen(
+              return state.maybeWhen(
                 infoLoaded: (data) {
                   return ProfileInformationBody(data: data);
                 },
                 loading: () {
                   return ProfileShimmer();
                 },
-                orElse: () {},
+                orElse: () {
+                  return SizedBox();
+                },
               );
-              return SizedBox();
             },
             listener: (BuildContext context, ProfileInformationState state) {
               state.maybeWhen(
