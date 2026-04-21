@@ -1,19 +1,22 @@
 import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/splash_screen/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/registration/registration_entity.dart';
-import '../../presentation/home_page/ui/home_page.dart';
-import '../../presentation/home_page/ui/notifications_page.dart';
-import '../../presentation/home_page/ui/offers/offer_detail_page.dart';
-import '../../presentation/home_page/ui/offers/offers_from_brands_page.dart';
-import '../../presentation/home_page/ui/profile/billing.dart';
-import '../../presentation/home_page/ui/profile/profile_information_page.dart';
-import '../../presentation/home_page/ui/profile/profile_page.dart';
-import '../../presentation/home_page/ui/profile/reviews.dart';
-import '../../presentation/home_page/ui/recomendations.dart';
+import '../../presentation/home_page/home_page.dart';
+import '../../presentation/home_page/notifications/notifications_page.dart';
+import '../../presentation/home_page/offers/offer_detail_page.dart';
+import '../../presentation/home_page/offers/offers_from_brands_page.dart';
+import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
+import '../../presentation/home_page/profile/ui/billing.dart';
+import '../../presentation/home_page/profile/ui/profile_information_page.dart';
+import '../../presentation/home_page/profile/ui/profile_page.dart';
+import '../../presentation/home_page/profile/ui/reviews.dart';
+import '../../presentation/home_page/recomendations/recomendations.dart';
 import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.dart';
 import '../../presentation/login/ui/login_page.dart';
 import '../../presentation/login/ui/term_of_use_page.dart';
@@ -21,7 +24,6 @@ import '../../presentation/onboarding/onboarding.dart';
 import '../../presentation/registration/ui/fill_profile_information_page.dart';
 import '../../presentation/registration/ui/registration_page.dart';
 import '../di/app_di.dart';
-import '../enums/enums.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
@@ -125,7 +127,14 @@ class AppRouter {
       GoRoute(
         path: ProfileInformationPage.tag,
         name: ProfileInformationPage.tag,
-        builder: (_, _) => ProfileInformationPage(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => sl<ProfileInformationCubit>()),
+            BlocProvider(create: (context) => sl<LanguageCubit>()),
+            BlocProvider(create: (context) => sl<CategoryCubit>()),
+          ],
+          child: const ProfileInformationPage(),
+        ),
       ),
       GoRoute(
         path: Reviews.tag,

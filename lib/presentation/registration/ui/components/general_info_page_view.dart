@@ -1,6 +1,7 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
+import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class GeneralInfoPageView extends StatefulWidget {
 class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
     with AutomaticKeepAliveClientMixin<GeneralInfoPageView> {
   final TextEditingController _profileInfoController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
   FillInfluencerProfileParam _fillInfluencerProfileParam =
       FillInfluencerProfileParam();
 
@@ -104,6 +106,45 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           ),
           SizedBox(height: 40),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Full name', style: Typographies.titleSmall),
+              const SizedBox(height: 8),
+              CredInputField(
+                controller: _fullNameController,
+                label: 'Full name',
+                onChanged: () {
+                  _fillInfluencerProfileParam = _fillInfluencerProfileParam
+                      .copyWith(displayName: _fullNameController.text);
+                  widget.onChanged(_fillInfluencerProfileParam);
+                },
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Iltimos, ism va familiyangizni kiriting';
+                  }
+
+                  final nameParts = value.trim().split(RegExp(r'\s+'));
+                  if (nameParts.length < 2) {
+                    return 'Iltimos, toʻliq ism va familiyangizni kiriting';
+                  }
+
+                  final nameRegExp = RegExp(r"^[a-zA-Zа-яА-ЯёЁқҚғҒҳҲўЎʼ'‘ ]+$");
+
+                  if (!nameRegExp.hasMatch(value)) {
+                    return 'Ismda faqat harflar boʻlishi kerak';
+                  }
+
+                  if (value.trim().length < 3) {
+                    return 'Ism juda qisqa';
+                  }
+
+                  return null;
+                },
+              ),
+            ],
+          ),
+          SizedBox(height: 24),
           ChooseSpokenLanguage(
             initialValue: widget.initialParam?.languageIds,
             title: t.common.select,

@@ -35,6 +35,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
   int _selectedLangId = 0;
   InputFieldType _inputFieldType = InputFieldType.phone;
   final TextEditingController _controller = TextEditingController();
+
   List<LangItemModel> get langItems => [
     LangItemModel(name: t.contact.phone, id: 0),
     LangItemModel(name: t.common.email, id: 1),
@@ -47,9 +48,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
     final value = _controller.text.trim();
     if (value.isNotEmpty) {
       setState(() {
-        contactItems.add(
-          Contact(type: value, value: _inputFieldType.id.toString()),
-        );
+        contactItems.add(Contact(type: _inputFieldType.name, value: value));
         _controller.clear();
       });
 
@@ -168,7 +167,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      contactItems[index].type ?? '',
+                      contactItems[index].value ?? '',
                       style: Typographies.bodyMedium,
                     ),
                     GestureDetector(

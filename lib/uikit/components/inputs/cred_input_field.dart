@@ -8,12 +8,14 @@ class CredInputField extends StatefulWidget {
     required this.controller,
     required this.label,
     required this.validator,
+    this.onChanged,
   });
 
   final TextEditingController controller;
   final String label;
 
   final String? Function(String?)? validator;
+  final VoidCallback? onChanged;
 
   @override
   State<CredInputField> createState() => _CredInputFieldState();
@@ -35,7 +37,9 @@ class _CredInputFieldState extends State<CredInputField> {
       controller: widget.controller,
       focusNode: _credFocusNode,
       keyboardType: TextInputType.text,
-
+      onChanged: (value) {
+        widget.onChanged?.call();
+      },
       decoration: InputDecoration(
         labelText: widget.label,
         labelStyle: Typographies.bodySmall.copyWith(

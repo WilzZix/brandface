@@ -18,27 +18,16 @@ class CategoryModel {
 
 class CategoryData {
   final int? id;
-  final String? nameUz;
-  final String? nameRu;
-  final String? nameEn;
+  final String? name;
   final int? icon;
   final int? parent;
 
-  CategoryData({
-    this.id,
-    this.nameUz,
-    this.nameRu,
-    this.nameEn,
-    this.icon,
-    this.parent,
-  });
+  CategoryData({this.id, this.name, this.icon, this.parent});
 
   factory CategoryData.fromJson(Map<String, dynamic> json) {
     return CategoryData(
       id: json['id'],
-      nameUz: json['name'],
-      nameRu: json['name_ru'],
-      nameEn: json['name_en'],
+      name: json['name'],
       icon: json['icon'],
       parent: json['parent'],
     );
@@ -47,11 +36,13 @@ class CategoryData {
   CategoryItemEntity toEntity() {
     return CategoryItemEntity(
       id: id ?? 0,
-      nameUz: nameUz ?? '',
-      nameRu: nameRu ?? '',
-      nameEn: nameEn ?? '',
+      name: name ?? '',
       icon: icon ?? 0,
       parent: parent,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'name': name, 'icon': icon, 'parent': parent};
   }
 }

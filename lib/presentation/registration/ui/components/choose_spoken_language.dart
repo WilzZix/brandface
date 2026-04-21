@@ -1,5 +1,9 @@
+import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,112 +31,143 @@ class ChooseSpokenLanguage extends StatefulWidget {
 }
 
 class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
-  String? _selectedLangLabel; // Tanlangan tillar nomini ko'rsatish uchun
-  final List<int> _selectedLangIds = []; // Tanlangan ID'lar ro'yxati
-
-  List<LangItemModel> langItems = [
-    LangItemModel(name: "O'zbek", id: 0),
-    LangItemModel(name: 'English', id: 1),
-    LangItemModel(name: 'Русский', id: 2),
-  ];
+  final List<int> _selectedLangIds = [];
 
   @override
   void initState() {
     super.initState();
-    if (widget.initialValue != null && widget.initialValue!.isNotEmpty) {
-      final selectedLangs = langItems
-          .where((item) => widget.initialValue!.contains(item.id))
-          .map((item) => item.name)
-          .toList();
-      if (selectedLangs.isNotEmpty) {
-        _selectedLangLabel = selectedLangs.join(', ');
-      } else {
-        _selectedLangLabel = widget.title;
-      }
-    } else {
-      _selectedLangLabel = widget.title;
+    if (widget.initialValue != null) {
+      _selectedLangIds.addAll(widget.initialValue!);
     }
+    context.read<LanguageCubit>().getLanguages();
   }
 
-  void _toggleLanguage(LangItemModel item, StateSetter bottomState) {
-    bottomState(() {
-      if (_selectedLangIds.contains(item.id)) {
-        _selectedLangIds.remove(item.id);
-      } else {
-        _selectedLangIds.add(item.id);
-      }
+  String _getSelectedLabel(List<LanguageEntity> allLanguages) {
+    if (_selectedLangIds.isEmpty) return widget.title;
 
-      if (_selectedLangIds.isEmpty) {
-        _selectedLangLabel = widget.title;
+    return allLanguages
+        .where((lang) => _selectedLangIds.contains(lang.id))
+        .map((lang) => lang.name)
+        .join(', ');
+  }
+
+  void _toggleLanguage(int id, StateSetter bottomState) {
+    bottomState(() {
+      if (_selectedLangIds.contains(id)) {
+        _selectedLangIds.remove(id);
       } else {
-        _selectedLangLabel = langItems
-            .where((element) => _selectedLangIds.contains(element.id))
-            .map((e) => e.name)
-            .join(', ');
+        _selectedLangIds.add(id);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(widget.label, style: Typographies.titleSmall),
-        const SizedBox(height: 8),
-        GestureDetector(
-          onTap: () async {
-            await BrandfaceBottomSheet.openBottomSheet<String>(
-              context: context,
-              header: t.choose.spoken_language,
-              onConfirm: () {
-                // Tanlangan barcha ID'larni yuboramiz
-                widget.onItemSelected(_selectedLangIds);
-                setState(() {}); // Asosiy UI'ni yangilash
-                context.pop();
-              },
-              builder: (context, bottomState) {
-                return Column(
-                  children: langItems.map((item) {
-                    return ChooseLangItem(
-                      title: item.name,
-                      // Ro'yxatda bor bo'lsa, belgilangan (check) bo'ladi
-                      isSelected: _selectedLangIds.contains(item.id),
-                      onTap: () => _toggleLanguage(item, bottomState),
-                    );
-                  }).toList(),
-                );
-              },
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.lightBg2,
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Tanlangan tillar ro'yxati uzun bo'lsa sig'ishi uchun Expanded
-                Expanded(
-                  child: Text(
-                    _selectedLangLabel ?? '',
-                    style: Typographies.labelLarge,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+    return BlocBuilder<LanguageCubit, LanguageState>(
+      builder: (context, state) {
+        final List<LanguageEntity> languages = state.maybeWhen(
+          loaded: (langs) => langs,
+          orElse: () => [],
+        );
+
+        final bool isLoading = state.maybeWhen(
+          loading: () => true,
+          orElse: () => false,
+        );
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.label, style: Typographies.titleSmall),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: isLoading
+                  ? null
+                  : () async {
+                      await BrandfaceBottomSheet.openBottomSheet<void>(
+                        context: context,
+                        header: t.choose.spoken_language,
+                        onConfirm: () {
+                          widget.onItemSelected(_selectedLangIds);
+                          setState(() {});
+                          context.pop();
+                        },
+                        builder: (context, bottomState) {
+                          return state.when(
+                            initial: () => const SizedBox.shrink(),
+                            loading: () => const Padding(
+                              padding: EdgeInsets.all(24.0),
+                              child: Center(child: CircularProgressIndicator()),
+                            ),
+                            loadFailure: (failure) => Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(failure.localized),
+                              ),
+                            ),
+                            loaded: (langs) {
+                              if (langs.isEmpty) {
+                                return const Center(
+                                  child: Text("Tillar topilmadi"),
+                                );
+                              }
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: langs.map((item) {
+                                    return ChooseLangItem(
+                                      title: item.name,
+                                      isSelected: _selectedLangIds.contains(
+                                        item.id,
+                                      ),
+                                      onTap: () =>
+                                          _toggleLanguage(item.id, bottomState),
+                                    );
+                                  }).toList(),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.lightBg2,
+                  borderRadius: BorderRadius.circular(999),
                 ),
-                SvgPicture.asset(AppAssets.icArrowDown),
-              ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        isLoading
+                            ? 'Yuklanmoqda...'
+                            : _getSelectedLabel(languages),
+                        style: Typographies.labelLarge,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (isLoading)
+                      const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    else
+                      SvgPicture.asset(AppAssets.icArrowDown),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
 
-class ChooseLangItem extends StatefulWidget {
+class ChooseLangItem extends StatelessWidget {
   const ChooseLangItem({
     super.key,
     required this.title,
@@ -142,27 +177,22 @@ class ChooseLangItem extends StatefulWidget {
 
   final String title;
   final bool isSelected;
-  final Function() onTap;
+  final VoidCallback onTap;
 
-  @override
-  State<ChooseLangItem> createState() => _ChooseLangItemState();
-}
-
-class _ChooseLangItemState extends State<ChooseLangItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: widget.onTap,
+      onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(widget.title, style: Typographies.labelLarge),
-              if (widget.isSelected) SvgPicture.asset(AppAssets.icCheck),
+              Text(title, style: Typographies.labelLarge),
+              if (isSelected) SvgPicture.asset(AppAssets.icCheck),
             ],
           ),
         ),
@@ -173,6 +203,7 @@ class _ChooseLangItemState extends State<ChooseLangItem> {
 
 class LangItemModel {
   final String name;
+
   final int id;
 
   LangItemModel({required this.name, required this.id});

@@ -1,7 +1,8 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/presentation/home_page/ui/home_page.dart';
+import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
@@ -79,20 +80,31 @@ class _FillProfileInformationPageState
           'My Pricing/Tariffs',
         ];
         _cachedWidgets = [
-          GeneralInfoPageView(
-            initialParam: _finalParam,
-            key: const PageStorageKey<String>('pageOne'),
-            onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(
-                displayName: p1.displayName,
-                avatarId: p1.avatarId,
-                bio: p1.bio,
-                regionId: p1.regionId,
-                cityId: p1.cityId,
-                birthDate: p1.birthDate,
-                gender: p1.gender,
-              );
-            },
+          BlocProvider(
+            create: (context) => sl<LanguageCubit>(),
+            child: GeneralInfoPageView(
+              initialParam: _finalParam,
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  displayName: p1.displayName,
+                  avatarId: p1.avatarId,
+                  bio: p1.bio,
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  birthDate: p1.birthDate,
+                  gender: p1.gender,
+                  languageIds: p1.languageIds,
+                  categoryIds: p1.categoryIds,
+                  serviceIds: p1.serviceIds,
+                  audience: p1.audience,
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                  pricing: p1.pricing,
+                  contacts: p1.contacts,
+                );
+              },
+            ),
           ),
           BlocProvider(
             create: (context) => sl<CategoryCubit>(),
@@ -148,20 +160,31 @@ class _FillProfileInformationPageState
           'Contract',
         ];
         _cachedWidgets = [
-          GeneralInfoPageView(
-            initialParam: _finalParam,
-            key: const PageStorageKey<String>('pageOne'),
-            onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(
-                displayName: p1.displayName,
-                avatarId: p1.avatarId,
-                bio: p1.bio,
-                regionId: p1.regionId,
-                cityId: p1.cityId,
-                birthDate: p1.birthDate,
-                gender: p1.gender,
-              );
-            },
+          BlocProvider(
+            create: (context) => sl<LanguageCubit>(),
+            child: GeneralInfoPageView(
+              initialParam: _finalParam,
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  displayName: p1.displayName,
+                  avatarId: p1.avatarId,
+                  bio: p1.bio,
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  birthDate: p1.birthDate,
+                  gender: p1.gender,
+                  contacts: p1.contacts,
+                  languageIds: p1.languageIds,
+                  categoryIds: p1.categoryIds,
+                  serviceIds: p1.serviceIds,
+                  audience: p1.audience,
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                  pricing: p1.pricing,
+                );
+              },
+            ),
           ),
           BlocProvider(
             create: (context) => sl<CategoryCubit>(),
@@ -212,20 +235,31 @@ class _FillProfileInformationPageState
           'My Pricing/Tariffs',
         ];
         _cachedWidgets = [
-          GeneralInfoPageView(
-            initialParam: _finalParam,
-            key: const PageStorageKey<String>('pageOne'),
-            onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(
-                displayName: p1.displayName,
-                avatarId: p1.avatarId,
-                bio: p1.bio,
-                regionId: p1.regionId,
-                cityId: p1.cityId,
-                birthDate: p1.birthDate,
-                gender: p1.gender,
-              );
-            },
+          BlocProvider(
+            create: (context) => sl<LanguageCubit>(),
+            child: GeneralInfoPageView(
+              initialParam: _finalParam,
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  displayName: p1.displayName,
+                  avatarId: p1.avatarId,
+                  bio: p1.bio,
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  birthDate: p1.birthDate,
+                  gender: p1.gender,
+                  contacts: p1.contacts,
+                  languageIds: p1.languageIds,
+                  categoryIds: p1.categoryIds,
+                  serviceIds: p1.serviceIds,
+                  audience: p1.audience,
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                  pricing: p1.pricing,
+                );
+              },
+            ),
           ),
           BlocProvider(
             create: (context) => sl<CategoryCubit>(),

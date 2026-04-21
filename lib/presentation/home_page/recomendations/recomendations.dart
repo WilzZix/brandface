@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../core/constants/app_assets.dart';
-import '../../../uikit/tokens/colors.dart';
-import '../../../uikit/typography/typography.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../uikit/tokens/colors.dart';
+import '../../../../uikit/typography/typography.dart';
 
 class Recommendation extends StatefulWidget {
   const Recommendation({super.key});

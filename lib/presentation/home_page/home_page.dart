@@ -1,14 +1,15 @@
 import 'package:brandface/core/constants/app_assets.dart';
-import 'package:brandface/presentation/home_page/ui/profile/profile_page.dart';
-import 'package:brandface/presentation/home_page/ui/recomendations.dart';
+import 'package:brandface/presentation/home_page/profile/ui/profile_page.dart';
+import 'package:brandface/presentation/home_page/recomendations/recomendations.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-import 'notifications_page.dart';
+import 'notifications/notifications_page.dart';
 import 'offers/offers_from_brands_page.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

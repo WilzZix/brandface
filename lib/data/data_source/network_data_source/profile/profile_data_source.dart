@@ -1,19 +1,25 @@
 import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
+import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 
 import '../../../../core/network/dio_client.dart';
+import '../../../models/profile/catalog/influencer_profile_information_model.dart';
 import '../../../models/profile/profile_model.dart';
 
 abstract class ProfileDataSource {
   Future<ProfileModel> getProfile({required String profileId});
 
+  Future<InfluencerProfileInformationModel> getInfluencerProfile();
+
   Future<CategoryModel> getCategories();
 
   Future<ServiceTypeModel> getServices();
 
-  Future<RegionModel> getRegions();
+  Future<List<RegionModel>> getRegions();
+
+  Future<LanguageModel> getLanguages();
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -42,10 +48,12 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   }
 
   @override
-  Future<RegionModel> getRegions() async {
+  Future<List<RegionModel>> getRegions() async {
     try {
       final result = await _dioClient.get(ApiRoutes.regions);
-      return RegionModel.fromJson(result.data);
+      final List<dynamic> data = result.data['data'];
+
+      return data.map((json) => RegionModel.fromJson(json)).toList();
     } catch (e) {
       rethrow;
     }
@@ -56,6 +64,26 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     try {
       final result = await _dioClient.get(ApiRoutes.profile(profileId));
       return ProfileModel.fromJson(result.data['data']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<InfluencerProfileInformationModel> getInfluencerProfile() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.myProfile);
+      return InfluencerProfileInformationModel.fromJson(result.data['data']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<LanguageModel> getLanguages() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.languages);
+      return LanguageModel.fromJson(result.data);
     } catch (e) {
       rethrow;
     }

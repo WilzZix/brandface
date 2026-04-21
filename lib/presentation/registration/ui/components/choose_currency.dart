@@ -22,7 +22,7 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
   String? _selectedText;
   int? _selectedId;
 
-  final List<LangItemModel> nicheItems = [
+  final List<LangItemModel> currencyItems = [
     LangItemModel(name: "Usd", id: 0),
     LangItemModel(name: 'Uzs', id: 1),
     LangItemModel(name: 'Bitcoin', id: 2),
@@ -41,7 +41,7 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
               header: t.choose.select_currency,
               onConfirm: () {
                 if (_selectedId != null) {
-                  final selectedItem = nicheItems.firstWhere(
+                  final selectedItem = currencyItems.firstWhere(
                         (item) => item.id == _selectedId,
                   );
                   widget.onItemSelected(selectedItem);
@@ -54,7 +54,7 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
               builder: (context, bottomState) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: nicheItems.map((item) {
+                  children: currencyItems.map((item) {
                     return ChooseLangItem(
                       title: item.name,
                       isSelected: item.id == _selectedId,

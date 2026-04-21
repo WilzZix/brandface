@@ -64,16 +64,16 @@ class _ChooseNicheState extends State<ChooseNiche> {
                               mainAxisSize: MainAxisSize.min,
                               children: categories.map((item) {
                                 return ChooseLangItem(
-                                  title: item.nameUz,
+                                  title: item.name,
                                   isSelected: item.id == _selectedId,
                                   onTap: () {
                                     setState(() {
                                       _selectedId = item.id;
-                                      _selectedText = item.nameUz;
+                                      _selectedText = item.name;
                                     });
                                     widget.onItemSelected(
                                       LangItemModel(
-                                        name: item.nameUz,
+                                        name: item.name,
                                         id: item.id,
                                       ),
                                     );
