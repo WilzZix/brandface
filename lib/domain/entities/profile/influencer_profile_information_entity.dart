@@ -1,20 +1,24 @@
+import 'package:brandface/data/models/profile/catalog/category_model.dart';
+import 'package:brandface/data/models/profile/catalog/language_model.dart';
+import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:equatable/equatable.dart';
-import '../../usecase/registration/params/fill_influencer_profile_param.dart';
+
+import 'catalog/region_entity.dart';
 
 class InfluencerProfileInformationEntity extends Equatable {
   final int id;
   final String? displayName;
   final String? avatarUrl;
-  final int? avatarId; // Param uchun kerak bo'lishi mumkin
+  final int? avatarId;
   final String? bio;
-  final int? regionId;
+  final RegionEntity? region;
   final int? cityId;
   final DateTime? birthDate;
   final String? gender;
-  final List<int>? categoryIds;
-  final List<int>? serviceIds;
-  final List<int>? languageIds;
+  final List<CategoryData>? categories;
+  final List<ServiceTypeData>? services;
+  final List<LanguageData>? languageIds;
   final int? yearsOfExperience;
   final bool? hasAdExperience;
   final bool? pressMentions;
@@ -29,7 +33,7 @@ class InfluencerProfileInformationEntity extends Equatable {
   final AudienceEntity? audience;
   final PricingEntity? pricing;
   final List<dynamic>? availableDates;
-  final List<dynamic>? awards;
+  final List<String>? awards;
   final List<dynamic>? reviews;
   final DateTime createdAt;
 
@@ -39,12 +43,12 @@ class InfluencerProfileInformationEntity extends Equatable {
     this.avatarUrl,
     this.avatarId,
     this.bio,
-    this.regionId,
+    this.region,
     this.cityId,
     this.birthDate,
     this.gender,
-    this.categoryIds,
-    this.serviceIds,
+    this.categories,
+    this.services,
     this.languageIds,
     this.yearsOfExperience,
     this.hasAdExperience,
@@ -65,64 +69,6 @@ class InfluencerProfileInformationEntity extends Equatable {
     required this.createdAt,
   });
 
-  FillInfluencerProfileParam toParam() {
-    return FillInfluencerProfileParam(
-      displayName: displayName,
-      avatarId: avatarId,
-      bio: bio,
-      regionId: regionId,
-      cityId: cityId,
-      birthDate: birthDate,
-      gender: gender,
-      yearsOfExperience: yearsOfExperience,
-      hasAdExperience: hasAdExperience,
-      pressMentions: pressMentions,
-      agencyRepresentation: agencyRepresentation,
-      partners: partners,
-      contacts: contacts
-          ?.map((e) => Contact(type: e.type, value: e.value))
-          .toList(),
-      categoryIds: categoryIds,
-      serviceIds: serviceIds,
-      languageIds: languageIds,
-      audience: audience != null
-          ? Audience(
-              brandSegment: audience!.brandSegment,
-              totalFollowers: audience!.totalFollowers,
-              malePercent: audience!.malePercent,
-              femalePercent: audience!.femalePercent,
-              menAgeFrom: audience!.menAgeFrom,
-              menAgeTo: audience!.menAgeTo,
-              womenAgeFrom: audience!.womenAgeFrom,
-              womenAgeTo: audience!.womenAgeTo,
-              engagementRate: audience!.engagementRate,
-              geography: audience!.geography,
-              socialMediaStats: audience!.socialMediaStats,
-            )
-          : null,
-      pricing: pricing != null
-          ? Pricing(
-              availableForLongTerm: pricing!.availableForLongTerm,
-              worksOnNetModel: pricing!.worksOnNetModel,
-              openToSimilarOffers: pricing!.openToSimilarOffers,
-              hourlyRateMinUzs: pricing!.hourlyRateMinUzs,
-              hourlyRateMaxUzs: pricing!.hourlyRateMaxUzs,
-              hourlyRateMinUsd: pricing!.hourlyRateMinUsd,
-              hourlyRateMaxUsd: pricing!.hourlyRateMaxUsd,
-              dailyRateMinUzs: pricing!.dailyRateMinUzs,
-              dailyRateMaxUzs: pricing!.dailyRateMaxUzs,
-              acceptsBarter: pricing!.acceptsBarter,
-              paymentTypes: pricing!.paymentTypes,
-              exclusivityAvailable: pricing!.exclusivityAvailable,
-              campaignFee: pricing!.campaignFee,
-              campaignFeeCurrency: pricing!.campaignFeeCurrency,
-              monthlyExclusivityFee: pricing!.monthlyExclusivityFee,
-              eventAppearanceFee: pricing!.eventAppearanceFee,
-            )
-          : null,
-    );
-  }
-
   @override
   List<Object?> get props => [
     id,
@@ -130,12 +76,12 @@ class InfluencerProfileInformationEntity extends Equatable {
     avatarUrl,
     avatarId,
     bio,
-    regionId,
+    region,
     cityId,
     birthDate,
     gender,
-    categoryIds,
-    serviceIds,
+    categories,
+    services,
     languageIds,
     yearsOfExperience,
     hasAdExperience,
@@ -156,6 +102,3 @@ class InfluencerProfileInformationEntity extends Equatable {
     createdAt,
   ];
 }
-
-// Qolgan yordamchi Entity klasslari (AudienceEntity, ContactEntity, PricingEntity)
-// siz yuborgan namunadagidek qoladi.

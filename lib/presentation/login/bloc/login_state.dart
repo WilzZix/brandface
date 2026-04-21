@@ -7,15 +7,19 @@ class LoginState with _$LoginState {
   ///OTP
   const factory LoginState.otpReceiving() = _OtpReceiving;
 
-  const factory LoginState.otpReceived({required OtpEntity otpEntity}) = _OtpReceived;
+  const factory LoginState.otpReceived({required OtpEntity otpEntity}) =
+      _OtpReceived;
 
-  const factory LoginState.otpReceivingFailure({required String msg}) = _OtpReceivingFailure;
+  const factory LoginState.otpReceivingFailure({required String msg}) =
+      _OtpReceivingFailure;
 
   ///Verify otp
   const factory LoginState.verifyingOtp() = _VerifyingOtp;
 
   //TODO state params need add
-  const factory LoginState.otpVerified() = _OtpVeiried;
+  const factory LoginState.otpVerified({required VerifyOtpEntity otpEntity}) =
+      _OtpVeiried;
 
-  const factory LoginState.verifyingOtpFailure({required String msg}) = _VerifyingOtpFailure;
+  const factory LoginState.verifyingOtpFailure({required String msg}) =
+      _VerifyingOtpFailure;
 }

@@ -80,8 +80,12 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         state.maybeWhen(
-          otpVerified: () {
-            context.go(HomePage.tag);
+          otpVerified: (verifyOtpEntity) {
+            if (verifyOtpEntity.isNewUser ?? true) {
+              context.go(RegistrationPage.tag);
+            } else {
+              context.go(HomePage.tag);
+            }
           },
           otpReceived: (otpEntity) {
             _controller.text = otpEntity.code ?? '';

@@ -1,4 +1,6 @@
 import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/splash_screen/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,8 +127,12 @@ class AppRouter {
       GoRoute(
         path: ProfileInformationPage.tag,
         name: ProfileInformationPage.tag,
-        builder: (_, _) => BlocProvider(
-          create: (context) => sl<ProfileInformationCubit>(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => sl<ProfileInformationCubit>()),
+            BlocProvider(create: (context) => sl<LanguageCubit>()),
+            BlocProvider(create: (context) => sl<CategoryCubit>()),
+          ],
           child: const ProfileInformationPage(),
         ),
       ),

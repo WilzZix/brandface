@@ -3,6 +3,7 @@ import 'package:brandface/domain/entities/otp_entity.dart';
 import 'package:brandface/domain/usecase/login/verify_otp_usecase.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../domain/entities/verify_otp_entity.dart';
 import '../../../domain/usecase/login/get_me_use_case.dart';
 import '../../../domain/usecase/login/params/verify_otp_params.dart';
 import '../../../domain/usecase/login/send_otp_usecase.dart';
@@ -85,7 +86,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             await _profileService.setProfileId(userEntity.id);
 
             // 5. HAMMA NARSALARI TAYYOR BO'LGANDAGINA VERIFIED EMIT QILAMIZ
-            emit(const LoginState.otpVerified());
+            emit(LoginState.otpVerified(otpEntity: otpEntity));
           },
         );
       },

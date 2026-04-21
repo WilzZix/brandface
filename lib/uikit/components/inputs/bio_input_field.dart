@@ -33,7 +33,6 @@ class _BioInputFieldState extends State<BioInputField> {
   @override
   void dispose() {
     _focusNode.dispose();
-
     super.dispose();
   }
 

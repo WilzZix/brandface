@@ -1,11 +1,17 @@
+import 'package:brandface/presentation/home_page/profile/ui/components/partners.dart';
+import 'package:brandface/presentation/home_page/profile/ui/components/services_item.dart';
+import 'package:brandface/utils/extansions/app_exts.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../../../domain/entities/profile/influencer_profile_information_entity.dart';
 import '../../../../../uikit/components/ui_components/app_container.dart';
-import '../../../../../uikit/components/ui_components/badge.dart';
 import '../../../../../uikit/components/ui_components/title_description_widget.dart';
 import '../../../../../uikit/tokens/colors.dart';
 import '../../../../../uikit/typography/typography.dart';
+import 'awards.dart';
+import 'categories.dart';
+import 'contact_details.dart';
+import 'language_item.dart';
 
 class ProfileInformationBody extends StatelessWidget {
   const ProfileInformationBody({super.key, required this.data});
@@ -42,20 +48,15 @@ class ProfileInformationBody extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-
-              ///TODO language id ga qarab nameni olish
               TitleDescriptionWidget(
                 title: 'Spoken languages',
-                descriptionItem: Text(
-                  data.languageIds.toString(),
-                  style: Typographies.bodyMedium,
-                ),
+                descriptionItem: LanguageItem(langIds: data.languageIds),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
                 title: 'Date of birth',
                 descriptionItem: Text(
-                  data.birthDate.toString(),
+                  data.birthDate!.toDotFormat(),
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -63,34 +64,15 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: 'Gender',
                 descriptionItem: Text(
-                  data.gender.toString(),
+                  data.gender!.toCapitalized(),
                   style: Typographies.bodyMedium,
                 ),
               ),
               SizedBox(height: 16),
-
-              ///TODO
               TitleDescriptionWidget(
                 title: 'Contact details',
-                descriptionItem: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Phone:+99894 691 4977',
-                      style: Typographies.bodyMedium,
-                    ),
-                    Text(
-                      'Linkedin: yo’ldosh.linkedin.com',
-                      style: Typographies.bodyMedium,
-                    ),
-                    Text(
-                      'Telegram: @yoldoshpro',
-                      style: Typographies.bodyMedium,
-                    ),
-                  ],
-                ),
+                descriptionItem: ContactDetails(contactData: data.contacts),
               ),
-              SizedBox(height: 16),
               TitleDescriptionWidget(
                 title: 'Profile information',
                 descriptionItem: Text(
@@ -102,31 +84,13 @@ class ProfileInformationBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 16),
-
-        ///TODO
         Text('Categories', style: Typographies.titleSmall),
         SizedBox(height: 8),
-        AppContainer(
-          child: Row(
-            children: [
-              AppBadge(title: 'Children'),
-              SizedBox(width: 8),
-              AppBadge(title: 'Sweets'),
-            ],
-          ),
-        ),
+        AppContainer(child: Categories(categories: data.categories)),
         SizedBox(height: 16),
         Text('Services', style: Typographies.titleSmall),
         SizedBox(height: 8),
-        AppContainer(
-          child: Row(
-            children: [
-              AppBadge(title: 'Youtube videos'),
-              SizedBox(width: 8),
-              AppBadge(title: 'Advertising'),
-            ],
-          ),
-        ),
+        AppContainer(child: ServicesItem(services: data.services)),
         SizedBox(height: 16),
         Text('Audience and followers', style: Typographies.titleSmall),
         SizedBox(height: 8),
@@ -134,11 +98,10 @@ class ProfileInformationBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //TODO region id ga qarab city ni olish
               TitleDescriptionWidget(
                 title: 'Geography',
                 descriptionItem: Text(
-                  data.regionId.toString(),
+                  data.region?.name ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -160,17 +123,17 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Social media accounts',
+                title: 'Gender',
                 descriptionItem: Text(
-                  '${data.audience?.socialMediaStats.toString()}',
+                  data.gender!.toCapitalized() ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Gender',
+                title: 'Social media accounts',
                 descriptionItem: Text(
-                  data.gender ?? '',
+                  '${data.audience?.socialMediaStats.toString()}',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -194,18 +157,12 @@ class ProfileInformationBody extends StatelessWidget {
               SizedBox(height: 16),
               TitleDescriptionWidget(
                 title: 'Partners',
-                descriptionItem: Text(
-                  data.partners.toString(),
-                  style: Typographies.bodyMedium,
-                ),
+                descriptionItem: Partners(partners: data.partners),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
                 title: 'Awards',
-                descriptionItem: Text(
-                  data.awards.toString(),
-                  style: Typographies.bodyMedium,
-                ),
+                descriptionItem: Awards(awards: data.awards),
               ),
             ],
           ),

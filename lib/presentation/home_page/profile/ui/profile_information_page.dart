@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../core/di/app_di.dart';
 import '../bloc/profile_information/profile_information_cubit.dart';
 import 'components/profile_information_body.dart';

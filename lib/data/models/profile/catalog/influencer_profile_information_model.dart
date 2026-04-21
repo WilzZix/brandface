@@ -1,21 +1,25 @@
+import 'package:brandface/data/models/profile/catalog/category_model.dart';
+import 'package:brandface/data/models/profile/catalog/language_model.dart';
+import 'package:brandface/data/models/profile/catalog/region_model.dart';
+import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
+
 import '../../../../domain/entities/profile/influencer_profile_information_entity.dart';
 import '../../../../domain/entities/profile/profile_entity.dart';
 
-class InfluencerProfileInformationModel extends InfluencerProfileInformationEntity {
-  // 1. 'const' konstruktor qo'shildi (Entity const bo'lgani uchun)
-  // 2. 'required' so'zlari Entity-ga moslab olib tashlandi yoki qoldirildi
+class InfluencerProfileInformationModel
+    extends InfluencerProfileInformationEntity {
   const InfluencerProfileInformationModel({
-    required super.id, // Entity-da required
+    required super.id,
     super.displayName,
     super.avatarUrl,
     super.avatarId,
     super.bio,
-    super.regionId,
+    super.region,
     super.cityId,
     super.birthDate,
     super.gender,
-    super.categoryIds,
-    super.serviceIds,
+    super.categories,
+    super.services,
     super.languageIds,
     super.yearsOfExperience,
     super.hasAdExperience,
@@ -36,62 +40,91 @@ class InfluencerProfileInformationModel extends InfluencerProfileInformationEnti
     required super.createdAt, // Entity-da required
   });
 
-  factory InfluencerProfileInformationModel.fromJson(Map<String, dynamic> json) {
+  factory InfluencerProfileInformationModel.fromJson(
+    Map<String, dynamic> json,
+  ) {
     return InfluencerProfileInformationModel(
       id: json['id'] ?? 0,
       displayName: json['display_name'],
       avatarUrl: json['avatar_url'],
-      // Agar backend-da avatar_id bo'lmasa, avatarUrl-dan yoki boshqa joydan olish mumkin
       avatarId: json['avatar_id'],
+      // JSONda avatar_id yo'q, lekin modelda bo'lsa qolgani ma'qul
       bio: json['bio'],
-      regionId: json['region_id'],
-      cityId: json['city_id'],
+
+      // JSONda region ob'ekt bo'lib kelyapti: {"id": 3, "name": "Bukhoro", ...}
+      region: json['region'] != null
+          ? RegionModel.fromJson(json['region'])
+          : json['region_id'],
+      cityId: json['city'] != null ? json['city']['id'] : json['city_id'],
+
       birthDate: json['birth_date'] != null
           ? DateTime.tryParse(json['birth_date'])
           : null,
       gender: json['gender'],
-      categoryIds: json['category_ids'] != null
-          ? List<int>.from(json['category_ids'])
+
+      // To'g'ri List mapping
+      categories: json['categories'] != null
+          ? (json['categories'] as List)
+                .map((i) => CategoryData.fromJson(i))
+                .toList()
           : null,
-      serviceIds: json['service_ids'] != null
-          ? List<int>.from(json['service_ids'])
+
+      services: json['services'] != null
+          ? (json['services'] as List)
+                .map((i) => ServiceTypeData.fromJson(i))
+                .toList()
           : null,
-      languageIds: json['language_ids'] != null
-          ? List<int>.from(json['language_ids'])
+
+      // JSONda 'languages' deb kelyapti va u ob'ektlar ro'yxati
+      languageIds: json['languages'] != null
+          ? (json['languages'] as List)
+                .map((i) => LanguageData.fromJson(i))
+                .toList()
           : null,
+
       yearsOfExperience: json['years_of_experience'],
       hasAdExperience: json['has_ad_experience'],
       pressMentions: json['press_mentions'],
       agencyRepresentation: json['agency_representation'],
+
       partners: json['partners'] != null
           ? List<String>.from(json['partners'])
           : null,
-      // Contacts conversion
+
       contacts: json['contacts'] != null
           ? (json['contacts'] as List)
-          .map((e) => ContactEntity(
-        type: e['type'],
-        value: e['value'],
-      ))
-          .toList()
+                .map(
+                  (e) => ContactEntity(
+                    type: e['type']?.toString(),
+                    value: e['value']?.toString(),
+                  ),
+                )
+                .toList()
           : null,
+
       isVerified: json['is_verified'] ?? false,
       isTop: json['is_top'] ?? false,
       averageRating: (json['average_rating'] as num?)?.toDouble(),
       totalReviews: json['total_reviews'] ?? 0,
       moderationStatus: json['moderation_status'] ?? 'pending',
-      // Audience and Pricing nested mapping
+
+      // Audience mapping
       audience: json['audience_info'] != null
-          ? AudienceEntity.fromJson(json['audience_info']) // Agar AudienceEntity-da fromJson bo'lsa
+          ? AudienceEntity.fromJson(json['audience_info'])
           : null,
+
       pricing: json['pricing_info'] != null
           ? PricingEntity.fromJson(json['pricing_info'])
           : null,
-      availableDates: json['available_dates'],
-      awards: json['awards'],
-      reviews: json['reviews'],
+
+      availableDates: json['available_dates'] != null
+          ? List<String>.from(json['available_dates'])
+          : [],
+      awards: json['awards'] != null ? List.from(json['awards']) : [],
+      reviews: json['reviews'] != null ? List.from(json['reviews']) : [],
+
       createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
+          ? DateTime.tryParse(json['created_at']) ?? DateTime.now()
           : DateTime.now(),
     );
   }
