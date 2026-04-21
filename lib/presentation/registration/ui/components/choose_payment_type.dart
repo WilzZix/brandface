@@ -1,30 +1,30 @@
-import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/i18n/strings.g.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_spoken_language.dart';
 
-class ChooseCurrency extends StatefulWidget {
-  const ChooseCurrency({super.key, required this.onItemSelected});
+class ChoosePaymentType extends StatefulWidget {
+  const ChoosePaymentType({super.key, required this.onItemSelected});
 
   final Function(LangItemModel) onItemSelected;
 
   @override
-  State<ChooseCurrency> createState() => _ChooseCurrencyState();
+  State<ChoosePaymentType> createState() => _ChoosePaymentTypeState();
 }
 
-class _ChooseCurrencyState extends State<ChooseCurrency> {
+class _ChoosePaymentTypeState extends State<ChoosePaymentType> {
   String? _selectedText;
   int? _selectedId;
 
   final List<LangItemModel> currencyItems = [
-    LangItemModel(name: "Usd", id: 0),
-    LangItemModel(name: 'Uzs', id: 1),
+    LangItemModel(name: "Cash", id: 0),
+    LangItemModel(name: 'Bank transfer', id: 1),
   ];
 
   @override
@@ -36,7 +36,7 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
           onTap: () async {
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
-              header: t.choose.select_currency,
+              header: 'Select payment type',
               onConfirm: () {
                 if (_selectedId != null) {
                   final selectedItem = currencyItems.firstWhere(

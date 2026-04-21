@@ -98,6 +98,7 @@ class ProfileInformationBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //TODO beckend object qaytarib beradigon qilishi kerak
               TitleDescriptionWidget(
                 title: 'Geography',
                 descriptionItem: Text(
@@ -155,6 +156,7 @@ class ProfileInformationBody extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
+              //TODO beckend object qaytadigon qilib berishi kerak
               TitleDescriptionWidget(
                 title: 'Partners',
                 descriptionItem: Partners(partners: data.partners),

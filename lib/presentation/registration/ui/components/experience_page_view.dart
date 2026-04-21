@@ -95,6 +95,9 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
                 children: [
                   Expanded(
                     child: CredInputField(
+                      onChanged: () {
+                        //TODO awards qo'shish
+                      },
                       controller: _awardController,
                       label: t.registration.write_award_info,
                       validator: (String? value) {

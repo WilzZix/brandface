@@ -278,6 +278,6 @@ class Pricing {
       "campaign_fee_currency": campaignFeeCurrency,
       "monthly_exclusivity_fee": monthlyExclusivityFee,
       "event_appearance_fee": eventAppearanceFee,
-    };
+    }..removeWhere((key, value) => value == null);
   }
 }

@@ -12,6 +12,7 @@ import '../../../../uikit/components/inputs/email_input_field.dart';
 import '../../../../uikit/components/inputs/phone_input_field.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
+import '../../../../utils/extansions/app_exts.dart';
 import 'choose_spoken_language.dart';
 
 class ChooseContactDetail extends StatefulWidget {
@@ -167,7 +168,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      contactItems[index].value ?? '',
+                      contactItems[index].value!.toPrettyPhoneFormat(),
                       style: Typographies.bodyMedium,
                     ),
                     GestureDetector(
