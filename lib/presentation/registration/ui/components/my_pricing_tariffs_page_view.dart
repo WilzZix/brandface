@@ -1,5 +1,4 @@
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/components/inputs/from_to_input_field.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
   FillInfluencerProfileParam _param = FillInfluencerProfileParam(
     pricing: Pricing(),
   );
-  final List<LangItemModel> _selectedCurrencyItems = [];
   final List<String> _selectedPaymentTypes = [];
   final TextEditingController _hourlyRateFrom = TextEditingController();
   final TextEditingController _hourlyRateTo = TextEditingController();
@@ -61,7 +59,18 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
           const SizedBox(height: 8),
           ChooseCurrency(
             onItemSelected: (LangItemModel p1) {
-              _updateData();
+              _param = _param.copyWith(
+                pricing: Pricing(
+                  hourlyRateMinUsd: _hourlyRateFrom.text,
+                  hourlyRateMinUzs: _hourlyRateFrom.text,
+                  hourlyRateMaxUsd: _hourlyRateTo.text,
+                  hourlyRateMaxUzs: _hourlyRateTo.text,
+                  paymentTypes: _selectedPaymentTypes,
+                  campaignFee: _paymentByProjectController.text,
+                  campaignFeeCurrency: p1.name,
+                ),
+              );
+              widget.onChanged(_param);
             },
           ),
           SizedBox(height: 16),
