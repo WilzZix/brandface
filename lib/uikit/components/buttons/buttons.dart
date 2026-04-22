@@ -4,12 +4,12 @@ import '../../tokens/colors.dart';
 import '../../typography/typography.dart';
 
 class AppButtons extends StatefulWidget {
-  const AppButtons._({super.key, required this.title, required this.onTap});
+  const AppButtons._({super.key, required this.title, this.onTap});
 
-  const AppButtons.primary({Key? key, required String title, required VoidCallback onTap})
+  const AppButtons.primary({Key? key, required String title, VoidCallback? onTap})
     : this._(title: title, onTap: onTap, key: key);
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   State<AppButtons> createState() => _AppButtonsState();

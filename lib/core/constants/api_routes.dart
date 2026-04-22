@@ -28,4 +28,7 @@ class ApiRoutes {
       'profiles/v1/influencers/$profileId/';
 
   static String myProfile = 'profiles/v1/my/';
+
+  static String myAwards = 'profiles/v1/my/awards/';
+  static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
 }

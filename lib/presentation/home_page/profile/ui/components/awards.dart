@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../uikit/typography/typography.dart';
-
 class Awards extends StatelessWidget {
   const Awards({super.key, this.awards});
 

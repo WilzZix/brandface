@@ -3,6 +3,7 @@ import 'package:brandface/data/models/profile/catalog/category_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
+import 'package:brandface/domain/entities/profile/award_entity.dart';
 
 import '../../../../core/network/dio_client.dart';
 import '../../../models/profile/catalog/influencer_profile_information_model.dart';
@@ -26,6 +27,10 @@ abstract class ProfileDataSource {
     required String platform,
     required String username,
   });
+
+  Future<AwardEntity> createAward({required String title});
+
+  Future<void> deleteAward({required int awardId});
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -106,6 +111,29 @@ class ProfileDataSourceImpl implements ProfileDataSource {
         data: {'platform': platform, 'username': username},
       );
       return SocialMediaAccountStatsModel.fromJson(result.data['data']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AwardEntity> createAward({required String title}) async {
+    try {
+      final result = await _dioClient.post(
+        ApiRoutes.myAwards,
+        data: {'title': title},
+      );
+      final data = result.data['data'] ?? result.data;
+      return AwardEntity(id: data['id'], title: data['title']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteAward({required int awardId}) async {
+    try {
+      await _dioClient.delete(ApiRoutes.deleteAward(awardId));
     } catch (e) {
       rethrow;
     }

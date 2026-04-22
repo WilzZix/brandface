@@ -1,10 +1,13 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../core/error/failures.dart';
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/buttons/buttons.dart';
 import '../../../../uikit/typography/typography.dart';
@@ -27,7 +30,6 @@ class _AmbassadorExperiencePageViewState
   final TextEditingController _promoExperienceController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
   final List<LangItemModel> _selectedNichesItems = [];
-  final List<String> _awards = [];
 
   @override
   void initState() {
@@ -113,60 +115,91 @@ class _AmbassadorExperiencePageViewState
             onChanged: (val) {},
           ),
           SizedBox(height: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(t.registration.write_award_info, style: Typographies.titleSmall),
-              SizedBox(height: 8),
-              Row(
+          BlocConsumer<AwardCubit, AwardState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                failure: (awards, failure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(failure.localized),
+                      backgroundColor: AppColors.red,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+                orElse: () {},
+              );
+            },
+            builder: (context, state) {
+              final awards = state.awards;
+              final isLoading = state.maybeWhen(
+                loading: (_) => true,
+                orElse: () => false,
+              );
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: CredInputField(
-                      controller: _awardController,
-                      label: t.registration.write_award_info,
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) return t.common.please_enter_text;
-                        return null;
+                  Text(t.registration.write_award_info,
+                      style: Typographies.titleSmall),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CredInputField(
+                          controller: _awardController,
+                          label: t.registration.write_award_info,
+                          validator: (v) => null,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      AppButtons.primary(
+                        title: t.common.apply,
+                        onTap: isLoading
+                            ? null
+                            : () {
+                                final text = _awardController.text.trim();
+                                if (text.isNotEmpty) {
+                                  context
+                                      .read<AwardCubit>()
+                                      .createAward(title: text);
+                                  _awardController.clear();
+                                }
+                              },
+                      ),
+                    ],
+                  ),
+                  if (awards.isNotEmpty)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: awards.length,
+                      itemBuilder: (context, index) {
+                        final award = awards[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child: Text(award.title,
+                                      style: Typographies.bodyMedium)),
+                              GestureDetector(
+                                onTap: () => context
+                                    .read<AwardCubit>()
+                                    .deleteAward(awardId: award.id),
+                                child: Text(t.common.delete,
+                                    style: Typographies.labelLarge
+                                        .copyWith(color: AppColors.red)),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  AppButtons.primary(
-                    title: t.common.apply,
-                    onTap: () {
-                      final text = _awardController.text.trim();
-                      if (text.isNotEmpty) {
-                        setState(() => _awards.add(text));
-                        _awardController.clear();
-                      }
-                    },
-                  ),
                 ],
-              ),
-              if (_awards.isNotEmpty)
-                ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: _awards.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(child: Text(_awards[index], style: Typographies.bodyMedium)),
-                          GestureDetector(
-                            onTap: () => setState(() => _awards.removeAt(index)),
-                            child: Text(t.common.delete,
-                                style: Typographies.labelLarge.copyWith(color: AppColors.red)),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-            ],
+              );
+            },
           ),
         ],
       ),

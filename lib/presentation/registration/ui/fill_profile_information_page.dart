@@ -2,6 +2,7 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
@@ -137,14 +138,17 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          ExperiencePageView(
-            key: const PageStorageKey<String>('pageFive'),
-            onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(
-                yearsOfExperience: p1.yearsOfExperience,
-                partners: p1.partners,
-              );
-            },
+          BlocProvider(
+            create: (context) => sl<AwardCubit>(),
+            child: ExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                );
+              },
+            ),
           ),
           MyPricingTariffsPageView(
             key: const PageStorageKey<String>('pageSix'),
@@ -217,9 +221,12 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          AmbassadorExperiencePageView(
-            key: const PageStorageKey<String>('pageFive'),
-            onChanged: (p1) {},
+          BlocProvider(
+            create: (context) => sl<AwardCubit>(),
+            child: AmbassadorExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (p1) {},
+            ),
           ),
           AmbassadorContractPageView(
             key: const PageStorageKey<String>('pageSix'),
@@ -292,9 +299,12 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BrandfaceCameraExperiencePageView(
-            key: const PageStorageKey<String>('pageFive'),
-            onChanged: (p1) {},
+          BlocProvider(
+            create: (context) => sl<AwardCubit>(),
+            child: BrandfaceCameraExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (p1) {},
+            ),
           ),
           BrandfacePricingPageView(
             key: const PageStorageKey<String>('pageSix'),

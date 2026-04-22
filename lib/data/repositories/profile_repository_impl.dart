@@ -1,4 +1,5 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/profile/award_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
@@ -204,6 +205,44 @@ class ProfileRepositoryImpl implements IProfileRepository {
       );
 
       return Right(socialAccountStats.toEntity());
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AwardEntity>> createAward({required String title}) async {
+    try {
+      final award = await _dataSource.createAward(title: title);
+      return Right(award);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAward({required int awardId}) async {
+    try {
+      await _dataSource.deleteAward(awardId: awardId);
+      return const Right(null);
     } on DioException catch (e) {
       return Left(
         ServerFailure(

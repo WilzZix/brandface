@@ -12,12 +12,15 @@ import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
 import 'package:brandface/domain/usecase/login/get_me_use_case.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
+import 'package:brandface/domain/usecase/profile/create_award_use_case.dart';
+import 'package:brandface/domain/usecase/profile/delete_award_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_social_media_account_stats_use_case.dart';
 import 'package:brandface/domain/usecase/registration/registration_usecase.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
@@ -85,6 +88,8 @@ class AppDi {
     sl.registerLazySingleton(
       () => GetSocialMediaAccountStatsUseCase(repository: sl()),
     );
+    sl.registerLazySingleton(() => CreateAwardUseCase(repository: sl()));
+    sl.registerLazySingleton(() => DeleteAwardUseCase(repository: sl()));
 
     ///Repository
     sl.registerLazySingleton<ILoginRepository>(
@@ -128,6 +133,10 @@ class AppDi {
     sl.registerFactory(() => GetProfileCubit(getProfileUseCase: sl()));
     sl.registerFactory(() => LanguageCubit(getLanguagesUseCase: sl()));
     sl.registerFactory(() => AudienceCubit(accountStatsUseCase: sl()));
+    sl.registerFactory(() => AwardCubit(
+          createAwardUseCase: sl(),
+          deleteAwardUseCase: sl(),
+        ));
     sl.registerFactory(
       () => ProfileInformationCubit(
         influencerProfileUseCase: sl(),

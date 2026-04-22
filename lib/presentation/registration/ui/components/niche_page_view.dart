@@ -27,7 +27,7 @@ class _NichePageViewState extends State<NichePageView>
     with AutomaticKeepAliveClientMixin<NichePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final List<LangItemModel> _selectedNichesItems = [];
-  bool _prefilledFromInitial = false;
+  final bool _prefilledFromInitial = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,10 @@ class _NichePageViewState extends State<NichePageView>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(t.registration.selected_niches, style: Typographies.titleSmall),
+                Text(
+                  t.registration.selected_niches,
+                  style: Typographies.titleSmall,
+                ),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,
