@@ -21,11 +21,13 @@ class ChooseContactDetail extends StatefulWidget {
     required this.title,
     required this.label,
     required this.onItemSelected,
+    this.initialValue,
   });
 
   final String title;
   final String label;
   final Function(List<Contact>) onItemSelected;
+  final List<Contact>? initialValue;
 
   @override
   State<ChooseContactDetail> createState() => _ChooseContactDetailState();
@@ -60,6 +62,9 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
   @override
   void initState() {
     _selectedLang = widget.title;
+    if (widget.initialValue != null) {
+      contactItems = List.from(widget.initialValue!);
+    }
     super.initState();
   }
 
