@@ -84,7 +84,7 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
           ),
           const SizedBox(height: 8),
           CredInputField(
-            onChanged: () {
+            onChanged: (val) {
               setState(() {
                 _updateData();
               });

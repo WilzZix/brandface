@@ -1,6 +1,7 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
+import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
@@ -124,8 +125,11 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<RegionCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: AudienceAndFollowersPageView(
               key: const PageStorageKey<String>('pageFour'),
               onChanged: (p1) {

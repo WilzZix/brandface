@@ -22,6 +22,7 @@ class ApiRoutes {
   static String regions = 'catalog/v1/regions/';
   static String cities = 'catalog/v1/cities/';
   static String languages = 'catalog/v1/languages/';
+  static String socialProfileStats = 'profiles/v1/social/channel-stats/';
 
   static String profile(String profileId) =>
       'profiles/v1/influencers/$profileId/';

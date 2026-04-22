@@ -114,9 +114,9 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
               CredInputField(
                 controller: _fullNameController,
                 label: t.registration.full_name,
-                onChanged: () {
+                onChanged: (val) {
                   _fillInfluencerProfileParam = _fillInfluencerProfileParam
-                      .copyWith(displayName: _fullNameController.text);
+                      .copyWith(displayName:val);
                   widget.onChanged(_fillInfluencerProfileParam);
                 },
                 validator: (value) {

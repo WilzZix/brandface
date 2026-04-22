@@ -6,6 +6,7 @@ import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 
 import '../../../../core/network/dio_client.dart';
 import '../../../models/profile/catalog/influencer_profile_information_model.dart';
+import '../../../models/profile/catalog/social_media_account_stats_model.dart';
 import '../../../models/profile/profile_model.dart';
 
 abstract class ProfileDataSource {
@@ -20,6 +21,11 @@ abstract class ProfileDataSource {
   Future<List<RegionModel>> getRegions();
 
   Future<LanguageModel> getLanguages();
+
+  Future<SocialMediaAccountStatsModel> getSocialMediaStats({
+    required String platform,
+    required String username,
+  });
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -84,6 +90,22 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     try {
       final result = await _dioClient.get(ApiRoutes.languages);
       return LanguageModel.fromJson(result.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<SocialMediaAccountStatsModel> getSocialMediaStats({
+    required String platform,
+    required String username,
+  }) async {
+    try {
+      final result = await _dioClient.post(
+        ApiRoutes.socialProfileStats,
+        data: {'platform': platform, 'username': username},
+      );
+      return SocialMediaAccountStatsModel.fromJson(result.data['data']);
     } catch (e) {
       rethrow;
     }

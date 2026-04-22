@@ -95,7 +95,7 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
                 children: [
                   Expanded(
                     child: CredInputField(
-                      onChanged: () {
+                      onChanged: (val) {
                         //TODO awards qo'shish
                       },
                       controller: _awardController,
