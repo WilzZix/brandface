@@ -24,16 +24,39 @@ class AmbassadorExperiencePageView extends StatefulWidget {
 class _AmbassadorExperiencePageViewState
     extends State<AmbassadorExperiencePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
-  final TextEditingController _promoExperienceController =
-      TextEditingController();
+  final TextEditingController _promoExperienceController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
   final List<LangItemModel> _selectedNichesItems = [];
+  final List<String> _awards = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _promoExperienceController.addListener(_onExperienceChanged);
+  }
+
+  void _onExperienceChanged() {
+    final years = int.tryParse(_promoExperienceController.text);
+    if (years != null) {
+      _param = _param.copyWith(yearsOfExperience: years);
+      widget.onChanged(_param);
+    }
+  }
 
   void _updateData() {
     _param = _param.copyWith(
-      categoryIds: _selectedNichesItems.map((e) => e.id).toList(),
+      yearsOfExperience: int.tryParse(_promoExperienceController.text),
+      partners: _selectedNichesItems.map((e) => e.id.toString()).toList(),
     );
     widget.onChanged(_param);
+  }
+
+  @override
+  void dispose() {
+    _promoExperienceController.removeListener(_onExperienceChanged);
+    _promoExperienceController.dispose();
+    _awardController.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,9 +71,7 @@ class _AmbassadorExperiencePageViewState
             controller: _promoExperienceController,
             label: t.registration.describe_your_experience,
             validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return t.common.please_enter_text;
-              }
+              if (value == null || value.isEmpty) return t.common.please_enter_text;
               return null;
             },
           ),
@@ -59,24 +80,38 @@ class _AmbassadorExperiencePageViewState
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
+              if (!_selectedNichesItems.any((e) => e.id == p1.id)) {
+                _selectedNichesItems.add(p1);
+              }
               _updateData();
             },
           ),
           const SizedBox(height: 24),
-          Text(
-            t.registration.experience_in_referral,
-            style: Typographies.titleMedium,
-          ),
+          Text(t.registration.experience_in_referral, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          YesNoWidget(onItemTaped: (bool p1) {}),
+          YesNoWidget(
+            onItemTaped: (bool value) {
+              _param = _param.copyWith(hasAdExperience: value);
+              widget.onChanged(_param);
+            },
+          ),
           const SizedBox(height: 16),
           Text(t.registration.optional_experience, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseOptionWidget(title: t.optional_items.previous_brand_collaborations),
+          ChooseOptionWidget(
+            title: t.optional_items.previous_brand_collaborations,
+            onChanged: (val) {},
+          ),
           const SizedBox(height: 16),
-          ChooseOptionWidget(title: t.optional_items.case_study_link),
+          ChooseOptionWidget(
+            title: t.optional_items.case_study_link,
+            onChanged: (val) {},
+          ),
           const SizedBox(height: 16),
-          ChooseOptionWidget(title: t.optional_items.conversion_metrics),
+          ChooseOptionWidget(
+            title: t.optional_items.conversion_metrics,
+            onChanged: (val) {},
+          ),
           SizedBox(height: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,17 +125,47 @@ class _AmbassadorExperiencePageViewState
                       controller: _awardController,
                       label: t.registration.write_award_info,
                       validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return t.common.please_enter_text;
-                        }
+                        if (value == null || value.isEmpty) return t.common.please_enter_text;
                         return null;
                       },
                     ),
                   ),
                   SizedBox(width: 8),
-                  AppButtons.primary(title: t.common.apply, onTap: () {}),
+                  AppButtons.primary(
+                    title: t.common.apply,
+                    onTap: () {
+                      final text = _awardController.text.trim();
+                      if (text.isNotEmpty) {
+                        setState(() => _awards.add(text));
+                        _awardController.clear();
+                      }
+                    },
+                  ),
                 ],
               ),
+              if (_awards.isNotEmpty)
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _awards.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text(_awards[index], style: Typographies.bodyMedium)),
+                          GestureDetector(
+                            onTap: () => setState(() => _awards.removeAt(index)),
+                            child: Text(t.common.delete,
+                                style: Typographies.labelLarge.copyWith(color: AppColors.red)),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
             ],
           ),
         ],
@@ -167,9 +232,14 @@ class _YesNoWidgetState extends State<YesNoWidget> {
 }
 
 class ChooseOptionWidget extends StatefulWidget {
-  const ChooseOptionWidget({super.key, required this.title});
+  const ChooseOptionWidget({
+    super.key,
+    required this.title,
+    this.onChanged,
+  });
 
   final String title;
+  final ValueChanged<bool>? onChanged;
 
   @override
   State<ChooseOptionWidget> createState() => _ChooseOptionWidgetState();
@@ -185,6 +255,7 @@ class _ChooseOptionWidgetState extends State<ChooseOptionWidget> {
         setState(() {
           _selected = !_selected;
         });
+        widget.onChanged?.call(_selected);
       },
       child: Row(
         children: [
@@ -193,14 +264,15 @@ class _ChooseOptionWidgetState extends State<ChooseOptionWidget> {
             visualDensity: VisualDensity.compact,
             side: BorderSide(
               color: _selected ? Color(0xFF497D00) : AppColors.borderColor,
-              // Your custom border color
-              width: 1.0, // Optional: thickness
+              width: 1.0,
             ),
             activeColor: AppColors.primary,
             value: _selected,
             onChanged: (value) {
-              _selected = value!;
-              setState(() {});
+              setState(() {
+                _selected = value!;
+              });
+              widget.onChanged?.call(_selected);
             },
           ),
           Text(widget.title, style: Typographies.labelLarge),
