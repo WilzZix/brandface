@@ -37,8 +37,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
 
   @override
   void initState() {
-    _profileInfoController.text = widget.initialParam?.bio ?? '';
     super.initState();
+    _fillInfluencerProfileParam = widget.initialParam ?? FillInfluencerProfileParam();
+    _profileInfoController.text = widget.initialParam?.bio ?? '';
+    _fullNameController.text = widget.initialParam?.displayName ?? '';
   }
 
   @override
@@ -157,6 +159,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseDateOfBirthday(
+            initialValue: widget.initialParam?.birthDate,
             title: 'DD.MM.YYYY',
             label: t.registration.date_of_birth,
             onItemSelected: (DateTime date) {
@@ -168,6 +171,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseGender(
+            initialValue: widget.initialParam?.gender,
             title: t.common.select,
             label: t.registration.gender,
             onItemSelected: (String p1) {
@@ -178,6 +182,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseContactDetail(
+            initialValue: widget.initialParam?.contacts,
             title: t.contact.phone,
             label: t.registration.contact_details,
             onItemSelected: (List<Contact> contacts) {
