@@ -173,7 +173,7 @@ class Audience {
       "engagement_rate": engagementRate,
       "geography": geography,
       "social_media_stats": socialMediaStats,
-      "social_channels": socialMediaAccounts,
+      "social_channels": socialMediaAccounts?.map((e) => e.toJson()).toList(),
     };
   }
 }

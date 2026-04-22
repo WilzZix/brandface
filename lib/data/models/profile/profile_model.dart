@@ -1,4 +1,6 @@
 import '../../../domain/entities/profile/profile_entity.dart';
+import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart'
+    show SocialMediaAccount;
 
 class ProfileModel {
   final String? displayName;
@@ -154,6 +156,7 @@ class Audience {
   final String? engagementRate;
   final List<String>? geography;
   final List<String>? socialMediaStats;
+  final List<SocialMediaAccount>? socialMediaAccounts;
 
   Audience({
     this.brandSegment,
@@ -167,6 +170,7 @@ class Audience {
     this.engagementRate,
     this.geography,
     this.socialMediaStats,
+    this.socialMediaAccounts,
   });
 
   factory Audience.fromJson(Map<String, dynamic> json) {
@@ -184,6 +188,12 @@ class Audience {
       socialMediaStats: (json['social_media_stats'] as List?)
           ?.map((e) => e as String)
           .toList(),
+      socialMediaAccounts: (json['social_channels'] as List?)
+          ?.map((e) => SocialMediaAccount(
+                platform: e['platform'] as String? ?? '',
+                username: e['username'] as String? ?? '',
+              ))
+          .toList(),
     );
   }
 
@@ -200,6 +210,7 @@ class Audience {
       engagementRate: engagementRate,
       geography: geography,
       socialMediaStats: socialMediaStats,
+      socialMediaAccounts: socialMediaAccounts,
     );
   }
 }

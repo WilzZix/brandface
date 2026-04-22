@@ -32,6 +32,11 @@ class _AudienceAndFollowersPageViewState
   final List<LangItemModel> _selectedGeographyItems = [];
   final List<SocialMediaAccount> _selectedSocialMediaAccounts = [];
 
+  // Per-account stats map: "platform:username" → stats
+  final Map<String, SocialMediaAccountStatsEntity> _statsMap = {};
+  // Key of the account whose stats are currently being fetched
+  String? _pendingKey;
+
   late TextEditingController _controllerFrom;
   late TextEditingController _controllerTo;
   late TextEditingController _controllerFromWomen;
@@ -52,16 +57,10 @@ class _AudienceAndFollowersPageViewState
     _controllerToWomen = TextEditingController();
     _controllerSocial = TextEditingController();
 
-    // Debounced listener for better performance
-    _controllerFrom.addListener(_debouncedUpdate);
-    _controllerTo.addListener(_debouncedUpdate);
-    _controllerFromWomen.addListener(_debouncedUpdate);
-    _controllerToWomen.addListener(_debouncedUpdate);
-  }
-
-  void _debouncedUpdate() {
-    // Consolidate all updates into a single setState call
-    _handleUpdate();
+    _controllerFrom.addListener(_handleUpdate);
+    _controllerTo.addListener(_handleUpdate);
+    _controllerFromWomen.addListener(_handleUpdate);
+    _controllerToWomen.addListener(_handleUpdate);
   }
 
   void _handleUpdate() {
@@ -85,22 +84,21 @@ class _AudienceAndFollowersPageViewState
   bool get wantKeepAlive => true;
 
   void _addSocialAccount() {
-    // Validation
     if (_selectedPlatform == null || _controllerSocial.text.trim().isEmpty) {
       _showErrorSnackBar('Fill required fields');
       return;
     }
 
-    if (_isAddingAccount) return; // Prevent duplicate requests
+    if (_isAddingAccount) return;
 
     setState(() => _isAddingAccount = true);
 
     try {
-      // Check for duplicates
+      final username = _controllerSocial.text.trim();
+      final platform = _selectedPlatform!;
+
       final isDuplicate = _selectedSocialMediaAccounts.any(
-        (acc) =>
-            acc.platform == _selectedPlatform &&
-            acc.username == _controllerSocial.text.trim(),
+        (acc) => acc.platform == platform && acc.username == username,
       );
 
       if (isDuplicate) {
@@ -108,25 +106,21 @@ class _AudienceAndFollowersPageViewState
         return;
       }
 
-      // Add account
-      final newAccount = SocialMediaAccount(
-        platform: _selectedPlatform!,
-        username: _controllerSocial.text.trim(),
-      );
+      final newAccount = SocialMediaAccount(platform: platform, username: username);
+      final key = '$platform:$username';
 
       setState(() {
         _selectedSocialMediaAccounts.add(newAccount);
+        _pendingKey = key;
       });
 
       _handleUpdate();
 
-      // Fetch stats
       context.read<AudienceCubit>().getSocialMediaAccountStats(
-        platform: _selectedPlatform ?? '',
-        username: _controllerSocial.text.trim(),
+        platform: platform,
+        username: username,
       );
 
-      // Clear input
       _controllerSocial.clear();
       _selectedPlatform = null;
     } finally {
@@ -142,8 +136,11 @@ class _AudienceAndFollowersPageViewState
   }
 
   void _removeSocialAccount(int index) {
+    final account = _selectedSocialMediaAccounts[index];
+    final key = '${account.platform}:${account.username}';
     setState(() {
       _selectedSocialMediaAccounts.removeAt(index);
+      _statsMap.remove(key);
       _handleUpdate();
     });
   }
@@ -161,18 +158,36 @@ class _AudienceAndFollowersPageViewState
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          _buildGeographySection(),
-          const SizedBox(height: 32),
-          _buildAgeSection(),
-          const SizedBox(height: 32),
-          _buildSocialMediaSection(),
-          const SizedBox(height: 32),
-        ],
+    return BlocListener<AudienceCubit, AudienceState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          loaded: (data) {
+            if (_pendingKey != null) {
+              setState(() {
+                _statsMap[_pendingKey!] = data;
+                _pendingKey = null;
+              });
+            }
+          },
+          failure: (_) {
+            setState(() => _pendingKey = null);
+          },
+          orElse: () {},
+        );
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            _buildGeographySection(),
+            const SizedBox(height: 32),
+            _buildAgeSection(),
+            const SizedBox(height: 32),
+            _buildSocialMediaSection(),
+            const SizedBox(height: 32),
+          ],
+        ),
       ),
     );
   }
@@ -286,9 +301,7 @@ class _AudienceAndFollowersPageViewState
           child: CredInputField(
             controller: _controllerSocial,
             label: t.registration.paste_link_here,
-
             onChanged: (val) {
-              // Only update if changed significantly
               if (_controllerSocial.text != val) {
                 _controllerSocial.text = val;
               }
@@ -316,57 +329,44 @@ class _AudienceAndFollowersPageViewState
   }
 
   Widget _buildSocialAccountCard(SocialMediaAccount account, int index) {
-    return BlocBuilder<AudienceCubit, AudienceState>(
-      builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${account.platform}: ${account.username}",
-                      style: Typographies.labelLarge,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    _buildAccountStats(state),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              GestureDetector(
-                onTap: () => _removeSocialAccount(index),
-                child: Icon(Icons.close, color: AppColors.red, size: 20),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+    final key = '${account.platform}:${account.username}';
+    final stats = _statsMap[key];
+    final isLoading = _pendingKey == key;
 
-  Widget _buildAccountStats(AudienceState state) {
-    return state.maybeWhen(
-      loading: () =>
-          const SizedBox(height: 4, child: LinearProgressIndicator()),
-      loaded: (data) => _buildStatsRow(data),
-      failure: (err) => Tooltip(
-        message: err.toString(),
-        child: Text(
-          'Failure',
-          style: Typographies.bodySmall.copyWith(color: AppColors.red),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      orElse: () => Text(
-        'Loading ...',
-        style: Typographies.bodySmall.copyWith(color: AppColors.grey),
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${account.platform}: ${account.username}',
+                  style: Typographies.labelLarge,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                if (isLoading)
+                  const SizedBox(height: 4, child: LinearProgressIndicator())
+                else if (stats != null)
+                  _buildStatsRow(stats)
+                else
+                  Text(
+                    '...',
+                    style: Typographies.bodySmall.copyWith(color: AppColors.grey),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () => _removeSocialAccount(index),
+            child: Icon(Icons.close, color: AppColors.red, size: 20),
+          ),
+        ],
       ),
     );
   }
