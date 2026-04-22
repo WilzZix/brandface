@@ -105,10 +105,10 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Spacer(),
-              Text('SMS confirmation', style: Typographies.headlineSmall),
+              Text(t.login.sms_confirmation, style: Typographies.headlineSmall),
               SizedBox(height: 8),
               Text(
-                'We have sent SMS code to your phone number **${widget.arguments.phoneNumber.replaceAll(' ', '').substring(widget.arguments.phoneNumber.length - 4)},please enter this code',
+                t.login.sms_sent_to(phoneEnd: widget.arguments.phoneNumber.replaceAll(' ', '').substring(widget.arguments.phoneNumber.length - 4)),
                 style: Typographies.bodySmall,
               ),
               SizedBox(height: 24),
@@ -161,7 +161,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                         );
                       },
                       child: Text(
-                        'Send code again',
+                        t.login.send_code_again,
                         style: Typographies.titleSmall,
                       ),
                     )

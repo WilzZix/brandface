@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/partners.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/services_item.dart';
 import 'package:brandface/utils/extansions/app_exts.dart';
@@ -23,7 +24,7 @@ class ProfileInformationBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('General info', style: Typographies.titleSmall),
+        Text(t.profile.general_info, style: Typographies.titleSmall),
         SizedBox(height: 8),
         AppContainer(
           child: Column(
@@ -41,7 +42,7 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Full name',
+                title: t.registration.full_name,
                 descriptionItem: Text(
                   data.displayName.toString(),
                   style: Typographies.bodyMedium,
@@ -49,12 +50,12 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Spoken languages',
+                title: t.registration.spoken_languages,
                 descriptionItem: LanguageItem(langIds: data.languageIds),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Date of birth',
+                title: t.registration.date_of_birth,
                 descriptionItem: Text(
                   data.birthDate!.toDotFormat(),
                   style: Typographies.bodyMedium,
@@ -62,7 +63,7 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Gender',
+                title: t.registration.gender,
                 descriptionItem: Text(
                   data.gender!.toCapitalized(),
                   style: Typographies.bodyMedium,
@@ -70,11 +71,11 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Contact details',
+                title: t.registration.contact_details,
                 descriptionItem: ContactDetails(contactData: data.contacts),
               ),
               TitleDescriptionWidget(
-                title: 'Profile information',
+                title: t.registration.profile_information,
                 descriptionItem: Text(
                   data.bio ?? '',
                   style: Typographies.bodyMedium,
@@ -84,15 +85,15 @@ class ProfileInformationBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 16),
-        Text('Categories', style: Typographies.titleSmall),
+        Text(t.registration.categories, style: Typographies.titleSmall),
         SizedBox(height: 8),
         AppContainer(child: Categories(categories: data.categories)),
         SizedBox(height: 16),
-        Text('Services', style: Typographies.titleSmall),
+        Text(t.registration.services, style: Typographies.titleSmall),
         SizedBox(height: 8),
         AppContainer(child: ServicesItem(services: data.services)),
         SizedBox(height: 16),
-        Text('Audience and followers', style: Typographies.titleSmall),
+        Text(t.profile.audience_and_followers, style: Typographies.titleSmall),
         SizedBox(height: 8),
         AppContainer(
           child: Column(
@@ -100,7 +101,7 @@ class ProfileInformationBody extends StatelessWidget {
             children: [
               //TODO beckend object qaytarib beradigon qilishi kerak
               TitleDescriptionWidget(
-                title: 'Geography',
+                title: t.registration.geography,
                 descriptionItem: Text(
                   data.region?.name ?? '',
                   style: Typographies.bodyMedium,
@@ -108,31 +109,31 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Men',
+                title: t.registration.men,
                 descriptionItem: Text(
-                  'Age ${data.audience?.menAgeFrom} - ${data.audience?.menAgeTo}',
+                  t.profile.age_range(from: data.audience?.menAgeFrom ?? '', to: data.audience?.menAgeTo ?? ''),
                   style: Typographies.bodyMedium,
                 ),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Female',
+                title: t.registration.female,
                 descriptionItem: Text(
-                  'Age ${data.audience?.womenAgeFrom} - ${data.audience?.womenAgeTo}',
+                  t.profile.age_range(from: data.audience?.womenAgeFrom ?? '', to: data.audience?.womenAgeTo ?? ''),
                   style: Typographies.bodyMedium,
                 ),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Gender',
+                title: t.registration.gender,
                 descriptionItem: Text(
-                  data.gender!.toCapitalized() ?? '',
+                  data.gender!.toCapitalized(),
                   style: Typographies.bodyMedium,
                 ),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Social media accounts',
+                title: t.registration.social_media_accounts,
                 descriptionItem: Text(
                   '${data.audience?.socialMediaStats.toString()}',
                   style: Typographies.bodyMedium,
@@ -142,14 +143,14 @@ class ProfileInformationBody extends StatelessWidget {
           ),
         ),
         SizedBox(height: 16),
-        Text('Experience', style: Typographies.titleSmall),
+        Text(t.profile.experience, style: Typographies.titleSmall),
         SizedBox(height: 8),
         AppContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleDescriptionWidget(
-                title: 'Years of experience',
+                title: t.registration.years_of_experience,
                 descriptionItem: Text(
                   data.yearsOfExperience.toString(),
                   style: Typographies.bodyMedium,
@@ -158,26 +159,26 @@ class ProfileInformationBody extends StatelessWidget {
               SizedBox(height: 16),
               //TODO beckend object qaytadigon qilib berishi kerak
               TitleDescriptionWidget(
-                title: 'Partners',
+                title: t.registration.partners,
                 descriptionItem: Partners(partners: data.partners),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Awards',
+                title: t.profile.awards,
                 descriptionItem: Awards(awards: data.awards),
               ),
             ],
           ),
         ),
         SizedBox(height: 16),
-        Text('Pricing / Tariffs', style: Typographies.titleSmall),
+        Text(t.profile.pricing_tariffs, style: Typographies.titleSmall),
         SizedBox(height: 8),
         AppContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleDescriptionWidget(
-                title: 'Currency',
+                title: t.registration.currency,
                 descriptionItem: Text(
                   data.pricing?.campaignFeeCurrency ?? '',
                   style: Typographies.bodyMedium,
@@ -185,7 +186,7 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Write hourly rate',
+                title: t.registration.write_hourly_rate,
                 descriptionItem: Text(
                   'Min ${data.pricing?.hourlyRateMinUsd}\nMax ${data.pricing?.hourlyRateMinUsd}',
                   style: Typographies.bodyMedium,
@@ -193,7 +194,7 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Projectly payment starting price',
+                title: t.registration.projectly_payment_starting_price,
                 descriptionItem: Text(
                   '${data.pricing?.campaignFee}',
                   style: Typographies.bodyMedium,
@@ -201,7 +202,7 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Payment type',
+                title: t.profile.payment_type,
                 descriptionItem: Text(
                   '${data.pricing?.paymentTypes.toString()}',
                   style: Typographies.bodyMedium,
@@ -216,7 +217,7 @@ class ProfileInformationBody extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.only(top: 16),
             child: Text(
-              'Delete account',
+              t.profile.delete_account,
               style: Typographies.titleMedium.copyWith(color: AppColors.red),
             ),
           ),

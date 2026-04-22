@@ -81,7 +81,7 @@ class _AmbassadorExperiencePageViewState
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(t.registration.social_media_accounts, style: Typographies.titleSmall),
+              Text(t.registration.write_award_info, style: Typographies.titleSmall),
               SizedBox(height: 8),
               Row(
                 children: [

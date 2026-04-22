@@ -10,7 +10,10 @@
     "welcome_msg": "Добро пожаловать в Findbrandface",
     "term_of_use_first": "Нажимая «Войти», я принимаю все ",
     "term_of_use_second": "условия использования",
-    "login_methods": "или войти через"
+    "login_methods": "или войти через",
+    "sms_confirmation": "SMS подтверждение",
+    "sms_sent_to": "На ваш номер телефона **$phoneEnd отправлен SMS код, пожалуйста введите его",
+    "send_code_again": "Отправить код снова"
   },
   "registration": {
     "title": "Регистрация",
@@ -19,6 +22,7 @@
     "brand": "Бренд",
     "your_name": "Ваше имя",
     "your_surname": "Ваша фамилия",
+    "full_name": "Полное имя",
     "brand_name": "Название бренда",
     "upload_profile_picture": "Загрузить фото профиля",
     "choose_file": "Выбрать файл",
@@ -78,7 +82,34 @@
     "no": "Нет",
     "write_text_here": "Напишите текст...",
     "please_enter_text": "Пожалуйста, введите текст",
-    "email": "Email"
+    "email": "Email",
+    "set_as_main": "Сделать основным"
+  },
+  "profile": {
+    "profile_page": "Страница профиля",
+    "stats": "Статистика",
+    "reviews": "Отзывы",
+    "calendar": "Календарь",
+    "portfolio": "Портфолио",
+    "billing": "Биллинг",
+    "make_profile_top": "Сделать профиль TOP",
+    "app_language": "Язык приложения",
+    "terms_and_conditions": "Условия использования",
+    "log_out": "Выйти",
+    "general_info": "Общая информация",
+    "audience_and_followers": "Аудитория и подписчики",
+    "experience": "Опыт",
+    "awards": "Награды",
+    "pricing_tariffs": "Ценообразование / Тарифы",
+    "payment_type": "Тип оплаты",
+    "delete_account": "Удалить аккаунт",
+    "age_range": "Возраст $from - $to"
+  },
+  "validation": {
+    "name_required": "Пожалуйста, введите имя и фамилию",
+    "name_full_required": "Пожалуйста, введите полное имя и фамилию",
+    "name_letters_only": "Имя должно содержать только буквы",
+    "name_too_short": "Имя слишком короткое"
   },
   "choose": {
     "select_niche": "Выбрать нишу",

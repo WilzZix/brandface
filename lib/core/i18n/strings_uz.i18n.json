@@ -10,7 +10,10 @@
     "welcome_msg": "Findbrandface-ga xush kelibsiz",
     "term_of_use_first": "Kirish tugmasini bosish orqali barcha ",
     "term_of_use_second": "foydalanish shartlariga rozilik bildiraman",
-    "login_methods": "yoki ... orqali kirish"
+    "login_methods": "yoki ... orqali kirish",
+    "sms_confirmation": "SMS tasdiqlash",
+    "sms_sent_to": "Telefon raqamingizga **$phoneEnd SMS kod yuborildi, iltimos kodni kiriting",
+    "send_code_again": "Kodni qayta yuborish"
   },
   "registration": {
     "title": "Ro'yxatdan o'tish",
@@ -19,6 +22,7 @@
     "brand": "Brand",
     "your_name": "Ismingiz",
     "your_surname": "Familiyangiz",
+    "full_name": "To'liq ism",
     "brand_name": "Brand nomi",
     "upload_profile_picture": "Profil rasmini yuklash",
     "choose_file": "Fayl tanlash",
@@ -78,7 +82,34 @@
     "no": "Yo'q",
     "write_text_here": "Matn yozing...",
     "please_enter_text": "Iltimos, matn kiriting",
-    "email": "Email"
+    "email": "Email",
+    "set_as_main": "Asosiy qilib belgilash"
+  },
+  "profile": {
+    "profile_page": "Profil sahifasi",
+    "stats": "Statistika",
+    "reviews": "Sharhlar",
+    "calendar": "Taqvim",
+    "portfolio": "Portfolio",
+    "billing": "To'lovlar",
+    "make_profile_top": "Profilni TOP ga chiqarish",
+    "app_language": "Ilova tili",
+    "terms_and_conditions": "Foydalanish shartlari",
+    "log_out": "Chiqish",
+    "general_info": "Umumiy ma'lumot",
+    "audience_and_followers": "Auditoriya va obunachilar",
+    "experience": "Tajriba",
+    "awards": "Mukofotlar",
+    "pricing_tariffs": "Narxlar / Tariflar",
+    "payment_type": "To'lov turi",
+    "delete_account": "Hisobni o'chirish",
+    "age_range": "Yosh $from - $to"
+  },
+  "validation": {
+    "name_required": "Iltimos, ism va familiyangizni kiriting",
+    "name_full_required": "Iltimos, to'liq ism va familiyangizni kiriting",
+    "name_letters_only": "Ismda faqat harflar bo'lishi kerak",
+    "name_too_short": "Ism juda qisqa"
   },
   "choose": {
     "select_niche": "Niche tanlash",

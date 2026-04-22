@@ -10,7 +10,10 @@
     "welcome_msg": "Welcome to Findbrandface",
     "term_of_use_first": "By pressing Login i agree to all ",
     "term_of_use_second": "terms of use",
-    "login_methods": "or login in with"
+    "login_methods": "or login in with",
+    "sms_confirmation": "SMS confirmation",
+    "sms_sent_to": "We have sent SMS code to your phone number **$phoneEnd, please enter this code",
+    "send_code_again": "Send code again"
   },
   "registration": {
     "title": "Registration",
@@ -19,6 +22,7 @@
     "brand": "Brand",
     "your_name": "Your name",
     "your_surname": "Your surname",
+    "full_name": "Full name",
     "brand_name": "Brand name",
     "upload_profile_picture": "Upload profile picture",
     "choose_file": "Choose file",
@@ -78,7 +82,34 @@
     "no": "No",
     "write_text_here": "Write text here...",
     "please_enter_text": "Please enter some text",
-    "email": "Email"
+    "email": "Email",
+    "set_as_main": "Set as main"
+  },
+  "profile": {
+    "profile_page": "Profile page",
+    "stats": "Stats",
+    "reviews": "Reviews",
+    "calendar": "Calendar",
+    "portfolio": "Portfolio",
+    "billing": "Billing",
+    "make_profile_top": "Make the profile TOP",
+    "app_language": "App language",
+    "terms_and_conditions": "Terms and conditions",
+    "log_out": "Log out",
+    "general_info": "General info",
+    "audience_and_followers": "Audience and followers",
+    "experience": "Experience",
+    "awards": "Awards",
+    "pricing_tariffs": "Pricing / Tariffs",
+    "payment_type": "Payment type",
+    "delete_account": "Delete account",
+    "age_range": "Age $from - $to"
+  },
+  "validation": {
+    "name_required": "Please enter your name and surname",
+    "name_full_required": "Please enter your full name and surname",
+    "name_letters_only": "Name must contain only letters",
+    "name_too_short": "Name is too short"
   },
   "choose": {
     "select_niche": "Select niche",

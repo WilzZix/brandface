@@ -8,6 +8,9 @@ class Partners extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (partners == null || partners!.isEmpty) {
+      return const SizedBox.shrink();
+    }
     return Text(
       partners!.map((e) => e.toUpperCase()).join(', '),
       style: Typographies.bodyMedium,

@@ -109,11 +109,11 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Full name', style: Typographies.titleSmall),
+              Text(t.registration.full_name, style: Typographies.titleSmall),
               const SizedBox(height: 8),
               CredInputField(
                 controller: _fullNameController,
-                label: 'Full name',
+                label: t.registration.full_name,
                 onChanged: () {
                   _fillInfluencerProfileParam = _fillInfluencerProfileParam
                       .copyWith(displayName: _fullNameController.text);
@@ -121,22 +121,22 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                 },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Iltimos, ism va familiyangizni kiriting';
+                    return t.validation.name_required;
                   }
 
-                  final nameParts = value.trim().split(RegExp(r'\s+'));
+                  final nameParts = value.trim().split(RegExp('rs+'));
                   if (nameParts.length < 2) {
-                    return 'Iltimos, toʻliq ism va familiyangizni kiriting';
+                    return t.validation.name_full_required;
                   }
 
-                  final nameRegExp = RegExp(r"^[a-zA-Zа-яА-ЯёЁқҚғҒҳҲўЎʼ'‘ ]+$");
+                  final nameRegExp = RegExp(r"^[a-zA-Zа-яА-ЯёЁқҚғҒҳҲўЎʼ' ]+$");
 
                   if (!nameRegExp.hasMatch(value)) {
-                    return 'Ismda faqat harflar boʻlishi kerak';
+                    return t.validation.name_letters_only;
                   }
 
                   if (value.trim().length < 3) {
-                    return 'Ism juda qisqa';
+                    return t.validation.name_too_short;
                   }
 
                   return null;
