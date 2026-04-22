@@ -405,7 +405,7 @@ class _FillProfileInformationPageState
               ),
               SizedBox(height: 8),
               GestureDetector(
-                onTap: () {},
+                onTap: () => context.go(HomePage.tag),
                 child: Text(
                   'Save and continue later',
                   style: Typographies.labelLarge,
