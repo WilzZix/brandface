@@ -103,6 +103,7 @@
     "pricing_tariffs": "Pricing / Tariffs",
     "payment_type": "Payment type",
     "delete_account": "Delete account",
+    "delete_account_confirm": "Are you sure you want to delete your account? This action cannot be undone.",
     "age_range": "Age $from - $to"
   },
   "validation": {

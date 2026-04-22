@@ -10,6 +10,7 @@ import 'package:brandface/domain/repository/registration_repository.dart';
 import 'package:brandface/domain/usecase/catalog/category/get_languages_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
+import 'package:brandface/domain/usecase/login/delete_account_use_case.dart';
 import 'package:brandface/domain/usecase/login/get_me_use_case.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:brandface/domain/usecase/profile/create_award_use_case.dart';
@@ -38,6 +39,8 @@ import '../../domain/usecase/login/verify_otp_usecase.dart';
 import '../../domain/usecase/registration/brand_registration_usecase.dart';
 import '../../domain/usecase/registration/fill_brand_profile_usecase.dart';
 import '../../domain/usecase/registration/fill_profile_info_usecase.dart';
+import '../../domain/usecase/registration/update_my_profile_usecase.dart';
+import '../../presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
 import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import '../../presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
 import '../../presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
@@ -75,6 +78,7 @@ class AppDi {
     sl.registerLazySingleton(() => RegistrationUsecase(sl()));
     sl.registerLazySingleton(() => BrandRegistrationUsecase(sl()));
     sl.registerLazySingleton(() => FillProfileInfoUsecase(sl()));
+    sl.registerLazySingleton(() => UpdateMyProfileUsecase(sl()));
     sl.registerLazySingleton(() => FillBrandProfileUsecase(sl()));
     sl.registerLazySingleton(() => CategoryUseCase(repository: sl()));
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
@@ -84,6 +88,7 @@ class AppDi {
       () => GetInfluencerProfileUseCase(repository: sl()),
     );
     sl.registerLazySingleton(() => GetMeUseCase(iLoginRepository: sl()));
+    sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
     sl.registerLazySingleton(() => GetLanguagesUseCase(repository: sl()));
     sl.registerLazySingleton(
       () => GetSocialMediaAccountStatsUseCase(repository: sl()),
@@ -123,7 +128,10 @@ class AppDi {
     sl.registerFactory(
       () => BrandRegistrationBloc(brandRegistrationUsecase: sl()),
     );
-    sl.registerFactory(() => FillProfileBloc(fillProfileInfoUsecase: sl()));
+    sl.registerFactory(() => FillProfileBloc(
+          fillProfileInfoUsecase: sl(),
+          updateMyProfileUsecase: sl(),
+        ));
     sl.registerFactory(
       () => FillBrandProfileBloc(fillBrandProfileUsecase: sl()),
     );
@@ -142,6 +150,9 @@ class AppDi {
         influencerProfileUseCase: sl(),
         profileService: sl(),
       ),
+    );
+    sl.registerFactory(
+      () => DeleteAccountCubit(deleteAccountUseCase: sl()),
     );
   }
 }

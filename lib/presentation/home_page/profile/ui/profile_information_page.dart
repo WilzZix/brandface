@@ -43,6 +43,7 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
                 extra: RegistrationEntity(
                   role: sl<ProfileService>().getRole() ?? 'influencer',
                   profileId: sl<ProfileService>().getProfileId() ?? 1,
+                  isEditMode: true,
                 ),
               );
             },

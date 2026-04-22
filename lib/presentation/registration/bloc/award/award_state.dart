@@ -1,7 +1,7 @@
 part of 'award_cubit.dart';
 
 @freezed
-class AwardState with _$AwardState {
+abstract class AwardState with _$AwardState {
   const factory AwardState.initial({@Default([]) List<AwardEntity> awards}) =
       _Initial;
 
@@ -15,8 +15,4 @@ class AwardState with _$AwardState {
     required List<AwardEntity> awards,
     required Failure failure,
   }) = _Failure;
-
-  @override
-  // TODO: implement awards
-  List<AwardEntity> get awards => [];
 }

@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/error/failures.dart' show FailureLocalization;
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../core/error/failures.dart';
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/buttons/buttons.dart';
 import '../../../../uikit/typography/typography.dart';

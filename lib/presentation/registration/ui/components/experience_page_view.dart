@@ -1,3 +1,4 @@
+import 'package:brandface/core/error/failures.dart' show FailureLocalization;
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
@@ -5,7 +6,6 @@ import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/error/failures.dart';
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/buttons/buttons.dart';
 import '../../../../uikit/typography/typography.dart';
@@ -103,8 +103,10 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(t.registration.write_award_info,
-                      style: Typographies.titleSmall),
+                  Text(
+                    t.registration.write_award_info,
+                    style: Typographies.titleSmall,
+                  ),
                   SizedBox(height: 8),
                   Row(
                     children: [
@@ -118,16 +120,17 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
                       SizedBox(width: 8),
                       AppButtons.primary(
                         title: t.common.apply,
-                        onTap: () {
-                          if (isLoading) return;
-                          final text = _awardController.text.trim();
-                          if (text.isNotEmpty) {
-                            context
-                                .read<AwardCubit>()
-                                .createAward(title: text);
-                            _awardController.clear();
-                          }
-                        },
+                        onTap: isLoading
+                            ? null
+                            : () {
+                                final text = _awardController.text.trim();
+                                if (text.isNotEmpty) {
+                                  context.read<AwardCubit>().createAward(
+                                    title: text,
+                                  );
+                                  _awardController.clear();
+                                }
+                              },
                       ),
                     ],
                   ),
@@ -145,15 +148,21 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                  child: Text(award.title,
-                                      style: Typographies.bodyMedium)),
+                                child: Text(
+                                  award.title,
+                                  style: Typographies.bodyMedium,
+                                ),
+                              ),
                               GestureDetector(
                                 onTap: () => context
                                     .read<AwardCubit>()
                                     .deleteAward(awardId: award.id),
-                                child: Text(t.common.delete,
-                                    style: Typographies.labelLarge
-                                        .copyWith(color: AppColors.red)),
+                                child: Text(
+                                  t.common.delete,
+                                  style: Typographies.labelLarge.copyWith(
+                                    color: AppColors.red,
+                                  ),
+                                ),
                               ),
                             ],
                           ),

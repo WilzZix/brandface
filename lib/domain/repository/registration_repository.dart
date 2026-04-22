@@ -24,4 +24,8 @@ abstract class IRegistrationRepository {
     required FillBrandProfileParam params,
     required String profileId,
   });
+
+  Future<Either<Failure, void>> updateMyProfile({
+    required FillInfluencerProfileParam params,
+  });
 }

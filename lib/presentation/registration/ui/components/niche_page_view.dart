@@ -4,6 +4,7 @@ import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../domain/entities/profile/catalog/category_entity.dart';
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_niche.dart';
@@ -27,12 +28,55 @@ class _NichePageViewState extends State<NichePageView>
     with AutomaticKeepAliveClientMixin<NichePageView> {
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final List<LangItemModel> _selectedNichesItems = [];
-  final bool _prefilledFromInitial = false;
+  bool _prefilledFromInitial = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialCategoryIds != null && widget.initialCategoryIds!.isNotEmpty) {
+      _param = _param.copyWith(categoryIds: widget.initialCategoryIds);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final catState = context.read<CategoryCubit>().state;
+        catState.maybeWhen(
+          categoryLoaded: (data) => _tryPrefill(data),
+          orElse: () {},
+        );
+      });
+    }
+  }
+
+  void _tryPrefill(List<CategoryItemEntity> categories) {
+    if (_prefilledFromInitial) return;
+    final ids = widget.initialCategoryIds;
+    if (ids == null || ids.isEmpty) return;
+    final matched = categories
+        .where((c) => ids.contains(c.id))
+        .map((c) => LangItemModel(name: c.name, id: c.id))
+        .toList();
+    if (matched.isNotEmpty && mounted) {
+      setState(() {
+        for (final item in matched) {
+          if (!_selectedNichesItems.any((e) => e.id == item.id)) {
+            _selectedNichesItems.add(item);
+          }
+        }
+        _prefilledFromInitial = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
+    return BlocListener<CategoryCubit, CategoryState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          categoryLoaded: (data) => _tryPrefill(data),
+          orElse: () {},
+        );
+      },
+      child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -121,6 +165,7 @@ class _NichePageViewState extends State<NichePageView>
             ),
         ],
       ),
+    ),
     );
   }
 

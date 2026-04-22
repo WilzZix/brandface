@@ -67,4 +67,21 @@ class LoginRepositoryImpl implements ILoginRepository {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteAccount() async {
+    try {
+      await remoteDataSource.deleteAccount();
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
 }

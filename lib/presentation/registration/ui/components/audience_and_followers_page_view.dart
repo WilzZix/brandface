@@ -15,9 +15,14 @@ import 'choose_social_media_platform.dart';
 import 'choose_spoken_language.dart';
 
 class AudienceAndFollowersPageView extends StatefulWidget {
-  const AudienceAndFollowersPageView({super.key, required this.onChanged});
+  const AudienceAndFollowersPageView({
+    super.key,
+    required this.onChanged,
+    this.initialParam,
+  });
 
   final Function(FillInfluencerProfileParam) onChanged;
+  final FillInfluencerProfileParam? initialParam;
 
   @override
   State<AudienceAndFollowersPageView> createState() =>
@@ -49,12 +54,28 @@ class _AudienceAndFollowersPageViewState
   @override
   void initState() {
     super.initState();
-    _param = FillInfluencerProfileParam(audience: Audience());
+    final audience = widget.initialParam?.audience;
+    _param = FillInfluencerProfileParam(
+      audience: Audience(
+        menAgeFrom: audience?.menAgeFrom,
+        menAgeTo: audience?.menAgeTo,
+        womenAgeFrom: audience?.womenAgeFrom,
+        womenAgeTo: audience?.womenAgeTo,
+      ),
+    );
 
-    _controllerFrom = TextEditingController();
-    _controllerTo = TextEditingController();
-    _controllerFromWomen = TextEditingController();
-    _controllerToWomen = TextEditingController();
+    _controllerFrom = TextEditingController(
+      text: audience?.menAgeFrom?.toString() ?? '',
+    );
+    _controllerTo = TextEditingController(
+      text: audience?.menAgeTo?.toString() ?? '',
+    );
+    _controllerFromWomen = TextEditingController(
+      text: audience?.womenAgeFrom?.toString() ?? '',
+    );
+    _controllerToWomen = TextEditingController(
+      text: audience?.womenAgeTo?.toString() ?? '',
+    );
     _controllerSocial = TextEditingController();
 
     _controllerFrom.addListener(_handleUpdate);

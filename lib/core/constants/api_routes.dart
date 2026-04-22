@@ -5,6 +5,7 @@ class ApiRoutes {
   static String sendOtp = 'accounts/v1/auth/send-otp/';
   static String verifyOtp = 'accounts/v1/auth/verify-otp/';
   static String me = 'accounts/v1/auth/me/';
+  static String deleteAccount = 'accounts/v1/auth/me/';
 
   ///Registration
   static String registration = 'accounts/v1/register/influencer/';
