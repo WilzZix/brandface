@@ -1,10 +1,14 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/home_page/brand_home_page.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
+import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
@@ -27,6 +31,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
 import '../../../domain/entities/registration/registration_entity.dart';
+import '../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/audience_and_followers_page_view.dart';
 import 'components/experience_page_view.dart';
@@ -50,28 +55,41 @@ class FillProfileInformationPage extends StatefulWidget {
 
 class _FillProfileInformationPageState
     extends State<FillProfileInformationPage> {
-  late final List<Widget> _cachedWidgets;
-  late final List<String> _pageTitles;
+  List<Widget> _cachedWidgets = [];
+  List<String> _pageTitles = [];
+  bool _isProfileLoading = true;
 
   PageController pageController = PageController();
   FillInfluencerProfileParam _finalParam = FillInfluencerProfileParam();
+  FillBrandProfileParam _brandParam = FillBrandProfileParam();
   int _currentPage = 0;
+
+  bool get _isBrand => widget.registrationEntity.role == 'brand';
 
   int get _totalPages => _cachedWidgets.length;
 
   @override
   void initState() {
     super.initState();
-    _buildWidgetsAndTitles();
-    context.read<GetProfileCubit>().getProfile(
-      profileId: widget.registrationEntity.profileId.toString(),
+    context.read<FillProfileBloc>().setEditMode(
+      widget.registrationEntity.isEditMode,
     );
+    if (widget.registrationEntity.isEditMode) {
+      context.read<GetProfileCubit>().getMyProfile();
+    } else {
+      context.read<GetProfileCubit>().getProfile(
+        profileId: widget.registrationEntity.profileId.toString(),
+      );
+    }
   }
 
   void _buildWidgetsAndTitles() {
+    final List<String> titles;
+    final List<Widget> widgets;
+
     switch (widget.registrationEntity.role) {
       case 'influencer':
-        _pageTitles = [
+        titles = [
           'General info',
           'Niche',
           'Services',
@@ -79,7 +97,7 @@ class _FillProfileInformationPageState
           'Experience',
           'My Pricing/Tariffs',
         ];
-        _cachedWidgets = [
+        widgets = [
           BlocProvider(
             create: (context) => sl<LanguageCubit>(),
             child: GeneralInfoPageView(
@@ -110,6 +128,7 @@ class _FillProfileInformationPageState
             create: (context) => sl<CategoryCubit>(),
             child: NichePageView(
               key: const PageStorageKey<String>('pageTwo'),
+              initialCategoryIds: _finalParam.categoryIds,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
               },
@@ -119,31 +138,41 @@ class _FillProfileInformationPageState
             create: (context) => sl<ServiceTypeCubit>(),
             child: ServicesPageView(
               key: const PageStorageKey<String>('pageThree'),
+              initialServiceIds: _finalParam.serviceIds,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<RegionCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: AudienceAndFollowersPageView(
               key: const PageStorageKey<String>('pageFour'),
+              initialParam: _finalParam,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(audience: p1.audience);
               },
             ),
           ),
-          ExperiencePageView(
-            key: const PageStorageKey<String>('pageFive'),
-            onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(
-                yearsOfExperience: p1.yearsOfExperience,
-                partners: p1.partners,
-              );
-            },
+          BlocProvider(
+            create: (context) => sl<AwardCubit>(),
+            child: ExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              initialParam: _finalParam,
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                );
+              },
+            ),
           ),
           MyPricingTariffsPageView(
             key: const PageStorageKey<String>('pageSix'),
+            initialParam: _finalParam,
             onChanged: (p1) {
               _finalParam = _finalParam.copyWith(pricing: p1.pricing);
             },
@@ -151,7 +180,7 @@ class _FillProfileInformationPageState
         ];
 
       case 'ambassador':
-        _pageTitles = [
+        titles = [
           'General info',
           'Niche',
           'Services',
@@ -159,7 +188,7 @@ class _FillProfileInformationPageState
           'Experience',
           'Contract',
         ];
-        _cachedWidgets = [
+        widgets = [
           BlocProvider(
             create: (context) => sl<LanguageCubit>(),
             child: GeneralInfoPageView(
@@ -190,6 +219,7 @@ class _FillProfileInformationPageState
             create: (context) => sl<CategoryCubit>(),
             child: NichePageView(
               key: const PageStorageKey<String>('pageTwo'),
+              initialCategoryIds: _finalParam.categoryIds,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
               },
@@ -199,6 +229,7 @@ class _FillProfileInformationPageState
             create: (context) => sl<ServiceTypeCubit>(),
             child: ServicesPageView(
               key: const PageStorageKey<String>('pageThree'),
+              initialServiceIds: _finalParam.serviceIds,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
               },
@@ -208,14 +239,18 @@ class _FillProfileInformationPageState
             create: (context) => sl<RegionCubit>(),
             child: AudienceAndFollowersPageView(
               key: const PageStorageKey<String>('pageFour'),
+              initialParam: _finalParam,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(audience: p1.audience);
               },
             ),
           ),
-          AmbassadorExperiencePageView(
-            key: const PageStorageKey<String>('pageFive'),
-            onChanged: (p1) {},
+          BlocProvider(
+            create: (context) => sl<AwardCubit>(),
+            child: AmbassadorExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (p1) {},
+            ),
           ),
           AmbassadorContractPageView(
             key: const PageStorageKey<String>('pageSix'),
@@ -226,7 +261,7 @@ class _FillProfileInformationPageState
         ];
 
       case 'brandface':
-        _pageTitles = [
+        titles = [
           'General info',
           'Niche',
           'Services',
@@ -234,7 +269,7 @@ class _FillProfileInformationPageState
           'Camera experience',
           'My Pricing/Tariffs',
         ];
-        _cachedWidgets = [
+        widgets = [
           BlocProvider(
             create: (context) => sl<LanguageCubit>(),
             child: GeneralInfoPageView(
@@ -265,6 +300,7 @@ class _FillProfileInformationPageState
             create: (context) => sl<CategoryCubit>(),
             child: NichePageView(
               key: const PageStorageKey<String>('pageTwo'),
+              initialCategoryIds: _finalParam.categoryIds,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
               },
@@ -274,6 +310,7 @@ class _FillProfileInformationPageState
             create: (context) => sl<ServiceTypeCubit>(),
             child: ServicesPageView(
               key: const PageStorageKey<String>('pageThree'),
+              initialServiceIds: _finalParam.serviceIds,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(serviceIds: p1.serviceIds);
               },
@@ -288,12 +325,16 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BrandfaceCameraExperiencePageView(
-            key: const PageStorageKey<String>('pageFive'),
-            onChanged: (p1) {},
+          BlocProvider(
+            create: (context) => sl<AwardCubit>(),
+            child: BrandfaceCameraExperiencePageView(
+              key: const PageStorageKey<String>('pageFive'),
+              onChanged: (p1) {},
+            ),
           ),
           BrandfacePricingPageView(
             key: const PageStorageKey<String>('pageSix'),
+            initialParam: _finalParam,
             onChanged: (p1) {
               _finalParam = _finalParam.copyWith(pricing: p1.pricing);
             },
@@ -301,14 +342,17 @@ class _FillProfileInformationPageState
         ];
 
       case 'brand':
-        _pageTitles = ['General info', 'Categories'];
-        _cachedWidgets = [
+        titles = ['General info', 'Categories'];
+        widgets = [
           BrandInfoPageView(
             key: const PageStorageKey<String>('pageOne'),
             onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(
+              _brandParam = _brandParam.copyWith(
                 regionId: p1.regionId,
                 cityId: p1.cityId,
+                sphereId: p1.sphereId,
+                logoId: p1.logoId,
+                description: p1.description,
               );
             },
           ),
@@ -317,15 +361,39 @@ class _FillProfileInformationPageState
             child: BrandCategoriesPageView(
               key: const PageStorageKey<String>('pageTwo'),
               onChanged: (p1) {
-                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+                _brandParam = _brandParam.copyWith(categoryIds: p1.categoryIds);
               },
             ),
           ),
         ];
 
       default:
-        _pageTitles = [];
-        _cachedWidgets = [];
+        titles = [];
+        widgets = [];
+    }
+
+    setState(() {
+      _pageTitles = titles;
+      _cachedWidgets = widgets;
+      _isProfileLoading = false;
+    });
+  }
+
+  void _saveAndContinueLater() {
+    if (_isBrand) {
+      context.read<FillBrandProfileBloc>().add(
+        FillBrandProfileEvent.fillBrandProfile(
+          profileId: widget.registrationEntity.profileId.toString(),
+          params: _brandParam,
+        ),
+      );
+    } else {
+      context.read<FillProfileBloc>().add(
+        FillProfileEvent.fillProfile(
+          profile: widget.registrationEntity.profileId.toString(),
+          params: _finalParam,
+        ),
+      );
     }
   }
 
@@ -358,162 +426,193 @@ class _FillProfileInformationPageState
             );
           },
         ),
+        BlocListener<FillBrandProfileBloc, FillBrandProfileState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              filled: () {
+                context.go(BrandHomePage.tag);
+              },
+              failure: (failure) {
+                BrandfaceBottomSheet.openFailureBottomSheet(
+                  context: context,
+                  message: failure.localized,
+                );
+              },
+              orElse: () {},
+            );
+          },
+        ),
         BlocListener<GetProfileCubit, GetProfileState>(
           listener: (context, state) {
             state.maybeWhen(
-              orElse: () {},
               profileLoaded: (data) {
-                setState(() {
-                  _finalParam = data.toParam();
-                });
+                _finalParam = data.toParam();
+                _buildWidgetsAndTitles();
               },
+              profileLoadFailure: (_) {
+                _buildWidgetsAndTitles();
+              },
+              orElse: () {},
             );
           },
         ),
       ],
       child: Scaffold(
-        bottomNavigationBar: Container(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            bottom: MediaQuery.of(context).padding.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppButtons.primary(
-                title: t.onboarding.kContinue,
-                onTap: () {
-                  if (_currentPage < _totalPages - 1) {
-                    pageController.nextPage(
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeInOut,
-                    );
-                  } else {
-                    context.read<FillProfileBloc>().add(
-                      FillProfileEvent.fillProfile(
-                        profile: widget.registrationEntity.profileId.toString(),
-                        params: _finalParam,
+        bottomNavigationBar: _isProfileLoading
+            ? null
+            : Container(
+                padding: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  bottom: MediaQuery.of(context).padding.bottom,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppButtons.primary(
+                      title: t.onboarding.kContinue,
+                      onTap: () {
+                        if (_currentPage < _totalPages - 1) {
+                          pageController.nextPage(
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeInOut,
+                          );
+                        } else if (_isBrand) {
+                          context.read<FillBrandProfileBloc>().add(
+                            FillBrandProfileEvent.fillBrandProfile(
+                              profileId: widget.registrationEntity.profileId
+                                  .toString(),
+                              params: _brandParam,
+                            ),
+                          );
+                        } else {
+                          context.read<FillProfileBloc>().add(
+                            FillProfileEvent.fillProfile(
+                              profile: widget.registrationEntity.profileId
+                                  .toString(),
+                              params: _finalParam,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: _saveAndContinueLater,
+                      child: Text(
+                        'Save and continue later',
+                        style: Typographies.labelLarge,
                       ),
-                    );
-                  }
-                },
-              ),
-              SizedBox(height: 8),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  'Save and continue later',
-                  style: Typographies.labelLarge,
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 16 + MediaQuery.of(context).padding.top),
-              Text(
-                'Fill profile information',
-                style: Typographies.headlineSmall,
-              ),
-              SizedBox(height: 16),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: _currentPage > 0
-                        ? () {
-                            pageController.previousPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        : null,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(999),
-                        color: AppColors.lightBg2,
-                      ),
-                      child: SvgPicture.asset(AppAssets.icArrowLeft),
+        body: _isProfileLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 16 + MediaQuery.of(context).padding.top),
+                    Text(
+                      'Fill profile information',
+                      style: Typographies.headlineSmall,
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(999),
-                        color: AppColors.black,
-                      ),
-                      child: Center(
-                        child: Text(
-                          _pageViewTitle,
-                          style: Typographies.labelMedium.copyWith(
-                            color: AppColors.lightBg,
+                    SizedBox(height: 16),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        GestureDetector(
+                          onTap: _currentPage > 0
+                              ? () {
+                                  pageController.previousPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                              : null,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(999),
+                              color: AppColors.lightBg2,
+                            ),
+                            child: SvgPicture.asset(AppAssets.icArrowLeft),
                           ),
                         ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(999),
+                              color: AppColors.black,
+                            ),
+                            child: Center(
+                              child: Text(
+                                _pageViewTitle,
+                                style: Typographies.labelMedium.copyWith(
+                                  color: AppColors.lightBg,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: _currentPage < _totalPages - 1
+                              ? () {
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                              : null,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(999),
+                              color: AppColors.lightBg2,
+                            ),
+                            child: SvgPicture.asset(AppAssets.icArrowRight),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24),
+                    Expanded(
+                      child: PageView.builder(
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentPage = index;
+                          });
+                        },
+                        scrollDirection: Axis.horizontal,
+                        controller: pageController,
+                        itemCount: _cachedWidgets.length,
+                        itemBuilder: (context, index) {
+                          return _cachedWidgets[index];
+                        },
                       ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: _currentPage < _totalPages - 1
-                        ? () {
-                            pageController.nextPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        : null,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(999),
-                        color: AppColors.lightBg2,
-                      ),
-                      child: SvgPicture.asset(AppAssets.icArrowRight),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-              Expanded(
-                child: PageView.builder(
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                  },
-                  scrollDirection: Axis.horizontal,
-                  controller: pageController,
-                  itemCount: _cachedWidgets.length,
-                  itemBuilder: (context, index) {
-                    return _cachedWidgets[index];
-                  },
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

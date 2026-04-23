@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class _ProfileAvatarItemState extends State<ProfileAvatarItem> {
                         ? SvgPicture.asset(AppAssets.icCheckBox)
                         : SvgPicture.asset(AppAssets.icCheckBoxDisabled),
                     SizedBox(width: 4),
-                    Text('Set as main', style: Typographies.labelSmall),
+                    Text(t.common.set_as_main, style: Typographies.labelSmall),
                   ],
                 ),
               ],

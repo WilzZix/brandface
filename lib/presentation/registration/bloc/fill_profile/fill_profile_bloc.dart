@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:brandface/domain/usecase/registration/fill_profile_info_usecase.dart';
 import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import 'package:brandface/domain/usecase/registration/update_my_profile_usecase.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/error/failures.dart';
@@ -14,11 +16,20 @@ part 'fill_profile_bloc.freezed.dart';
 
 class FillProfileBloc extends Bloc<FillProfileEvent, FillProfileState> {
   final FillProfileInfoUsecase _fillProfileInfoUsecase;
+  final UpdateMyProfileUsecase _updateMyProfileUsecase;
 
-  FillProfileBloc({required FillProfileInfoUsecase fillProfileInfoUsecase})
-    : _fillProfileInfoUsecase = fillProfileInfoUsecase,
+  bool _isEditMode = false;
 
-      super(const FillProfileState.initial()) {
+  void setEditMode(bool isEditMode) {
+    _isEditMode = isEditMode;
+  }
+
+  FillProfileBloc({
+    required FillProfileInfoUsecase fillProfileInfoUsecase,
+    required UpdateMyProfileUsecase updateMyProfileUsecase,
+  })  : _fillProfileInfoUsecase = fillProfileInfoUsecase,
+        _updateMyProfileUsecase = updateMyProfileUsecase,
+        super(const FillProfileState.initial()) {
     on<_FillProfile>(_fillProfile);
   }
 
@@ -27,12 +38,20 @@ class FillProfileBloc extends Bloc<FillProfileEvent, FillProfileState> {
     Emitter<FillProfileState> emit,
   ) async {
     emit(FillProfileState.loading());
-    final result = await _fillProfileInfoUsecase.call(
-      params: FillProfileParams(
-        profileId: event.profile,
-        profileData: event.params,
-      ),
-    );
+
+    final Either<Failure, void> result;
+
+    if (_isEditMode) {
+      result = await _updateMyProfileUsecase.call(params: event.params);
+    } else {
+      result = await _fillProfileInfoUsecase.call(
+        params: FillProfileParams(
+          profileId: event.profile,
+          profileData: event.params,
+        ),
+      );
+    }
+
     result.fold(
       ifLeft: (failure) {
         emit(FillProfileState.fillingFailure(failure: failure));

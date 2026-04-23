@@ -42,6 +42,8 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsLoginRu login = _TranslationsLoginRu._(_root);
 	@override late final _TranslationsRegistrationRu registration = _TranslationsRegistrationRu._(_root);
 	@override late final _TranslationsCommonRu common = _TranslationsCommonRu._(_root);
+	@override late final _TranslationsProfileRu profile = _TranslationsProfileRu._(_root);
+	@override late final _TranslationsValidationRu validation = _TranslationsValidationRu._(_root);
 	@override late final _TranslationsChooseRu choose = _TranslationsChooseRu._(_root);
 	@override late final _TranslationsContactRu contact = _TranslationsContactRu._(_root);
 	@override late final _TranslationsOptionalItemsRu optional_items = _TranslationsOptionalItemsRu._(_root);
@@ -80,6 +82,9 @@ class _TranslationsLoginRu implements TranslationsLoginUz {
 	@override String get term_of_use_first => 'Нажимая «Войти», я принимаю все ';
 	@override String get term_of_use_second => 'условия использования';
 	@override String get login_methods => 'или войти через';
+	@override String get sms_confirmation => 'SMS подтверждение';
+	@override String sms_sent_to({required Object phoneEnd}) => 'На ваш номер телефона **${phoneEnd} отправлен SMS код, пожалуйста введите его';
+	@override String get send_code_again => 'Отправить код снова';
 }
 
 // Path: registration
@@ -95,6 +100,7 @@ class _TranslationsRegistrationRu implements TranslationsRegistrationUz {
 	@override String get brand => 'Бренд';
 	@override String get your_name => 'Ваше имя';
 	@override String get your_surname => 'Ваша фамилия';
+	@override String get full_name => 'Полное имя';
 	@override String get brand_name => 'Название бренда';
 	@override String get upload_profile_picture => 'Загрузить фото профиля';
 	@override String get choose_file => 'Выбрать файл';
@@ -162,6 +168,47 @@ class _TranslationsCommonRu implements TranslationsCommonUz {
 	@override String get write_text_here => 'Напишите текст...';
 	@override String get please_enter_text => 'Пожалуйста, введите текст';
 	@override String get email => 'Email';
+	@override String get set_as_main => 'Сделать основным';
+}
+
+// Path: profile
+class _TranslationsProfileRu implements TranslationsProfileUz {
+	_TranslationsProfileRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get profile_page => 'Страница профиля';
+	@override String get stats => 'Статистика';
+	@override String get reviews => 'Отзывы';
+	@override String get calendar => 'Календарь';
+	@override String get portfolio => 'Портфолио';
+	@override String get billing => 'Биллинг';
+	@override String get make_profile_top => 'Сделать профиль TOP';
+	@override String get app_language => 'Язык приложения';
+	@override String get terms_and_conditions => 'Условия использования';
+	@override String get log_out => 'Выйти';
+	@override String get general_info => 'Общая информация';
+	@override String get audience_and_followers => 'Аудитория и подписчики';
+	@override String get experience => 'Опыт';
+	@override String get awards => 'Награды';
+	@override String get pricing_tariffs => 'Ценообразование / Тарифы';
+	@override String get payment_type => 'Тип оплаты';
+	@override String get delete_account => 'Удалить аккаунт';
+	@override String age_range({required Object from, required Object to}) => 'Возраст ${from} - ${to}';
+}
+
+// Path: validation
+class _TranslationsValidationRu implements TranslationsValidationUz {
+	_TranslationsValidationRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get name_required => 'Пожалуйста, введите имя и фамилию';
+	@override String get name_full_required => 'Пожалуйста, введите полное имя и фамилию';
+	@override String get name_letters_only => 'Имя должно содержать только буквы';
+	@override String get name_too_short => 'Имя слишком короткое';
 }
 
 // Path: choose
@@ -259,12 +306,16 @@ extension on TranslationsRu {
 			'login.term_of_use_first' => 'Нажимая «Войти», я принимаю все ',
 			'login.term_of_use_second' => 'условия использования',
 			'login.login_methods' => 'или войти через',
+			'login.sms_confirmation' => 'SMS подтверждение',
+			'login.sms_sent_to' => ({required Object phoneEnd}) => 'На ваш номер телефона **${phoneEnd} отправлен SMS код, пожалуйста введите его',
+			'login.send_code_again' => 'Отправить код снова',
 			'registration.title' => 'Регистрация',
 			'registration.influencer' => 'Инфлюенсер',
 			'registration.ambassador' => 'Амбассадор',
 			'registration.brand' => 'Бренд',
 			'registration.your_name' => 'Ваше имя',
 			'registration.your_surname' => 'Ваша фамилия',
+			'registration.full_name' => 'Полное имя',
 			'registration.brand_name' => 'Название бренда',
 			'registration.upload_profile_picture' => 'Загрузить фото профиля',
 			'registration.choose_file' => 'Выбрать файл',
@@ -323,6 +374,29 @@ extension on TranslationsRu {
 			'common.write_text_here' => 'Напишите текст...',
 			'common.please_enter_text' => 'Пожалуйста, введите текст',
 			'common.email' => 'Email',
+			'common.set_as_main' => 'Сделать основным',
+			'profile.profile_page' => 'Страница профиля',
+			'profile.stats' => 'Статистика',
+			'profile.reviews' => 'Отзывы',
+			'profile.calendar' => 'Календарь',
+			'profile.portfolio' => 'Портфолио',
+			'profile.billing' => 'Биллинг',
+			'profile.make_profile_top' => 'Сделать профиль TOP',
+			'profile.app_language' => 'Язык приложения',
+			'profile.terms_and_conditions' => 'Условия использования',
+			'profile.log_out' => 'Выйти',
+			'profile.general_info' => 'Общая информация',
+			'profile.audience_and_followers' => 'Аудитория и подписчики',
+			'profile.experience' => 'Опыт',
+			'profile.awards' => 'Награды',
+			'profile.pricing_tariffs' => 'Ценообразование / Тарифы',
+			'profile.payment_type' => 'Тип оплаты',
+			'profile.delete_account' => 'Удалить аккаунт',
+			'profile.age_range' => ({required Object from, required Object to}) => 'Возраст ${from} - ${to}',
+			'validation.name_required' => 'Пожалуйста, введите имя и фамилию',
+			'validation.name_full_required' => 'Пожалуйста, введите полное имя и фамилию',
+			'validation.name_letters_only' => 'Имя должно содержать только буквы',
+			'validation.name_too_short' => 'Имя слишком короткое',
 			'choose.select_niche' => 'Выбрать нишу',
 			'choose.select_gender' => 'Выбрать пол',
 			'choose.select_geography' => 'Выбрать географию',

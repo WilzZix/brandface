@@ -104,4 +104,23 @@ class RegistrationRepositoryImpl implements IRegistrationRepository {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> updateMyProfile({
+    required FillInfluencerProfileParam params,
+  }) async {
+    try {
+      await _dataSource.updateMyInfluencerProfile(params: params);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
 }

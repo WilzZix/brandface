@@ -45,6 +45,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsLoginUz login = TranslationsLoginUz._(_root);
 	late final TranslationsRegistrationUz registration = TranslationsRegistrationUz._(_root);
 	late final TranslationsCommonUz common = TranslationsCommonUz._(_root);
+	late final TranslationsProfileUz profile = TranslationsProfileUz._(_root);
+	late final TranslationsValidationUz validation = TranslationsValidationUz._(_root);
 	late final TranslationsChooseUz choose = TranslationsChooseUz._(_root);
 	late final TranslationsContactUz contact = TranslationsContactUz._(_root);
 	late final TranslationsOptionalItemsUz optional_items = TranslationsOptionalItemsUz._(_root);
@@ -97,6 +99,15 @@ class TranslationsLoginUz {
 
 	/// uz: 'or login in with'
 	String get login_methods => 'or login in with';
+
+	/// uz: 'SMS confirmation'
+	String get sms_confirmation => 'SMS confirmation';
+
+	/// uz: 'We have sent SMS code to your phone number **$phoneEnd, please enter this code'
+	String sms_sent_to({required Object phoneEnd}) => 'We have sent SMS code to your phone number **${phoneEnd}, please enter this code';
+
+	/// uz: 'Send code again'
+	String get send_code_again => 'Send code again';
 }
 
 // Path: registration
@@ -125,8 +136,11 @@ class TranslationsRegistrationUz {
 	/// uz: 'Your surname'
 	String get your_surname => 'Your surname';
 
-	/// uz: 'Brand nomi'
-	String get brand_name => 'Brand nomi';
+	/// uz: 'Full name'
+	String get full_name => 'Full name';
+
+	/// uz: 'Brand name'
+	String get brand_name => 'Brand name';
 
 	/// uz: 'Upload profile picture'
 	String get upload_profile_picture => 'Upload profile picture';
@@ -307,6 +321,93 @@ class TranslationsCommonUz {
 
 	/// uz: 'Email'
 	String get email => 'Email';
+
+	/// uz: 'Set as main'
+	String get set_as_main => 'Set as main';
+}
+
+// Path: profile
+class TranslationsProfileUz {
+	TranslationsProfileUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Profile page'
+	String get profile_page => 'Profile page';
+
+	/// uz: 'Stats'
+	String get stats => 'Stats';
+
+	/// uz: 'Reviews'
+	String get reviews => 'Reviews';
+
+	/// uz: 'Calendar'
+	String get calendar => 'Calendar';
+
+	/// uz: 'Portfolio'
+	String get portfolio => 'Portfolio';
+
+	/// uz: 'Billing'
+	String get billing => 'Billing';
+
+	/// uz: 'Make the profile TOP'
+	String get make_profile_top => 'Make the profile TOP';
+
+	/// uz: 'App language'
+	String get app_language => 'App language';
+
+	/// uz: 'Terms and conditions'
+	String get terms_and_conditions => 'Terms and conditions';
+
+	/// uz: 'Log out'
+	String get log_out => 'Log out';
+
+	/// uz: 'General info'
+	String get general_info => 'General info';
+
+	/// uz: 'Audience and followers'
+	String get audience_and_followers => 'Audience and followers';
+
+	/// uz: 'Experience'
+	String get experience => 'Experience';
+
+	/// uz: 'Awards'
+	String get awards => 'Awards';
+
+	/// uz: 'Pricing / Tariffs'
+	String get pricing_tariffs => 'Pricing / Tariffs';
+
+	/// uz: 'Payment type'
+	String get payment_type => 'Payment type';
+
+	/// uz: 'Delete account'
+	String get delete_account => 'Delete account';
+
+	/// uz: 'Age $from - $to'
+	String age_range({required Object from, required Object to}) => 'Age ${from} - ${to}';
+}
+
+// Path: validation
+class TranslationsValidationUz {
+	TranslationsValidationUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Please enter your name and surname'
+	String get name_required => 'Please enter your name and surname';
+
+	/// uz: 'Please enter your full name and surname'
+	String get name_full_required => 'Please enter your full name and surname';
+
+	/// uz: 'Name must contain only letters'
+	String get name_letters_only => 'Name must contain only letters';
+
+	/// uz: 'Name is too short'
+	String get name_too_short => 'Name is too short';
 }
 
 // Path: choose
@@ -473,13 +574,17 @@ extension on Translations {
 			'login.term_of_use_first' => 'By pressing Login i agree to all ',
 			'login.term_of_use_second' => 'terms of use',
 			'login.login_methods' => 'or login in with',
+			'login.sms_confirmation' => 'SMS confirmation',
+			'login.sms_sent_to' => ({required Object phoneEnd}) => 'We have sent SMS code to your phone number **${phoneEnd}, please enter this code',
+			'login.send_code_again' => 'Send code again',
 			'registration.title' => 'Registration',
 			'registration.influencer' => 'Influencer',
 			'registration.ambassador' => 'Ambassador',
 			'registration.brand' => 'Brand',
 			'registration.your_name' => 'Your name',
 			'registration.your_surname' => 'Your surname',
-			'registration.brand_name' => 'Brand nomi',
+			'registration.full_name' => 'Full name',
+			'registration.brand_name' => 'Brand name',
 			'registration.upload_profile_picture' => 'Upload profile picture',
 			'registration.choose_file' => 'Choose file',
 			'registration.file_format_hint' => 'SVG, PNG, JPG or GIF (MAX. 800x400px).',
@@ -537,6 +642,29 @@ extension on Translations {
 			'common.write_text_here' => 'Write text here...',
 			'common.please_enter_text' => 'Please enter some text',
 			'common.email' => 'Email',
+			'common.set_as_main' => 'Set as main',
+			'profile.profile_page' => 'Profile page',
+			'profile.stats' => 'Stats',
+			'profile.reviews' => 'Reviews',
+			'profile.calendar' => 'Calendar',
+			'profile.portfolio' => 'Portfolio',
+			'profile.billing' => 'Billing',
+			'profile.make_profile_top' => 'Make the profile TOP',
+			'profile.app_language' => 'App language',
+			'profile.terms_and_conditions' => 'Terms and conditions',
+			'profile.log_out' => 'Log out',
+			'profile.general_info' => 'General info',
+			'profile.audience_and_followers' => 'Audience and followers',
+			'profile.experience' => 'Experience',
+			'profile.awards' => 'Awards',
+			'profile.pricing_tariffs' => 'Pricing / Tariffs',
+			'profile.payment_type' => 'Payment type',
+			'profile.delete_account' => 'Delete account',
+			'profile.age_range' => ({required Object from, required Object to}) => 'Age ${from} - ${to}',
+			'validation.name_required' => 'Please enter your name and surname',
+			'validation.name_full_required' => 'Please enter your full name and surname',
+			'validation.name_letters_only' => 'Name must contain only letters',
+			'validation.name_too_short' => 'Name is too short',
 			'choose.select_niche' => 'Select niche',
 			'choose.select_gender' => 'Select gender',
 			'choose.select_geography' => 'Select geography',

@@ -14,11 +14,13 @@ class ChooseDateOfBirthday extends StatefulWidget {
     required this.label,
     required this.onItemSelected,
     required this.iconPath,
+    this.initialValue,
   });
 
   final String title;
   final String label;
   final String iconPath;
+  final DateTime? initialValue;
   final Function(DateTime) onItemSelected;
 
   @override
@@ -31,8 +33,13 @@ class _ChooseDateOfBirthdayState extends State<ChooseDateOfBirthday> {
 
   @override
   void initState() {
-    _selectedLang = widget.title;
     super.initState();
+    if (widget.initialValue != null) {
+      _selectedDate = widget.initialValue;
+      _selectedLang = DateFormat('dd.MM.yyyy').format(widget.initialValue!);
+    } else {
+      _selectedLang = widget.title;
+    }
   }
 
   @override

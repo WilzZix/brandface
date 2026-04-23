@@ -1,7 +1,7 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_niche.dart';
@@ -10,7 +10,7 @@ import 'choose_spoken_language.dart';
 class BrandCategoriesPageView extends StatefulWidget {
   const BrandCategoriesPageView({super.key, required this.onChanged});
 
-  final Function(FillInfluencerProfileParam) onChanged;
+  final Function(FillBrandProfileParam) onChanged;
 
   @override
   State<BrandCategoriesPageView> createState() =>
@@ -19,7 +19,7 @@ class BrandCategoriesPageView extends StatefulWidget {
 
 class _BrandCategoriesPageViewState extends State<BrandCategoriesPageView>
     with AutomaticKeepAliveClientMixin<BrandCategoriesPageView> {
-  FillInfluencerProfileParam _param = FillInfluencerProfileParam();
+  FillBrandProfileParam _param = FillBrandProfileParam();
   final List<LangItemModel> _selectedCategories = [];
 
   void _updateData() {

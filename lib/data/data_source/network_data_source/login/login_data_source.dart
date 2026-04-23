@@ -13,6 +13,8 @@ abstract class LoginRemoteDataSource {
   Future<VerifyOtpModel> verifyOtp({required VerifyOtpParams params});
 
   Future<UserModel> getMe();
+
+  Future<void> deleteAccount();
 }
 
 class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
@@ -79,6 +81,15 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
           type: DioExceptionType.badResponse,
         );
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await _dioClient.delete(ApiRoutes.deleteAccount);
     } catch (e) {
       rethrow;
     }

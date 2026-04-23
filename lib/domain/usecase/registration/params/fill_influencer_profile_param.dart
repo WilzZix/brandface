@@ -115,6 +115,7 @@ class Audience {
   final String? engagementRate;
   final List<String>? geography;
   final List<String>? socialMediaStats;
+  final List<SocialMediaAccount>? socialMediaAccounts;
 
   Audience({
     this.brandSegment,
@@ -128,6 +129,7 @@ class Audience {
     this.engagementRate,
     this.geography,
     this.socialMediaStats,
+    this.socialMediaAccounts,
   });
 
   Audience copyWith({
@@ -142,6 +144,7 @@ class Audience {
     String? engagementRate,
     List<String>? geography,
     List<String>? socialMediaStats,
+    List<SocialMediaAccount>? socialMediaAccounts,
   }) => Audience(
     brandSegment: brandSegment ?? this.brandSegment,
     totalFollowers: totalFollowers ?? this.totalFollowers,
@@ -154,6 +157,7 @@ class Audience {
     engagementRate: engagementRate ?? this.engagementRate,
     geography: geography ?? this.geography,
     socialMediaStats: socialMediaStats ?? this.socialMediaStats,
+    socialMediaAccounts: socialMediaAccounts ?? this.socialMediaAccounts,
   );
 
   Map<String, dynamic> toJson() {
@@ -169,6 +173,7 @@ class Audience {
       "engagement_rate": engagementRate,
       "geography": geography,
       "social_media_stats": socialMediaStats,
+      "social_channels": socialMediaAccounts?.map((e) => e.toJson()).toList(),
     };
   }
 }
@@ -278,6 +283,17 @@ class Pricing {
       "campaign_fee_currency": campaignFeeCurrency,
       "monthly_exclusivity_fee": monthlyExclusivityFee,
       "event_appearance_fee": eventAppearanceFee,
-    };
+    }..removeWhere((key, value) => value == null);
+  }
+}
+
+class SocialMediaAccount {
+  final String platform;
+  final String username;
+
+  SocialMediaAccount({required this.platform, required this.username});
+
+  Map<String, dynamic> toJson() {
+    return {"platform": platform, "username": username};
   }
 }

@@ -15,11 +15,13 @@ class ChooseGender extends StatefulWidget {
     required this.title,
     required this.label,
     required this.onItemSelected,
+    this.initialValue,
   });
 
   final String title;
   final String label;
   final Function(String) onItemSelected;
+  final String? initialValue;
 
   @override
   State<ChooseGender> createState() => _ChooseGenderState();
@@ -35,8 +37,16 @@ class _ChooseGenderState extends State<ChooseGender> {
 
   @override
   void initState() {
-    _selectedLang = widget.title;
     super.initState();
+    if (widget.initialValue == 'male') {
+      _selectedLang = t.registration.male;
+      _selectedLangId = 0;
+    } else if (widget.initialValue == 'female') {
+      _selectedLang = t.registration.female;
+      _selectedLangId = 1;
+    } else {
+      _selectedLang = widget.title;
+    }
   }
 
   @override

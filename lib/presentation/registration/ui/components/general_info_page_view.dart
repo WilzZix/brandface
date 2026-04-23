@@ -37,8 +37,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
 
   @override
   void initState() {
-    _profileInfoController.text = widget.initialParam?.bio ?? '';
     super.initState();
+    _fillInfluencerProfileParam = widget.initialParam ?? FillInfluencerProfileParam();
+    _profileInfoController.text = widget.initialParam?.bio ?? '';
+    _fullNameController.text = widget.initialParam?.displayName ?? '';
   }
 
   @override
@@ -109,34 +111,34 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Full name', style: Typographies.titleSmall),
+              Text(t.registration.full_name, style: Typographies.titleSmall),
               const SizedBox(height: 8),
               CredInputField(
                 controller: _fullNameController,
-                label: 'Full name',
-                onChanged: () {
+                label: t.registration.full_name,
+                onChanged: (val) {
                   _fillInfluencerProfileParam = _fillInfluencerProfileParam
-                      .copyWith(displayName: _fullNameController.text);
+                      .copyWith(displayName:val);
                   widget.onChanged(_fillInfluencerProfileParam);
                 },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Iltimos, ism va familiyangizni kiriting';
+                    return t.validation.name_required;
                   }
 
-                  final nameParts = value.trim().split(RegExp(r'\s+'));
+                  final nameParts = value.trim().split(RegExp('rs+'));
                   if (nameParts.length < 2) {
-                    return 'Iltimos, toʻliq ism va familiyangizni kiriting';
+                    return t.validation.name_full_required;
                   }
 
-                  final nameRegExp = RegExp(r"^[a-zA-Zа-яА-ЯёЁқҚғҒҳҲўЎʼ'‘ ]+$");
+                  final nameRegExp = RegExp(r"^[a-zA-Zа-яА-ЯёЁқҚғҒҳҲўЎʼ' ]+$");
 
                   if (!nameRegExp.hasMatch(value)) {
-                    return 'Ismda faqat harflar boʻlishi kerak';
+                    return t.validation.name_letters_only;
                   }
 
                   if (value.trim().length < 3) {
-                    return 'Ism juda qisqa';
+                    return t.validation.name_too_short;
                   }
 
                   return null;
@@ -157,6 +159,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseDateOfBirthday(
+            initialValue: widget.initialParam?.birthDate,
             title: 'DD.MM.YYYY',
             label: t.registration.date_of_birth,
             onItemSelected: (DateTime date) {
@@ -168,6 +171,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseGender(
+            initialValue: widget.initialParam?.gender,
             title: t.common.select,
             label: t.registration.gender,
             onItemSelected: (String p1) {
@@ -178,6 +182,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           ),
           SizedBox(height: 24),
           ChooseContactDetail(
+            initialValue: widget.initialParam?.contacts,
             title: t.contact.phone,
             label: t.registration.contact_details,
             onItemSelected: (List<Contact> contacts) {

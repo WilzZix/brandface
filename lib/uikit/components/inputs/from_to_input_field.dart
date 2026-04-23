@@ -11,6 +11,7 @@ class FromToInputField extends StatefulWidget {
     required this.labelFrom,
     required this.labelTo,
     required this.title,
+    this.onChanged,
   });
 
   final TextEditingController controllerFrom;
@@ -18,6 +19,7 @@ class FromToInputField extends StatefulWidget {
   final String title;
   final String labelFrom;
   final String labelTo;
+  final VoidCallback? onChanged;
 
   @override
   State<FromToInputField> createState() => _FromToInputFieldState();
@@ -36,6 +38,9 @@ class _FromToInputFieldState extends State<FromToInputField> {
           children: [
             Expanded(
               child: TextField(
+                onChanged: (value) {
+                  widget.onChanged?.call();
+                },
                 controller: widget.controllerFrom,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(

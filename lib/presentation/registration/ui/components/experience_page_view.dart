@@ -1,6 +1,10 @@
+import 'package:brandface/core/error/failures.dart' show FailureLocalization;
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
+import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/buttons/buttons.dart';
@@ -9,8 +13,13 @@ import 'choose_partners.dart';
 import 'choose_spoken_language.dart';
 
 class ExperiencePageView extends StatefulWidget {
-  const ExperiencePageView({super.key, required this.onChanged});
+  const ExperiencePageView({
+    super.key,
+    required this.initialParam,
+    required this.onChanged,
+  });
 
+  final FillInfluencerProfileParam initialParam;
   final Function(FillInfluencerProfileParam) onChanged;
 
   @override
@@ -19,15 +28,19 @@ class ExperiencePageView extends StatefulWidget {
 
 class _ExperiencePageViewState extends State<ExperiencePageView>
     with AutomaticKeepAliveClientMixin<ExperiencePageView> {
-  FillInfluencerProfileParam _param = FillInfluencerProfileParam();
+  late FillInfluencerProfileParam _param;
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _param = widget.initialParam;
+    final years = widget.initialParam.yearsOfExperience;
+    if (years != null) {
+      _experienceController.text = years.toString();
+    }
     _experienceController.addListener(_handleExperienceChange);
-    _awardController.addListener(_handleAwardChange);
   }
 
   void _handleExperienceChange() {
@@ -38,13 +51,6 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
         _param = _param.copyWith(yearsOfExperience: years);
         widget.onChanged(_param);
       }
-    }
-  }
-
-  void _handleAwardChange() {
-    final text = _awardController.text;
-    if (text.isNotEmpty) {
-      widget.onChanged(_param);
     }
   }
 
@@ -83,33 +89,99 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
             },
           ),
           SizedBox(height: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                t.registration.write_award_info,
-                style: Typographies.titleSmall,
-              ),
-              SizedBox(height: 8),
-              Row(
+          BlocConsumer<AwardCubit, AwardState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                failure: (awards, failure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(failure.localized),
+                      backgroundColor: AppColors.red,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+                orElse: () {},
+              );
+            },
+            builder: (context, state) {
+              final awards = state.awards;
+              final isLoading = state.maybeWhen(
+                loading: (_) => true,
+                orElse: () => false,
+              );
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: CredInputField(
-                      controller: _awardController,
-                      label: t.registration.write_award_info,
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return t.common.please_enter_text;
-                        }
-                        return null;
+                  Text(
+                    t.registration.write_award_info,
+                    style: Typographies.titleSmall,
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CredInputField(
+                          controller: _awardController,
+                          label: t.registration.write_award_info,
+                          validator: (v) => null,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      AppButtons.primary(
+                        title: t.common.apply,
+                        onTap: isLoading
+                            ? null
+                            : () {
+                                final text = _awardController.text.trim();
+                                if (text.isNotEmpty) {
+                                  context.read<AwardCubit>().createAward(
+                                    title: text,
+                                  );
+                                  _awardController.clear();
+                                }
+                              },
+                      ),
+                    ],
+                  ),
+                  if (awards.isNotEmpty)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: awards.length,
+                      itemBuilder: (context, index) {
+                        final award = awards[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  award.title,
+                                  style: Typographies.bodyMedium,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () => context
+                                    .read<AwardCubit>()
+                                    .deleteAward(awardId: award.id),
+                                child: Text(
+                                  t.common.delete,
+                                  style: Typographies.labelLarge.copyWith(
+                                    color: AppColors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  AppButtons.primary(title: t.common.apply, onTap: () {}),
                 ],
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),
@@ -119,7 +191,6 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
   @override
   void dispose() {
     _experienceController.removeListener(_handleExperienceChange);
-    _awardController.removeListener(_handleAwardChange);
     _experienceController.dispose();
     _awardController.dispose();
     super.dispose();

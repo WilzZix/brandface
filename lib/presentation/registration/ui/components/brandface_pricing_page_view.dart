@@ -10,9 +10,14 @@ import 'choose_currency.dart';
 import 'choose_spoken_language.dart';
 
 class BrandfacePricingPageView extends StatefulWidget {
-  const BrandfacePricingPageView({super.key, required this.onChanged});
+  const BrandfacePricingPageView({
+    super.key,
+    required this.onChanged,
+    this.initialParam,
+  });
 
   final Function(FillInfluencerProfileParam) onChanged;
+  final FillInfluencerProfileParam? initialParam;
 
   @override
   State<BrandfacePricingPageView> createState() =>
@@ -20,11 +25,22 @@ class BrandfacePricingPageView extends StatefulWidget {
 }
 
 class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
-  final FillInfluencerProfileParam _param = FillInfluencerProfileParam();
+  late FillInfluencerProfileParam _param;
   final TextEditingController _hourlyRateFrom = TextEditingController();
   final TextEditingController _hourlyRateTo = TextEditingController();
   final TextEditingController _paymentByProjectController =
       TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialParam;
+    _param = initial ?? FillInfluencerProfileParam();
+    final pricing = initial?.pricing;
+    _hourlyRateFrom.text = pricing?.hourlyRateMinUzs ?? pricing?.hourlyRateMinUsd ?? '';
+    _hourlyRateTo.text = pricing?.hourlyRateMaxUzs ?? pricing?.hourlyRateMaxUsd ?? '';
+    _paymentByProjectController.text = pricing?.campaignFee ?? '';
+  }
 
   void _updateData() {
     widget.onChanged(_param);

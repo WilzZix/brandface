@@ -82,10 +82,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             emit(LoginState.verifyingOtpFailure(msg: failure.message));
           },
           ifRight: (userEntity) async {
-            // 4. Foydalanuvchi ID-sini saqlash
             await _profileService.setProfileId(userEntity.id);
-
-            // 5. HAMMA NARSALARI TAYYOR BO'LGANDAGINA VERIFIED EMIT QILAMIZ
+            await _profileService.setRole(userEntity.role);
             emit(LoginState.otpVerified(otpEntity: otpEntity));
           },
         );

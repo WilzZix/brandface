@@ -4,7 +4,6 @@ import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +13,6 @@ import '../../../../../core/di/app_di.dart';
 import '../../../../../core/i18n/strings.g.dart';
 import '../../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../../utils/services/app_language_service.dart';
-import '../bloc/profile_information/profile_information_cubit.dart';
 import 'billing.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -35,9 +33,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    return _buildScaffold(context);
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile page', style: Typographies.titleLarge),
+        title: Text(t.profile.profile_page, style: Typographies.titleLarge),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
@@ -50,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Profile information', style: Typographies.titleMedium),
+                  Text(t.registration.profile_information, style: Typographies.titleMedium),
                   Spacer(),
                   SvgPicture.asset(AppAssets.icChevronRight),
                 ],
@@ -62,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Stats', style: Typographies.titleMedium),
+                Text(t.profile.stats, style: Typographies.titleMedium),
                 Spacer(),
                 SvgPicture.asset(AppAssets.icChevronRight),
               ],
@@ -74,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Reviews', style: Typographies.titleMedium),
+                  Text(t.profile.reviews, style: Typographies.titleMedium),
                   Spacer(),
                   SvgPicture.asset(AppAssets.icChevronRight),
                 ],
@@ -86,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Calendar', style: Typographies.titleMedium),
+                Text(t.profile.calendar, style: Typographies.titleMedium),
                 Spacer(),
                 SvgPicture.asset(AppAssets.icChevronRight),
               ],
@@ -97,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Portfolio', style: Typographies.titleMedium),
+                Text(t.profile.portfolio, style: Typographies.titleMedium),
                 Spacer(),
                 SvgPicture.asset(AppAssets.icChevronRight),
               ],
@@ -110,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Billing', style: Typographies.titleMedium),
+                  Text(t.profile.billing, style: Typographies.titleMedium),
                   Spacer(),
                   SvgPicture.asset(AppAssets.icChevronRight),
                 ],
@@ -122,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Make the profile TOP', style: Typographies.titleMedium),
+                Text(t.profile.make_profile_top, style: Typographies.titleMedium),
                 Spacer(),
                 SvgPicture.asset(AppAssets.icChevronRight),
               ],
@@ -180,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('App language', style: Typographies.titleMedium),
+                  Text(t.profile.app_language, style: Typographies.titleMedium),
                   Spacer(),
                   SvgPicture.asset(AppAssets.icChevronRight),
                 ],
@@ -192,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Term and conditions', style: Typographies.titleMedium),
+                Text(t.profile.terms_and_conditions, style: Typographies.titleMedium),
                 Spacer(),
                 SvgPicture.asset(AppAssets.icChevronRight),
               ],
@@ -207,7 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
               },
               child: Text(
-                'Log out',
+                t.profile.log_out,
                 style: Typographies.titleMedium.copyWith(color: AppColors.red),
               ),
             ),

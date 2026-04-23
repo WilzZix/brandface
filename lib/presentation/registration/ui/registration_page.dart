@@ -109,7 +109,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     label: t.registration.brand_name,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return t.common.please_enter_text;
                       }
                       return null;
                     },
@@ -120,7 +120,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     label: t.registration.your_name,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return t.common.please_enter_text;
                       }
                       return null;
                     },
@@ -131,7 +131,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     label: t.registration.your_surname,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return t.common.please_enter_text;
                       }
                       return null;
                     },

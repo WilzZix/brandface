@@ -12,6 +12,7 @@ import '../../../../uikit/components/inputs/email_input_field.dart';
 import '../../../../uikit/components/inputs/phone_input_field.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
+import '../../../../utils/extansions/app_exts.dart';
 import 'choose_spoken_language.dart';
 
 class ChooseContactDetail extends StatefulWidget {
@@ -20,11 +21,13 @@ class ChooseContactDetail extends StatefulWidget {
     required this.title,
     required this.label,
     required this.onItemSelected,
+    this.initialValue,
   });
 
   final String title;
   final String label;
   final Function(List<Contact>) onItemSelected;
+  final List<Contact>? initialValue;
 
   @override
   State<ChooseContactDetail> createState() => _ChooseContactDetailState();
@@ -59,6 +62,9 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
   @override
   void initState() {
     _selectedLang = widget.title;
+    if (widget.initialValue != null) {
+      contactItems = List.from(widget.initialValue!);
+    }
     super.initState();
   }
 
@@ -167,7 +173,7 @@ class _ChooseContactDetailState extends State<ChooseContactDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      contactItems[index].value ?? '',
+                      contactItems[index].value!.toPrettyPhoneFormat(),
                       style: Typographies.bodyMedium,
                     ),
                     GestureDetector(

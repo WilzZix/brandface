@@ -10,7 +10,6 @@ import '../../core/constants/app_assets.dart';
 import '../../core/i18n/strings.g.dart';
 import '../home_page/home_page.dart';
 import '../login/ui/login_page.dart';
-import '../registration/ui/registration_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

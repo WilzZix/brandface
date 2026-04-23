@@ -1,4 +1,5 @@
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
+import 'package:brandface/utils/extansions/app_exts.dart';
 import 'package:flutter/material.dart';
 
 class ContactDetails extends StatefulWidget {
@@ -26,7 +27,7 @@ class _ContactDetailsState extends State<ContactDetails> {
         return Row(
           children: [
             Text('${widget.contactData?[index].type}: '),
-            Text('${widget.contactData?[index].value}'),
+            Text('${widget.contactData?[index].value!.toPrettyPhoneFormat()}'),
           ],
         );
       },

@@ -1,8 +1,10 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/profile/award_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/service_type_entity.dart';
+import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
@@ -187,6 +189,71 @@ class ProfileRepositoryImpl implements IProfileRepository {
       );
     } catch (e) {
       return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SocialMediaAccountStatsEntity>>
+  getSocialMediaAccountStats({
+    required String platform,
+    required String username,
+  }) async {
+    try {
+      final socialAccountStats = await _dataSource.getSocialMediaStats(
+        platform: platform,
+        username: username,
+      );
+
+      return Right(socialAccountStats.toEntity());
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AwardEntity>> createAward({required String title}) async {
+    try {
+      final award = await _dataSource.createAward(title: title);
+      return Right(award);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAward({required int awardId}) async {
+    try {
+      await _dataSource.deleteAward(awardId: awardId);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
     }
   }
 }

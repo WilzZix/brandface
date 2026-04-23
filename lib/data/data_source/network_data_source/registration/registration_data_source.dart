@@ -25,6 +25,10 @@ abstract class RegistrationDataSource {
     required FillBrandProfileParam params,
     required String profileId,
   });
+
+  Future<void> updateMyInfluencerProfile({
+    required FillInfluencerProfileParam params,
+  });
 }
 
 class RegistrationDataSourceImpl implements RegistrationDataSource {
@@ -104,6 +108,21 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
     try {
       final response = await _dioClient.patch(
         ApiRoutes.fillBrandProfile(profileId),
+        data: params.toJson(),
+      );
+      if (kDebugMode) debugPrint(response.toString());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateMyInfluencerProfile({
+    required FillInfluencerProfileParam params,
+  }) async {
+    try {
+      final response = await _dioClient.patch(
+        ApiRoutes.myProfile,
         data: params.toJson(),
       );
       if (kDebugMode) debugPrint(response.toString());

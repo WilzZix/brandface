@@ -7,15 +7,16 @@ class CredInputField extends StatefulWidget {
     super.key,
     required this.controller,
     required this.label,
-    required this.validator,
+    this.validator, // Required emas, null bo'lishi mumkin
     this.onChanged,
   });
 
   final TextEditingController controller;
   final String label;
-
   final String? Function(String?)? validator;
-  final VoidCallback? onChanged;
+
+  // BU YERNI O'ZGARTIRDIK: String qabul qiladigan qildik
+  final Function(String)? onChanged;
 
   @override
   State<CredInputField> createState() => _CredInputFieldState();
@@ -38,7 +39,8 @@ class _CredInputFieldState extends State<CredInputField> {
       focusNode: _credFocusNode,
       keyboardType: TextInputType.text,
       onChanged: (value) {
-        widget.onChanged?.call();
+        // Qiymatni tashqariga uzatamiz
+        widget.onChanged?.call(value);
       },
       decoration: InputDecoration(
         labelText: widget.label,
@@ -48,19 +50,18 @@ class _CredInputFieldState extends State<CredInputField> {
         hintText: widget.label,
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
 
-        // Refactored borders to be more concise
         border: _buildBorder(AppColors.borderColor),
         enabledBorder: _buildBorder(AppColors.borderColor),
         focusedBorder: _buildBorder(AppColors.primary),
         errorBorder: _buildBorder(AppColors.red),
-        focusedErrorBorder: _buildBorder(
-          AppColors.red,
-        ), // Added for consistency
+        focusedErrorBorder: _buildBorder(AppColors.red),
+
+        // Error xabari chiqsa border qizil bo'lishi uchun padding
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       ),
     );
   }
 
-  // Helper method to keep the code DRY
   OutlineInputBorder _buildBorder(Color color) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(999),

@@ -78,6 +78,7 @@ class ProfileEntity extends Equatable {
               engagementRate: audience!.engagementRate,
               geography: audience!.geography,
               socialMediaStats: audience!.socialMediaStats,
+              socialMediaAccounts: audience!.socialMediaAccounts,
             )
           : null,
       // PricingEntity -> Pricing (Model) o'girish
@@ -139,6 +140,7 @@ class AudienceEntity extends Equatable {
   final String? engagementRate;
   final List<String>? geography;
   final List<String>? socialMediaStats;
+  final List<SocialMediaAccount>? socialMediaAccounts;
 
   const AudienceEntity({
     this.brandSegment,
@@ -152,6 +154,7 @@ class AudienceEntity extends Equatable {
     this.engagementRate,
     this.geography,
     this.socialMediaStats,
+    this.socialMediaAccounts,
   });
 
   factory AudienceEntity.fromJson(Map<String, dynamic> json) {
@@ -171,6 +174,12 @@ class AudienceEntity extends Equatable {
       socialMediaStats: json['social_media_stats'] != null
           ? List<String>.from(json['social_media_stats'])
           : null,
+      socialMediaAccounts: (json['social_channels'] as List?)
+          ?.map((e) => SocialMediaAccount(
+                platform: e['platform'] as String? ?? '',
+                username: e['username'] as String? ?? '',
+              ))
+          .toList(),
     );
   }
 
@@ -187,6 +196,7 @@ class AudienceEntity extends Equatable {
     engagementRate,
     geography,
     socialMediaStats,
+    socialMediaAccounts,
   ];
 }
 

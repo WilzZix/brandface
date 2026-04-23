@@ -14,4 +14,6 @@ abstract class ILoginRepository {
   });
 
   Future<Either<Failure, UserEntity>> getMe();
+
+  Future<Either<Failure, void>> deleteAccount();
 }

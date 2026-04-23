@@ -10,9 +10,14 @@ import '../../../../uikit/typography/typography.dart';
 import 'choose_spoken_language.dart';
 
 class ChooseCurrency extends StatefulWidget {
-  const ChooseCurrency({super.key, required this.onItemSelected});
+  const ChooseCurrency({
+    super.key,
+    required this.onItemSelected,
+    this.initialValue,
+  });
 
   final Function(LangItemModel) onItemSelected;
+  final String? initialValue;
 
   @override
   State<ChooseCurrency> createState() => _ChooseCurrencyState();
@@ -25,9 +30,21 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
   final List<LangItemModel> currencyItems = [
     LangItemModel(name: "Usd", id: 0),
     LangItemModel(name: 'Uzs', id: 1),
-    LangItemModel(name: 'Bitcoin', id: 2),
-    LangItemModel(name: 'Ton', id: 3),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue != null) {
+      final match = currencyItems.where(
+        (c) => c.name.toLowerCase() == widget.initialValue!.toLowerCase(),
+      );
+      if (match.isNotEmpty) {
+        _selectedId = match.first.id;
+        _selectedText = match.first.name;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +59,7 @@ class _ChooseCurrencyState extends State<ChooseCurrency> {
               onConfirm: () {
                 if (_selectedId != null) {
                   final selectedItem = currencyItems.firstWhere(
-                        (item) => item.id == _selectedId,
+                    (item) => item.id == _selectedId,
                   );
                   widget.onItemSelected(selectedItem);
                   setState(() {
