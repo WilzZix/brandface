@@ -259,7 +259,16 @@ class _FillProfileInformationPageState
             ],
             child: AmbassadorExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
-              onChanged: (p1) {},
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                  referralExperience: p1.referralExperience,
+                  previousBrandCollaborations: p1.previousBrandCollaborations,
+                  caseStudyAvailable: p1.caseStudyAvailable,
+                  conversionMetricsAvailable: p1.conversionMetricsAvailable,
+                );
+              },
             ),
           ),
           AmbassadorContractPageView(
@@ -342,7 +351,20 @@ class _FillProfileInformationPageState
             create: (context) => sl<AwardCubit>(),
             child: BrandfaceCameraExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
-              onChanged: (p1) {},
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  yearsOfExperience: p1.yearsOfExperience,
+                  hasAdExperience: p1.hasAdExperience,
+                  pressMentions: p1.pressMentions,
+                  agencyRepresentation: p1.agencyRepresentation,
+                  partners: p1.partners,
+                  pricing: p1.pricing != null
+                      ? (_finalParam.pricing ?? Pricing()).copyWith(
+                          exclusivityAvailable: p1.pricing!.exclusivityAvailable,
+                        )
+                      : _finalParam.pricing,
+                );
+              },
             ),
           ),
           BrandfacePricingPageView(

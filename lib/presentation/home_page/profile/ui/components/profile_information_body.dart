@@ -211,7 +211,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.write_hourly_rate,
                 descriptionItem: Text(
-                  'Min ${data.pricing?.hourlyRateMinUsd}\nMax ${data.pricing?.hourlyRateMinUsd}',
+                  'Min ${data.pricing?.hourlyRateMinUsd} ${data.pricing?.campaignFeeCurrency ?? ''}\nMax ${data.pricing?.hourlyRateMaxUsd} ${data.pricing?.campaignFeeCurrency ?? ''}',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -219,7 +219,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.projectly_payment_starting_price,
                 descriptionItem: Text(
-                  '${data.pricing?.campaignFee}',
+                  '${data.pricing?.campaignFee} ${data.pricing?.campaignFeeCurrency ?? ''}',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -227,7 +227,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.profile.payment_type,
                 descriptionItem: Text(
-                  '${data.pricing?.paymentTypes.toString()}',
+                  data.pricing?.paymentTypes?.join(', ') ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),

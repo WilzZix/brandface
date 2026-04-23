@@ -53,6 +53,11 @@ class _AmbassadorExperiencePageViewState
     widget.onChanged(_param);
   }
 
+  void _updateField(FillInfluencerProfileParam updated) {
+    _param = updated;
+    widget.onChanged(_param);
+  }
+
   @override
   void dispose() {
     _promoExperienceController.removeListener(_onExperienceChanged);
@@ -93,8 +98,7 @@ class _AmbassadorExperiencePageViewState
           const SizedBox(height: 8),
           YesNoWidget(
             onItemTaped: (bool value) {
-              _param = _param.copyWith(hasAdExperience: value);
-              widget.onChanged(_param);
+              _updateField(_param.copyWith(referralExperience: value));
             },
           ),
           const SizedBox(height: 16),
@@ -102,17 +106,23 @@ class _AmbassadorExperiencePageViewState
           const SizedBox(height: 8),
           ChooseOptionWidget(
             title: t.optional_items.previous_brand_collaborations,
-            onChanged: (val) {},
+            onChanged: (val) {
+              _updateField(_param.copyWith(previousBrandCollaborations: val));
+            },
           ),
           const SizedBox(height: 16),
           ChooseOptionWidget(
             title: t.optional_items.case_study_link,
-            onChanged: (val) {},
+            onChanged: (val) {
+              _updateField(_param.copyWith(caseStudyAvailable: val));
+            },
           ),
           const SizedBox(height: 16),
           ChooseOptionWidget(
             title: t.optional_items.conversion_metrics,
-            onChanged: (val) {},
+            onChanged: (val) {
+              _updateField(_param.copyWith(conversionMetricsAvailable: val));
+            },
           ),
           SizedBox(height: 16),
           BlocConsumer<AwardCubit, AwardState>(
