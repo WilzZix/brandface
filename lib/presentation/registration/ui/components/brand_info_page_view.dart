@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'choose_spoken_language.dart';
 
 class BrandInfoPageView extends StatefulWidget {
   const BrandInfoPageView({super.key, required this.onChanged});
 
-  final Function(FillInfluencerProfileParam) onChanged;
+  final Function(FillBrandProfileParam) onChanged;
 
   @override
   State<BrandInfoPageView> createState() => _BrandInfoPageViewState();
@@ -23,7 +23,7 @@ class BrandInfoPageView extends StatefulWidget {
 
 class _BrandInfoPageViewState extends State<BrandInfoPageView>
     with AutomaticKeepAliveClientMixin<BrandInfoPageView> {
-  FillInfluencerProfileParam _param = FillInfluencerProfileParam();
+  FillBrandProfileParam _param = FillBrandProfileParam();
   final TextEditingController _bioController = TextEditingController();
 
   final List<LangItemModel> _regions = [
@@ -60,7 +60,8 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     _param = _param.copyWith(
       regionId: _selectedRegionId,
       cityId: _selectedCityId,
-      bio: _bioController.text,
+      sphereId: _selectedSphereId,
+      description: _bioController.text.isEmpty ? null : _bioController.text,
     );
     widget.onChanged(_param);
   }
@@ -120,7 +121,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
           const SizedBox(height: 24),
           ProfileAvatarItem(
             onTap: (int id) {
-              _param = _param.copyWith(avatarId: id);
+              _param = _param.copyWith(logoId: id);
               widget.onChanged(_param);
             },
             items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],

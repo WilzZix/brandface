@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
+import 'package:brandface/core/di/app_di.dart';
+import 'package:brandface/presentation/home_page/brand_home_page.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/ui/registration_page.dart';
+import 'package:brandface/utils/services/profile_service.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -84,7 +87,12 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
             if (verifyOtpEntity.isNewUser ?? true) {
               context.go(RegistrationPage.tag);
             } else {
-              context.go(HomePage.tag);
+              final role = sl<ProfileService>().getRole();
+              if (role == 'brand') {
+                context.go(BrandHomePage.tag);
+              } else {
+                context.go(HomePage.tag);
+              }
             }
           },
           otpReceived: (otpEntity) {

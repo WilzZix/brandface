@@ -1,5 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/home_page/brand_home_page.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:brandface/presentation/registration/bloc/catalog/category/catego
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/registration/ui/components/ambassador_contract_page_view.dart';
@@ -29,6 +31,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
 import '../../../domain/entities/registration/registration_entity.dart';
+import '../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'components/audience_and_followers_page_view.dart';
 import 'components/experience_page_view.dart';
@@ -58,7 +61,10 @@ class _FillProfileInformationPageState
 
   PageController pageController = PageController();
   FillInfluencerProfileParam _finalParam = FillInfluencerProfileParam();
+  FillBrandProfileParam _brandParam = FillBrandProfileParam();
   int _currentPage = 0;
+
+  bool get _isBrand => widget.registrationEntity.role == 'brand';
 
   int get _totalPages => _cachedWidgets.length;
 
@@ -341,9 +347,12 @@ class _FillProfileInformationPageState
           BrandInfoPageView(
             key: const PageStorageKey<String>('pageOne'),
             onChanged: (p1) {
-              _finalParam = _finalParam.copyWith(
+              _brandParam = _brandParam.copyWith(
                 regionId: p1.regionId,
                 cityId: p1.cityId,
+                sphereId: p1.sphereId,
+                logoId: p1.logoId,
+                description: p1.description,
               );
             },
           ),
@@ -352,7 +361,7 @@ class _FillProfileInformationPageState
             child: BrandCategoriesPageView(
               key: const PageStorageKey<String>('pageTwo'),
               onChanged: (p1) {
-                _finalParam = _finalParam.copyWith(categoryIds: p1.categoryIds);
+                _brandParam = _brandParam.copyWith(categoryIds: p1.categoryIds);
               },
             ),
           ),
@@ -371,12 +380,21 @@ class _FillProfileInformationPageState
   }
 
   void _saveAndContinueLater() {
-    context.read<FillProfileBloc>().add(
-      FillProfileEvent.fillProfile(
-        profile: widget.registrationEntity.profileId.toString(),
-        params: _finalParam,
-      ),
-    );
+    if (_isBrand) {
+      context.read<FillBrandProfileBloc>().add(
+        FillBrandProfileEvent.fillBrandProfile(
+          profileId: widget.registrationEntity.profileId.toString(),
+          params: _brandParam,
+        ),
+      );
+    } else {
+      context.read<FillProfileBloc>().add(
+        FillProfileEvent.fillProfile(
+          profile: widget.registrationEntity.profileId.toString(),
+          params: _finalParam,
+        ),
+      );
+    }
   }
 
   String get _pageViewTitle =>
@@ -399,6 +417,22 @@ class _FillProfileInformationPageState
                 context.go(HomePage.tag);
               },
               fillingFailure: (failure) {
+                BrandfaceBottomSheet.openFailureBottomSheet(
+                  context: context,
+                  message: failure.localized,
+                );
+              },
+              orElse: () {},
+            );
+          },
+        ),
+        BlocListener<FillBrandProfileBloc, FillBrandProfileState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              filled: () {
+                context.go(BrandHomePage.tag);
+              },
+              failure: (failure) {
                 BrandfaceBottomSheet.openFailureBottomSheet(
                   context: context,
                   message: failure.localized,
@@ -442,6 +476,14 @@ class _FillProfileInformationPageState
                           pageController.nextPage(
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInOut,
+                          );
+                        } else if (_isBrand) {
+                          context.read<FillBrandProfileBloc>().add(
+                            FillBrandProfileEvent.fillBrandProfile(
+                              profileId: widget.registrationEntity.profileId
+                                  .toString(),
+                              params: _brandParam,
+                            ),
                           );
                         } else {
                           context.read<FillProfileBloc>().add(
