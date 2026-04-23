@@ -1,3 +1,4 @@
+import 'package:brandface/core/navigation/app_navigator_key.dart';
 import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
@@ -28,6 +29,7 @@ import '../di/app_di.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
+    navigatorKey: appNavigatorKey,
     initialLocation: SplashScreen.tag,
     // redirect: (context, state) {
     //   final authService = sl<IAuthLocalService>();
