@@ -1,14 +1,18 @@
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
+import 'package:brandface/domain/usecase/profile/get_social_media_account_stats_use_case.dart';
+import 'package:brandface/domain/usecase/profile/params/social_medi_params.dart';
+import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/partners.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/services_item.dart';
 import 'package:brandface/utils/extansions/app_exts.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../domain/entities/profile/influencer_profile_information_entity.dart';
 import '../../../../../uikit/components/ui_components/app_container.dart';
 import '../../../../../uikit/components/ui_components/title_description_widget.dart';
-import '../../../../../uikit/tokens/colors.dart';
 import '../../../../../uikit/typography/typography.dart';
 import 'awards.dart';
 import 'categories.dart';
@@ -58,7 +62,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.date_of_birth,
                 descriptionItem: Text(
-                  data.birthDate!.toDotFormat(),
+                  data.birthDate?.toDotFormat() ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -66,7 +70,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.gender,
                 descriptionItem: Text(
-                  data.gender!.toCapitalized(),
+                  data.gender?.toCapitalized() ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -128,16 +132,34 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.gender,
                 descriptionItem: Text(
-                  data.gender!.toCapitalized(),
+                  data.gender?.toCapitalized() ?? '',
+                  style: Typographies.bodyMedium,
+                ),
+              ),
+              SizedBox(height: 16),
+              TitleDescriptionWidget(
+                title: 'Jami followers',
+                descriptionItem: Text(
+                  _formatFollowers(data.audience?.totalFollowers),
+                  style: Typographies.bodyMedium,
+                ),
+              ),
+              SizedBox(height: 16),
+              TitleDescriptionWidget(
+                title: 'Engagement rate',
+                descriptionItem: Text(
+                  data.audience?.engagementRate != null
+                      ? '${data.audience!.engagementRate}%'
+                      : '',
                   style: Typographies.bodyMedium,
                 ),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
                 title: t.registration.social_media_accounts,
-                descriptionItem: Text(
-                  '${data.audience?.socialMediaStats.toString()}',
-                  style: Typographies.bodyMedium,
+                descriptionItem: _SocialMediaStatsSection(
+                  accounts: data.audience?.socialMediaAccounts,
+                  fallbackUsernames: data.audience?.socialMediaStats,
                 ),
               ),
             ],
@@ -248,4 +270,113 @@ class _AvatarWidget extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       );
+}
+
+String _formatFollowers(int? count) {
+  if (count == null) return '';
+  if (count >= 1000000) return '${(count / 1000000).toStringAsFixed(1)}M';
+  if (count >= 1000) return '${(count / 1000).toStringAsFixed(1)}K';
+  return count.toString();
+}
+
+class _SocialMediaStatsSection extends StatefulWidget {
+  const _SocialMediaStatsSection({this.accounts, this.fallbackUsernames});
+
+  final List<SocialMediaAccount>? accounts;
+  final List<String>? fallbackUsernames;
+
+  @override
+  State<_SocialMediaStatsSection> createState() =>
+      _SocialMediaStatsSectionState();
+}
+
+class _SocialMediaStatsSectionState extends State<_SocialMediaStatsSection> {
+  final Map<String, SocialMediaAccountStatsEntity?> _statsMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAll();
+  }
+
+  Future<void> _fetchAll() async {
+    final accounts = widget.accounts;
+    if (accounts == null || accounts.isEmpty) return;
+
+    final useCase = sl<GetSocialMediaAccountStatsUseCase>();
+    for (final account in accounts) {
+      final key = '${account.platform}:${account.username}';
+      if (mounted) setState(() => _statsMap[key] = null);
+
+      final result = await useCase.call(
+        params: SocialMediaParams(
+          platform: account.platform,
+          username: account.username,
+        ),
+      );
+
+      if (!mounted) return;
+      result.fold(
+        ifLeft: (_) => setState(() => _statsMap.remove(key)),
+        ifRight: (stats) => setState(() => _statsMap[key] = stats),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final accounts = widget.accounts;
+
+    if (accounts != null && accounts.isNotEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: accounts.map((account) {
+          final key = '${account.platform}:${account.username}';
+          final isLoading = _statsMap.containsKey(key) && _statsMap[key] == null;
+          final stats = _statsMap[key];
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${account.platform} ${account.username}',
+                  style: Typographies.labelLarge,
+                ),
+                const SizedBox(height: 4),
+                if (isLoading)
+                  const SizedBox(
+                    height: 2,
+                    child: LinearProgressIndicator(),
+                  )
+                else if (stats != null)
+                  Text(
+                    '${_formatFollowers(stats.followers)} followers, ${stats.engagementRate}% engagement rate',
+                    style: Typographies.bodySmall,
+                  ),
+              ],
+            ),
+          );
+        }).toList(),
+      );
+    }
+
+    // Fallback: faqat username stringlar bo'lsa
+    final usernames = widget.fallbackUsernames;
+    if (usernames == null || usernames.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: usernames
+          .map(
+            (u) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(u, style: Typographies.bodyMedium),
+            ),
+          )
+          .toList(),
+    );
+  }
 }
