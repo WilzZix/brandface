@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/registration/bloc/upload/upload_cubit.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
 import 'package:brandface/uikit/components/inputs/bio_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
@@ -24,6 +29,9 @@ class BrandInfoPageView extends StatefulWidget {
 class _BrandInfoPageViewState extends State<BrandInfoPageView>
     with AutomaticKeepAliveClientMixin<BrandInfoPageView> {
   FillBrandProfileParam _param = FillBrandProfileParam();
+  File? _pickedImage;
+  final List<UploadedAvatarItem> _uploadedItems = [];
+
   final TextEditingController _bioController = TextEditingController();
 
   final List<LangItemModel> _regions = [
@@ -66,181 +74,244 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     widget.onChanged(_param);
   }
 
+  Future<void> _pickAndUpload() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+      maxWidth: 800,
+      maxHeight: 800,
+    );
+    if (picked == null) return;
+    final file = File(picked.path);
+    setState(() => _pickedImage = file);
+    if (!mounted) return;
+    context.read<UploadCubit>().uploadFile(file);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(t.registration.upload_profile_picture, style: Typographies.titleMedium),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              SizedBox(
-                height: 96,
-                width: 96,
-                child: Image.asset(
-                  'assets/images/im_person_avatar_sample.png',
-                  fit: BoxFit.cover,
+    return BlocListener<UploadCubit, UploadState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          uploaded: (entity) {
+            setState(() {
+              _uploadedItems.add(
+                UploadedAvatarItem(id: entity.id, file: _pickedImage!),
+              );
+            });
+            _param = _param.copyWith(logoId: entity.id);
+            widget.onChanged(_param);
+          },
+          orElse: () {},
+        );
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(t.registration.upload_profile_picture, style: Typographies.titleMedium),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                SizedBox(
+                  height: 96,
+                  width: 96,
+                  child: ClipOval(
+                    child: _pickedImage != null
+                        ? Image.file(_pickedImage!, fit: BoxFit.cover)
+                        : Image.asset(
+                            'assets/images/im_person_avatar_sample.png',
+                            fit: BoxFit.cover,
+                          ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 24,
+                const SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BlocBuilder<UploadCubit, UploadState>(
+                      builder: (context, state) {
+                        final isLoading = state.maybeWhen(loading: () => true, orElse: () => false);
+                        return GestureDetector(
+                          onTap: isLoading ? null : _pickAndUpload,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 24,
+                            ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(999),
+                              color: AppColors.primary,
+                            ),
+                            child: isLoading
+                                ? SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.black,
+                                    ),
+                                  )
+                                : Row(
+                                    children: [
+                                      SvgPicture.asset(AppAssets.icAttachFile),
+                                      const SizedBox(width: 8),
+                                      Text(t.registration.choose_file, style: Typographies.bodyMedium),
+                                    ],
+                                  ),
+                          ),
+                        );
+                      },
                     ),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(999),
-                      color: AppColors.primary,
+                    const SizedBox(height: 8),
+                    Text(
+                      t.registration.file_format_hint,
+                      style: Typographies.bodySmall.copyWith(
+                        color: AppColors.grey,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(AppAssets.icAttachFile),
-                        const SizedBox(width: 8),
-                        Text(t.registration.choose_file, style: Typographies.bodyMedium),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    t.registration.file_format_hint,
-                    style: Typographies.bodySmall.copyWith(
-                      color: AppColors.grey,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
+              ],
+            ),
+            if (_uploadedItems.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              ProfileAvatarItem(
+                items: _uploadedItems,
+                onSetMain: (id) {
+                  _param = _param.copyWith(logoId: id);
+                  widget.onChanged(_param);
+                },
+                onDelete: (id) {
+                  setState(() {
+                    _uploadedItems.removeWhere((e) => e.id == id);
+                  });
+                  if (_uploadedItems.isNotEmpty) {
+                    _param = _param.copyWith(logoId: _uploadedItems.first.id);
+                    widget.onChanged(_param);
+                  }
+                },
               ),
             ],
-          ),
-          const SizedBox(height: 24),
-          ProfileAvatarItem(
-            onTap: (int id) {
-              _param = _param.copyWith(logoId: id);
-              widget.onChanged(_param);
-            },
-            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          ),
-          const SizedBox(height: 40),
-          Text(t.registration.region, style: Typographies.titleMedium),
-          const SizedBox(height: 8),
-          _DropdownField(
-            selectedText: _selectedRegionName ?? t.choose.select_region,
-            isSelected: _selectedRegionId != null,
-            onTap: () async {
-              await BrandfaceBottomSheet.openBottomSheet<String>(
-                context: context,
-                header: t.choose.select_region,
-                onConfirm: () {
-                  _updateData();
-                  context.pop();
-                },
-                builder: (context, bottomState) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: _regions.map((item) {
-                      return ChooseLangItem(
-                        title: item.name,
-                        isSelected: item.id == _selectedRegionId,
-                        onTap: () {
-                          setState(() {
-                            _selectedRegionId = item.id;
-                            _selectedRegionName = item.name;
-                          });
-                          bottomState(() {});
-                        },
-                      );
-                    }).toList(),
-                  );
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-          Text(t.registration.city, style: Typographies.titleMedium),
-          const SizedBox(height: 8),
-          _DropdownField(
-            selectedText: _selectedCityName ?? t.choose.select_city,
-            isSelected: _selectedCityId != null,
-            onTap: () async {
-              await BrandfaceBottomSheet.openBottomSheet<String>(
-                context: context,
-                header: t.choose.select_city,
-                onConfirm: () {
-                  _updateData();
-                  context.pop();
-                },
-                builder: (context, bottomState) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: _cities.map((item) {
-                      return ChooseLangItem(
-                        title: item.name,
-                        isSelected: item.id == _selectedCityId,
-                        onTap: () {
-                          setState(() {
-                            _selectedCityId = item.id;
-                            _selectedCityName = item.name;
-                          });
-                          bottomState(() {});
-                        },
-                      );
-                    }).toList(),
-                  );
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-          Text(t.registration.sphere, style: Typographies.titleMedium),
-          const SizedBox(height: 8),
-          _DropdownField(
-            selectedText: _selectedSphereName ?? t.choose.select_sphere,
-            isSelected: _selectedSphereId != null,
-            onTap: () async {
-              await BrandfaceBottomSheet.openBottomSheet<String>(
-                context: context,
-                header: t.choose.select_sphere,
-                onConfirm: () {
-                  _updateData();
-                  context.pop();
-                },
-                builder: (context, bottomState) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: _spheres.map((item) {
-                      return ChooseLangItem(
-                        title: item.name,
-                        isSelected: item.id == _selectedSphereId,
-                        onTap: () {
-                          setState(() {
-                            _selectedSphereId = item.id;
-                            _selectedSphereName = item.name;
-                          });
-                          bottomState(() {});
-                        },
-                      );
-                    }).toList(),
-                  );
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-          BioInputField(
-            controller: _bioController,
-            label: t.registration.profile_information,
-            onChanged: () {
-              _updateData();
-            },
-          ),
-          const SizedBox(height: 24),
-        ],
+            const SizedBox(height: 40),
+            Text(t.registration.region, style: Typographies.titleMedium),
+            const SizedBox(height: 8),
+            _DropdownField(
+              selectedText: _selectedRegionName ?? t.choose.select_region,
+              isSelected: _selectedRegionId != null,
+              onTap: () async {
+                await BrandfaceBottomSheet.openBottomSheet<String>(
+                  context: context,
+                  header: t.choose.select_region,
+                  onConfirm: () {
+                    _updateData();
+                    context.pop();
+                  },
+                  builder: (context, bottomState) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _regions.map((item) {
+                        return ChooseLangItem(
+                          title: item.name,
+                          isSelected: item.id == _selectedRegionId,
+                          onTap: () {
+                            setState(() {
+                              _selectedRegionId = item.id;
+                              _selectedRegionName = item.name;
+                            });
+                            bottomState(() {});
+                          },
+                        );
+                      }).toList(),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            Text(t.registration.city, style: Typographies.titleMedium),
+            const SizedBox(height: 8),
+            _DropdownField(
+              selectedText: _selectedCityName ?? t.choose.select_city,
+              isSelected: _selectedCityId != null,
+              onTap: () async {
+                await BrandfaceBottomSheet.openBottomSheet<String>(
+                  context: context,
+                  header: t.choose.select_city,
+                  onConfirm: () {
+                    _updateData();
+                    context.pop();
+                  },
+                  builder: (context, bottomState) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _cities.map((item) {
+                        return ChooseLangItem(
+                          title: item.name,
+                          isSelected: item.id == _selectedCityId,
+                          onTap: () {
+                            setState(() {
+                              _selectedCityId = item.id;
+                              _selectedCityName = item.name;
+                            });
+                            bottomState(() {});
+                          },
+                        );
+                      }).toList(),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            Text(t.registration.sphere, style: Typographies.titleMedium),
+            const SizedBox(height: 8),
+            _DropdownField(
+              selectedText: _selectedSphereName ?? t.choose.select_sphere,
+              isSelected: _selectedSphereId != null,
+              onTap: () async {
+                await BrandfaceBottomSheet.openBottomSheet<String>(
+                  context: context,
+                  header: t.choose.select_sphere,
+                  onConfirm: () {
+                    _updateData();
+                    context.pop();
+                  },
+                  builder: (context, bottomState) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _spheres.map((item) {
+                        return ChooseLangItem(
+                          title: item.name,
+                          isSelected: item.id == _selectedSphereId,
+                          onTap: () {
+                            setState(() {
+                              _selectedSphereId = item.id;
+                              _selectedSphereName = item.name;
+                            });
+                            bottomState(() {});
+                          },
+                        );
+                      }).toList(),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            BioInputField(
+              controller: _bioController,
+              label: t.registration.profile_information,
+              onChanged: () {
+                _updateData();
+              },
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }

@@ -30,6 +30,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
+import '../bloc/upload/upload_cubit.dart';
 import '../../../domain/entities/registration/registration_entity.dart';
 import '../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
@@ -98,8 +99,11 @@ class _FillProfileInformationPageState
           'My Pricing/Tariffs',
         ];
         widgets = [
-          BlocProvider(
-            create: (context) => sl<LanguageCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+            ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
@@ -189,8 +193,11 @@ class _FillProfileInformationPageState
           'Contract',
         ];
         widgets = [
-          BlocProvider(
-            create: (context) => sl<LanguageCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+            ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
@@ -270,8 +277,11 @@ class _FillProfileInformationPageState
           'My Pricing/Tariffs',
         ];
         widgets = [
-          BlocProvider(
-            create: (context) => sl<LanguageCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+            ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
@@ -344,17 +354,20 @@ class _FillProfileInformationPageState
       case 'brand':
         titles = ['General info', 'Categories'];
         widgets = [
-          BrandInfoPageView(
-            key: const PageStorageKey<String>('pageOne'),
-            onChanged: (p1) {
-              _brandParam = _brandParam.copyWith(
-                regionId: p1.regionId,
-                cityId: p1.cityId,
-                sphereId: p1.sphereId,
-                logoId: p1.logoId,
-                description: p1.description,
-              );
-            },
+          BlocProvider(
+            create: (context) => sl<UploadCubit>(),
+            child: BrandInfoPageView(
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (p1) {
+                _brandParam = _brandParam.copyWith(
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  sphereId: p1.sphereId,
+                  logoId: p1.logoId,
+                  description: p1.description,
+                );
+              },
+            ),
           ),
           BlocProvider(
             create: (context) => sl<CategoryCubit>(),

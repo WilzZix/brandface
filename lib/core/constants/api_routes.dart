@@ -32,4 +32,6 @@ class ApiRoutes {
 
   static String myAwards = 'profiles/v1/my/awards/';
   static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
+
+  static String uploadFile = 'uploads/v1/upload/file/';
 }

@@ -122,11 +122,11 @@ return appInitialized(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( bool isLoggedIn)?  appInitialized,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( bool isLoggedIn,  String? role)?  appInitialized,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _AppInitialized() when appInitialized != null:
-return appInitialized(_that.isLoggedIn);case _:
+return appInitialized(_that.isLoggedIn,_that.role);case _:
   return orElse();
 
 }
@@ -144,11 +144,11 @@ return appInitialized(_that.isLoggedIn);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( bool isLoggedIn)  appInitialized,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( bool isLoggedIn,  String? role)  appInitialized,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _AppInitialized():
-return appInitialized(_that.isLoggedIn);case _:
+return appInitialized(_that.isLoggedIn,_that.role);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +165,11 @@ return appInitialized(_that.isLoggedIn);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( bool isLoggedIn)?  appInitialized,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( bool isLoggedIn,  String? role)?  appInitialized,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _AppInitialized() when appInitialized != null:
-return appInitialized(_that.isLoggedIn);case _:
+return appInitialized(_that.isLoggedIn,_that.role);case _:
   return null;
 
 }
@@ -213,10 +213,11 @@ String toString() {
 
 
 class _AppInitialized implements InitAppState {
-  const _AppInitialized(this.isLoggedIn);
+  const _AppInitialized(this.isLoggedIn, {this.role});
   
 
  final  bool isLoggedIn;
+ final  String? role;
 
 /// Create a copy of InitAppState
 /// with the given fields replaced by the non-null parameter values.
@@ -228,16 +229,16 @@ _$AppInitializedCopyWith<_AppInitialized> get copyWith => __$AppInitializedCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppInitialized&&(identical(other.isLoggedIn, isLoggedIn) || other.isLoggedIn == isLoggedIn));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppInitialized&&(identical(other.isLoggedIn, isLoggedIn) || other.isLoggedIn == isLoggedIn)&&(identical(other.role, role) || other.role == role));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoggedIn);
+int get hashCode => Object.hash(runtimeType,isLoggedIn,role);
 
 @override
 String toString() {
-  return 'InitAppState.appInitialized(isLoggedIn: $isLoggedIn)';
+  return 'InitAppState.appInitialized(isLoggedIn: $isLoggedIn, role: $role)';
 }
 
 
@@ -248,7 +249,7 @@ abstract mixin class _$AppInitializedCopyWith<$Res> implements $InitAppStateCopy
   factory _$AppInitializedCopyWith(_AppInitialized value, $Res Function(_AppInitialized) _then) = __$AppInitializedCopyWithImpl;
 @useResult
 $Res call({
- bool isLoggedIn
+ bool isLoggedIn, String? role
 });
 
 
@@ -265,10 +266,11 @@ class __$AppInitializedCopyWithImpl<$Res>
 
 /// Create a copy of InitAppState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? isLoggedIn = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? isLoggedIn = null,Object? role = freezed,}) {
   return _then(_AppInitialized(
 null == isLoggedIn ? _self.isLoggedIn : isLoggedIn // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
