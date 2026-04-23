@@ -252,8 +252,11 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<AwardCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<AwardCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: AmbassadorExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
               onChanged: (p1) {},
