@@ -211,17 +211,7 @@ class ProfileInformationBody extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            padding: EdgeInsets.only(top: 16),
-            child: Text(
-              t.profile.delete_account,
-              style: Typographies.titleMedium.copyWith(color: AppColors.red),
-            ),
-          ),
-        ),
+
         SizedBox(height: MediaQuery.of(context).padding.bottom + 56),
       ],
     );

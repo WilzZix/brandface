@@ -138,7 +138,10 @@ class AppDi {
     sl.registerFactory(() => CategoryCubit(categoryUseCase: sl()));
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));
     sl.registerFactory(() => RegionCubit(regionUseCase: sl()));
-    sl.registerFactory(() => GetProfileCubit(getProfileUseCase: sl()));
+    sl.registerFactory(() => GetProfileCubit(
+          getProfileUseCase: sl(),
+          getInfluencerProfileUseCase: sl(),
+        ));
     sl.registerFactory(() => LanguageCubit(getLanguagesUseCase: sl()));
     sl.registerFactory(() => AudienceCubit(accountStatsUseCase: sl()));
     sl.registerFactory(() => AwardCubit(

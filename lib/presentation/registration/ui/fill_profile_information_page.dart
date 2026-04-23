@@ -68,9 +68,13 @@ class _FillProfileInformationPageState
     context.read<FillProfileBloc>().setEditMode(
       widget.registrationEntity.isEditMode,
     );
-    context.read<GetProfileCubit>().getProfile(
-      profileId: widget.registrationEntity.profileId.toString(),
-    );
+    if (widget.registrationEntity.isEditMode) {
+      context.read<GetProfileCubit>().getMyProfile();
+    } else {
+      context.read<GetProfileCubit>().getProfile(
+        profileId: widget.registrationEntity.profileId.toString(),
+      );
+    }
   }
 
   void _buildWidgetsAndTitles() {

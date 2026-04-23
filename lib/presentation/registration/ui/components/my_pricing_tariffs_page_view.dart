@@ -11,8 +11,13 @@ import 'choose_payment_type.dart';
 import 'choose_spoken_language.dart';
 
 class MyPricingTariffsPageView extends StatefulWidget {
-  const MyPricingTariffsPageView({super.key, required this.onChanged});
+  const MyPricingTariffsPageView({
+    super.key,
+    required this.initialParam,
+    required this.onChanged,
+  });
 
+  final FillInfluencerProfileParam initialParam;
   final Function(FillInfluencerProfileParam) onChanged;
 
   @override
@@ -22,15 +27,26 @@ class MyPricingTariffsPageView extends StatefulWidget {
 
 class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
     with AutomaticKeepAliveClientMixin<MyPricingTariffsPageView> {
-  FillInfluencerProfileParam _param = FillInfluencerProfileParam(
-    pricing: Pricing(),
-  );
+  late FillInfluencerProfileParam _param;
   final List<LangItemModel> _selectedCurrencyItems = [];
-  final List<String> _selectedPaymentTypes = [];
+  late List<String> _selectedPaymentTypes;
   final TextEditingController _hourlyRateFrom = TextEditingController();
   final TextEditingController _hourlyRateTo = TextEditingController();
   final TextEditingController _paymentByProjectController =
       TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final pricing = widget.initialParam.pricing;
+    _param = widget.initialParam.copyWith(
+      pricing: pricing ?? Pricing(),
+    );
+    _selectedPaymentTypes = List<String>.from(pricing?.paymentTypes ?? []);
+    _hourlyRateFrom.text = pricing?.hourlyRateMinUsd ?? '';
+    _hourlyRateTo.text = pricing?.hourlyRateMaxUsd ?? '';
+    _paymentByProjectController.text = pricing?.campaignFee ?? '';
+  }
 
   void _updateData() {
     _param = _param.copyWith(

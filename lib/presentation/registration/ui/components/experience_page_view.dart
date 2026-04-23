@@ -13,8 +13,13 @@ import 'choose_partners.dart';
 import 'choose_spoken_language.dart';
 
 class ExperiencePageView extends StatefulWidget {
-  const ExperiencePageView({super.key, required this.onChanged});
+  const ExperiencePageView({
+    super.key,
+    required this.initialParam,
+    required this.onChanged,
+  });
 
+  final FillInfluencerProfileParam initialParam;
   final Function(FillInfluencerProfileParam) onChanged;
 
   @override
@@ -23,13 +28,18 @@ class ExperiencePageView extends StatefulWidget {
 
 class _ExperiencePageViewState extends State<ExperiencePageView>
     with AutomaticKeepAliveClientMixin<ExperiencePageView> {
-  FillInfluencerProfileParam _param = FillInfluencerProfileParam();
+  late FillInfluencerProfileParam _param;
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _param = widget.initialParam;
+    final years = widget.initialParam.yearsOfExperience;
+    if (years != null) {
+      _experienceController.text = years.toString();
+    }
     _experienceController.addListener(_handleExperienceChange);
   }
 

@@ -1,11 +1,9 @@
-import 'package:brandface/presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/ui/profile_information_page.dart';
 import 'package:brandface/presentation/home_page/profile/ui/reviews.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +13,6 @@ import '../../../../../core/di/app_di.dart';
 import '../../../../../core/i18n/strings.g.dart';
 import '../../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../../utils/services/app_language_service.dart';
-import '../../../../core/error/failures.dart';
 import 'billing.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -34,48 +31,9 @@ class _ProfilePageState extends State<ProfilePage> {
     prefs: sl(),
   );
 
-  void _showDeleteConfirmation(BuildContext context) {
-    BrandfaceBottomSheet.openBottomSheet<void>(
-      context: context,
-      header: t.profile.delete_account,
-      onConfirm: () {
-        context.pop();
-        context.read<DeleteAccountCubit>().deleteAccount();
-      },
-      builder: (context, setState) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-          child: Text(
-            'Confirm delete',
-            style: Typographies.labelLarge,
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DeleteAccountCubit>(
-      create: (_) => sl<DeleteAccountCubit>(),
-      child: BlocListener<DeleteAccountCubit, DeleteAccountState>(
-        listener: (context, state) async {
-          if (state is DeleteAccountSuccess) {
-            final prefs = sl<SharedPreferences>();
-            await prefs.clear();
-            if (context.mounted) {
-              context.go(LoginPage.tag);
-            }
-          } else if (state is DeleteAccountFailure) {
-            BrandfaceBottomSheet.openFailureBottomSheet(
-              context: context,
-              message: state.failure.localized,
-            );
-          }
-        },
-        child: _buildScaffold(context),
-      ),
-    );
+    return _buildScaffold(context);
   }
 
   Widget _buildScaffold(BuildContext context) {
@@ -252,14 +210,6 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               child: Text(
                 t.profile.log_out,
-                style: Typographies.titleMedium.copyWith(color: AppColors.red),
-              ),
-            ),
-            SizedBox(height: 16),
-            GestureDetector(
-              onTap: () => _showDeleteConfirmation(context),
-              child: Text(
-                t.profile.delete_account,
                 style: Typographies.titleMedium.copyWith(color: AppColors.red),
               ),
             ),

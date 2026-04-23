@@ -90,7 +90,10 @@ class AppRouter {
         path: FillProfileInformationPage.tag,
         name: FillProfileInformationPage.tag,
         builder: (_, state) => BlocProvider(
-          create: (context) => GetProfileCubit(getProfileUseCase: sl()),
+          create: (context) => GetProfileCubit(
+            getProfileUseCase: sl(),
+            getInfluencerProfileUseCase: sl(),
+          ),
           child: FillProfileInformationPage(
             registrationEntity: state.extra as RegistrationEntity,
           ),

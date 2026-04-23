@@ -69,6 +69,29 @@ class InfluencerProfileInformationEntity extends Equatable {
     required this.createdAt,
   });
 
+  ProfileEntity toProfileEntity() {
+    return ProfileEntity(
+      displayName: displayName,
+      avatarId: avatarId,
+      bio: bio,
+      regionId: region?.id,
+      cityId: cityId,
+      birthDate: birthDate,
+      gender: gender,
+      yearsOfExperience: yearsOfExperience,
+      hasAdExperience: hasAdExperience,
+      pressMentions: pressMentions,
+      agencyRepresentation: agencyRepresentation,
+      partners: partners,
+      contacts: contacts,
+      categoryIds: categories?.map((c) => c.id).whereType<int>().toList(),
+      serviceIds: services?.map((s) => s.id).whereType<int>().toList(),
+      languageIds: languageIds?.map((l) => l.id).whereType<int>().toList(),
+      audience: audience,
+      pricing: pricing,
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,
