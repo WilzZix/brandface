@@ -175,10 +175,12 @@ class AudienceEntity extends Equatable {
           ? List<String>.from(json['social_media_stats'])
           : null,
       socialMediaAccounts: (json['social_channels'] as List?)
-          ?.map((e) => SocialMediaAccount(
-                platform: e['platform'] as String? ?? '',
-                username: e['username'] as String? ?? '',
-              ))
+          ?.map(
+            (e) => SocialMediaAccount(
+              platform: e['platform'] as String? ?? '',
+              username: e['username'] as String? ?? '',
+            ),
+          )
           .toList(),
     );
   }

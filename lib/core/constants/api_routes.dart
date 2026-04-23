@@ -1,5 +1,6 @@
 class ApiRoutes {
   static String baseUrl = 'https://api.influerax.com/api/';
+  static String mediaBaseUrl = 'https://api.influerax.com';
 
   ///Login
   static String sendOtp = 'accounts/v1/auth/send-otp/';
@@ -32,4 +33,6 @@ class ApiRoutes {
 
   static String myAwards = 'profiles/v1/my/awards/';
   static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
+
+  static String uploadFile = 'uploads/v1/upload/file/';
 }

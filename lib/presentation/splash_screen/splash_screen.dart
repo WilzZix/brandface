@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_assets.dart';
 import '../../core/i18n/strings.g.dart';
+import '../home_page/brand_home_page.dart';
 import '../home_page/home_page.dart';
 import '../login/ui/login_page.dart';
 
@@ -27,9 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
       body: BlocListener<InitAppCubit, InitAppState>(
         listener: (context, state) {
           state.maybeWhen(
-            appInitialized: (isLoggedIn) {
+            appInitialized: (isLoggedIn, role) {
               if (isLoggedIn) {
-                context.go(HomePage.tag);
+                if (role == 'brand') {
+                  context.go(BrandHomePage.tag);
+                } else {
+                  context.go(HomePage.tag);
+                }
               } else {
                 context.go(LoginPage.tag);
               }

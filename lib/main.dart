@@ -34,7 +34,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => sl<FillProfileBloc>()),
         BlocProvider(create: (context) => sl<FillBrandProfileBloc>()),
         BlocProvider(
-          create: (context) => InitAppCubit(sharedPrefService: sl())..initApp(),
+          create: (context) =>
+              InitAppCubit(sharedPrefService: sl(), profileService: sl())
+                ..initApp(),
         ),
       ],
       child: MaterialApp.router(

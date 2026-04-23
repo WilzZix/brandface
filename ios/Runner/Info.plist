@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Profile rasmini yuklash uchun ruxsat kerak</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Kamera orqali profil rasmi olish uchun ruxsat kerak</string>
 </dict>
 </plist>
