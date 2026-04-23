@@ -1,4 +1,6 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/uikit/components/buttons/buttons.dart';
+import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +94,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
                   child: Text(
-                    'My campaigns',
+                    'Offers and applications',
                     style: Typographies.titleLarge,
                   ),
                 ),
@@ -102,15 +104,15 @@ class _BrandHomePageState extends State<BrandHomePage> {
                     children: [
                       Expanded(
                         child: _BrandStatCard(
-                          title: '0',
-                          description: 'Active campaigns',
+                          title: '2',
+                          description: 'Active offers',
                         ),
                       ),
                       SizedBox(width: 8),
                       Expanded(
                         child: _BrandStatCard(
-                          title: '0',
-                          description: 'Influencers hired',
+                          title: '23',
+                          description: 'New applications',
                         ),
                       ),
                     ],
@@ -118,12 +120,11 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
-                  child: Text(
-                    'Recent activity',
-                    style: Typographies.titleLarge,
-                  ),
+                  child: Text('AI Matching', style: Typographies.titleLarge),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(child: TabWidget(onChanged: (int p1) {})),
+                SliverToBoxAdapter(child: SizedBox(height: 24)),
                 SliverList.separated(
                   itemCount: 5,
                   itemBuilder: (context, index) {
@@ -132,23 +133,103 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         horizontal: 24,
                         vertical: 16,
                       ),
-                      decoration: BoxDecoration(
-                        color: AppColors.lightBg3,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Campaign title here',
-                            style: Typographies.titleMedium,
+                          Stack(
+                            children: [
+                              Container(
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  // Burchaklarni aylana qilish (screenshotdagi kabi 12-16 atrofida)
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      'assets/images/im_person_avatar_sample.png',
+                                    ),
+                                    fit: BoxFit
+                                        .cover, // To'rtburchakni to'liq to'ldirishi uchun 'cover' afzal
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  padding: EdgeInsetsGeometry.symmetric(
+                                    horizontal: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: AppColors.orange,
+                                  ),
+                                  child: Text(
+                                    'TOP',
+                                    style: Typographies.labelSmall,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            'No active campaigns yet',
-                            style: Typographies.bodySmall.copyWith(
-                              color: AppColors.grey,
-                            ),
+                          SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'No active campaigns yet',
+                                    style: Typographies.titleMedium,
+                                  ),
+                                  SizedBox(width: 4),
+                                  SvgPicture.asset(AppAssets.icVerified),
+                                ],
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssets.icStar,
+                                    color: AppColors.lightBg2,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    '4.34',
+                                    style: Typographies.bodySmall.copyWith(
+                                      color: AppColors.mutedBlack,
+                                    ),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text('·'),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    '2.4 mln followers',
+                                    style: Typographies.bodySmall.copyWith(
+                                      color: AppColors.mutedBlack,
+                                    ),
+                                  ),
+                                  Text('·'),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    '3 years exp.',
+                                    style: Typographies.bodySmall.copyWith(
+                                      color: AppColors.mutedBlack,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  AppBadge(title: 'Business'),
+                                  SizedBox(width: 8),
+                                  AppBadge(title: 'Finance'),
+                                  SizedBox(width: 8),
+                                  AppBadge(title: 'Trading'),
+                                  SizedBox(width: 8),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -176,17 +257,20 @@ class _BrandHomePageState extends State<BrandHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 56 + MediaQuery.of(context).padding.top,
-                      ),
+                      SizedBox(height: 56 + MediaQuery.of(context).padding.top),
                       Center(child: SvgPicture.asset(AppAssets.icLogo)),
+                      SizedBox(height: 24),
+                      Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
                       SizedBox(height: 24),
                       Text('Menu', style: Typographies.headlineSmall),
                       SizedBox(height: 32),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Campaigns', style: Typographies.titleMedium),
+                          Text(
+                            'Collaboration Offers',
+                            style: Typographies.titleMedium,
+                          ),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -195,7 +279,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Find influencers', style: Typographies.titleMedium),
+                          Text('Brandfaces', style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -204,7 +288,43 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Messages', style: Typographies.titleMedium),
+                          Text('Ambassadors', style: Typographies.titleMedium),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Influencers', style: Typographies.titleMedium),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Favourites', style: Typographies.titleMedium),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('AI Matching', style: Typographies.titleMedium),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Analytics', style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -268,6 +388,77 @@ class _BrandStatCard extends StatelessWidget {
           Text(description, style: Typographies.bodyMedium),
         ],
       ),
+    );
+  }
+}
+
+class TabWidget extends StatefulWidget {
+  const TabWidget({super.key, required this.onChanged});
+
+  final Function(int) onChanged;
+
+  @override
+  State<TabWidget> createState() => _TabWidgetState();
+}
+
+class _TabWidgetState extends State<TabWidget> {
+  int _selectedIndex = 0;
+
+  bool _isSelected(int index) {
+    return _selectedIndex == index;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              _selectedIndex = 0;
+              setState(() {});
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: _isSelected(0) ? AppColors.primary : null,
+                border: BoxBorder.all(color: AppColors.borderColor),
+                borderRadius: BorderRadius.circular(9999),
+              ),
+              padding: EdgeInsetsGeometry.symmetric(
+                horizontal: 6,
+                vertical: 16,
+              ),
+              child: Center(
+                child: Text('Influencer', style: Typographies.labelMedium),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              _selectedIndex = 1;
+              setState(() {});
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: _isSelected(1) ? AppColors.primary : null,
+                border: BoxBorder.all(color: AppColors.borderColor),
+                borderRadius: BorderRadius.circular(9999),
+              ),
+              padding: EdgeInsetsGeometry.symmetric(
+                horizontal: 6,
+                vertical: 16,
+              ),
+              child: Center(
+                child: Text('Ambassadors', style: Typographies.labelMedium),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
