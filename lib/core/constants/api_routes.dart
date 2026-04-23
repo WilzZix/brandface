@@ -1,5 +1,6 @@
 class ApiRoutes {
   static String baseUrl = 'https://api.influerax.com/api/';
+  static String mediaBaseUrl = 'https://api.influerax.com';
 
   ///Login
   static String sendOtp = 'accounts/v1/auth/send-otp/';

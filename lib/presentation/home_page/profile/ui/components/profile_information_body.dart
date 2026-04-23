@@ -1,3 +1,4 @@
+import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/partners.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/services_item.dart';
@@ -32,7 +33,7 @@ class ProfileInformationBody extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Image.asset('assets/images/im_person_avatar_sample.png'),
+                  _AvatarWidget(avatarUrl: data.avatarUrl),
                   SizedBox(width: 16),
                   Text(
                     data.displayName.toString(),
@@ -216,4 +217,35 @@ class ProfileInformationBody extends StatelessWidget {
       ],
     );
   }
+}
+
+class _AvatarWidget extends StatelessWidget {
+  const _AvatarWidget({this.avatarUrl});
+
+  final String? avatarUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (avatarUrl != null && avatarUrl!.isNotEmpty) {
+      return ClipOval(
+        child: Image.network(
+          '${ApiRoutes.mediaBaseUrl}$avatarUrl',
+          width: 56,
+          height: 56,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => _placeholder(),
+        ),
+      );
+    }
+    return _placeholder();
+  }
+
+  Widget _placeholder() => ClipOval(
+        child: Image.asset(
+          'assets/images/im_person_avatar_sample.png',
+          width: 56,
+          height: 56,
+          fit: BoxFit.cover,
+        ),
+      );
 }
