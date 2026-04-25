@@ -35,4 +35,14 @@ class ApiRoutes {
   static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
 
   static String uploadFile = 'uploads/v1/upload/file/';
+
+  ///Brand
+  static String myBrandProfile = 'profiles/v1/me/brand/';
+  static String brandAnalytics = 'analytics/v1/brand/';
+  static String brandOffers = 'offers/v1/';
+  static String aiMatchingResults(int offerId) =>
+      'ai/v1/offers/$offerId/results/';
+
+  ///Auth
+  static String logout = 'accounts/v1/auth/logout/';
 }

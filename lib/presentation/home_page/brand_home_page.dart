@@ -101,22 +101,25 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
                 SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _BrandStatCard(
-                          title: '2',
-                          description: t.common.active_offers,
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: _BrandStatCard(
+                            title: '2',
+                            description: t.common.active_offers,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: _BrandStatCard(
-                          title: '23',
-                          description: t.brand.new_applications,
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: _BrandStatCard(
+                            title: '23',
+                            description: t.brand.new_applications,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
@@ -173,64 +176,68 @@ class _BrandHomePageState extends State<BrandHomePage> {
                             ],
                           ),
                           SizedBox(width: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    t.brand.no_active_campaigns_yet,
-                                    style: Typographies.titleMedium,
-                                  ),
-                                  SizedBox(width: 4),
-                                  SvgPicture.asset(AppAssets.icVerified),
-                                ],
-                              ),
-                              SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    AppAssets.icStar,
-                                    color: AppColors.lightBg2,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '4.34',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        t.brand.no_active_campaigns_yet,
+                                        style: Typographies.titleMedium,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text('·'),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '2.4 mln followers',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
+                                    SizedBox(width: 4),
+                                    SvgPicture.asset(AppAssets.icVerified),
+                                  ],
+                                ),
+                                SizedBox(height: 4),
+                                Wrap(
+                                  spacing: 4,
+                                  runSpacing: 4,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      AppAssets.icStar,
+                                      color: AppColors.lightBg2,
                                     ),
-                                  ),
-                                  Text('·'),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '3 years exp.',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
+                                    Text(
+                                      '4.34',
+                                      style: Typographies.bodySmall.copyWith(
+                                        color: AppColors.mutedBlack,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  AppBadge(title: 'Business'),
-                                  SizedBox(width: 8),
-                                  AppBadge(title: 'Finance'),
-                                  SizedBox(width: 8),
-                                  AppBadge(title: 'Trading'),
-                                  SizedBox(width: 8),
-                                ],
-                              ),
-                            ],
+                                    Text('·'),
+                                    Text(
+                                      '2.4 mln followers',
+                                      style: Typographies.bodySmall.copyWith(
+                                        color: AppColors.mutedBlack,
+                                      ),
+                                    ),
+                                    Text('·'),
+                                    Text(
+                                      '3 years exp.',
+                                      style: Typographies.bodySmall.copyWith(
+                                        color: AppColors.mutedBlack,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: [
+                                    AppBadge(title: 'Business'),
+                                    AppBadge(title: 'Finance'),
+                                    AppBadge(title: 'Trading'),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -377,15 +384,17 @@ class _BrandStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.lightBg3,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: Typographies.headlineMedium),
+          const SizedBox(height: 8),
           Text(description, style: Typographies.bodyMedium),
         ],
       ),
