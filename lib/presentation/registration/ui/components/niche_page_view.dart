@@ -98,7 +98,7 @@ class _NichePageViewState extends State<NichePageView>
                     borderRadius: BorderRadius.circular(999),
                   ),
 
-                  child: Text('Business', style: Typographies.labelMedium),
+                  child: Text(t.registration.niche_business_placeholder, style: Typographies.labelMedium),
                 );
               },
 

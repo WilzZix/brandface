@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/core/navigation/app_navigator_key.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -88,10 +89,10 @@ class _UnauthorizedBottomSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: 24),
-          Text('Sessiya tugadi', style: Typographies.titleMedium),
+          Text(t.errors.session_expired, style: Typographies.titleMedium),
           SizedBox(height: 8),
           Text(
-            'Qayta kirish uchun login sahifasiga yo\'naltirilasiz.',
+            t.errors.redirect_to_login,
             style: Typographies.bodySmall,
             textAlign: TextAlign.center,
           ),
@@ -106,7 +107,7 @@ class _UnauthorizedBottomSheet extends StatelessWidget {
               ),
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'OK',
+                t.common.ok,
                 style: Typographies.labelLarge.copyWith(
                   color: AppColors.white,
                 ),

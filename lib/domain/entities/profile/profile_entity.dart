@@ -182,6 +182,33 @@ class AudienceEntity extends Equatable {
   });
 
   factory AudienceEntity.fromJson(Map<String, dynamic> json) {
+    final rawStats = json['social_media_stats'] as List?;
+    final List<String>? statUsernames = rawStats
+        ?.map((e) {
+          if (e is String) return e;
+          if (e is Map) return e['username']?.toString() ?? '';
+          return '';
+        })
+        .where((s) => s.isNotEmpty)
+        .toList();
+    final List<SocialMediaAccount>? accountsFromChannels =
+        (json['social_channels'] as List?)
+            ?.map(
+              (e) => SocialMediaAccount(
+                platform: e['platform'] as String? ?? '',
+                username: e['username'] as String? ?? '',
+              ),
+            )
+            .toList();
+    final List<SocialMediaAccount>? accountsFromStats = rawStats
+        ?.whereType<Map>()
+        .map(
+          (e) => SocialMediaAccount(
+            platform: e['platform']?.toString() ?? '',
+            username: e['username']?.toString() ?? '',
+          ),
+        )
+        .toList();
     return AudienceEntity(
       brandSegment: json['brand_segment'],
       totalFollowers: json['total_followers'],
@@ -195,17 +222,8 @@ class AudienceEntity extends Equatable {
       geography: json['geography'] != null
           ? List<String>.from(json['geography'])
           : null,
-      socialMediaStats: json['social_media_stats'] != null
-          ? List<String>.from(json['social_media_stats'])
-          : null,
-      socialMediaAccounts: (json['social_channels'] as List?)
-          ?.map(
-            (e) => SocialMediaAccount(
-              platform: e['platform'] as String? ?? '',
-              username: e['username'] as String? ?? '',
-            ),
-          )
-          .toList(),
+      socialMediaStats: statUsernames,
+      socialMediaAccounts: accountsFromChannels ?? accountsFromStats,
     );
   }
 

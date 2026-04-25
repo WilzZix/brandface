@@ -29,6 +29,14 @@ class _BrandfaceCameraExperiencePageViewState
   FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final TextEditingController _yearsController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
+  final List<LangItemModel> _selectedPartners = [];
+
+  void _updatePartners() {
+    _param = _param.copyWith(
+      partners: _selectedPartners.map((e) => e.id.toString()).toList(),
+    );
+    widget.onChanged(_param);
+  }
 
   @override
   void initState() {
@@ -108,14 +116,46 @@ class _BrandfaceCameraExperiencePageViewState
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
-              final current = List<String>.from(_param.partners ?? []);
-              if (!current.contains(p1.id.toString())) {
-                current.add(p1.id.toString());
-              }
-              _param = _param.copyWith(partners: current);
-              widget.onChanged(_param);
+              if (_selectedPartners.any((e) => e.id == p1.id)) return;
+              setState(() {
+                _selectedPartners.add(p1);
+              });
+              _updatePartners();
             },
           ),
+          if (_selectedPartners.isNotEmpty)
+            ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _selectedPartners.length,
+              itemBuilder: (context, index) {
+                final partner = _selectedPartners[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(partner.name, style: Typographies.bodyMedium),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedPartners.removeAt(index);
+                          });
+                          _updatePartners();
+                        },
+                        child: Text(
+                          t.common.delete,
+                          style: Typographies.labelLarge.copyWith(
+                            color: AppColors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           SizedBox(height: 16),
           Text(
             t.registration.exclusivity_availability,

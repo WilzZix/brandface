@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: false,
-        title: Text('Offer details'),
+        title: Text(t.offer.offer_details),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,14 +32,14 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('General info', style: Typographies.titleSmall),
+              Text(t.profile.general_info, style: Typographies.titleSmall),
               SizedBox(height: 8),
               AppContainer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TitleDescriptionWidget(
-                      title: 'Offert title',
+                      title: t.offer.offer_title,
                       descriptionItem: Text(
                         'I need an influencer for my social media activities',
                         style: Typographies.bodyMedium,
@@ -46,7 +47,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                     ),
                     SizedBox(height: 16),
                     TitleDescriptionWidget(
-                      title: 'Offert title',
+                      title: t.offer.offer_title,
                       descriptionItem: Row(
                         children: [
                           AppBadge(title: 'Children'),
@@ -57,7 +58,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                     ),
                     SizedBox(height: 16),
                     TitleDescriptionWidget(
-                      title: 'Description',
+                      title: t.offer.description,
                       descriptionItem: Text(
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ',
                         style: Typographies.bodyMedium,
@@ -65,7 +66,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                     ),
                     SizedBox(height: 16),
                     TitleDescriptionWidget(
-                      title: 'Status',
+                      title: t.offer.status,
                       descriptionItem: Text(
                         'Active',
                         style: Typographies.bodyMedium,
@@ -75,60 +76,60 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                 ),
               ),
               SizedBox(height: 16),
-              Text('Requirements', style: Typographies.titleSmall),
+              Text(t.offer.requirements, style: Typographies.titleSmall),
               SizedBox(height: 8),
               AppContainer(
                 child: Column(
                   children: [
                     RowTitleDescription(
-                      title: 'Country',
+                      title: t.offer.country,
                       description: 'Uzbekistan',
                     ),
-                    RowTitleDescription(title: 'City', description: 'Tashkent'),
+                    RowTitleDescription(title: t.offer.city, description: 'Tashkent'),
                     RowTitleDescription(
-                      title: 'Followers max',
+                      title: t.offer.followers_max,
                       description: '12 000',
                     ),
                     RowTitleDescription(
-                      title: 'Followers min',
+                      title: t.offer.followers_min,
                       description: '5 000',
                     ),
                     RowTitleDescription(
-                      title: 'Languages',
+                      title: t.offer.languages,
                       description: 'Uzbek,Rus,English',
                     ),
                     RowTitleDescription(
-                      title: 'Engagement rate',
+                      title: t.offer.engagement_rate,
                       description: '5',
                     ),
                     RowTitleDescription(
-                      title: 'Content type',
+                      title: t.offer.content_type,
                       description: 'Reels',
                     ),
                     RowTitleDescription(
-                      title: 'Gander',
-                      description: 'Male',
+                      title: t.offer.gender,
+                      description: t.registration.male,
                       showDivider: false,
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 16),
-              Text('Collaboration Details', style: Typographies.titleSmall),
+              Text(t.offer.collaboration_details, style: Typographies.titleSmall),
               SizedBox(height: 8),
               AppContainer(
                 child: Column(
                   children: [
                     RowTitleDescription(
-                      title: 'Duration',
+                      title: t.offer.duration,
                       description: '1 month',
                     ),
                     RowTitleDescription(
-                      title: 'Deadline',
+                      title: t.common.deadline,
                       description: '12.12.2026',
                     ),
                     RowTitleDescription(
-                      title: 'Visibility',
+                      title: t.offer.visibility,
                       description: 'Public',
                       showDivider: false,
                     ),
@@ -162,7 +163,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                   onTap: () => Navigator.pop(context),
                   child: Center(
                     child: Text(
-                      'Cancel',
+                      t.common.cancel,
                       style: Typographies.labelLarge.copyWith(
                         color: AppColors.black,
                       ),
@@ -173,7 +174,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
               const SizedBox(width: 16),
               Expanded(
                 child: AppButtons.primary(
-                  title: 'Submit',
+                  title: t.common.submit,
                   onTap: () {
                     // Submit mantiqi
                   },

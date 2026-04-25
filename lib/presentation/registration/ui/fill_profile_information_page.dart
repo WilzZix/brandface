@@ -242,8 +242,11 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<RegionCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: AudienceAndFollowersPageView(
               key: const PageStorageKey<String>('pageFour'),
               initialParam: _finalParam,
@@ -338,8 +341,11 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<RegionCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: BrandfaceSegmentPageView(
               key: const PageStorageKey<String>('pageFour'),
               onChanged: (p1) {
@@ -360,7 +366,8 @@ class _FillProfileInformationPageState
                   partners: p1.partners,
                   pricing: p1.pricing != null
                       ? (_finalParam.pricing ?? Pricing()).copyWith(
-                          exclusivityAvailable: p1.pricing!.exclusivityAvailable,
+                          exclusivityAvailable:
+                              p1.pricing!.exclusivityAvailable,
                         )
                       : _finalParam.pricing,
                 );

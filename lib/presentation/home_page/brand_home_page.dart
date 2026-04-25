@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -54,7 +55,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       ),
                     ),
                   ),
-                  title: Text('Brand', style: Typographies.titleMedium),
+                  title: Text(t.brand.title, style: Typographies.titleMedium),
                   actions: [
                     GestureDetector(
                       onTap: () => context.pushNamed(NotificationsPage.tag),
@@ -94,7 +95,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
                   child: Text(
-                    'Offers and applications',
+                    t.brand.offers_and_applications,
                     style: Typographies.titleLarge,
                   ),
                 ),
@@ -105,14 +106,14 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Expanded(
                         child: _BrandStatCard(
                           title: '2',
-                          description: 'Active offers',
+                          description: t.common.active_offers,
                         ),
                       ),
                       SizedBox(width: 8),
                       Expanded(
                         child: _BrandStatCard(
                           title: '23',
-                          description: 'New applications',
+                          description: t.brand.new_applications,
                         ),
                       ),
                     ],
@@ -120,7 +121,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
-                  child: Text('AI Matching', style: Typographies.titleLarge),
+                  child: Text(t.brand.ai_matching, style: Typographies.titleLarge),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
                 SliverToBoxAdapter(child: TabWidget(onChanged: (int p1) {})),
@@ -164,7 +165,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                                     color: AppColors.orange,
                                   ),
                                   child: Text(
-                                    'TOP',
+                                    t.brand.top_label,
                                     style: Typographies.labelSmall,
                                   ),
                                 ),
@@ -178,7 +179,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                               Row(
                                 children: [
                                   Text(
-                                    'No active campaigns yet',
+                                    t.brand.no_active_campaigns_yet,
                                     style: Typographies.titleMedium,
                                   ),
                                   SizedBox(width: 4),
@@ -262,13 +263,13 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       SizedBox(height: 24),
                       Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
                       SizedBox(height: 24),
-                      Text('Menu', style: Typographies.headlineSmall),
+                      Text(t.common.menu, style: Typographies.headlineSmall),
                       SizedBox(height: 32),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Collaboration Offers',
+                            t.brand.collaboration_offers,
                             style: Typographies.titleMedium,
                           ),
                           SvgPicture.asset(AppAssets.icChevronRight),
@@ -279,7 +280,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Brandfaces', style: Typographies.titleMedium),
+                          Text(t.brand.brandfaces, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -288,7 +289,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Ambassadors', style: Typographies.titleMedium),
+                          Text(t.brand.ambassadors, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -297,7 +298,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Influencers', style: Typographies.titleMedium),
+                          Text(t.brand.influencers, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -306,7 +307,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Favourites', style: Typographies.titleMedium),
+                          Text(t.brand.favourites, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -315,7 +316,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('AI Matching', style: Typographies.titleMedium),
+                          Text(t.brand.ai_matching, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -324,7 +325,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Analytics', style: Typographies.titleMedium),
+                          Text(t.brand.analytics, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -430,7 +431,7 @@ class _TabWidgetState extends State<TabWidget> {
                 vertical: 16,
               ),
               child: Center(
-                child: Text('Influencer', style: Typographies.labelMedium),
+                child: Text(t.brand.influencer_tab, style: Typographies.labelMedium),
               ),
             ),
           ),
@@ -453,7 +454,7 @@ class _TabWidgetState extends State<TabWidget> {
                 vertical: 16,
               ),
               child: Center(
-                child: Text('Ambassadors', style: Typographies.labelMedium),
+                child: Text(t.brand.ambassadors_tab, style: Typographies.labelMedium),
               ),
             ),
           ),

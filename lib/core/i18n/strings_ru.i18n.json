@@ -70,7 +70,11 @@
     "available_for_long_term_contract": "Доступны для долгосрочного контракта?",
     "kpi_based_model": "Модель на основе KPI",
     "available_for_offline_events": "Доступны для офлайн мероприятий",
-    "pricing_options": "Варианты ценообразования"
+    "pricing_options": "Варианты ценообразования",
+    "do_not_have_account": "нет аккаунта",
+    "no_languages_found": "Языки не найдены",
+    "service_creating_reels_placeholder": "Создание Reels",
+    "niche_business_placeholder": "Бизнес"
   },
   "common": {
     "select": "Выбрать",
@@ -83,7 +87,18 @@
     "write_text_here": "Напишите текст...",
     "please_enter_text": "Пожалуйста, введите текст",
     "email": "Email",
-    "set_as_main": "Сделать основным"
+    "set_as_main": "Сделать основным",
+    "ok": "OK",
+    "submit": "Отправить",
+    "loading": "Загрузка...",
+    "deadline": "Срок",
+    "menu": "Меню",
+    "messages": "Сообщения",
+    "active_offers": "Активные предложения",
+    "recommended_for_you": "Рекомендуется для вас",
+    "offers_from_brands": "Предложения от брендов",
+    "niche_type": "Тип ниши",
+    "offer_title_placeholder": "Заголовок предложения"
   },
   "profile": {
     "profile_page": "Страница профиля",
@@ -103,13 +118,19 @@
     "pricing_tariffs": "Ценообразование / Тарифы",
     "payment_type": "Тип оплаты",
     "delete_account": "Удалить аккаунт",
-    "age_range": "Возраст $from - $to"
+    "delete_account_confirm": "Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.",
+    "age_range": "Возраст $from - $to",
+    "confirm_delete": "Подтвердить удаление",
+    "total_followers": "Всего подписчиков",
+    "engagement_rate": "Уровень вовлечённости"
   },
   "validation": {
     "name_required": "Пожалуйста, введите имя и фамилию",
     "name_full_required": "Пожалуйста, введите полное имя и фамилию",
     "name_letters_only": "Имя должно содержать только буквы",
-    "name_too_short": "Имя слишком короткое"
+    "name_too_short": "Имя слишком короткое",
+    "fill_required_fields": "Заполните обязательные поля",
+    "account_already_added": "Аккаунт уже добавлен"
   },
   "choose": {
     "select_niche": "Выбрать нишу",
@@ -143,10 +164,54 @@
     "campaign_based_fee": "Оплата на основе кампании",
     "event_appearance_fee": "Оплата за участие в мероприятии"
   },
+  "home": {
+    "offers_and_messages": "Предложения и сообщения",
+    "recommendations_for_you": "Рекомендации для вас"
+  },
+  "brand": {
+    "title": "Бренд",
+    "offers_and_applications": "Предложения и заявки",
+    "new_applications": "Новые заявки",
+    "ai_matching": "AI Подбор",
+    "top_label": "TOP",
+    "no_active_campaigns_yet": "Пока нет активных кампаний",
+    "collaboration_offers": "Предложения о сотрудничестве",
+    "brandfaces": "Brandfaces",
+    "ambassadors": "Амбассадоры",
+    "influencers": "Инфлюенсеры",
+    "favourites": "Избранное",
+    "analytics": "Аналитика",
+    "influencer_tab": "Инфлюенсер",
+    "ambassadors_tab": "Амбассадоры"
+  },
+  "offer": {
+    "offer_details": "Детали предложения",
+    "offer_title": "Заголовок предложения",
+    "description": "Описание",
+    "status": "Статус",
+    "requirements": "Требования",
+    "country": "Страна",
+    "city": "Город",
+    "followers_max": "Подписчиков макс.",
+    "followers_min": "Подписчиков мин.",
+    "languages": "Языки",
+    "engagement_rate": "Уровень вовлечённости",
+    "content_type": "Тип контента",
+    "gender": "Пол",
+    "collaboration_details": "Детали сотрудничества",
+    "duration": "Длительность",
+    "visibility": "Видимость"
+  },
+  "reviews": {
+    "average": "Среднее",
+    "client_reviews": "Отзывы клиентов"
+  },
   "errors": {
     "network": "Проблемы с интернетом, проверьте соединение",
     "parsing": "Ошибка обработки данных",
     "unknown": "Произошла неизвестная ошибка",
+    "session_expired": "Сессия истекла",
+    "redirect_to_login": "Вы будете перенаправлены на страницу входа.",
     "server": {
       "defaultMsg": "Ошибка сервера ($code)",
       "badRequest": "Некорректный запрос",

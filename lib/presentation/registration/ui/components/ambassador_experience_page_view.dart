@@ -87,12 +87,46 @@ class _AmbassadorExperiencePageViewState
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
-              if (!_selectedNichesItems.any((e) => e.id == p1.id)) {
+              if (_selectedNichesItems.any((e) => e.id == p1.id)) return;
+              setState(() {
                 _selectedNichesItems.add(p1);
-              }
+              });
               _updateData();
             },
           ),
+          if (_selectedNichesItems.isNotEmpty)
+            ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _selectedNichesItems.length,
+              itemBuilder: (context, index) {
+                final partner = _selectedNichesItems[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(partner.name, style: Typographies.bodyMedium),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedNichesItems.removeAt(index);
+                          });
+                          _updateData();
+                        },
+                        child: Text(
+                          t.common.delete,
+                          style: Typographies.labelLarge.copyWith(
+                            color: AppColors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           const SizedBox(height: 24),
           Text(t.registration.experience_in_referral, style: Typographies.titleMedium),
           const SizedBox(height: 8),

@@ -174,6 +174,33 @@ class Audience {
   });
 
   factory Audience.fromJson(Map<String, dynamic> json) {
+    final rawStats = json['social_media_stats'] as List?;
+    final List<String>? statUsernames = rawStats
+        ?.map((e) {
+          if (e is String) return e;
+          if (e is Map) return e['username']?.toString() ?? '';
+          return '';
+        })
+        .where((s) => s.isNotEmpty)
+        .toList();
+    final List<SocialMediaAccount>? accountsFromChannels =
+        (json['social_channels'] as List?)
+            ?.map(
+              (e) => SocialMediaAccount(
+                platform: e['platform'] as String? ?? '',
+                username: e['username'] as String? ?? '',
+              ),
+            )
+            .toList();
+    final List<SocialMediaAccount>? accountsFromStats = rawStats
+        ?.whereType<Map>()
+        .map(
+          (e) => SocialMediaAccount(
+            platform: e['platform']?.toString() ?? '',
+            username: e['username']?.toString() ?? '',
+          ),
+        )
+        .toList();
     return Audience(
       brandSegment: json['brand_segment'] as String?,
       totalFollowers: json['total_followers'] as int?,
@@ -185,15 +212,8 @@ class Audience {
       womenAgeTo: json['women_age_to'] as int?,
       engagementRate: json['engagement_rate']?.toString(),
       geography: (json['geography'] as List?)?.map((e) => e as String).toList(),
-      socialMediaStats: (json['social_media_stats'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
-      socialMediaAccounts: (json['social_channels'] as List?)
-          ?.map((e) => SocialMediaAccount(
-                platform: e['platform'] as String? ?? '',
-                username: e['username'] as String? ?? '',
-              ))
-          .toList(),
+      socialMediaStats: statUsernames,
+      socialMediaAccounts: accountsFromChannels ?? accountsFromStats,
     );
   }
 

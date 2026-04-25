@@ -70,7 +70,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.gender,
                 descriptionItem: Text(
-                  data.gender?.toCapitalized() ?? '',
+                  _localizedGender(data.gender),
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -132,13 +132,13 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.gender,
                 descriptionItem: Text(
-                  data.gender?.toCapitalized() ?? '',
+                  _localizedGender(data.gender),
                   style: Typographies.bodyMedium,
                 ),
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Jami followers',
+                title: t.profile.total_followers,
                 descriptionItem: Text(
                   _formatFollowers(data.audience?.totalFollowers),
                   style: Typographies.bodyMedium,
@@ -146,7 +146,7 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: 'Engagement rate',
+                title: t.profile.engagement_rate,
                 descriptionItem: Text(
                   data.audience?.engagementRate != null
                       ? '${data.audience!.engagementRate}%'
@@ -211,7 +211,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.write_hourly_rate,
                 descriptionItem: Text(
-                  'Min ${data.pricing?.hourlyRateMinUsd} ${data.pricing?.campaignFeeCurrency ?? ''}\nMax ${data.pricing?.hourlyRateMaxUsd} ${data.pricing?.campaignFeeCurrency ?? ''}',
+                  '${t.registration.min} ${data.pricing?.hourlyRateMinUsd ?? '-'} ${data.pricing?.campaignFeeCurrency ?? ''}\n${t.registration.max} ${data.pricing?.hourlyRateMaxUsd ?? '-'} ${data.pricing?.campaignFeeCurrency ?? ''}',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -219,7 +219,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.projectly_payment_starting_price,
                 descriptionItem: Text(
-                  '${data.pricing?.campaignFee} ${data.pricing?.campaignFeeCurrency ?? ''}',
+                  '${data.pricing?.campaignFee ?? '-'} ${data.pricing?.campaignFeeCurrency ?? ''}',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -277,6 +277,17 @@ String _formatFollowers(int? count) {
   if (count >= 1000000) return '${(count / 1000000).toStringAsFixed(1)}M';
   if (count >= 1000) return '${(count / 1000).toStringAsFixed(1)}K';
   return count.toString();
+}
+
+String _localizedGender(String? gender) {
+  switch (gender?.toLowerCase()) {
+    case 'male':
+      return t.registration.male;
+    case 'female':
+      return t.registration.female;
+    default:
+      return '';
+  }
 }
 
 class _SocialMediaStatsSection extends StatefulWidget {
