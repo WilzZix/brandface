@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/components/ui_components/title_description_widget.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -18,14 +19,14 @@ class _ReviewsState extends State<Reviews> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Reviews"), centerTitle: false),
+      appBar: AppBar(title: Text(t.profile.reviews), centerTitle: false),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 16),
-            Text('Average', style: Typographies.titleLarge),
+            Text(t.reviews.average, style: Typographies.titleLarge),
             SizedBox(height: 8),
             AppContainer(
               child: Row(
@@ -37,7 +38,7 @@ class _ReviewsState extends State<Reviews> {
               ),
             ),
             SizedBox(height: 32),
-            Text('Client reviews', style: Typographies.titleLarge),
+            Text(t.reviews.client_reviews, style: Typographies.titleLarge),
             SizedBox(height: 8),
             Expanded(
               child: ListView.separated(

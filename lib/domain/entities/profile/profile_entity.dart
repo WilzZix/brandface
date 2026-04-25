@@ -10,15 +10,21 @@ class ProfileEntity extends Equatable {
   final int? cityId;
   final DateTime? birthDate;
   final String? gender;
+  final String? professionalCategory;
   final int? yearsOfExperience;
   final bool? hasAdExperience;
   final bool? pressMentions;
   final bool? agencyRepresentation;
+  final bool? referralExperience;
+  final bool? previousBrandCollaborations;
+  final bool? caseStudyAvailable;
+  final bool? conversionMetricsAvailable;
   final List<String>? partners;
   final List<ContactEntity>? contacts;
   final List<int>? categoryIds;
   final List<int>? serviceIds;
   final List<int>? languageIds;
+  final List<int>? activeBrandIds;
   final AudienceEntity? audience;
   final PricingEntity? pricing;
 
@@ -30,15 +36,21 @@ class ProfileEntity extends Equatable {
     this.cityId,
     this.birthDate,
     this.gender,
+    this.professionalCategory,
     this.yearsOfExperience,
     this.hasAdExperience,
     this.pressMentions,
     this.agencyRepresentation,
+    this.referralExperience,
+    this.previousBrandCollaborations,
+    this.caseStudyAvailable,
+    this.conversionMetricsAvailable,
     this.partners,
     this.contacts,
     this.categoryIds,
     this.serviceIds,
     this.languageIds,
+    this.activeBrandIds,
     this.audience,
     this.pricing,
   });
@@ -52,19 +64,23 @@ class ProfileEntity extends Equatable {
       cityId: cityId,
       birthDate: birthDate,
       gender: gender,
+      professionalCategory: professionalCategory,
       yearsOfExperience: yearsOfExperience,
       hasAdExperience: hasAdExperience,
       pressMentions: pressMentions,
       agencyRepresentation: agencyRepresentation,
+      referralExperience: referralExperience,
+      previousBrandCollaborations: previousBrandCollaborations,
+      caseStudyAvailable: caseStudyAvailable,
+      conversionMetricsAvailable: conversionMetricsAvailable,
       partners: partners,
-      // ContactEntity -> Contact (Model) o'girish
       contacts: contacts
           ?.map((e) => Contact(type: e.type, value: e.value))
           .toList(),
       categoryIds: categoryIds,
       serviceIds: serviceIds,
       languageIds: languageIds,
-      // AudienceEntity -> Audience (Model) o'girish
+      activeBrandIds: activeBrandIds,
       audience: audience != null
           ? Audience(
               brandSegment: audience!.brandSegment,
@@ -81,7 +97,6 @@ class ProfileEntity extends Equatable {
               socialMediaAccounts: audience!.socialMediaAccounts,
             )
           : null,
-      // PricingEntity -> Pricing (Model) o'girish
       pricing: pricing != null
           ? Pricing(
               availableForLongTerm: pricing!.availableForLongTerm,
@@ -100,6 +115,9 @@ class ProfileEntity extends Equatable {
               campaignFeeCurrency: pricing!.campaignFeeCurrency,
               monthlyExclusivityFee: pricing!.monthlyExclusivityFee,
               eventAppearanceFee: pricing!.eventAppearanceFee,
+              kpiBasedModel: pricing!.kpiBasedModel,
+              availableForOfflineEvents: pricing!.availableForOfflineEvents,
+              monthlyContentCapacity: pricing!.monthlyContentCapacity,
             )
           : null,
     );
@@ -114,15 +132,21 @@ class ProfileEntity extends Equatable {
     cityId,
     birthDate,
     gender,
+    professionalCategory,
     yearsOfExperience,
     hasAdExperience,
     pressMentions,
     agencyRepresentation,
+    referralExperience,
+    previousBrandCollaborations,
+    caseStudyAvailable,
+    conversionMetricsAvailable,
     partners,
     contacts,
     categoryIds,
     serviceIds,
     languageIds,
+    activeBrandIds,
     audience,
     pricing,
   ];
@@ -158,6 +182,33 @@ class AudienceEntity extends Equatable {
   });
 
   factory AudienceEntity.fromJson(Map<String, dynamic> json) {
+    final rawStats = json['social_media_stats'] as List?;
+    final List<String>? statUsernames = rawStats
+        ?.map((e) {
+          if (e is String) return e;
+          if (e is Map) return e['username']?.toString() ?? '';
+          return '';
+        })
+        .where((s) => s.isNotEmpty)
+        .toList();
+    final List<SocialMediaAccount>? accountsFromChannels =
+        (json['social_channels'] as List?)
+            ?.map(
+              (e) => SocialMediaAccount(
+                platform: e['platform'] as String? ?? '',
+                username: e['username'] as String? ?? '',
+              ),
+            )
+            .toList();
+    final List<SocialMediaAccount>? accountsFromStats = rawStats
+        ?.whereType<Map>()
+        .map(
+          (e) => SocialMediaAccount(
+            platform: e['platform']?.toString() ?? '',
+            username: e['username']?.toString() ?? '',
+          ),
+        )
+        .toList();
     return AudienceEntity(
       brandSegment: json['brand_segment'],
       totalFollowers: json['total_followers'],
@@ -171,17 +222,8 @@ class AudienceEntity extends Equatable {
       geography: json['geography'] != null
           ? List<String>.from(json['geography'])
           : null,
-      socialMediaStats: json['social_media_stats'] != null
-          ? List<String>.from(json['social_media_stats'])
-          : null,
-      socialMediaAccounts: (json['social_channels'] as List?)
-          ?.map(
-            (e) => SocialMediaAccount(
-              platform: e['platform'] as String? ?? '',
-              username: e['username'] as String? ?? '',
-            ),
-          )
-          .toList(),
+      socialMediaStats: statUsernames,
+      socialMediaAccounts: accountsFromChannels ?? accountsFromStats,
     );
   }
 
@@ -229,6 +271,9 @@ class PricingEntity extends Equatable {
   final String? campaignFeeCurrency;
   final String? monthlyExclusivityFee;
   final String? eventAppearanceFee;
+  final bool? kpiBasedModel;
+  final bool? availableForOfflineEvents;
+  final int? monthlyContentCapacity;
 
   const PricingEntity({
     this.availableForLongTerm,
@@ -247,6 +292,9 @@ class PricingEntity extends Equatable {
     this.campaignFeeCurrency,
     this.monthlyExclusivityFee,
     this.eventAppearanceFee,
+    this.kpiBasedModel,
+    this.availableForOfflineEvents,
+    this.monthlyContentCapacity,
   });
 
   factory PricingEntity.fromJson(Map<String, dynamic> json) {
@@ -269,6 +317,9 @@ class PricingEntity extends Equatable {
       campaignFeeCurrency: json['campaign_fee_currency'],
       monthlyExclusivityFee: json['monthly_exclusivity_fee']?.toString(),
       eventAppearanceFee: json['event_appearance_fee']?.toString(),
+      kpiBasedModel: json['kpi_based_model'],
+      availableForOfflineEvents: json['available_for_offline_events'],
+      monthlyContentCapacity: json['monthly_content_capacity'],
     );
   }
 
@@ -290,5 +341,8 @@ class PricingEntity extends Equatable {
     campaignFeeCurrency,
     monthlyExclusivityFee,
     eventAppearanceFee,
+    kpiBasedModel,
+    availableForOfflineEvents,
+    monthlyContentCapacity,
   ];
 }

@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -54,7 +55,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       ),
                     ),
                   ),
-                  title: Text('Brand', style: Typographies.titleMedium),
+                  title: Text(t.brand.title, style: Typographies.titleMedium),
                   actions: [
                     GestureDetector(
                       onTap: () => context.pushNamed(NotificationsPage.tag),
@@ -94,33 +95,36 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
                   child: Text(
-                    'Offers and applications',
+                    t.brand.offers_and_applications,
                     style: Typographies.titleLarge,
                   ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
                 SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _BrandStatCard(
-                          title: '2',
-                          description: 'Active offers',
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: _BrandStatCard(
+                            title: '2',
+                            description: t.common.active_offers,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: _BrandStatCard(
-                          title: '23',
-                          description: 'New applications',
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: _BrandStatCard(
+                            title: '23',
+                            description: t.brand.new_applications,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
-                  child: Text('AI Matching', style: Typographies.titleLarge),
+                  child: Text(t.brand.ai_matching, style: Typographies.titleLarge),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
                 SliverToBoxAdapter(child: TabWidget(onChanged: (int p1) {})),
@@ -164,7 +168,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                                     color: AppColors.orange,
                                   ),
                                   child: Text(
-                                    'TOP',
+                                    t.brand.top_label,
                                     style: Typographies.labelSmall,
                                   ),
                                 ),
@@ -172,64 +176,68 @@ class _BrandHomePageState extends State<BrandHomePage> {
                             ],
                           ),
                           SizedBox(width: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'No active campaigns yet',
-                                    style: Typographies.titleMedium,
-                                  ),
-                                  SizedBox(width: 4),
-                                  SvgPicture.asset(AppAssets.icVerified),
-                                ],
-                              ),
-                              SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    AppAssets.icStar,
-                                    color: AppColors.lightBg2,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '4.34',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        t.brand.no_active_campaigns_yet,
+                                        style: Typographies.titleMedium,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text('·'),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '2.4 mln followers',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
+                                    SizedBox(width: 4),
+                                    SvgPicture.asset(AppAssets.icVerified),
+                                  ],
+                                ),
+                                SizedBox(height: 4),
+                                Wrap(
+                                  spacing: 4,
+                                  runSpacing: 4,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      AppAssets.icStar,
+                                      color: AppColors.lightBg2,
                                     ),
-                                  ),
-                                  Text('·'),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '3 years exp.',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
+                                    Text(
+                                      '4.34',
+                                      style: Typographies.bodySmall.copyWith(
+                                        color: AppColors.mutedBlack,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  AppBadge(title: 'Business'),
-                                  SizedBox(width: 8),
-                                  AppBadge(title: 'Finance'),
-                                  SizedBox(width: 8),
-                                  AppBadge(title: 'Trading'),
-                                  SizedBox(width: 8),
-                                ],
-                              ),
-                            ],
+                                    Text('·'),
+                                    Text(
+                                      '2.4 mln followers',
+                                      style: Typographies.bodySmall.copyWith(
+                                        color: AppColors.mutedBlack,
+                                      ),
+                                    ),
+                                    Text('·'),
+                                    Text(
+                                      '3 years exp.',
+                                      style: Typographies.bodySmall.copyWith(
+                                        color: AppColors.mutedBlack,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: [
+                                    AppBadge(title: 'Business'),
+                                    AppBadge(title: 'Finance'),
+                                    AppBadge(title: 'Trading'),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -262,13 +270,13 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       SizedBox(height: 24),
                       Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
                       SizedBox(height: 24),
-                      Text('Menu', style: Typographies.headlineSmall),
+                      Text(t.common.menu, style: Typographies.headlineSmall),
                       SizedBox(height: 32),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Collaboration Offers',
+                            t.brand.collaboration_offers,
                             style: Typographies.titleMedium,
                           ),
                           SvgPicture.asset(AppAssets.icChevronRight),
@@ -279,7 +287,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Brandfaces', style: Typographies.titleMedium),
+                          Text(t.brand.brandfaces, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -288,7 +296,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Ambassadors', style: Typographies.titleMedium),
+                          Text(t.brand.ambassadors, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -297,7 +305,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Influencers', style: Typographies.titleMedium),
+                          Text(t.brand.influencers, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -306,7 +314,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Favourites', style: Typographies.titleMedium),
+                          Text(t.brand.favourites, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -315,7 +323,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('AI Matching', style: Typographies.titleMedium),
+                          Text(t.brand.ai_matching, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -324,7 +332,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Analytics', style: Typographies.titleMedium),
+                          Text(t.brand.analytics, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -376,15 +384,17 @@ class _BrandStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.lightBg3,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: Typographies.headlineMedium),
+          const SizedBox(height: 8),
           Text(description, style: Typographies.bodyMedium),
         ],
       ),
@@ -430,7 +440,7 @@ class _TabWidgetState extends State<TabWidget> {
                 vertical: 16,
               ),
               child: Center(
-                child: Text('Influencer', style: Typographies.labelMedium),
+                child: Text(t.brand.influencer_tab, style: Typographies.labelMedium),
               ),
             ),
           ),
@@ -453,7 +463,7 @@ class _TabWidgetState extends State<TabWidget> {
                 vertical: 16,
               ),
               child: Center(
-                child: Text('Ambassadors', style: Typographies.labelMedium),
+                child: Text(t.brand.ambassadors_tab, style: Typographies.labelMedium),
               ),
             ),
           ),

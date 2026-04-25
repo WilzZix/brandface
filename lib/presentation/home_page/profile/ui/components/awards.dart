@@ -13,33 +13,19 @@ class Awards extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Sarlavha
-        const Text(
-          'Awards',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        const SizedBox(height: 8), // Sarlavha va ro'yxat orasidagi masofa
-        // Ro'yxat elementlari
-        ...awards!.map(
-          (award) => Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            // Elementlar orasidagi masofa
-            child: Text(
-              award,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
+      children: awards!.map(
+        (award) => Padding(
+          padding: const EdgeInsets.only(bottom: 4.0),
+          child: Text(
+            award,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
             ),
           ),
         ),
-      ],
+      ).toList(),
     );
   }
 }

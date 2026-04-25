@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/profile/ui/profile_page.dart';
 import 'package:brandface/presentation/home_page/recomendations/recomendations.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
                   child: Text(
-                    'Offers and messages',
+                    t.home.offers_and_messages,
                     style: Typographies.titleLarge,
                   ),
                 ),
@@ -113,14 +114,14 @@ class _HomePageState extends State<HomePage> {
                       Expanded(
                         child: HomePageContainer(
                           title: '2',
-                          description: 'Active offers',
+                          description: t.common.active_offers,
                         ),
                       ),
                       SizedBox(width: 8),
                       Expanded(
                         child: HomePageContainer(
                           title: '23',
-                          description: 'Messages',
+                          description: t.common.messages,
                         ),
                       ),
                     ],
@@ -129,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
                 SliverToBoxAdapter(
                   child: Text(
-                    'Recommended for You',
+                    t.common.recommended_for_you,
                     style: Typographies.titleLarge,
                   ),
                 ),
@@ -150,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Offer title here',
+                            t.common.offer_title_placeholder,
                             style: Typographies.titleMedium,
                           ),
                           SizedBox(height: 12),
@@ -167,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Deadline',
+                                    t.common.deadline,
                                     style: Typographies.titleSmall.copyWith(
                                       color: AppColors.grey,
                                     ),
@@ -184,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Deadline',
+                                    t.common.deadline,
                                     style: Typographies.titleSmall.copyWith(
                                       color: AppColors.grey,
                                     ),
@@ -259,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 24),
                       Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
                       SizedBox(height: 24),
-                      Text('Menu', style: Typographies.headlineSmall),
+                      Text(t.common.menu, style: Typographies.headlineSmall),
                       SizedBox(height: 32),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
@@ -269,7 +270,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Offers from brands',
+                              t.common.offers_from_brands,
                               style: Typographies.titleMedium,
                             ),
                             SvgPicture.asset(AppAssets.icChevronRight),
@@ -285,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Recommended for You',
+                              t.common.recommended_for_you,
                               style: Typographies.titleMedium,
                             ),
                             SvgPicture.asset(AppAssets.icChevronRight),
@@ -297,7 +298,7 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Messages', style: Typographies.titleMedium),
+                          Text(t.common.messages, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),

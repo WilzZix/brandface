@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -32,7 +33,7 @@ class _RecommendationState extends State<Recommendation> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: false,
-        title: Text('Recommendations for you'),
+        title: Text(t.home.recommendations_for_you),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Padding(
@@ -54,7 +55,7 @@ class _RecommendationState extends State<Recommendation> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Niche type ', style: Typographies.labelLarge),
+                        Text(t.common.niche_type, style: Typographies.labelLarge),
                         SvgPicture.asset(AppAssets.icArrowDown),
                       ],
                     ),
@@ -82,7 +83,7 @@ class _RecommendationState extends State<Recommendation> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Offer title here', style: Typographies.titleMedium),
+                  Text(t.common.offer_title_placeholder, style: Typographies.titleMedium),
                   SizedBox(height: 12),
                   Text(
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
@@ -97,7 +98,7 @@ class _RecommendationState extends State<Recommendation> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Deadline',
+                            t.common.deadline,
                             style: Typographies.titleSmall.copyWith(
                               color: AppColors.grey,
                             ),
@@ -111,7 +112,7 @@ class _RecommendationState extends State<Recommendation> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Deadline',
+                            t.common.deadline,
                             style: Typographies.titleSmall.copyWith(
                               color: AppColors.grey,
                             ),

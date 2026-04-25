@@ -70,7 +70,11 @@
     "available_for_long_term_contract": "Uzoq muddatli shartnoma uchun mavjudmisiz?",
     "kpi_based_model": "KPI asosidagi model",
     "available_for_offline_events": "Oflayn tadbirlar uchun mavjudmisiz",
-    "pricing_options": "Narxlash variantlari"
+    "pricing_options": "Narxlash variantlari",
+    "do_not_have_account": "hisobingiz yo'qmi",
+    "no_languages_found": "Tillar topilmadi",
+    "service_creating_reels_placeholder": "Reels yaratish",
+    "niche_business_placeholder": "Biznes"
   },
   "common": {
     "select": "Tanlash",
@@ -83,7 +87,18 @@
     "write_text_here": "Matn yozing...",
     "please_enter_text": "Iltimos, matn kiriting",
     "email": "Email",
-    "set_as_main": "Asosiy qilib belgilash"
+    "set_as_main": "Asosiy qilib belgilash",
+    "ok": "OK",
+    "submit": "Yuborish",
+    "loading": "Yuklanmoqda...",
+    "deadline": "Muddat",
+    "menu": "Menyu",
+    "messages": "Xabarlar",
+    "active_offers": "Faol takliflar",
+    "recommended_for_you": "Siz uchun tavsiya etiladi",
+    "offers_from_brands": "Brendlardan takliflar",
+    "niche_type": "Nicha turi",
+    "offer_title_placeholder": "Taklif sarlavhasi"
   },
   "profile": {
     "profile_page": "Profil sahifasi",
@@ -103,13 +118,19 @@
     "pricing_tariffs": "Narxlar / Tariflar",
     "payment_type": "To'lov turi",
     "delete_account": "Hisobni o'chirish",
-    "age_range": "Yosh $from - $to"
+    "delete_account_confirm": "Hisobingizni o'chirishga ishonchingiz komilmi? Bu amalni qaytarib bo'lmaydi.",
+    "age_range": "Yosh $from - $to",
+    "confirm_delete": "O'chirishni tasdiqlang",
+    "total_followers": "Jami obunachilar",
+    "engagement_rate": "Faollik darajasi"
   },
   "validation": {
     "name_required": "Iltimos, ism va familiyangizni kiriting",
     "name_full_required": "Iltimos, to'liq ism va familiyangizni kiriting",
     "name_letters_only": "Ismda faqat harflar bo'lishi kerak",
-    "name_too_short": "Ism juda qisqa"
+    "name_too_short": "Ism juda qisqa",
+    "fill_required_fields": "Majburiy maydonlarni to'ldiring",
+    "account_already_added": "Hisob allaqachon qo'shilgan"
   },
   "choose": {
     "select_niche": "Niche tanlash",
@@ -143,10 +164,54 @@
     "campaign_based_fee": "Kampaniya asosidagi to'lov",
     "event_appearance_fee": "Tadbirda qatnashish to'lovi"
   },
+  "home": {
+    "offers_and_messages": "Takliflar va xabarlar",
+    "recommendations_for_you": "Siz uchun tavsiyalar"
+  },
+  "brand": {
+    "title": "Brend",
+    "offers_and_applications": "Takliflar va arizalar",
+    "new_applications": "Yangi arizalar",
+    "ai_matching": "AI moslashtirish",
+    "top_label": "TOP",
+    "no_active_campaigns_yet": "Hali faol kampaniyalar yo'q",
+    "collaboration_offers": "Hamkorlik takliflari",
+    "brandfaces": "Brandfaces",
+    "ambassadors": "Ambassadorlar",
+    "influencers": "Influencerlar",
+    "favourites": "Sevimlilar",
+    "analytics": "Analitika",
+    "influencer_tab": "Influencer",
+    "ambassadors_tab": "Ambassadorlar"
+  },
+  "offer": {
+    "offer_details": "Taklif tafsilotlari",
+    "offer_title": "Taklif sarlavhasi",
+    "description": "Tavsif",
+    "status": "Holati",
+    "requirements": "Talablar",
+    "country": "Davlat",
+    "city": "Shahar",
+    "followers_max": "Maksimal obunachilar",
+    "followers_min": "Minimal obunachilar",
+    "languages": "Tillar",
+    "engagement_rate": "Faollik darajasi",
+    "content_type": "Kontent turi",
+    "gender": "Jinsi",
+    "collaboration_details": "Hamkorlik tafsilotlari",
+    "duration": "Davomiyligi",
+    "visibility": "Ko'rinishi"
+  },
+  "reviews": {
+    "average": "O'rtacha",
+    "client_reviews": "Mijoz sharhlari"
+  },
   "errors": {
     "network": "Internet bilan bog'lanishda muammo, aloqani tekshiring",
     "parsing": "Ma'lumotlarni qayta ishlashda xatolik",
     "unknown": "Noma'lum xatolik yuz berdi",
+    "session_expired": "Sessiya tugadi",
+    "redirect_to_login": "Qayta kirish uchun login sahifasiga yo'naltirilasiz.",
     "server": {
       "defaultMsg": "Server xatoligi ($code)",
       "badRequest": "Noto'g'ri so'rov",

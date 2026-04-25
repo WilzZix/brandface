@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/inputs/cred_input_field.dart';
 import '../../../../uikit/components/inputs/from_to_input_field.dart';
+import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_currency.dart';
+import 'choose_payment_type.dart';
 import 'choose_spoken_language.dart';
 
 class AmbassadorContractPageView extends StatefulWidget {
@@ -21,13 +23,54 @@ class AmbassadorContractPageView extends StatefulWidget {
 
 class _AmbassadorContractPageViewState
     extends State<AmbassadorContractPageView> {
-  final FillInfluencerProfileParam _param = FillInfluencerProfileParam();
+  FillInfluencerProfileParam _param = FillInfluencerProfileParam();
   final TextEditingController _hourlyRateFrom = TextEditingController();
   final TextEditingController _hourlyRateTo = TextEditingController();
   final TextEditingController _paymentByProjectController =
       TextEditingController();
+  final List<String> _selectedPaymentTypes = [];
+  String? _selectedCurrency;
+
+  @override
+  void initState() {
+    super.initState();
+    _hourlyRateFrom.addListener(_onTextChanged);
+    _hourlyRateTo.addListener(_onTextChanged);
+    _paymentByProjectController.addListener(_onTextChanged);
+  }
+
+  @override
+  void dispose() {
+    _hourlyRateFrom.removeListener(_onTextChanged);
+    _hourlyRateTo.removeListener(_onTextChanged);
+    _paymentByProjectController.removeListener(_onTextChanged);
+    _hourlyRateFrom.dispose();
+    _hourlyRateTo.dispose();
+    _paymentByProjectController.dispose();
+    super.dispose();
+  }
+
+  void _onTextChanged() {
+    _updateData();
+  }
 
   void _updateData() {
+    _param = _param.copyWith(
+      pricing: Pricing(
+        availableForLongTerm: _param.pricing?.availableForLongTerm,
+        kpiBasedModel: _param.pricing?.kpiBasedModel,
+        availableForOfflineEvents: _param.pricing?.availableForOfflineEvents,
+        campaignFee: _paymentByProjectController.text.isNotEmpty
+            ? _paymentByProjectController.text
+            : null,
+        campaignFeeCurrency: _selectedCurrency,
+        hourlyRateMinUzs: _hourlyRateFrom.text.isNotEmpty ? _hourlyRateFrom.text : null,
+        hourlyRateMaxUzs: _hourlyRateTo.text.isNotEmpty ? _hourlyRateTo.text : null,
+        hourlyRateMinUsd: _hourlyRateFrom.text.isNotEmpty ? _hourlyRateFrom.text : null,
+        hourlyRateMaxUsd: _hourlyRateTo.text.isNotEmpty ? _hourlyRateTo.text : null,
+        paymentTypes: _selectedPaymentTypes.isNotEmpty ? List.from(_selectedPaymentTypes) : null,
+      ),
+    );
     widget.onChanged(_param);
   }
 
@@ -44,17 +87,42 @@ class _AmbassadorContractPageViewState
           const SizedBox(height: 8),
           YesNoWidget(
             onItemTaped: (value) {
+              _param = _param.copyWith(
+                pricing: (_param.pricing ?? Pricing()).copyWith(
+                  availableForLongTerm: value,
+                ),
+              );
               _updateData();
             },
           ),
           const SizedBox(height: 16),
           Text(t.registration.kpi_based_model, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseOptionWidget(title: t.optional_items.willing_to_work_kpi),
+          ChooseOptionWidget(
+            title: t.optional_items.willing_to_work_kpi,
+            onChanged: (val) {
+              _param = _param.copyWith(
+                pricing: (_param.pricing ?? Pricing()).copyWith(
+                  kpiBasedModel: val,
+                ),
+              );
+              _updateData();
+            },
+          ),
           const SizedBox(height: 16),
           Text(t.registration.available_for_offline_events, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          YesNoWidget(onItemTaped: (value) {}),
+          YesNoWidget(
+            onItemTaped: (value) {
+              _param = _param.copyWith(
+                pricing: (_param.pricing ?? Pricing()).copyWith(
+                  availableForOfflineEvents: value,
+                ),
+              );
+              _updateData();
+            },
+          ),
+          const SizedBox(height: 16),
           Text(
             t.registration.projectly_payment_starting_price,
             style: Typographies.titleMedium,
@@ -75,11 +143,13 @@ class _AmbassadorContractPageViewState
           const SizedBox(height: 8),
           ChooseCurrency(
             onItemSelected: (LangItemModel p1) {
+              _selectedCurrency = p1.name.toUpperCase();
               _updateData();
             },
           ),
           SizedBox(height: 16),
           FromToInputField(
+            onChanged: () => _updateData(),
             controllerFrom: _hourlyRateFrom,
             controllerTo: _hourlyRateTo,
             labelFrom: t.registration.min,
@@ -89,7 +159,49 @@ class _AmbassadorContractPageViewState
           SizedBox(height: 16),
           Text(t.registration.payment_types, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseCurrency(onItemSelected: (LangItemModel p1) {}),
+          ChoosePaymentType(
+            onItemSelected: (LangItemModel p1) {
+              setState(() {
+                _selectedPaymentTypes.add(p1.name);
+              });
+              _updateData();
+            },
+          ),
+          if (_selectedPaymentTypes.isNotEmpty)
+            ListView.builder(
+              itemCount: _selectedPaymentTypes.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _selectedPaymentTypes[index],
+                        style: Typographies.bodyMedium,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedPaymentTypes.removeAt(index);
+                          });
+                          _updateData();
+                        },
+                        child: Text(
+                          t.common.delete,
+                          style: Typographies.labelLarge.copyWith(
+                            color: AppColors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
         ],
       ),
     );

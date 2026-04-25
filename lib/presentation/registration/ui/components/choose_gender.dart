@@ -86,7 +86,7 @@ class _ChooseGenderState extends State<ChooseGender> {
               },
               header: t.choose.select_gender,
               onConfirm: () {
-                widget.onItemSelected(_selectedLang ?? '');
+                widget.onItemSelected(_selectedLangId == 0 ? 'male' : 'female');
                 setState(() {});
                 context.pop();
               },

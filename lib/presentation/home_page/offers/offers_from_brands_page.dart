@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,7 +35,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: false,
-        title: Text('Offers from brands'),
+        title: Text(t.common.offers_from_brands),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: Padding(
@@ -56,7 +57,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Niche type ', style: Typographies.labelLarge),
+                        Text(t.common.niche_type, style: Typographies.labelLarge),
                         SvgPicture.asset(AppAssets.icArrowDown),
                       ],
                     ),
@@ -86,7 +87,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Offer title here', style: Typographies.titleMedium),
+                    Text(t.common.offer_title_placeholder, style: Typographies.titleMedium),
                     SizedBox(height: 12),
                     Text(
                       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
@@ -101,7 +102,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Deadline',
+                              t.common.deadline,
                               style: Typographies.titleSmall.copyWith(
                                 color: AppColors.grey,
                               ),
@@ -115,7 +116,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Deadline',
+                              t.common.deadline,
                               style: Typographies.titleSmall.copyWith(
                                 color: AppColors.grey,
                               ),
