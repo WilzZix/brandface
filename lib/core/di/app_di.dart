@@ -1,20 +1,12 @@
 import 'package:brandface/core/network/dio_client.dart';
-import 'package:brandface/data/data_source/network_data_source/brand/brand_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/login/login_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/profile/profile_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/registration/registration_data_source.dart';
-import 'package:brandface/data/repositories/brand_repository_impl.dart';
 import 'package:brandface/data/repositories/profile_repository_impl.dart';
 import 'package:brandface/data/repositories/registration_repository_impl.dart';
-import 'package:brandface/domain/repository/brand_repository.dart';
 import 'package:brandface/domain/repository/login_repository.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/domain/repository/registration_repository.dart';
-import 'package:brandface/domain/usecase/brand/get_brand_analytics_use_case.dart';
-import 'package:brandface/domain/usecase/brand/get_brand_profile_use_case.dart';
-import 'package:brandface/domain/usecase/brand/logout_use_case.dart';
-import 'package:brandface/presentation/home_page/brand_home/bloc/brand_home_cubit.dart';
-import 'package:brandface/presentation/home_page/brand_home/bloc/logout_cubit.dart';
 import 'package:brandface/domain/usecase/catalog/category/get_languages_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
@@ -87,9 +79,6 @@ class AppDi {
     sl.registerLazySingleton<UploadDataSource>(
       () => UploadDataSourceImpl(dioClient: sl()),
     );
-    sl.registerLazySingleton<BrandDataSource>(
-      () => BrandDataSourceImpl(sl()),
-    );
 
     ///Use case
     sl.registerLazySingleton(() => SendOtpUseCase(sl()));
@@ -114,9 +103,6 @@ class AppDi {
     );
     sl.registerLazySingleton(() => CreateAwardUseCase(repository: sl()));
     sl.registerLazySingleton(() => DeleteAwardUseCase(repository: sl()));
-    sl.registerLazySingleton(() => GetBrandProfileUseCase(repository: sl()));
-    sl.registerLazySingleton(() => GetBrandAnalyticsUseCase(repository: sl()));
-    sl.registerLazySingleton(() => LogoutUseCase(repository: sl()));
 
     ///Repository
     sl.registerLazySingleton<ILoginRepository>(
@@ -134,9 +120,6 @@ class AppDi {
     );
     sl.registerLazySingleton<IUploadRepository>(
       () => UploadRepositoryImpl(dataSource: sl()),
-    );
-    sl.registerLazySingleton<IBrandRepository>(
-      () => BrandRepositoryImpl(dataSource: sl(), authLocalService: sl()),
     );
     sl.registerLazySingleton(() => UploadFileUseCase(sl()));
 
@@ -187,12 +170,5 @@ class AppDi {
     sl.registerFactory(
       () => DeleteAccountCubit(deleteAccountUseCase: sl()),
     );
-    sl.registerFactory(
-      () => BrandHomeCubit(
-        getBrandProfileUseCase: sl(),
-        getBrandAnalyticsUseCase: sl(),
-      ),
-    );
-    sl.registerFactory(() => LogoutCubit(logoutUseCase: sl()));
   }
 }
