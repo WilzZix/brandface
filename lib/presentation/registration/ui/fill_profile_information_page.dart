@@ -6,8 +6,10 @@ import 'package:brandface/presentation/registration/bloc/audience/audience_cubit
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/city/city_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/sphere/sphere_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
@@ -386,8 +388,13 @@ class _FillProfileInformationPageState
       case 'brand':
         titles = ['General info', 'Categories'];
         widgets = [
-          BlocProvider(
-            create: (context) => sl<UploadCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<CityCubit>()),
+              BlocProvider(create: (context) => sl<SphereCubit>()),
+            ],
             child: BrandInfoPageView(
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (p1) {

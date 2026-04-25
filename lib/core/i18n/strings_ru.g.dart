@@ -321,6 +321,8 @@ class _TranslationsBrandRu implements TranslationsBrandUz {
 	@override String get analytics => 'Аналитика';
 	@override String get influencer_tab => 'Инфлюенсер';
 	@override String get ambassadors_tab => 'Амбассадоры';
+	@override String get brand_profile => 'Профиль бренда';
+	@override String get website => 'Веб-сайт';
 }
 
 // Path: offer
@@ -557,6 +559,8 @@ extension on TranslationsRu {
 			'brand.analytics' => 'Аналитика',
 			'brand.influencer_tab' => 'Инфлюенсер',
 			'brand.ambassadors_tab' => 'Амбассадоры',
+			'brand.brand_profile' => 'Профиль бренда',
+			'brand.website' => 'Веб-сайт',
 			'offer.offer_details' => 'Детали предложения',
 			'offer.offer_title' => 'Заголовок предложения',
 			'offer.description' => 'Описание',

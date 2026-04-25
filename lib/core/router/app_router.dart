@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/registration/registration_entity.dart';
 import '../../presentation/home_page/brand_home_page.dart';
+import '../../presentation/home_page/brand_profile_page.dart';
 import '../../presentation/home_page/home_page.dart';
 import '../../presentation/home_page/notifications/notifications_page.dart';
 import '../../presentation/home_page/offers/offer_detail_page.dart';
@@ -83,6 +84,11 @@ class AppRouter {
         path: BrandHomePage.tag,
         name: BrandHomePage.tag,
         builder: (_, _) => BrandHomePage(),
+      ),
+      GoRoute(
+        path: BrandProfilePage.tag,
+        name: BrandProfilePage.tag,
+        builder: (_, _) => BrandProfilePage(),
       ),
       GoRoute(
         path: ProfilePage.tag,
