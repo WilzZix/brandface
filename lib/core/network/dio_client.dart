@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 
 import '../../utils/services/app_auth_local_service.dart';
 import '../constants/api_routes.dart';
-import '../di/app_di.dart';
 
 class DioClient {
   final Dio _dio;
@@ -18,11 +17,11 @@ class DioClient {
       ..options.connectTimeout = const Duration(seconds: 5)
       ..options.receiveTimeout = const Duration(seconds: 5)
       ..options.responseType = ResponseType.json
-      ..interceptors.add(AuthInterceptor(_sharedPrefService))
+      ..interceptors.add(AuthInterceptor(_dio, _sharedPrefService))
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
       ..interceptors.addAll([
         InterceptorsWrapper(),
-        if (kDebugMode) LoggerInterceptor(authLocalService: sl(), dio: sl()),
+        if (kDebugMode) LoggerInterceptor(),
       ]);
   }
 

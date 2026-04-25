@@ -1,15 +1,20 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/home/home_dashboard_entity.dart';
+import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
+import 'package:brandface/presentation/home_page/bloc/home_state.dart';
+import 'package:brandface/presentation/home_page/offers/offer_detail_page.dart';
 import 'package:brandface/presentation/home_page/profile/ui/profile_page.dart';
 import 'package:brandface/presentation/home_page/recomendations/recomendations.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'notifications/notifications_page.dart';
 import 'offers/offers_from_brands_page.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,236 +36,61 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  scrolledUnderElevation: 0,
-                  backgroundColor: AppColors.lightBg,
-                  pinned: true,
-                  leading: GestureDetector(
-                    onTap: () => context.pushNamed(ProfilePage.tag),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 10,
-                      ),
-                      child: SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: Image.asset(
-                          'assets/images/im_person_avatar_sample.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    "Yo'ldoshev Usmon",
-                    style: Typographies.titleMedium,
-                  ),
-                  actions: [
-                    GestureDetector(
-                      onTap: () => context.pushNamed(NotificationsPage.tag),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.lightGreen,
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0,
-                            vertical: 12,
-                          ),
-                          child: Stack(
-                            children: [
-                              SvgPicture.asset(AppAssets.icBell),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  height: 8,
-                                  width: 8,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.orange,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+          BlocListener<HomeCubit, HomeState>(
+            listenWhen: (previous, current) =>
+                previous.failure != current.failure &&
+                current.failure != null &&
+                current.dashboard != null,
+            listener: (context, state) {
+              final messenger = ScaffoldMessenger.of(context);
+              messenger
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text(state.failure!.message)));
+            },
+            child: BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                return RefreshIndicator(
+                  color: AppColors.black,
+                  onRefresh: () => context.read<HomeCubit>().loadHome(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: CustomScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: _buildSlivers(
+                        context,
+                        state: state,
+                        bottomPadding: bottomPadding,
                       ),
                     ),
-                    SizedBox(width: 16),
-                  ],
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 32)),
-                SliverToBoxAdapter(
-                  child: Text(
-                    'Offers and messages',
-                    style: Typographies.titleLarge,
                   ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: HomePageContainer(
-                          title: '2',
-                          description: 'Active offers',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: HomePageContainer(
-                          title: '23',
-                          description: 'Messages',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 32)),
-                SliverToBoxAdapter(
-                  child: Text(
-                    'Recommended for You',
-                    style: Typographies.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverList.separated(
-                  itemCount: 12,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.lightBg3,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Offer title here',
-                            style: Typographies.titleMedium,
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-                            style: Typographies.bodySmall,
-                          ),
-                          SizedBox(height: 12),
-                          Divider(color: AppColors.borderColor),
-                          SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Deadline',
-                                    style: Typographies.titleSmall.copyWith(
-                                      color: AppColors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    '12.10.2026',
-                                    style: Typographies.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 16),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Deadline',
-                                    style: Typographies.titleSmall.copyWith(
-                                      color: AppColors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  SizedBox(
-                                    height: 24,
-                                    child: ListView.separated(
-                                      itemCount: 2,
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 6,
-                                            vertical: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.lightBg2,
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            'Cars',
-                                            style: Typographies.labelMedium,
-                                          ),
-                                        );
-                                      },
-                                      separatorBuilder:
-                                          (BuildContext context, int index) {
-                                            return SizedBox(width: 8);
-                                          },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              SvgPicture.asset(AppAssets.icChevronRight),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: 16);
-                  },
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 16 + MediaQuery.of(context).padding.bottom,
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
           IgnorePointer(
             ignoring: !_isOpen,
             child: AnimatedOpacity(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               opacity: _isOpen ? 1.0 : 0.0,
               child: Container(
                 color: AppColors.lightBg,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 56 + MediaQuery.of(context).padding.top),
                       Center(child: SvgPicture.asset(AppAssets.icLogo)),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Text('Menu', style: Typographies.headlineSmall),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () =>
@@ -277,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
+                      const SizedBox(height: 18),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () => context.pushNamed(Recommendation.tag),
@@ -293,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
+                      const SizedBox(height: 18),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -312,12 +142,13 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: GestureDetector(
         onTap: _toggleMenu,
         child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           transitionBuilder: (child, anim) => RotationTransition(
             turns: anim,
             child: FadeTransition(opacity: anim, child: child),
           ),
           child: Container(
+            key: ValueKey(_isOpen),
             height: 64,
             width: 64,
             decoration: BoxDecoration(
@@ -326,11 +157,11 @@ class _HomePageState extends State<HomePage> {
             ),
             child: _isOpen
                 ? Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(24),
                     child: SvgPicture.asset(AppAssets.icClose),
                   )
                 : Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(24),
                     child: SvgPicture.asset(AppAssets.icBars),
                   ),
           ),
@@ -338,9 +169,196 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  List<Widget> _buildSlivers(
+    BuildContext context, {
+    required HomeState state,
+    required double bottomPadding,
+  }) {
+    final dashboard = state.dashboard;
+
+    return [
+      _buildAppBar(
+        context,
+        dashboard: dashboard,
+        showNotificationBadge: (dashboard?.unreadNotificationsCount ?? 0) > 0,
+      ),
+      const SliverToBoxAdapter(child: SizedBox(height: 32)),
+      if (state.status == HomeStatus.loading && dashboard == null)
+        const SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(child: CircularProgressIndicator()),
+        )
+      else if (state.status == HomeStatus.failure && dashboard == null)
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: _HomeErrorState(
+            failure: state.failure,
+            onRetry: () => context.read<HomeCubit>().loadHome(),
+          ),
+        )
+      else if (dashboard != null) ...[
+        if (state.status == HomeStatus.loading)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: LinearProgressIndicator(minHeight: 2),
+            ),
+          ),
+        ..._buildDashboardSlivers(dashboard),
+      ] else
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: _HomeErrorState(
+            failure: state.failure,
+            onRetry: () => context.read<HomeCubit>().loadHome(),
+          ),
+        ),
+      SliverToBoxAdapter(child: SizedBox(height: 16 + bottomPadding)),
+    ];
+  }
+
+  SliverAppBar _buildAppBar(
+    BuildContext context, {
+    required HomeDashboardEntity? dashboard,
+    required bool showNotificationBadge,
+  }) {
+    final profile = dashboard?.profile;
+
+    return SliverAppBar(
+      scrolledUnderElevation: 0,
+      backgroundColor: AppColors.lightBg,
+      pinned: true,
+      leading: GestureDetector(
+        onTap: () => context.pushNamed(ProfilePage.tag),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: _ProfileAvatar(avatarUrl: profile?.avatarUrl),
+        ),
+      ),
+      title: Text(
+        _resolveDisplayName(profile),
+        style: Typographies.titleMedium,
+      ),
+      actions: [
+        GestureDetector(
+          onTap: () => context.pushNamed(NotificationsPage.tag),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.lightGreen,
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  SvgPicture.asset(AppAssets.icBell),
+                  if (showNotificationBadge)
+                    Positioned(
+                      right: -2,
+                      top: -1,
+                      child: Container(
+                        height: 8,
+                        width: 8,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.orange,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+      ],
+    );
+  }
+
+  List<Widget> _buildDashboardSlivers(HomeDashboardEntity dashboard) {
+    final isPendingApproval = dashboard.profile.moderationStatus != 'approved';
+
+    return [
+      if (isPendingApproval)
+        const SliverToBoxAdapter(child: _PendingApprovalBanner()),
+      if (isPendingApproval)
+        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+      SliverToBoxAdapter(
+        child: Text('Offers and messages', style: Typographies.titleLarge),
+      ),
+      const SliverToBoxAdapter(child: SizedBox(height: 16)),
+      SliverToBoxAdapter(
+        child: Row(
+          children: [
+            Expanded(
+              child: HomePageContainer(
+                title: dashboard.activeOffersCount.toString(),
+                description: 'Active offers',
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: HomePageContainer(
+                title: dashboard.messagesCount.toString(),
+                description: 'Messages',
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SliverToBoxAdapter(child: SizedBox(height: 32)),
+      SliverToBoxAdapter(
+        child: Text('Recommended for You', style: Typographies.titleLarge),
+      ),
+      const SliverToBoxAdapter(child: SizedBox(height: 16)),
+      if (dashboard.recommendations.isEmpty)
+        SliverToBoxAdapter(
+          child: _HomeEmptyRecommendations(
+            isPendingApproval: isPendingApproval,
+          ),
+        )
+      else
+        SliverList.separated(
+          itemCount: dashboard.recommendations.length,
+          itemBuilder: (context, index) {
+            return _RecommendedOfferCard(
+              item: dashboard.recommendations[index],
+              onTap: () => context.pushNamed(
+                OfferDetailPage.tag,
+                extra: dashboard.recommendations[index].id,
+              ),
+            );
+          },
+          separatorBuilder: (_, _) => const SizedBox(height: 16),
+        ),
+    ];
+  }
+
+  String _resolveDisplayName(dynamic profile) {
+    if (profile == null) {
+      return 'BrandFace';
+    }
+
+    final displayName = profile.displayName?.toString().trim();
+    if (displayName != null && displayName.isNotEmpty) {
+      return displayName;
+    }
+
+    final contacts = profile.contacts;
+    if (contacts is List && contacts.isNotEmpty) {
+      final firstValue = contacts.first.value?.toString().trim();
+      if (firstValue != null && firstValue.isNotEmpty) {
+        return firstValue;
+      }
+    }
+
+    return 'BrandFace';
+  }
 }
 
-class HomePageContainer extends StatefulWidget {
+class HomePageContainer extends StatelessWidget {
   const HomePageContainer({
     super.key,
     required this.title,
@@ -351,14 +369,9 @@ class HomePageContainer extends StatefulWidget {
   final String description;
 
   @override
-  State<HomePageContainer> createState() => _HomePageContainerState();
-}
-
-class _HomePageContainerState extends State<HomePageContainer> {
-  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
         color: AppColors.lightBg3,
         borderRadius: BorderRadius.circular(16),
@@ -366,9 +379,319 @@ class _HomePageContainerState extends State<HomePageContainer> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.title, style: Typographies.headlineMedium),
-          Text(widget.description, style: Typographies.bodyMedium),
+          Text(title, style: Typographies.headlineMedium),
+          Text(description, style: Typographies.bodyMedium),
         ],
+      ),
+    );
+  }
+}
+
+class _ProfileAvatar extends StatelessWidget {
+  const _ProfileAvatar({this.avatarUrl});
+
+  final String? avatarUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = avatarUrl?.trim();
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(999),
+      child: imageUrl != null && imageUrl.isNotEmpty
+          ? Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) => Image.asset(
+                'assets/images/im_person_avatar_sample.png',
+                fit: BoxFit.cover,
+              ),
+            )
+          : Image.asset(
+              'assets/images/im_person_avatar_sample.png',
+              fit: BoxFit.cover,
+            ),
+    );
+  }
+}
+
+class _RecommendedOfferCard extends StatelessWidget {
+  const _RecommendedOfferCard({required this.item, required this.onTap});
+
+  final RecommendedHomeOfferEntity item;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitle = item.brandName?.trim().isNotEmpty == true
+        ? item.brandName!.trim()
+        : _fallbackDescription(item.description);
+    final categories = item.categories.take(3).toList();
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        decoration: BoxDecoration(
+          color: AppColors.lightBg3,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(item.title, style: Typographies.titleMedium),
+                ),
+                if (item.score > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.lightGreen,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      _formatScore(item.score),
+                      style: Typographies.labelMedium,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              subtitle,
+              style: Typographies.bodySmall.copyWith(
+                color: AppColors.mutedBlack,
+              ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 12),
+            Divider(color: AppColors.borderColor),
+            const SizedBox(height: 12),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _InfoColumn(
+                  label: 'Deadline',
+                  value: _formatDeadline(item.deadline),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: categories.isEmpty
+                      ? _InfoColumn(
+                          label: 'Reward',
+                          value: _buildRewardText(item),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Categories',
+                              style: Typographies.titleSmall.copyWith(
+                                color: AppColors.grey,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: categories
+                                  .map(
+                                    (category) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.lightBg2,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Text(
+                                        category,
+                                        style: Typographies.labelMedium,
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                ),
+                const SizedBox(width: 12),
+                SvgPicture.asset(AppAssets.icChevronRight),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _fallbackDescription(String? description) {
+    final trimmed = description?.trim();
+    if (trimmed != null && trimmed.isNotEmpty) {
+      return trimmed;
+    }
+
+    return 'New recommendation tailored to your profile.';
+  }
+
+  String _formatDeadline(DateTime? deadline) {
+    if (deadline == null) {
+      return 'Open';
+    }
+
+    final day = deadline.day.toString().padLeft(2, '0');
+    final month = deadline.month.toString().padLeft(2, '0');
+    final year = deadline.year.toString();
+    return '$day.$month.$year';
+  }
+
+  String _buildRewardText(RecommendedHomeOfferEntity item) {
+    final amount = item.rewardAmount?.trim();
+    final currency = item.rewardCurrency?.trim();
+    final reward = item.reward?.trim();
+
+    if (amount != null && amount.isNotEmpty) {
+      return [
+        amount,
+        if (currency != null && currency.isNotEmpty) currency,
+      ].join(' ');
+    }
+
+    if (reward != null && reward.isNotEmpty) {
+      return reward;
+    }
+
+    return 'Flexible';
+  }
+
+  String _formatScore(double score) {
+    final scoreText = score.truncateToDouble() == score
+        ? score.toStringAsFixed(0)
+        : score.toStringAsFixed(1);
+    return '$scoreText%';
+  }
+}
+
+class _InfoColumn extends StatelessWidget {
+  const _InfoColumn({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Typographies.titleSmall.copyWith(color: AppColors.grey),
+        ),
+        const SizedBox(height: 4),
+        Text(value, style: Typographies.bodyMedium),
+      ],
+    );
+  }
+}
+
+class _HomeEmptyRecommendations extends StatelessWidget {
+  const _HomeEmptyRecommendations({required this.isPendingApproval});
+
+  final bool isPendingApproval;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.lightBg3,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Text(
+        isPendingApproval
+            ? 'Your profile is still under review. Offers and recommendations will appear after approval.'
+            : 'Recommendations will appear here once matching results are ready.',
+        style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
+      ),
+    );
+  }
+}
+
+class _PendingApprovalBanner extends StatelessWidget {
+  const _PendingApprovalBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.lightGreen,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.borderColor),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.schedule_rounded, color: AppColors.black),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'Your profile is pending approval. Messages and notifications are available now, and offer tools will unlock after moderation.',
+              style: Typographies.bodyMedium.copyWith(color: AppColors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeErrorState extends StatelessWidget {
+  const _HomeErrorState({required this.failure, required this.onRetry});
+
+  final Failure? failure;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              failure?.message ?? 'Home page data could not be loaded.',
+              style: Typographies.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Pull to refresh or try again.',
+              style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: onRetry,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.black,
+                foregroundColor: AppColors.white,
+              ),
+              child: const Text('Try again'),
+            ),
+          ],
+        ),
       ),
     );
   }
