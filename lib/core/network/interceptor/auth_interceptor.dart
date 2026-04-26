@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/core/navigation/app_navigator_key.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
@@ -10,10 +13,12 @@ import 'package:go_router/go_router.dart';
 import '../../../utils/services/app_auth_local_service.dart';
 
 class AuthInterceptor extends Interceptor {
+  final Dio _dio;
   final IAuthLocalService _authLocalService;
+  Future<String?>? _refreshFuture;
   bool _isShowingUnauthorizedSheet = false;
 
-  AuthInterceptor(this._authLocalService);
+  AuthInterceptor(this._dio, this._authLocalService);
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {

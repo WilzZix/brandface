@@ -1,9 +1,13 @@
 import 'package:brandface/core/constants/app_assets.dart';
-import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/reviews/reviews_state.dart';
+import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/components/ui_components/title_description_widget.dart';
+import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Reviews extends StatefulWidget {
@@ -18,65 +22,174 @@ class Reviews extends StatefulWidget {
 class _ReviewsState extends State<Reviews> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(t.profile.reviews), centerTitle: false),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16),
-            Text(t.reviews.average, style: Typographies.titleLarge),
-            SizedBox(height: 8),
-            AppContainer(
-              child: Row(
+    return BlocListener<ReviewsCubit, ReviewsState>(
+      listenWhen: (previous, current) =>
+          previous.failure != current.failure &&
+          current.failure != null &&
+          current.reviews.isNotEmpty,
+      listener: (context, state) {
+        final messenger = ScaffoldMessenger.of(context);
+        messenger
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(state.failure!.message)));
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Reviews'), centerTitle: false),
+        body: BlocBuilder<ReviewsCubit, ReviewsState>(
+          builder: (context, state) {
+            if (state.status == ReviewsStatus.loading &&
+                state.reviews.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (state.status == ReviewsStatus.failure &&
+                state.reviews.isEmpty) {
+              return _ReviewsErrorState(
+                message:
+                    state.failure?.message ?? 'Reviews could not be loaded.',
+                onRetry: () =>
+                    context.read<ReviewsCubit>().loadReviews(force: true),
+              );
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SvgPicture.asset(AppAssets.icStar),
-                  SizedBox(width: 8),
-                  Text('4.34', style: Typographies.titleLarge),
-                ],
-              ),
-            ),
-            SizedBox(height: 32),
-            Text(t.reviews.client_reviews, style: Typographies.titleLarge),
-            SizedBox(height: 8),
-            Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return AppContainer(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: 16),
+                  Text('Average', style: Typographies.titleLarge),
+                  const SizedBox(height: 8),
+                  AppContainer(
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset(AppAssets.icStar),
-                            SizedBox(width: 8),
-                            Text('4.34', style: Typographies.titleLarge),
-                          ],
-                        ),
-                        SizedBox(height: 12),
+                        SvgPicture.asset(AppAssets.icStar),
+                        const SizedBox(width: 8),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                          style: Typographies.bodySmall,
-                        ),
-                        SizedBox(height: 12),
-                        Divider(),
-                        SizedBox(height: 12),
-                        TitleDescriptionWidget(
-                          title: 'John Johnson',
-                          descriptionItem: Text(
-                            'Director Paypal',
-                            style: Typographies.bodyMedium,
-                          ),
+                          _formatAverage(state.averageRating),
+                          style: Typographies.titleLarge,
                         ),
                       ],
                     ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    SizedBox(height: 8),
-                itemCount: 5,
+                  ),
+                  const SizedBox(height: 32),
+                  Text('Client reviews', style: Typographies.titleLarge),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: RefreshIndicator(
+                      color: AppColors.black,
+                      onRefresh: () =>
+                          context.read<ReviewsCubit>().loadReviews(force: true),
+                      child: state.reviews.isEmpty
+                          ? ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              children: const [
+                                SizedBox(height: 120),
+                                Center(child: Text('No reviews yet.')),
+                              ],
+                            )
+                          : ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final review = state.reviews[index];
+                                return AppContainer(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(AppAssets.icStar),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            review.rating.toString(),
+                                            style: Typographies.titleLarge,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        review.text.isEmpty
+                                            ? 'No review text provided.'
+                                            : review.text,
+                                        style: Typographies.bodySmall,
+                                      ),
+                                      const SizedBox(height: 12),
+                                      const Divider(),
+                                      const SizedBox(height: 12),
+                                      TitleDescriptionWidget(
+                                        title: review.reviewerName,
+                                        descriptionItem: Text(
+                                          _formatReviewDate(review.createdAt),
+                                          style: Typographies.bodyMedium,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const SizedBox(height: 8),
+                              itemCount: state.reviews.length,
+                            ),
+                    ),
+                  ),
+                ],
               ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  static String _formatAverage(double value) {
+    return value.toStringAsFixed(2);
+  }
+
+  static String _formatReviewDate(DateTime? value) {
+    if (value == null) {
+      return 'Unknown date';
+    }
+
+    final day = value.day.toString().padLeft(2, '0');
+    final month = value.month.toString().padLeft(2, '0');
+    final year = value.year.toString();
+
+    return '$day.$month.$year';
+  }
+}
+
+class _ReviewsErrorState extends StatelessWidget {
+  const _ReviewsErrorState({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              message,
+              style: Typographies.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Pull to refresh or try again.',
+              style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: 170,
+              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
             ),
           ],
         ),

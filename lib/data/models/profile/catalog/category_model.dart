@@ -28,8 +28,8 @@ class CategoryData {
     return CategoryData(
       id: json['id'],
       name: json['name'],
-      icon: json['icon'],
-      parent: json['parent'],
+      icon: json['icon'] is int ? json['icon'] as int : 0,
+      parent: json['parent_id'] as int? ?? json['parent'] as int?,
     );
   }
 

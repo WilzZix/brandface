@@ -1,0 +1,16 @@
+import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/billing/billing_entities.dart';
+import 'package:brandface/domain/repository/billing_repository.dart';
+import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
+import 'package:dart_either/dart_either.dart';
+
+class SetDefaultBillingCardUseCase implements UseCase<BillingCardEntity, int> {
+  final IBillingRepository repository;
+
+  SetDefaultBillingCardUseCase({required this.repository});
+
+  @override
+  Future<Either<Failure, BillingCardEntity>> call({required int params}) {
+    return repository.setDefaultCard(params);
+  }
+}

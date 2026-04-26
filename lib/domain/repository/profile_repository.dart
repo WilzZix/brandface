@@ -7,6 +7,7 @@ import 'package:brandface/domain/entities/profile/catalog/service_type_entity.da
 import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/sphere_entity.dart';
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
+import 'package:brandface/domain/entities/profile/review_entity.dart';
 import 'package:dart_either/dart_either.dart';
 
 import '../../core/error/failures.dart';
@@ -36,6 +37,10 @@ abstract class IProfileRepository {
   getSocialMediaAccountStats({
     required String platform,
     required String username,
+  });
+
+  Future<Either<Failure, List<ReviewEntity>>> getInfluencerReviews({
+    required int influencerId,
   });
 
   Future<Either<Failure, AwardEntity>> createAward({required String title});
