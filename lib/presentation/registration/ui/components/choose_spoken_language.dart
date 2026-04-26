@@ -107,8 +107,8 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
                             ),
                             loaded: (langs) {
                               if (langs.isEmpty) {
-                                return const Center(
-                                  child: Text("Tillar topilmadi"),
+                                return Center(
+                                  child: Text(t.registration.no_languages_found),
                                 );
                               }
                               return SingleChildScrollView(
@@ -142,7 +142,7 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
                     Expanded(
                       child: Text(
                         isLoading
-                            ? 'Yuklanmoqda...'
+                            ? t.common.loading
                             : _getSelectedLabel(languages),
                         style: Typographies.labelLarge,
                         overflow: TextOverflow.ellipsis,

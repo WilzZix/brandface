@@ -28,8 +28,8 @@ class MyPricingTariffsPageView extends StatefulWidget {
 class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
     with AutomaticKeepAliveClientMixin<MyPricingTariffsPageView> {
   late FillInfluencerProfileParam _param;
-  final List<LangItemModel> _selectedCurrencyItems = [];
   late List<String> _selectedPaymentTypes;
+  String? _selectedCurrency;
   final TextEditingController _hourlyRateFrom = TextEditingController();
   final TextEditingController _hourlyRateTo = TextEditingController();
   final TextEditingController _paymentByProjectController =
@@ -43,20 +43,23 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
       pricing: pricing ?? Pricing(),
     );
     _selectedPaymentTypes = List<String>.from(pricing?.paymentTypes ?? []);
+    _selectedCurrency = pricing?.campaignFeeCurrency;
     _hourlyRateFrom.text = pricing?.hourlyRateMinUsd ?? '';
     _hourlyRateTo.text = pricing?.hourlyRateMaxUsd ?? '';
     _paymentByProjectController.text = pricing?.campaignFee ?? '';
   }
 
   void _updateData() {
+    final current = _param.pricing ?? Pricing();
     _param = _param.copyWith(
-      pricing: Pricing(
+      pricing: current.copyWith(
         hourlyRateMinUsd: _hourlyRateFrom.text,
         hourlyRateMinUzs: _hourlyRateFrom.text,
         hourlyRateMaxUsd: _hourlyRateTo.text,
         hourlyRateMaxUzs: _hourlyRateTo.text,
         paymentTypes: _selectedPaymentTypes,
         campaignFee: _paymentByProjectController.text,
+        campaignFeeCurrency: _selectedCurrency,
       ),
     );
     widget.onChanged(_param);
@@ -75,7 +78,9 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
           Text(t.registration.currency, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(
+            initialValue: _selectedCurrency,
             onItemSelected: (LangItemModel p1) {
+              _selectedCurrency = p1.name;
               _updateData();
             },
           ),
@@ -118,9 +123,11 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
           const SizedBox(height: 8),
           ChoosePaymentType(
             onItemSelected: (LangItemModel p1) {
+              if (_selectedPaymentTypes.contains(p1.name)) return;
               setState(() {
                 _selectedPaymentTypes.add(p1.name);
               });
+              _updateData();
             },
           ),
           if (_selectedPaymentTypes.isNotEmpty)
@@ -144,6 +151,7 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
                           setState(() {
                             _selectedPaymentTypes.removeAt(index);
                           });
+                          _updateData();
                         },
                         child: Text(
                           t.common.delete,

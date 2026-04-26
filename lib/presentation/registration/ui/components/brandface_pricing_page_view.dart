@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/inputs/cred_input_field.dart';
+import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'ambassador_experience_page_view.dart';
 import 'choose_currency.dart';
+import 'choose_payment_type.dart';
 import 'choose_spoken_language.dart';
 
 class BrandfacePricingPageView extends StatefulWidget {
@@ -24,12 +26,18 @@ class BrandfacePricingPageView extends StatefulWidget {
       _BrandfacePricingPageViewState();
 }
 
-class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
+class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView>
+    with AutomaticKeepAliveClientMixin<BrandfacePricingPageView> {
   late FillInfluencerProfileParam _param;
   final TextEditingController _hourlyRateFrom = TextEditingController();
   final TextEditingController _hourlyRateTo = TextEditingController();
   final TextEditingController _paymentByProjectController =
       TextEditingController();
+  final List<String> _selectedPaymentTypes = [];
+  String? _selectedCurrency;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -40,14 +48,48 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
     _hourlyRateFrom.text = pricing?.hourlyRateMinUzs ?? pricing?.hourlyRateMinUsd ?? '';
     _hourlyRateTo.text = pricing?.hourlyRateMaxUzs ?? pricing?.hourlyRateMaxUsd ?? '';
     _paymentByProjectController.text = pricing?.campaignFee ?? '';
+    _selectedCurrency = pricing?.campaignFeeCurrency;
+    _selectedPaymentTypes.addAll(pricing?.paymentTypes ?? []);
+    _hourlyRateFrom.addListener(_updateData);
+    _hourlyRateTo.addListener(_updateData);
+    _paymentByProjectController.addListener(_updateData);
+  }
+
+  @override
+  void dispose() {
+    _hourlyRateFrom.removeListener(_updateData);
+    _hourlyRateTo.removeListener(_updateData);
+    _paymentByProjectController.removeListener(_updateData);
+    _hourlyRateFrom.dispose();
+    _hourlyRateTo.dispose();
+    _paymentByProjectController.dispose();
+    super.dispose();
   }
 
   void _updateData() {
+    _param = _param.copyWith(
+      pricing: Pricing(
+        exclusivityAvailable: _param.pricing?.exclusivityAvailable,
+        worksOnNetModel: _param.pricing?.worksOnNetModel,
+        eventAppearanceFee: _param.pricing?.eventAppearanceFee,
+        campaignFee: _paymentByProjectController.text.isNotEmpty
+            ? _paymentByProjectController.text
+            : null,
+        campaignFeeCurrency: _selectedCurrency,
+        hourlyRateMinUzs: _hourlyRateFrom.text.isNotEmpty ? _hourlyRateFrom.text : null,
+        hourlyRateMaxUzs: _hourlyRateTo.text.isNotEmpty ? _hourlyRateTo.text : null,
+        hourlyRateMinUsd: _hourlyRateFrom.text.isNotEmpty ? _hourlyRateFrom.text : null,
+        hourlyRateMaxUsd: _hourlyRateTo.text.isNotEmpty ? _hourlyRateTo.text : null,
+        paymentTypes: _selectedPaymentTypes.isNotEmpty ? List.from(_selectedPaymentTypes) : null,
+        monthlyExclusivityFee: _param.pricing?.monthlyExclusivityFee,
+      ),
+    );
     widget.onChanged(_param);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,16 +99,39 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
           const SizedBox(height: 8),
           YesNoWidget(
             onItemTaped: (value) {
+              _param = _param.copyWith(
+                pricing: (_param.pricing ?? Pricing()).copyWith(
+                  exclusivityAvailable: value,
+                ),
+              );
               _updateData();
             },
           ),
-
           const SizedBox(height: 24),
           Text(t.registration.pricing_options, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseOptionWidget(title: t.optional_items.willing_to_work_kpi),
-          ChooseOptionWidget(title: t.optional_items.campaign_based_fee),
-          ChooseOptionWidget(title: t.optional_items.event_appearance_fee),
+          ChooseOptionWidget(
+            title: t.optional_items.willing_to_work_kpi,
+            onChanged: (val) {
+              _param = _param.copyWith(
+                pricing: (_param.pricing ?? Pricing()).copyWith(
+                  worksOnNetModel: val,
+                ),
+              );
+              _updateData();
+            },
+          ),
+          ChooseOptionWidget(
+            title: t.optional_items.event_appearance_fee,
+            onChanged: (val) {
+              _param = _param.copyWith(
+                pricing: (_param.pricing ?? Pricing()).copyWith(
+                  eventAppearanceFee: val ? '1' : null,
+                ),
+              );
+              _updateData();
+            },
+          ),
           const SizedBox(height: 16),
           Text(
             t.registration.projectly_payment_starting_price,
@@ -87,12 +152,15 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
           Text(t.registration.currency, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(
+            initialValue: _selectedCurrency,
             onItemSelected: (LangItemModel p1) {
+              _selectedCurrency = p1.name.toUpperCase();
               _updateData();
             },
           ),
           SizedBox(height: 16),
           FromToInputField(
+            onChanged: () => setState(() => _updateData()),
             controllerFrom: _hourlyRateFrom,
             controllerTo: _hourlyRateTo,
             labelFrom: t.registration.min,
@@ -102,7 +170,49 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView> {
           SizedBox(height: 16),
           Text(t.registration.payment_types, style: Typographies.titleMedium),
           const SizedBox(height: 8),
-          ChooseCurrency(onItemSelected: (LangItemModel p1) {}),
+          ChoosePaymentType(
+            onItemSelected: (LangItemModel p1) {
+              setState(() {
+                _selectedPaymentTypes.add(p1.name);
+              });
+              _updateData();
+            },
+          ),
+          if (_selectedPaymentTypes.isNotEmpty)
+            ListView.builder(
+              itemCount: _selectedPaymentTypes.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _selectedPaymentTypes[index],
+                        style: Typographies.bodyMedium,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedPaymentTypes.removeAt(index);
+                          });
+                          _updateData();
+                        },
+                        child: Text(
+                          t.common.delete,
+                          style: Typographies.labelLarge.copyWith(
+                            color: AppColors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
         ],
       ),
     );

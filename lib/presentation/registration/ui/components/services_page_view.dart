@@ -102,7 +102,7 @@ class _ServicesPageViewState extends State<ServicesPageView>
                       border: Border.all(color: AppColors.primaryDark, width: 1),
                       borderRadius: BorderRadius.circular(999),
                     ),
-                    child: Text('Creating reels', style: Typographies.labelMedium),
+                    child: Text(t.registration.service_creating_reels_placeholder, style: Typographies.labelMedium),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {

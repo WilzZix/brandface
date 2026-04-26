@@ -34,7 +34,7 @@ class RegistrationDivider extends StatelessWidget {
       children: [
         SizedBox(width: 70, child: Divider(color: AppColors.borderColor)),
         SizedBox(width: 18),
-        Text('do not have account', style: Typographies.titleSmall),
+        Text(t.registration.do_not_have_account, style: Typographies.titleSmall),
         SizedBox(width: 18),
         SizedBox(width: 70, child: Divider(color: AppColors.borderColor)),
       ],

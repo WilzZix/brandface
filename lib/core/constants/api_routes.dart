@@ -1,5 +1,6 @@
 class ApiRoutes {
   static String baseUrl = 'https://api.influerax.com/api/';
+  static String mediaBaseUrl = 'https://api.influerax.com';
 
   ///Login
   static String sendOtp = 'accounts/v1/auth/send-otp/';
@@ -56,4 +57,5 @@ class ApiRoutes {
   static String mySubscription = 'billing/v1/my-subscription/';
   static String billingPlans = 'billing/v1/plans/';
   static String billingTransactions = 'billing/v1/transactions/';
+  static String uploadFile = 'uploads/v1/upload/file/';
 }

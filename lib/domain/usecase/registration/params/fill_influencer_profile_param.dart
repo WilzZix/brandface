@@ -6,15 +6,21 @@ class FillInfluencerProfileParam {
   final int? cityId;
   final DateTime? birthDate;
   final String? gender;
+  final String? professionalCategory;
   final int? yearsOfExperience;
   final bool? hasAdExperience;
   final bool? pressMentions;
   final bool? agencyRepresentation;
+  final bool? referralExperience;
+  final bool? previousBrandCollaborations;
+  final bool? caseStudyAvailable;
+  final bool? conversionMetricsAvailable;
   final List<String>? partners;
   final List<Contact>? contacts;
   final List<int>? categoryIds;
   final List<int>? serviceIds;
   final List<int>? languageIds;
+  final List<int>? activeBrandIds;
   final Audience? audience;
   final Pricing? pricing;
 
@@ -26,15 +32,21 @@ class FillInfluencerProfileParam {
     this.cityId,
     this.birthDate,
     this.gender,
+    this.professionalCategory,
     this.yearsOfExperience,
     this.hasAdExperience,
     this.pressMentions,
     this.agencyRepresentation,
+    this.referralExperience,
+    this.previousBrandCollaborations,
+    this.caseStudyAvailable,
+    this.conversionMetricsAvailable,
     this.partners,
     this.contacts,
     this.categoryIds,
     this.serviceIds,
     this.languageIds,
+    this.activeBrandIds,
     this.audience,
     this.pricing,
   });
@@ -47,15 +59,21 @@ class FillInfluencerProfileParam {
     int? cityId,
     DateTime? birthDate,
     String? gender,
+    String? professionalCategory,
     int? yearsOfExperience,
     bool? hasAdExperience,
     bool? pressMentions,
     bool? agencyRepresentation,
+    bool? referralExperience,
+    bool? previousBrandCollaborations,
+    bool? caseStudyAvailable,
+    bool? conversionMetricsAvailable,
     List<String>? partners,
     List<Contact>? contacts,
     List<int>? categoryIds,
     List<int>? serviceIds,
     List<int>? languageIds,
+    List<int>? activeBrandIds,
     Audience? audience,
     Pricing? pricing,
   }) => FillInfluencerProfileParam(
@@ -66,15 +84,21 @@ class FillInfluencerProfileParam {
     cityId: cityId ?? this.cityId,
     birthDate: birthDate ?? this.birthDate,
     gender: gender ?? this.gender,
+    professionalCategory: professionalCategory ?? this.professionalCategory,
     yearsOfExperience: yearsOfExperience ?? this.yearsOfExperience,
     hasAdExperience: hasAdExperience ?? this.hasAdExperience,
     pressMentions: pressMentions ?? this.pressMentions,
     agencyRepresentation: agencyRepresentation ?? this.agencyRepresentation,
+    referralExperience: referralExperience ?? this.referralExperience,
+    previousBrandCollaborations: previousBrandCollaborations ?? this.previousBrandCollaborations,
+    caseStudyAvailable: caseStudyAvailable ?? this.caseStudyAvailable,
+    conversionMetricsAvailable: conversionMetricsAvailable ?? this.conversionMetricsAvailable,
     partners: partners ?? this.partners,
     contacts: contacts ?? this.contacts,
     categoryIds: categoryIds ?? this.categoryIds,
     serviceIds: serviceIds ?? this.serviceIds,
     languageIds: languageIds ?? this.languageIds,
+    activeBrandIds: activeBrandIds ?? this.activeBrandIds,
     audience: audience ?? this.audience,
     pricing: pricing ?? this.pricing,
   );
@@ -87,16 +111,22 @@ class FillInfluencerProfileParam {
       "region_id": regionId,
       "city_id": cityId,
       "birth_date": birthDate?.toIso8601String().split('T').first,
-      "gender": gender == "Мужской" ? "male" : "female",
+      "gender": gender,
+      "professional_category": professionalCategory,
       "years_of_experience": yearsOfExperience,
       "has_ad_experience": hasAdExperience,
       "press_mentions": pressMentions,
       "agency_representation": agencyRepresentation,
+      "referral_experience": referralExperience,
+      "previous_brand_collaborations": previousBrandCollaborations,
+      "case_study_available": caseStudyAvailable,
+      "conversion_metrics_available": conversionMetricsAvailable,
       "partners": partners,
       "contacts": contacts?.map((e) => e.toJson()).toList(),
       "category_ids": categoryIds,
       "service_ids": serviceIds,
       "language_ids": languageIds,
+      "active_brand_ids": activeBrandIds,
       "audience": audience?.toJson(),
       "pricing": pricing?.toJson(),
     }..removeWhere((key, value) => value == null);
@@ -209,6 +239,9 @@ class Pricing {
   final String? campaignFeeCurrency;
   final String? monthlyExclusivityFee;
   final String? eventAppearanceFee;
+  final bool? kpiBasedModel;
+  final bool? availableForOfflineEvents;
+  final int? monthlyContentCapacity;
 
   Pricing({
     this.availableForLongTerm,
@@ -227,6 +260,9 @@ class Pricing {
     this.campaignFeeCurrency,
     this.monthlyExclusivityFee,
     this.eventAppearanceFee,
+    this.kpiBasedModel,
+    this.availableForOfflineEvents,
+    this.monthlyContentCapacity,
   });
 
   Pricing copyWith({
@@ -246,6 +282,9 @@ class Pricing {
     String? campaignFeeCurrency,
     String? monthlyExclusivityFee,
     String? eventAppearanceFee,
+    bool? kpiBasedModel,
+    bool? availableForOfflineEvents,
+    int? monthlyContentCapacity,
   }) => Pricing(
     availableForLongTerm: availableForLongTerm ?? this.availableForLongTerm,
     worksOnNetModel: worksOnNetModel ?? this.worksOnNetModel,
@@ -263,6 +302,9 @@ class Pricing {
     campaignFeeCurrency: campaignFeeCurrency ?? this.campaignFeeCurrency,
     monthlyExclusivityFee: monthlyExclusivityFee ?? this.monthlyExclusivityFee,
     eventAppearanceFee: eventAppearanceFee ?? this.eventAppearanceFee,
+    kpiBasedModel: kpiBasedModel ?? this.kpiBasedModel,
+    availableForOfflineEvents: availableForOfflineEvents ?? this.availableForOfflineEvents,
+    monthlyContentCapacity: monthlyContentCapacity ?? this.monthlyContentCapacity,
   );
 
   Map<String, dynamic> toJson() {
@@ -272,7 +314,7 @@ class Pricing {
       "open_to_similar_offers": openToSimilarOffers,
       "hourly_rate_min_uzs": hourlyRateMinUzs,
       "hourly_rate_max_uzs": hourlyRateMaxUzs,
-      "hourly_rate_min_usd": hourlyRateMaxUsd,
+      "hourly_rate_min_usd": hourlyRateMinUsd,
       "hourly_rate_max_usd": hourlyRateMaxUsd,
       "daily_rate_min_uzs": dailyRateMinUzs,
       "daily_rate_max_uzs": dailyRateMaxUzs,
@@ -283,6 +325,9 @@ class Pricing {
       "campaign_fee_currency": campaignFeeCurrency,
       "monthly_exclusivity_fee": monthlyExclusivityFee,
       "event_appearance_fee": eventAppearanceFee,
+      "kpi_based_model": kpiBasedModel,
+      "available_for_offline_events": availableForOfflineEvents,
+      "monthly_content_capacity": monthlyContentCapacity,
     }..removeWhere((key, value) => value == null);
   }
 }

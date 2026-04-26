@@ -4,6 +4,7 @@ import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:equatable/equatable.dart';
 
+import 'catalog/city_entity.dart';
 import 'catalog/region_entity.dart';
 
 class InfluencerProfileInformationEntity extends Equatable {
@@ -13,7 +14,7 @@ class InfluencerProfileInformationEntity extends Equatable {
   final int? avatarId;
   final String? bio;
   final RegionEntity? region;
-  final int? cityId;
+  final CityEntity? city;
   final DateTime? birthDate;
   final String? gender;
   final List<CategoryData>? categories;
@@ -44,7 +45,7 @@ class InfluencerProfileInformationEntity extends Equatable {
     this.avatarId,
     this.bio,
     this.region,
-    this.cityId,
+    this.city,
     this.birthDate,
     this.gender,
     this.categories,
@@ -75,7 +76,7 @@ class InfluencerProfileInformationEntity extends Equatable {
       avatarId: avatarId,
       bio: bio,
       regionId: region?.id,
-      cityId: cityId,
+      cityId: city?.id,
       birthDate: birthDate,
       gender: gender,
       yearsOfExperience: yearsOfExperience,
@@ -100,7 +101,7 @@ class InfluencerProfileInformationEntity extends Equatable {
     avatarId,
     bio,
     region,
-    cityId,
+    city,
     birthDate,
     gender,
     categories,

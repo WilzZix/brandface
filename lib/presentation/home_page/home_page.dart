@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Offers from brands',
+                              t.common.offers_from_brands,
                               style: Typographies.titleMedium,
                             ),
                             SvgPicture.asset(AppAssets.icChevronRight),
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Recommended for You',
+                              t.common.recommended_for_you,
                               style: Typographies.titleMedium,
                             ),
                             SvgPicture.asset(AppAssets.icChevronRight),
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Messages', style: Typographies.titleMedium),
+                          Text(t.common.messages, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),

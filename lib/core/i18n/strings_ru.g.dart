@@ -47,6 +47,10 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsChooseRu choose = _TranslationsChooseRu._(_root);
 	@override late final _TranslationsContactRu contact = _TranslationsContactRu._(_root);
 	@override late final _TranslationsOptionalItemsRu optional_items = _TranslationsOptionalItemsRu._(_root);
+	@override late final _TranslationsHomeRu home = _TranslationsHomeRu._(_root);
+	@override late final _TranslationsBrandRu brand = _TranslationsBrandRu._(_root);
+	@override late final _TranslationsOfferRu offer = _TranslationsOfferRu._(_root);
+	@override late final _TranslationsReviewsRu reviews = _TranslationsReviewsRu._(_root);
 	@override late final _TranslationsErrorsRu errors = _TranslationsErrorsRu._(_root);
 }
 
@@ -149,6 +153,10 @@ class _TranslationsRegistrationRu implements TranslationsRegistrationUz {
 	@override String get kpi_based_model => 'Модель на основе KPI';
 	@override String get available_for_offline_events => 'Доступны для офлайн мероприятий';
 	@override String get pricing_options => 'Варианты ценообразования';
+	@override String get do_not_have_account => 'нет аккаунта';
+	@override String get no_languages_found => 'Языки не найдены';
+	@override String get service_creating_reels_placeholder => 'Создание Reels';
+	@override String get niche_business_placeholder => 'Бизнес';
 }
 
 // Path: common
@@ -169,6 +177,17 @@ class _TranslationsCommonRu implements TranslationsCommonUz {
 	@override String get please_enter_text => 'Пожалуйста, введите текст';
 	@override String get email => 'Email';
 	@override String get set_as_main => 'Сделать основным';
+	@override String get ok => 'OK';
+	@override String get submit => 'Отправить';
+	@override String get loading => 'Загрузка...';
+	@override String get deadline => 'Срок';
+	@override String get menu => 'Меню';
+	@override String get messages => 'Сообщения';
+	@override String get active_offers => 'Активные предложения';
+	@override String get recommended_for_you => 'Рекомендуется для вас';
+	@override String get offers_from_brands => 'Предложения от брендов';
+	@override String get niche_type => 'Тип ниши';
+	@override String get offer_title_placeholder => 'Заголовок предложения';
 }
 
 // Path: profile
@@ -195,7 +214,11 @@ class _TranslationsProfileRu implements TranslationsProfileUz {
 	@override String get pricing_tariffs => 'Ценообразование / Тарифы';
 	@override String get payment_type => 'Тип оплаты';
 	@override String get delete_account => 'Удалить аккаунт';
+	@override String get delete_account_confirm => 'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.';
 	@override String age_range({required Object from, required Object to}) => 'Возраст ${from} - ${to}';
+	@override String get confirm_delete => 'Подтвердить удаление';
+	@override String get total_followers => 'Всего подписчиков';
+	@override String get engagement_rate => 'Уровень вовлечённости';
 }
 
 // Path: validation
@@ -209,6 +232,8 @@ class _TranslationsValidationRu implements TranslationsValidationUz {
 	@override String get name_full_required => 'Пожалуйста, введите полное имя и фамилию';
 	@override String get name_letters_only => 'Имя должно содержать только буквы';
 	@override String get name_too_short => 'Имя слишком короткое';
+	@override String get fill_required_fields => 'Заполните обязательные поля';
+	@override String get account_already_added => 'Аккаунт уже добавлен';
 }
 
 // Path: choose
@@ -264,6 +289,76 @@ class _TranslationsOptionalItemsRu implements TranslationsOptionalItemsUz {
 	@override String get event_appearance_fee => 'Оплата за участие в мероприятии';
 }
 
+// Path: home
+class _TranslationsHomeRu implements TranslationsHomeUz {
+	_TranslationsHomeRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get offers_and_messages => 'Предложения и сообщения';
+	@override String get recommendations_for_you => 'Рекомендации для вас';
+}
+
+// Path: brand
+class _TranslationsBrandRu implements TranslationsBrandUz {
+	_TranslationsBrandRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Бренд';
+	@override String get offers_and_applications => 'Предложения и заявки';
+	@override String get new_applications => 'Новые заявки';
+	@override String get ai_matching => 'AI Подбор';
+	@override String get top_label => 'TOP';
+	@override String get no_active_campaigns_yet => 'Пока нет активных кампаний';
+	@override String get collaboration_offers => 'Предложения о сотрудничестве';
+	@override String get brandfaces => 'Brandfaces';
+	@override String get ambassadors => 'Амбассадоры';
+	@override String get influencers => 'Инфлюенсеры';
+	@override String get favourites => 'Избранное';
+	@override String get analytics => 'Аналитика';
+	@override String get influencer_tab => 'Инфлюенсер';
+	@override String get ambassadors_tab => 'Амбассадоры';
+}
+
+// Path: offer
+class _TranslationsOfferRu implements TranslationsOfferUz {
+	_TranslationsOfferRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get offer_details => 'Детали предложения';
+	@override String get offer_title => 'Заголовок предложения';
+	@override String get description => 'Описание';
+	@override String get status => 'Статус';
+	@override String get requirements => 'Требования';
+	@override String get country => 'Страна';
+	@override String get city => 'Город';
+	@override String get followers_max => 'Подписчиков макс.';
+	@override String get followers_min => 'Подписчиков мин.';
+	@override String get languages => 'Языки';
+	@override String get engagement_rate => 'Уровень вовлечённости';
+	@override String get content_type => 'Тип контента';
+	@override String get gender => 'Пол';
+	@override String get collaboration_details => 'Детали сотрудничества';
+	@override String get duration => 'Длительность';
+	@override String get visibility => 'Видимость';
+}
+
+// Path: reviews
+class _TranslationsReviewsRu implements TranslationsReviewsUz {
+	_TranslationsReviewsRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get average => 'Среднее';
+	@override String get client_reviews => 'Отзывы клиентов';
+}
+
 // Path: errors
 class _TranslationsErrorsRu implements TranslationsErrorsUz {
 	_TranslationsErrorsRu._(this._root);
@@ -274,6 +369,8 @@ class _TranslationsErrorsRu implements TranslationsErrorsUz {
 	@override String get network => 'Проблемы с интернетом, проверьте соединение';
 	@override String get parsing => 'Ошибка обработки данных';
 	@override String get unknown => 'Произошла неизвестная ошибка';
+	@override String get session_expired => 'Сессия истекла';
+	@override String get redirect_to_login => 'Вы будете перенаправлены на страницу входа.';
 	@override late final _TranslationsErrorsServerRu server = _TranslationsErrorsServerRu._(_root);
 }
 
@@ -364,6 +461,10 @@ extension on TranslationsRu {
 			'registration.kpi_based_model' => 'Модель на основе KPI',
 			'registration.available_for_offline_events' => 'Доступны для офлайн мероприятий',
 			'registration.pricing_options' => 'Варианты ценообразования',
+			'registration.do_not_have_account' => 'нет аккаунта',
+			'registration.no_languages_found' => 'Языки не найдены',
+			'registration.service_creating_reels_placeholder' => 'Создание Reels',
+			'registration.niche_business_placeholder' => 'Бизнес',
 			'common.select' => 'Выбрать',
 			'common.confirm' => 'Подтвердить',
 			'common.cancel' => 'Отмена',
@@ -375,6 +476,17 @@ extension on TranslationsRu {
 			'common.please_enter_text' => 'Пожалуйста, введите текст',
 			'common.email' => 'Email',
 			'common.set_as_main' => 'Сделать основным',
+			'common.ok' => 'OK',
+			'common.submit' => 'Отправить',
+			'common.loading' => 'Загрузка...',
+			'common.deadline' => 'Срок',
+			'common.menu' => 'Меню',
+			'common.messages' => 'Сообщения',
+			'common.active_offers' => 'Активные предложения',
+			'common.recommended_for_you' => 'Рекомендуется для вас',
+			'common.offers_from_brands' => 'Предложения от брендов',
+			'common.niche_type' => 'Тип ниши',
+			'common.offer_title_placeholder' => 'Заголовок предложения',
 			'profile.profile_page' => 'Страница профиля',
 			'profile.stats' => 'Статистика',
 			'profile.reviews' => 'Отзывы',
@@ -392,11 +504,17 @@ extension on TranslationsRu {
 			'profile.pricing_tariffs' => 'Ценообразование / Тарифы',
 			'profile.payment_type' => 'Тип оплаты',
 			'profile.delete_account' => 'Удалить аккаунт',
+			'profile.delete_account_confirm' => 'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.',
 			'profile.age_range' => ({required Object from, required Object to}) => 'Возраст ${from} - ${to}',
+			'profile.confirm_delete' => 'Подтвердить удаление',
+			'profile.total_followers' => 'Всего подписчиков',
+			'profile.engagement_rate' => 'Уровень вовлечённости',
 			'validation.name_required' => 'Пожалуйста, введите имя и фамилию',
 			'validation.name_full_required' => 'Пожалуйста, введите полное имя и фамилию',
 			'validation.name_letters_only' => 'Имя должно содержать только буквы',
 			'validation.name_too_short' => 'Имя слишком короткое',
+			'validation.fill_required_fields' => 'Заполните обязательные поля',
+			'validation.account_already_added' => 'Аккаунт уже добавлен',
 			'choose.select_niche' => 'Выбрать нишу',
 			'choose.select_gender' => 'Выбрать пол',
 			'choose.select_geography' => 'Выбрать географию',
@@ -423,9 +541,45 @@ extension on TranslationsRu {
 			'optional_items.willing_to_work_kpi' => 'Готов работать по модели KPI',
 			'optional_items.campaign_based_fee' => 'Оплата на основе кампании',
 			'optional_items.event_appearance_fee' => 'Оплата за участие в мероприятии',
+			'home.offers_and_messages' => 'Предложения и сообщения',
+			'home.recommendations_for_you' => 'Рекомендации для вас',
+			'brand.title' => 'Бренд',
+			'brand.offers_and_applications' => 'Предложения и заявки',
+			'brand.new_applications' => 'Новые заявки',
+			'brand.ai_matching' => 'AI Подбор',
+			'brand.top_label' => 'TOP',
+			'brand.no_active_campaigns_yet' => 'Пока нет активных кампаний',
+			'brand.collaboration_offers' => 'Предложения о сотрудничестве',
+			'brand.brandfaces' => 'Brandfaces',
+			'brand.ambassadors' => 'Амбассадоры',
+			'brand.influencers' => 'Инфлюенсеры',
+			'brand.favourites' => 'Избранное',
+			'brand.analytics' => 'Аналитика',
+			'brand.influencer_tab' => 'Инфлюенсер',
+			'brand.ambassadors_tab' => 'Амбассадоры',
+			'offer.offer_details' => 'Детали предложения',
+			'offer.offer_title' => 'Заголовок предложения',
+			'offer.description' => 'Описание',
+			'offer.status' => 'Статус',
+			'offer.requirements' => 'Требования',
+			'offer.country' => 'Страна',
+			'offer.city' => 'Город',
+			'offer.followers_max' => 'Подписчиков макс.',
+			'offer.followers_min' => 'Подписчиков мин.',
+			'offer.languages' => 'Языки',
+			'offer.engagement_rate' => 'Уровень вовлечённости',
+			'offer.content_type' => 'Тип контента',
+			'offer.gender' => 'Пол',
+			'offer.collaboration_details' => 'Детали сотрудничества',
+			'offer.duration' => 'Длительность',
+			'offer.visibility' => 'Видимость',
+			'reviews.average' => 'Среднее',
+			'reviews.client_reviews' => 'Отзывы клиентов',
 			'errors.network' => 'Проблемы с интернетом, проверьте соединение',
 			'errors.parsing' => 'Ошибка обработки данных',
 			'errors.unknown' => 'Произошла неизвестная ошибка',
+			'errors.session_expired' => 'Сессия истекла',
+			'errors.redirect_to_login' => 'Вы будете перенаправлены на страницу входа.',
 			'errors.server.defaultMsg' => ({required Object code}) => 'Ошибка сервера (${code})',
 			'errors.server.badRequest' => 'Некорректный запрос',
 			'errors.server.unauthorized' => 'Сессия истекла, войдите снова',

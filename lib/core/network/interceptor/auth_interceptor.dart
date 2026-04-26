@@ -1,7 +1,14 @@
 import 'dart:async';
 
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/core/navigation/app_navigator_key.dart';
+import 'package:brandface/presentation/login/ui/login_page.dart';
+import 'package:brandface/uikit/tokens/colors.dart';
+import 'package:brandface/uikit/typography/typography.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../utils/services/app_auth_local_service.dart';
 
@@ -9,6 +16,7 @@ class AuthInterceptor extends Interceptor {
   final Dio _dio;
   final IAuthLocalService _authLocalService;
   Future<String?>? _refreshFuture;
+  bool _isShowingUnauthorizedSheet = false;
 
   AuthInterceptor(this._dio, this._authLocalService);
 
@@ -22,98 +30,97 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onError(
-    DioException err,
-    ErrorInterceptorHandler handler,
-  ) async {
-    final requestOptions = err.requestOptions;
-
-    final isUnauthorized = err.response?.statusCode == 401;
-    final isRefreshCall = requestOptions.path.contains(ApiRoutes.refreshToken);
-    final hasRetried = requestOptions.extra['hasRetried'] == true;
-
-    if (!isUnauthorized || isRefreshCall || hasRetried) {
-      return super.onError(err, handler);
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 401) {
+      _handleUnauthorized();
     }
-
-    final newAccessToken = await _refreshAccessToken();
-
-    if (newAccessToken == null || newAccessToken.isEmpty) {
-      await _authLocalService.clearCache();
-      return super.onError(err, handler);
-    }
-
-    requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
-    requestOptions.extra['hasRetried'] = true;
-
-    try {
-      final response = await _dio.fetch<dynamic>(requestOptions);
-      return handler.resolve(response);
-    } on DioException catch (retryError) {
-      return super.onError(retryError, handler);
-    }
+    super.onError(err, handler);
   }
 
-  Future<String?> _refreshAccessToken() async {
-    if (_refreshFuture != null) {
-      return _refreshFuture;
+  Future<void> _handleUnauthorized() async {
+    if (_isShowingUnauthorizedSheet) return;
+    _isShowingUnauthorizedSheet = true;
+
+    await _authLocalService.clearCache();
+
+    final context = appNavigatorKey.currentContext;
+    if (context == null || !context.mounted) {
+      _isShowingUnauthorizedSheet = false;
+      return;
     }
 
-    final completer = Completer<String?>();
-    _refreshFuture = completer.future;
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      constraints: const BoxConstraints(maxWidth: double.infinity),
+      builder: (_) => _UnauthorizedBottomSheet(),
+    );
 
-    final refreshToken = _authLocalService.getRefreshToken();
+    _isShowingUnauthorizedSheet = false;
 
-    if (refreshToken == null || refreshToken.isEmpty) {
-      completer.complete(null);
-      _refreshFuture = null;
-      return completer.future;
+    final navContext = appNavigatorKey.currentContext;
+    if (navContext != null && navContext.mounted) {
+      navContext.go(LoginPage.tag);
     }
+  }
+}
 
-    try {
-      final response = await Dio(
-        BaseOptions(
-          baseUrl: ApiRoutes.baseUrl,
-          connectTimeout: const Duration(seconds: 5),
-          receiveTimeout: const Duration(seconds: 5),
-          responseType: ResponseType.json,
-        ),
-      ).post(ApiRoutes.refreshToken, data: {'refresh': refreshToken});
+class _UnauthorizedBottomSheet extends StatelessWidget {
+  const _UnauthorizedBottomSheet();
 
-      final payload = response.data;
-      final root = payload is Map<String, dynamic>
-          ? payload
-          : payload is Map
-          ? Map<String, dynamic>.from(payload)
-          : <String, dynamic>{};
-      final data = root['data'] is Map<String, dynamic>
-          ? root['data'] as Map<String, dynamic>
-          : root['data'] is Map
-          ? Map<String, dynamic>.from(root['data'])
-          : root;
-
-      final accessToken =
-          data['access']?.toString() ?? data['access_token']?.toString();
-      final nextRefreshToken =
-          data['refresh']?.toString() ??
-          data['refresh_token']?.toString() ??
-          refreshToken;
-
-      if (accessToken == null || accessToken.isEmpty) {
-        completer.complete(null);
-      } else {
-        await _authLocalService.saveTokens(
-          accessToken: accessToken,
-          refreshToken: nextRefreshToken,
-        );
-        completer.complete(accessToken);
-      }
-    } catch (_) {
-      completer.complete(null);
-    } finally {
-      _refreshFuture = null;
-    }
-
-    return completer.future;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(
+        24,
+        24,
+        24,
+        24 + MediaQuery.of(context).padding.bottom,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.lightBg,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 4,
+            width: 108,
+            decoration: BoxDecoration(
+              color: AppColors.borderColor,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+          SizedBox(height: 24),
+          Text(t.errors.session_expired, style: Typographies.titleMedium),
+          SizedBox(height: 8),
+          Text(
+            t.errors.redirect_to_login,
+            style: Typographies.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.black,
+                shape: StadiumBorder(),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                t.common.ok,
+                style: Typographies.labelLarge.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
