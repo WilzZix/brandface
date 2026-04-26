@@ -5,6 +5,7 @@ class ApiRoutes {
   ///Login
   static String sendOtp = 'accounts/v1/auth/send-otp/';
   static String verifyOtp = 'accounts/v1/auth/verify-otp/';
+  static String refreshToken = 'accounts/v1/auth/refresh-token/';
   static String me = 'accounts/v1/auth/me/';
   static String deleteAccount = 'accounts/v1/auth/me/';
 
@@ -20,6 +21,7 @@ class ApiRoutes {
 
   ///Catalog public routes
   static String categories = 'catalog/v1/categories/';
+  static String niches = 'catalog/v1/niches/';
   static String serviceType = 'catalog/v1/service-types/';
   static String regions = 'catalog/v1/regions/';
   static String cities = 'catalog/v1/cities/';
@@ -30,9 +32,30 @@ class ApiRoutes {
       'profiles/v1/influencers/$profileId/';
 
   static String myProfile = 'profiles/v1/my/';
+  static String influencerReviews(int influencerId) =>
+      'profiles/v1/influencers/$influencerId/reviews/';
 
   static String myAwards = 'profiles/v1/my/awards/';
   static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
 
+  static String myApplications = 'offers/v1/my-applications/';
+  static String recommendedOffers = 'offers/v1/recommended/';
+  static String availableOffers = 'offers/v1/available/';
+  static String availableOfferDetail(int id) => 'offers/v1/available/$id/';
+  static String applyToOffer(int id) => 'offers/v1/$id/apply/';
+  static String conversations = 'messaging/v1/conversations/';
+  static String notifications = 'notifications/v1/';
+  static String markNotificationAsRead(int id) => 'notifications/v1/$id/read/';
+  static String readAllNotifications = 'notifications/v1/read-all/';
+  static String unreadNotificationsCount = 'notifications/v1/unread-count/';
+
+  static String boostProfile = 'billing/v1/boost/';
+  static String boostPackages = 'billing/v1/boost-packages/';
+  static String cancelSubscription = 'billing/v1/cancel/';
+  static String billingCards = 'billing/v1/cards/';
+  static String billingCard(int cardId) => 'billing/v1/cards/$cardId/';
+  static String mySubscription = 'billing/v1/my-subscription/';
+  static String billingPlans = 'billing/v1/plans/';
+  static String billingTransactions = 'billing/v1/transactions/';
   static String uploadFile = 'uploads/v1/upload/file/';
 }

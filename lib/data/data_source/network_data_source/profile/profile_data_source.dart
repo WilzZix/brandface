@@ -3,6 +3,7 @@ import 'package:brandface/data/models/profile/catalog/category_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
+import 'package:brandface/data/models/profile/review_model.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
 
 import '../../../../core/network/dio_client.dart';
@@ -28,6 +29,8 @@ abstract class ProfileDataSource {
     required String username,
   });
 
+  Future<List<ReviewModel>> getInfluencerReviews({required int influencerId});
+
   Future<AwardEntity> createAward({required String title});
 
   Future<void> deleteAward({required int awardId});
@@ -41,7 +44,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   @override
   Future<CategoryModel> getCategories() async {
     try {
-      final result = await _dioClient.get(ApiRoutes.categories);
+      final result = await _dioClient.get(ApiRoutes.niches);
       return CategoryModel.fromJson(result.data);
     } catch (e) {
       rethrow;
@@ -111,6 +114,45 @@ class ProfileDataSourceImpl implements ProfileDataSource {
         data: {'platform': platform, 'username': username},
       );
       return SocialMediaAccountStatsModel.fromJson(result.data['data']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ReviewModel>> getInfluencerReviews({
+    required int influencerId,
+  }) async {
+    try {
+      final result = await _dioClient.get(
+        ApiRoutes.influencerReviews(influencerId),
+      );
+      final payload = result.data;
+
+      if (payload is List) {
+        return payload
+            .map(
+              (item) => ReviewModel.fromJson(Map<String, dynamic>.from(item)),
+            )
+            .toList();
+      }
+
+      final root = payload is Map<String, dynamic>
+          ? payload
+          : payload is Map
+          ? Map<String, dynamic>.from(payload)
+          : <String, dynamic>{};
+
+      final data = root['data'];
+      if (data is List) {
+        return data
+            .map(
+              (item) => ReviewModel.fromJson(Map<String, dynamic>.from(item)),
+            )
+            .toList();
+      }
+
+      return const [];
     } catch (e) {
       rethrow;
     }

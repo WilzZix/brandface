@@ -7,9 +7,10 @@ import 'package:brandface/domain/entities/profile/catalog/service_type_entity.da
 import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
+import 'package:brandface/domain/entities/profile/review_entity.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/utils/services/app_catalog_service.dart';
-import 'package:dart_either/src/dart_either.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
 import '../../utils/services/profile_service.dart';
@@ -220,7 +221,33 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
-  Future<Either<Failure, AwardEntity>> createAward({required String title}) async {
+  Future<Either<Failure, List<ReviewEntity>>> getInfluencerReviews({
+    required int influencerId,
+  }) async {
+    try {
+      final reviews = await _dataSource.getInfluencerReviews(
+        influencerId: influencerId,
+      );
+      return Right(reviews);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.response?.data?['detail'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AwardEntity>> createAward({
+    required String title,
+  }) async {
     try {
       final award = await _dataSource.createAward(title: title);
       return Right(award);
