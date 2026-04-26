@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/i18n/strings.g.dart';
 import 'notifications/notifications_page.dart';
 import 'offers/offers_from_brands_page.dart';
 
