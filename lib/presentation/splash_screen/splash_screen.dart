@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_assets.dart';
 import '../../core/i18n/strings.g.dart';
-import '../home_page/brand_home_page.dart';
+import '../home_page/brand/ui/brand_home_page.dart';
 import '../home_page/home_page.dart';
 import '../login/ui/login_page.dart';
 

@@ -184,7 +184,13 @@
     "influencer_tab": "Инфлюенсер",
     "ambassadors_tab": "Амбассадоры",
     "brand_profile": "Профиль бренда",
-    "website": "Веб-сайт"
+    "website": "Веб-сайт",
+    "actives": "Активные",
+    "archived": "Архив",
+    "views": "Просмотры",
+    "applications": "Заявки",
+    "search": "Поиск",
+    "new_offer": "Новое предложение"
   },
   "offer": {
     "offer_details": "Детали предложения",

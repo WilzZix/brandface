@@ -184,7 +184,13 @@
     "influencer_tab": "Influencer",
     "ambassadors_tab": "Ambassadorlar",
     "brand_profile": "Brend profili",
-    "website": "Veb-sayt"
+    "website": "Veb-sayt",
+    "actives": "Faollar",
+    "archived": "Arxivlangan",
+    "views": "Ko'rishlar",
+    "applications": "Arizalar",
+    "search": "Qidirish",
+    "new_offer": "Yangi taklif"
   },
   "offer": {
     "offer_details": "Taklif tafsilotlari",

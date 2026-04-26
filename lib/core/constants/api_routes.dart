@@ -39,6 +39,7 @@ class ApiRoutes {
   static String myAwards = 'profiles/v1/my/awards/';
   static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
 
+  static String brandOffers = 'offers/v1/';
   static String myApplications = 'offers/v1/my-applications/';
   static String recommendedOffers = 'offers/v1/recommended/';
   static String availableOffers = 'offers/v1/available/';
@@ -59,4 +60,5 @@ class ApiRoutes {
   static String billingPlans = 'billing/v1/plans/';
   static String billingTransactions = 'billing/v1/transactions/';
   static String uploadFile = 'uploads/v1/upload/file/';
+  static String ambassadors = 'profiles/v1/influencers/';
 }

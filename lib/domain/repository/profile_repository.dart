@@ -1,3 +1,4 @@
+import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
@@ -46,4 +47,8 @@ abstract class IProfileRepository {
   Future<Either<Failure, AwardEntity>> createAward({required String title});
 
   Future<Either<Failure, void>> deleteAward({required int awardId});
+
+  Future<Either<Failure, List<AmbassadorEntity>>> getAmbassadors({
+    String? ordering,
+  });
 }

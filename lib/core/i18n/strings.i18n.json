@@ -184,7 +184,13 @@
     "influencer_tab": "Influencer",
     "ambassadors_tab": "Ambassadors",
     "brand_profile": "Brand profile",
-    "website": "Website"
+    "website": "Website",
+    "actives": "Actives",
+    "archived": "Archived",
+    "views": "Views",
+    "applications": "Applications",
+    "search": "Search",
+    "new_offer": "New offer"
   },
   "offer": {
     "offer_details": "Offer details",

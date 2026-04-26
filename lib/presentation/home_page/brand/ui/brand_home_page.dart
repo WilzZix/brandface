@@ -1,18 +1,23 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/presentation/home_page/brand_profile_page.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_state.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_profile_page.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/di/app_di.dart';
-import 'notifications/notifications_page.dart';
+import '../../../../core/di/app_di.dart';
+import '../../notifications/notifications_page.dart';
+import 'ambassadors_page.dart';
+import 'collaboration_offers_page.dart';
 
 class BrandHomePage extends StatefulWidget {
   const BrandHomePage({super.key});
@@ -111,25 +116,39 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
                 SliverToBoxAdapter(
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: _BrandStatCard(
-                            title: '2',
-                            description: t.common.active_offers,
-                          ),
+                  child: BlocBuilder<BrandStatsCubit, BrandStatsState>(
+                    builder: (context, state) {
+                      final activeOffers = state is BrandStatsLoaded
+                          ? state.activeOffersCount.toString()
+                          : state is BrandStatsLoading
+                          ? '...'
+                          : '—';
+                      final applications = state is BrandStatsLoaded
+                          ? state.totalApplicationsCount.toString()
+                          : state is BrandStatsLoading
+                          ? '...'
+                          : '—';
+                      return IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: _BrandStatCard(
+                                title: activeOffers,
+                                description: t.common.active_offers,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: _BrandStatCard(
+                                title: applications,
+                                description: t.brand.new_applications,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: _BrandStatCard(
-                            title: '23',
-                            description: t.brand.new_applications,
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 32)),
@@ -282,18 +301,24 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         SizedBox(height: 24),
                         Text(t.common.menu, style: Typographies.headlineSmall),
                         SizedBox(height: 32),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.brand.collaboration_offers,
-                              style: Typographies.titleMedium,
-                            ),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
+                        GestureDetector(
+                          onTap: () {
+                            context.pushNamed(CollaborationOffersPage.tag);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                t.brand.collaboration_offers,
+                                style: Typographies.titleMedium,
+                              ),
+                              SvgPicture.asset(AppAssets.icChevronRight),
+                            ],
+                          ),
                         ),
+                        SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
-                        SizedBox(height: 18),
+                        SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -304,20 +329,26 @@ class _BrandHomePageState extends State<BrandHomePage> {
                             SvgPicture.asset(AppAssets.icChevronRight),
                           ],
                         ),
+                        SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
-                        SizedBox(height: 18),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.brand.ambassadors,
-                              style: Typographies.titleMedium,
-                            ),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () =>
+                              context.pushNamed(AmbassadorsPage.tag),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                t.brand.ambassadors,
+                                style: Typographies.titleMedium,
+                              ),
+                              SvgPicture.asset(AppAssets.icChevronRight),
+                            ],
+                          ),
                         ),
+                        SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
-                        SizedBox(height: 18),
+                        SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -328,8 +359,9 @@ class _BrandHomePageState extends State<BrandHomePage> {
                             SvgPicture.asset(AppAssets.icChevronRight),
                           ],
                         ),
+                        SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
-                        SizedBox(height: 18),
+                        SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -340,8 +372,9 @@ class _BrandHomePageState extends State<BrandHomePage> {
                             SvgPicture.asset(AppAssets.icChevronRight),
                           ],
                         ),
+                        SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
-                        SizedBox(height: 18),
+                        SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -353,7 +386,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                           ],
                         ),
                         Divider(color: AppColors.borderColor),
-                        SizedBox(height: 18),
+                        SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -364,7 +397,6 @@ class _BrandHomePageState extends State<BrandHomePage> {
                             SvgPicture.asset(AppAssets.icChevronRight),
                           ],
                         ),
-                        Divider(color: AppColors.borderColor),
                         SizedBox(
                           height: MediaQuery.of(context).padding.bottom + 16,
                         ),

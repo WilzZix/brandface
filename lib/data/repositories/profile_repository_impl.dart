@@ -1,4 +1,5 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
@@ -308,6 +309,27 @@ class ProfileRepositoryImpl implements IProfileRepository {
     try {
       await _dataSource.deleteAward(awardId: awardId);
       return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AmbassadorEntity>>> getAmbassadors({
+    String? ordering,
+  }) async {
+    try {
+      final data = await _dataSource.getAmbassadors(ordering: ordering);
+      return Right(data);
     } on DioException catch (e) {
       return Left(
         ServerFailure(

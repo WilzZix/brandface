@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/data/models/profile/ambassador_model.dart';
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
 import 'package:brandface/data/models/profile/catalog/city_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
@@ -40,6 +41,8 @@ abstract class ProfileDataSource {
   Future<AwardEntity> createAward({required String title});
 
   Future<void> deleteAward({required int awardId});
+
+  Future<List<AmbassadorModel>> getAmbassadors({String? ordering});
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -204,6 +207,41 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   Future<void> deleteAward({required int awardId}) async {
     try {
       await _dioClient.delete(ApiRoutes.deleteAward(awardId));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<AmbassadorModel>> getAmbassadors({String? ordering}) async {
+    try {
+      final response = await _dioClient.get(
+        ApiRoutes.ambassadors,
+        queryParameters:
+            ordering == null ? null : {'ordering': ordering},
+      );
+      final payload = response.data;
+
+      List<dynamic> list;
+      if (payload is List) {
+        list = payload;
+      } else if (payload is Map) {
+        final inner = payload['results'] ?? payload['data'];
+        if (inner is List) {
+          list = inner;
+        } else {
+          list = [];
+        }
+      } else {
+        list = [];
+      }
+
+      return list.map((item) {
+        final map = item is Map<String, dynamic>
+            ? item
+            : Map<String, dynamic>.from(item as Map);
+        return AmbassadorModel.fromJson(map);
+      }).toList();
     } catch (e) {
       rethrow;
     }

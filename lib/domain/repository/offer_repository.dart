@@ -1,9 +1,14 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/offer/create_offer_params.dart';
 import 'package:brandface/domain/entities/offer/offer_detail_entity.dart';
 import 'package:brandface/domain/entities/offer/offer_summary_entity.dart';
 import 'package:dart_either/dart_either.dart';
 
 abstract class IOfferRepository {
+  Future<Either<Failure, List<OfferSummaryEntity>>> getBrandOffers({
+    String? status,
+  });
+
   Future<Either<Failure, List<OfferSummaryEntity>>> getAvailableOffers({
     int? categoryId,
   });
@@ -18,4 +23,6 @@ abstract class IOfferRepository {
     required int id,
     String? coverLetter,
   });
+
+  Future<Either<Failure, void>> createOffer(CreateOfferParams params);
 }

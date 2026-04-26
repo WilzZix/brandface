@@ -1,6 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/presentation/home_page/brand_home_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_home_page.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';

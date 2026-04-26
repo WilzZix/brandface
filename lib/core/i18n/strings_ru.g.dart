@@ -323,6 +323,12 @@ class _TranslationsBrandRu implements TranslationsBrandUz {
 	@override String get ambassadors_tab => 'Амбассадоры';
 	@override String get brand_profile => 'Профиль бренда';
 	@override String get website => 'Веб-сайт';
+	@override String get actives => 'Активные';
+	@override String get archived => 'Архив';
+	@override String get views => 'Просмотры';
+	@override String get applications => 'Заявки';
+	@override String get search => 'Поиск';
+	@override String get new_offer => 'Новое предложение';
 }
 
 // Path: offer
@@ -561,6 +567,12 @@ extension on TranslationsRu {
 			'brand.ambassadors_tab' => 'Амбассадоры',
 			'brand.brand_profile' => 'Профиль бренда',
 			'brand.website' => 'Веб-сайт',
+			'brand.actives' => 'Активные',
+			'brand.archived' => 'Архив',
+			'brand.views' => 'Просмотры',
+			'brand.applications' => 'Заявки',
+			'brand.search' => 'Поиск',
+			'brand.new_offer' => 'Новое предложение',
 			'offer.offer_details' => 'Детали предложения',
 			'offer.offer_title' => 'Заголовок предложения',
 			'offer.description' => 'Описание',

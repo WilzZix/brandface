@@ -38,16 +38,22 @@ import 'package:brandface/domain/usecase/notification/get_notifications_use_case
 import 'package:brandface/domain/usecase/notification/mark_all_notifications_read_use_case.dart';
 import 'package:brandface/domain/usecase/notification/mark_notification_read_use_case.dart';
 import 'package:brandface/domain/usecase/offer/apply_to_offer_use_case.dart';
+import 'package:brandface/domain/usecase/offer/create_offer_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_available_offers_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_offer_detail_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_recommended_offers_use_case.dart';
 import 'package:brandface/domain/usecase/profile/create_award_use_case.dart';
 import 'package:brandface/domain/usecase/profile/delete_award_use_case.dart';
+import 'package:brandface/domain/usecase/profile/get_ambassadors_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_reviews_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_social_media_account_stats_use_case.dart';
 import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/collaboration_offers_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/create_offer/create_offer_cubit.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_cubit.dart';
@@ -169,6 +175,7 @@ class AppDi {
     );
     sl.registerLazySingleton(() => GetOfferDetailUseCase(repository: sl()));
     sl.registerLazySingleton(() => ApplyToOfferUseCase(repository: sl()));
+    sl.registerLazySingleton(() => CreateOfferUseCase(repository: sl()));
     sl.registerLazySingleton(
       () => GetSocialMediaAccountStatsUseCase(repository: sl()),
     );
@@ -177,6 +184,7 @@ class AppDi {
     );
     sl.registerLazySingleton(() => CreateAwardUseCase(repository: sl()));
     sl.registerLazySingleton(() => DeleteAwardUseCase(repository: sl()));
+    sl.registerLazySingleton(() => GetAmbassadorsUseCase(repository: sl()));
 
     ///Repository
     sl.registerLazySingleton<ILoginRepository>(
@@ -241,6 +249,11 @@ class AppDi {
     sl.registerFactory(() => CityCubit(cityUseCase: sl()));
     sl.registerFactory(() => SphereCubit(sphereUseCase: sl()));
     sl.registerFactory(() => HomeCubit(getHomeDashboardUseCase: sl()));
+    sl.registerFactory(() => BrandStatsCubit(offerRepository: sl()));
+    sl.registerFactory(() => CollaborationOffersCubit(offerRepository: sl()));
+    sl.registerFactory(
+      () => CreateOfferCubit(createOfferUseCase: sl()),
+    );
     sl.registerFactory(
       () => BillingCubit(
         getBillingDashboardUseCase: sl(),
@@ -296,5 +309,8 @@ class AppDi {
       ),
     );
     sl.registerFactory(() => DeleteAccountCubit(deleteAccountUseCase: sl()));
+    sl.registerFactory(
+      () => AmbassadorsCubit(getAmbassadorsUseCase: sl()),
+    );
   }
 }

@@ -107,6 +107,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 18),
                       Divider(color: AppColors.borderColor),
                       const SizedBox(height: 18),
                       GestureDetector(
@@ -123,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 18),
                       Divider(color: AppColors.borderColor),
                       const SizedBox(height: 18),
                       Row(

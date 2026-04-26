@@ -652,6 +652,24 @@ class TranslationsBrandUz {
 
 	/// uz: 'Website'
 	String get website => 'Website';
+
+	/// uz: 'Actives'
+	String get actives => 'Actives';
+
+	/// uz: 'Archived'
+	String get archived => 'Archived';
+
+	/// uz: 'Views'
+	String get views => 'Views';
+
+	/// uz: 'Applications'
+	String get applications => 'Applications';
+
+	/// uz: 'Search'
+	String get search => 'Search';
+
+	/// uz: 'New offer'
+	String get new_offer => 'New offer';
 }
 
 // Path: offer
@@ -947,6 +965,12 @@ extension on Translations {
 			'brand.ambassadors_tab' => 'Ambassadors',
 			'brand.brand_profile' => 'Brand profile',
 			'brand.website' => 'Website',
+			'brand.actives' => 'Actives',
+			'brand.archived' => 'Archived',
+			'brand.views' => 'Views',
+			'brand.applications' => 'Applications',
+			'brand.search' => 'Search',
+			'brand.new_offer' => 'New offer',
 			'offer.offer_details' => 'Offer details',
 			'offer.offer_title' => 'Offer title',
 			'offer.description' => 'Description',
