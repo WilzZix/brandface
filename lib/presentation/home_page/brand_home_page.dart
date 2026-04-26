@@ -269,116 +269,107 @@ class _BrandHomePageState extends State<BrandHomePage> {
                 color: AppColors.lightBg,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 56 + MediaQuery.of(context).padding.top),
-                      Center(child: SvgPicture.asset(AppAssets.icLogo)),
-                      SizedBox(height: 24),
-                      Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
-                      SizedBox(height: 24),
-                      Text(t.common.menu, style: Typographies.headlineSmall),
-                      SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.brand.collaboration_offers,
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
-                      ),
-                      Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.brand.brandfaces,
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
-                      ),
-                      Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.brand.ambassadors,
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
-                      ),
-                      Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.brand.influencers,
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
-                      ),
-                      Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.brand.favourites,
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
-                      ),
-                      Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.brand.ai_matching,
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
-                      ),
-                      Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.brand.analytics,
-                            style: Typographies.titleMedium,
-                          ),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
-                      ),
-                      Divider(color: AppColors.borderColor),
-                      SizedBox(height: 18),
-                      GestureDetector(
-                        onTap: () async {
-                          final prefs = sl<SharedPreferences>();
-                          await prefs.clear();
-                          if (context.mounted) {
-                            context.go(LoginPage.tag);
-                          }
-                        },
-                        child: Text(
-                          t.profile.log_out,
-                          style: Typographies.titleMedium.copyWith(
-                            color: AppColors.red,
-                          ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 56 + MediaQuery.of(context).padding.top,
                         ),
-                      ),
-                    ],
+                        Center(child: SvgPicture.asset(AppAssets.icLogo)),
+                        SizedBox(height: 24),
+                        Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
+                        SizedBox(height: 24),
+                        Text(t.common.menu, style: Typographies.headlineSmall),
+                        SizedBox(height: 32),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.brand.collaboration_offers,
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                        Divider(color: AppColors.borderColor),
+                        SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.brand.brandfaces,
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                        Divider(color: AppColors.borderColor),
+                        SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.brand.ambassadors,
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                        Divider(color: AppColors.borderColor),
+                        SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.brand.influencers,
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                        Divider(color: AppColors.borderColor),
+                        SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.brand.favourites,
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                        Divider(color: AppColors.borderColor),
+                        SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.brand.ai_matching,
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                        Divider(color: AppColors.borderColor),
+                        SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.brand.analytics,
+                              style: Typographies.titleMedium,
+                            ),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                        Divider(color: AppColors.borderColor),
+                        SizedBox(
+                          height: MediaQuery.of(context).padding.bottom + 16,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -184,14 +184,6 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
                       style: Typographies.titleMedium.copyWith(color: AppColors.red),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () => _showDeleteConfirmation(context),
-                    child: Text(
-                      t.profile.delete_account,
-                      style: Typographies.titleMedium.copyWith(color: AppColors.red),
-                    ),
-                  ),
                 ],
               ),
             ),
