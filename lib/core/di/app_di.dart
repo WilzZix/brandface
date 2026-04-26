@@ -240,10 +240,6 @@ class AppDi {
     sl.registerFactory(() => RegionCubit(regionUseCase: sl()));
     sl.registerFactory(() => CityCubit(cityUseCase: sl()));
     sl.registerFactory(() => SphereCubit(sphereUseCase: sl()));
-    sl.registerFactory(() => GetProfileCubit(
-          getProfileUseCase: sl(),
-          getInfluencerProfileUseCase: sl(),
-        ));
     sl.registerFactory(() => HomeCubit(getHomeDashboardUseCase: sl()));
     sl.registerFactory(
       () => BillingCubit(
