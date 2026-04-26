@@ -646,6 +646,12 @@ class TranslationsBrandUz {
 
 	/// uz: 'Ambassadors'
 	String get ambassadors_tab => 'Ambassadors';
+
+	/// uz: 'Brand profile'
+	String get brand_profile => 'Brand profile';
+
+	/// uz: 'Website'
+	String get website => 'Website';
 }
 
 // Path: offer
@@ -939,6 +945,8 @@ extension on Translations {
 			'brand.analytics' => 'Analytics',
 			'brand.influencer_tab' => 'Influencer',
 			'brand.ambassadors_tab' => 'Ambassadors',
+			'brand.brand_profile' => 'Brand profile',
+			'brand.website' => 'Website',
 			'offer.offer_details' => 'Offer details',
 			'offer.offer_title' => 'Offer title',
 			'offer.description' => 'Description',

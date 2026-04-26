@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/city/city_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/city/city_state.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/sphere/sphere_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/sphere/sphere_state.dart';
 import 'package:brandface/presentation/registration/bloc/upload/upload_cubit.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
 import 'package:brandface/uikit/components/inputs/bio_input_field.dart';
@@ -34,35 +39,20 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
 
   final TextEditingController _bioController = TextEditingController();
 
-  final List<LangItemModel> _regions = [
-    LangItemModel(name: 'Tashkent', id: 0),
-    LangItemModel(name: 'Samarkand', id: 1),
-    LangItemModel(name: 'Bukhara', id: 2),
-    LangItemModel(name: 'Fergana', id: 3),
-  ];
-
-  final List<LangItemModel> _cities = [
-    LangItemModel(name: 'Tashkent city', id: 0),
-    LangItemModel(name: 'Samarkand city', id: 1),
-    LangItemModel(name: 'Bukhara city', id: 2),
-    LangItemModel(name: 'Fergana city', id: 3),
-  ];
-
-  final List<LangItemModel> _spheres = [
-    LangItemModel(name: 'Technology', id: 0),
-    LangItemModel(name: 'Fashion', id: 1),
-    LangItemModel(name: 'Food & Beverage', id: 2),
-    LangItemModel(name: 'Beauty', id: 3),
-    LangItemModel(name: 'Sports', id: 4),
-    LangItemModel(name: 'Finance', id: 5),
-  ];
-
   int? _selectedRegionId;
   String? _selectedRegionName;
   int? _selectedCityId;
   String? _selectedCityName;
   int? _selectedSphereId;
   String? _selectedSphereName;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<RegionCubit>().getCategories();
+    context.read<CityCubit>().getCities();
+    context.read<SphereCubit>().getSpheres();
+  }
 
   void _updateData() {
     _param = _param.copyWith(
@@ -199,33 +189,44 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
             const SizedBox(height: 40),
             Text(t.registration.region, style: Typographies.titleMedium),
             const SizedBox(height: 8),
-            _DropdownField(
-              selectedText: _selectedRegionName ?? t.choose.select_region,
-              isSelected: _selectedRegionId != null,
-              onTap: () async {
-                await BrandfaceBottomSheet.openBottomSheet<String>(
-                  context: context,
-                  header: t.choose.select_region,
-                  onConfirm: () {
-                    _updateData();
-                    context.pop();
-                  },
-                  builder: (context, bottomState) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: _regions.map((item) {
-                        return ChooseLangItem(
-                          title: item.name,
-                          isSelected: item.id == _selectedRegionId,
-                          onTap: () {
-                            setState(() {
-                              _selectedRegionId = item.id;
-                              _selectedRegionName = item.name;
-                            });
-                            bottomState(() {});
-                          },
+            BlocBuilder<RegionCubit, RegionState>(
+              builder: (context, regionState) {
+                return _DropdownField(
+                  selectedText: _selectedRegionName ?? t.choose.select_region,
+                  isSelected: _selectedRegionId != null,
+                  onTap: () async {
+                    await BrandfaceBottomSheet.openBottomSheet<String>(
+                      context: context,
+                      header: t.choose.select_region,
+                      onConfirm: () {
+                        _updateData();
+                        context.pop();
+                      },
+                      builder: (context, bottomState) {
+                        return regionState.maybeWhen(
+                          loading: () => const SizedBox(
+                            height: 200,
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                          regionsLoaded: (data) => Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: data.map((item) {
+                              return ChooseLangItem(
+                                title: item.name,
+                                isSelected: item.id == _selectedRegionId,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedRegionId = item.id;
+                                    _selectedRegionName = item.name;
+                                  });
+                                  bottomState(() {});
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          orElse: () => const SizedBox.shrink(),
                         );
-                      }).toList(),
+                      },
                     );
                   },
                 );
@@ -234,33 +235,46 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
             const SizedBox(height: 24),
             Text(t.registration.city, style: Typographies.titleMedium),
             const SizedBox(height: 8),
-            _DropdownField(
-              selectedText: _selectedCityName ?? t.choose.select_city,
-              isSelected: _selectedCityId != null,
-              onTap: () async {
-                await BrandfaceBottomSheet.openBottomSheet<String>(
-                  context: context,
-                  header: t.choose.select_city,
-                  onConfirm: () {
-                    _updateData();
-                    context.pop();
-                  },
-                  builder: (context, bottomState) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: _cities.map((item) {
-                        return ChooseLangItem(
-                          title: item.name,
-                          isSelected: item.id == _selectedCityId,
-                          onTap: () {
-                            setState(() {
-                              _selectedCityId = item.id;
-                              _selectedCityName = item.name;
-                            });
-                            bottomState(() {});
-                          },
-                        );
-                      }).toList(),
+            BlocBuilder<CityCubit, CityState>(
+              builder: (context, cityState) {
+                return _DropdownField(
+                  selectedText: _selectedCityName ?? t.choose.select_city,
+                  isSelected: _selectedCityId != null,
+                  onTap: () async {
+                    await BrandfaceBottomSheet.openBottomSheet<String>(
+                      context: context,
+                      header: t.choose.select_city,
+                      onConfirm: () {
+                        _updateData();
+                        context.pop();
+                      },
+                      builder: (context, bottomState) {
+                        if (cityState is CityLoading) {
+                          return const SizedBox(
+                            height: 200,
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+                        if (cityState is CityLoaded) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: cityState.data.map((item) {
+                              return ChooseLangItem(
+                                title: item.name,
+                                isSelected: item.id == _selectedCityId,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedCityId = item.id;
+                                    _selectedCityName = item.name;
+                                  });
+                                  bottomState(() {});
+                                },
+                              );
+                            }).toList(),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
                     );
                   },
                 );
@@ -269,33 +283,46 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
             const SizedBox(height: 24),
             Text(t.registration.sphere, style: Typographies.titleMedium),
             const SizedBox(height: 8),
-            _DropdownField(
-              selectedText: _selectedSphereName ?? t.choose.select_sphere,
-              isSelected: _selectedSphereId != null,
-              onTap: () async {
-                await BrandfaceBottomSheet.openBottomSheet<String>(
-                  context: context,
-                  header: t.choose.select_sphere,
-                  onConfirm: () {
-                    _updateData();
-                    context.pop();
-                  },
-                  builder: (context, bottomState) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: _spheres.map((item) {
-                        return ChooseLangItem(
-                          title: item.name,
-                          isSelected: item.id == _selectedSphereId,
-                          onTap: () {
-                            setState(() {
-                              _selectedSphereId = item.id;
-                              _selectedSphereName = item.name;
-                            });
-                            bottomState(() {});
-                          },
-                        );
-                      }).toList(),
+            BlocBuilder<SphereCubit, SphereState>(
+              builder: (context, sphereState) {
+                return _DropdownField(
+                  selectedText: _selectedSphereName ?? t.choose.select_sphere,
+                  isSelected: _selectedSphereId != null,
+                  onTap: () async {
+                    await BrandfaceBottomSheet.openBottomSheet<String>(
+                      context: context,
+                      header: t.choose.select_sphere,
+                      onConfirm: () {
+                        _updateData();
+                        context.pop();
+                      },
+                      builder: (context, bottomState) {
+                        if (sphereState is SphereLoading) {
+                          return const SizedBox(
+                            height: 200,
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+                        if (sphereState is SphereLoaded) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: sphereState.data.map((item) {
+                              return ChooseLangItem(
+                                title: item.name,
+                                isSelected: item.id == _selectedSphereId,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedSphereId = item.id;
+                                    _selectedSphereName = item.name;
+                                  });
+                                  bottomState(() {});
+                                },
+                              );
+                            }).toList(),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
                     );
                   },
                 );

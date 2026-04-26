@@ -19,9 +19,11 @@ import 'package:brandface/domain/repository/offer_repository.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/domain/repository/registration_repository.dart';
+import 'package:brandface/domain/usecase/catalog/category/city_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/get_languages_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
+import 'package:brandface/domain/usecase/catalog/category/sphere_use_case.dart';
 import 'package:brandface/domain/usecase/billing/add_billing_card_use_case.dart';
 import 'package:brandface/domain/usecase/billing/boost_profile_use_case.dart';
 import 'package:brandface/domain/usecase/billing/cancel_subscription_use_case.dart';
@@ -56,8 +58,10 @@ import 'package:brandface/presentation/registration/bloc/audience/audience_cubit
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/city/city_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/sphere/sphere_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
@@ -132,6 +136,8 @@ class AppDi {
     sl.registerLazySingleton(() => CategoryUseCase(repository: sl()));
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
     sl.registerLazySingleton(() => RegionUseCase(repository: sl()));
+    sl.registerLazySingleton(() => CityUseCase(repository: sl()));
+    sl.registerLazySingleton(() => SphereUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetProfileUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetHomeDashboardUseCase(repository: sl()));
     sl.registerLazySingleton(
@@ -232,6 +238,12 @@ class AppDi {
     sl.registerFactory(() => CategoryCubit(categoryUseCase: sl()));
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));
     sl.registerFactory(() => RegionCubit(regionUseCase: sl()));
+    sl.registerFactory(() => CityCubit(cityUseCase: sl()));
+    sl.registerFactory(() => SphereCubit(sphereUseCase: sl()));
+    sl.registerFactory(() => GetProfileCubit(
+          getProfileUseCase: sl(),
+          getInfluencerProfileUseCase: sl(),
+        ));
     sl.registerFactory(() => HomeCubit(getHomeDashboardUseCase: sl()));
     sl.registerFactory(
       () => BillingCubit(

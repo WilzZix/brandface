@@ -182,7 +182,9 @@
     "favourites": "Избранное",
     "analytics": "Аналитика",
     "influencer_tab": "Инфлюенсер",
-    "ambassadors_tab": "Амбассадоры"
+    "ambassadors_tab": "Амбассадоры",
+    "brand_profile": "Профиль бренда",
+    "website": "Веб-сайт"
   },
   "offer": {
     "offer_details": "Детали предложения",
