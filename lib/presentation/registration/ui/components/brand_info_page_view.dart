@@ -98,6 +98,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
         );
       },
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

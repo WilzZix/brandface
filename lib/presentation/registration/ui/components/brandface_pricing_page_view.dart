@@ -91,6 +91,7 @@ class _BrandfacePricingPageViewState extends State<BrandfacePricingPageView>
   Widget build(BuildContext context) {
     super.build(context);
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -559,7 +559,10 @@ class _FillProfileInformationPageState
                   ],
                 ),
               ),
-        body: _isProfileLoading
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: _isProfileLoading
             ? const Center(child: CircularProgressIndicator())
             : Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -665,6 +668,7 @@ class _FillProfileInformationPageState
                   ],
                 ),
               ),
+          ),
       ),
     );
   }

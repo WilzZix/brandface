@@ -87,6 +87,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
         );
       },
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -72,6 +72,7 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
   Widget build(BuildContext context) {
     super.build(context);
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
