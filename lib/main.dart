@@ -13,11 +13,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'core/di/app_di.dart';
 import 'core/router/app_router.dart';
+import 'utils/services/app_language_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppDi().init();
-  LocaleSettings.setLocale(AppLocale.ru);
+  final savedLocale = await AppLanguageService(prefs: sl()).getAppLocale();
+  LocaleSettings.setLocale(savedLocale);
   runApp(TranslationProvider(child: const MyApp()));
 }
 

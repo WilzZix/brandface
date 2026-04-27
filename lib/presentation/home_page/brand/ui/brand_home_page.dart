@@ -1,9 +1,12 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_state.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_state.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_profile_page.dart';
-import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -12,9 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/di/app_di.dart';
 import '../../notifications/notifications_page.dart';
 import 'ambassadors_page.dart';
 import 'collaboration_offers_page.dart';
@@ -159,117 +160,78 @@ class _BrandHomePageState extends State<BrandHomePage> {
                   ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverToBoxAdapter(child: TabWidget(onChanged: (int p1) {})),
-                SliverToBoxAdapter(child: SizedBox(height: 24)),
-                SliverList.separated(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              height: 80,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'assets/images/im_person_avatar_sample.png',
-                                  ),
-                                  fit: BoxFit
-                                      .cover, // To'rtburchakni to'liq to'ldirishi uchun 'cover' afzal
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: Container(
-                                padding: EdgeInsetsGeometry.symmetric(
-                                  horizontal: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: AppColors.orange,
-                                ),
-                                child: Text(
-                                  t.brand.top_label,
-                                  style: Typographies.labelSmall,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      t.brand.no_active_campaigns_yet,
-                                      style: Typographies.titleMedium,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  SvgPicture.asset(AppAssets.icVerified),
-                                ],
-                              ),
-                              SizedBox(height: 4),
-                              Wrap(
-                                spacing: 4,
-                                runSpacing: 4,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    AppAssets.icStar,
-                                    color: AppColors.lightBg2,
-                                  ),
-                                  Text(
-                                    '4.34',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
-                                    ),
-                                  ),
-                                  Text('·'),
-                                  Text(
-                                    '2.4 mln followers',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
-                                    ),
-                                  ),
-                                  Text('·'),
-                                  Text(
-                                    '3 years exp.',
-                                    style: Typographies.bodySmall.copyWith(
-                                      color: AppColors.mutedBlack,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 8),
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: [
-                                  AppBadge(title: 'Business'),
-                                  AppBadge(title: 'Finance'),
-                                  AppBadge(title: 'Trading'),
-                                ],
-                              ),
-                            ],
+                SliverToBoxAdapter(
+                  child: BlocBuilder<AiMatchingCubit, AiMatchingState>(
+                    builder: (context, state) {
+                      if (state is AiMatchingLoaded &&
+                          state.results.isNotEmpty) {
+                        return _AiOfferHeader(
+                          offerTitle: state.offerTitle,
+                          offerId: state.offerId,
+                        );
+                      }
+                      if (state is AiMatchingEmpty) {
+                        return _AiOfferHeader(
+                          offerTitle: state.offerTitle,
+                          offerId: state.offerId,
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+                SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(
+                  child: BlocBuilder<AiMatchingCubit, AiMatchingState>(
+                    builder: (context, state) {
+                      if (state is AiMatchingLoading) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 40),
+                            child: CircularProgressIndicator(),
                           ),
-                        ),
-                      ],
+                        );
+                      }
+                      if (state is AiMatchingNoOffers) {
+                        return _AiEmptyState(
+                          message: t.brand.no_active_campaigns_yet,
+                        );
+                      }
+                      if (state is AiMatchingFailure) {
+                        return _AiEmptyState(message: state.message);
+                      }
+                      if (state is AiMatchingEmpty) {
+                        return _AiRunMatchSection(
+                          offerId: state.offerId,
+                          offerTitle: state.offerTitle,
+                        );
+                      }
+                      if (state is AiMatchingRunning) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 40),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+                BlocBuilder<AiMatchingCubit, AiMatchingState>(
+                  builder: (context, state) {
+                    if (state is! AiMatchingLoaded) {
+                      return const SliverToBoxAdapter(child: SizedBox.shrink());
+                    }
+                    return SliverList.separated(
+                      itemCount: state.results.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 24),
+                      itemBuilder: (context, index) {
+                        return _AiMatchItem(item: state.results[index]);
+                      },
                     );
                   },
-                  separatorBuilder: (context, index) => SizedBox(height: 24),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(
@@ -467,79 +429,321 @@ class _BrandStatCard extends StatelessWidget {
   }
 }
 
-class TabWidget extends StatefulWidget {
-  const TabWidget({super.key, required this.onChanged});
+class _AiOfferHeader extends StatelessWidget {
+  const _AiOfferHeader({required this.offerTitle, required this.offerId});
 
-  final Function(int) onChanged;
+  final String offerTitle;
+  final int offerId;
 
   @override
-  State<TabWidget> createState() => _TabWidgetState();
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.lightBg3,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(Icons.auto_awesome, size: 16, color: AppColors.black),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  t.brand.ai_matching,
+                  style: Typographies.labelSmall
+                      .copyWith(color: AppColors.mutedBlack),
+                ),
+                Text(
+                  offerTitle,
+                  style: Typographies.labelLarge,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _TabWidgetState extends State<TabWidget> {
-  int _selectedIndex = 0;
+class _AiRunMatchSection extends StatelessWidget {
+  const _AiRunMatchSection({
+    required this.offerId,
+    required this.offerTitle,
+  });
 
-  bool _isSelected(int index) {
-    return _selectedIndex == index;
+  final int offerId;
+  final String offerTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          children: [
+            SvgPicture.asset(AppAssets.icEmptyData),
+            const SizedBox(height: 16),
+            Text(
+              t.brand.ai_matching,
+              style: Typographies.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              t.brand.no_active_campaigns_yet,
+              style:
+                  Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            AppButtons.primary(
+              title: t.brand.ai_matching,
+              onTap: () {
+                context.read<AiMatchingCubit>().runMatching(offerId, offerTitle);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AiEmptyState extends StatelessWidget {
+  const _AiEmptyState({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Column(
+          children: [
+            SvgPicture.asset(AppAssets.icEmptyData),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              style:
+                  Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AiMatchItem extends StatelessWidget {
+  const _AiMatchItem({required this.item});
+
+  final AiMatchResultEntity item;
+
+  @override
+  Widget build(BuildContext context) {
+    final categoryList = item.categories
+        .split(',')
+        .map((c) => c.trim())
+        .where((c) => c.isNotEmpty)
+        .take(3)
+        .toList();
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                height: 80,
+                width: 80,
+                child: item.avatarUrl.isNotEmpty
+                    ? Image.network(
+                        item.avatarUrl.startsWith('http')
+                            ? item.avatarUrl
+                            : '${ApiRoutes.mediaBaseUrl}${item.avatarUrl}',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stack) => _defaultAvatar(),
+                      )
+                    : _defaultAvatar(),
+              ),
+            ),
+            if (item.isTop)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                    color: AppColors.orange,
+                  ),
+                  child: Text(
+                    t.brand.top_label,
+                    style: Typographies.labelSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.displayName.isNotEmpty
+                          ? item.displayName
+                          : 'Influencer #${item.influencerId}',
+                      style: Typographies.titleMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (item.isVerified) ...[
+                    const SizedBox(width: 4),
+                    SvgPicture.asset(AppAssets.icVerified),
+                  ],
+                  const SizedBox(width: 8),
+                  _ScoreBadge(score: item.score),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 4,
+                runSpacing: 4,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  if (item.averageRating != '0') ...[
+                    SvgPicture.asset(
+                      AppAssets.icStar,
+                      colorFilter: ColorFilter.mode(
+                        AppColors.lightBg2,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    Text(
+                      item.averageRating,
+                      style: Typographies.bodySmall.copyWith(
+                        color: AppColors.mutedBlack,
+                      ),
+                    ),
+                    Text('·'),
+                  ],
+                  if (item.totalFollowers.isNotEmpty &&
+                      item.totalFollowers != '0')
+                    Text(
+                      '${item.totalFollowers} followers',
+                      style: Typographies.bodySmall.copyWith(
+                        color: AppColors.mutedBlack,
+                      ),
+                    ),
+                  if (item.engagementRate.isNotEmpty &&
+                      item.engagementRate != '0') ...[
+                    Text('·'),
+                    Text(
+                      '${item.engagementRate}% ER',
+                      style: Typographies.bodySmall.copyWith(
+                        color: AppColors.mutedBlack,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              if (item.city.isNotEmpty || item.region.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 12,
+                      color: AppColors.mutedBlack,
+                    ),
+                    const SizedBox(width: 2),
+                    Text(
+                      [item.city, item.region]
+                          .where((s) => s.isNotEmpty)
+                          .join(', '),
+                      style: Typographies.bodySmall.copyWith(
+                        color: AppColors.mutedBlack,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              if (categoryList.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: categoryList
+                      .map((cat) => AppBadge(title: cat))
+                      .toList(),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _defaultAvatar() {
+    return Image.asset(
+      'assets/images/im_person_avatar_sample.png',
+      fit: BoxFit.cover,
+    );
+  }
+}
+
+class _ScoreBadge extends StatelessWidget {
+  const _ScoreBadge({required this.score});
+
+  final double score;
+
+  Color get _color {
+    if (score >= 70) return const Color(0xFF497D00);
+    if (score >= 40) return AppColors.orange;
+    return AppColors.mutedBlack;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              _selectedIndex = 0;
-              setState(() {});
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: _isSelected(0) ? AppColors.primary : null,
-                border: BoxBorder.all(color: AppColors.borderColor),
-                borderRadius: BorderRadius.circular(9999),
-              ),
-              padding: EdgeInsetsGeometry.symmetric(
-                horizontal: 6,
-                vertical: 16,
-              ),
-              child: Center(
-                child: Text(
-                  t.brand.influencer_tab,
-                  style: Typographies.labelMedium,
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: 8),
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              _selectedIndex = 1;
-              setState(() {});
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: _isSelected(1) ? AppColors.primary : null,
-                border: BoxBorder.all(color: AppColors.borderColor),
-                borderRadius: BorderRadius.circular(9999),
-              ),
-              padding: EdgeInsetsGeometry.symmetric(
-                horizontal: 6,
-                vertical: 16,
-              ),
-              child: Center(
-                child: Text(
-                  t.brand.ambassadors_tab,
-                  style: Typographies.labelMedium,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: _color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: _color.withValues(alpha: 0.4)),
+      ),
+      child: Text(
+        '${score.toStringAsFixed(0)}%',
+        style: Typographies.labelSmall.copyWith(color: _color),
+      ),
     );
   }
 }

@@ -29,4 +29,5 @@ class AppAssets {
   static String icAdd = 'assets/icons/plus.svg';
   static String icDownload = 'assets/icons/download.svg';
   static String icVerified = 'assets/icons/badge-check.svg';
+  static String icEmptyData = 'assets/icons/ic_empty_data.svg';
 }

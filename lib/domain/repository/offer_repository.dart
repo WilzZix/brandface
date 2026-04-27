@@ -1,4 +1,5 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
 import 'package:brandface/domain/entities/offer/create_offer_params.dart';
 import 'package:brandface/domain/entities/offer/offer_detail_entity.dart';
 import 'package:brandface/domain/entities/offer/offer_summary_entity.dart';
@@ -25,4 +26,12 @@ abstract class IOfferRepository {
   });
 
   Future<Either<Failure, void>> createOffer(CreateOfferParams params);
+
+  Future<Either<Failure, List<AiMatchResultEntity>>> runAiMatching({
+    required int offerId,
+  });
+
+  Future<Either<Failure, List<AiMatchResultEntity>>> getAiMatchingResults({
+    required int offerId,
+  });
 }

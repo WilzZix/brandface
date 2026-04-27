@@ -394,6 +394,7 @@ class _FillProfileInformationPageState
               BlocProvider(create: (context) => sl<RegionCubit>()),
               BlocProvider(create: (context) => sl<CityCubit>()),
               BlocProvider(create: (context) => sl<SphereCubit>()),
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
             ],
             child: BrandInfoPageView(
               key: const PageStorageKey<String>('pageOne'),

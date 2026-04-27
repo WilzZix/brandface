@@ -61,4 +61,7 @@ class ApiRoutes {
   static String billingTransactions = 'billing/v1/transactions/';
   static String uploadFile = 'uploads/v1/upload/file/';
   static String ambassadors = 'profiles/v1/influencers/';
+
+  static String aiMatchRun(int offerId) => 'ai/v1/offers/$offerId/match/';
+  static String aiMatchResults(int offerId) => 'ai/v1/offers/$offerId/results/';
 }

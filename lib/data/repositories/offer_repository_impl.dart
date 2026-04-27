@@ -1,5 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/data/data_source/network_data_source/offer/offer_data_source.dart';
+import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
 import 'package:brandface/domain/entities/offer/create_offer_params.dart';
 import 'package:brandface/domain/entities/offer/offer_detail_entity.dart';
 import 'package:brandface/domain/entities/offer/offer_summary_entity.dart';
@@ -90,6 +91,34 @@ class OfferRepositoryImpl implements IOfferRepository {
     try {
       await _dataSource.createOffer(params);
       return const Right(null);
+    } on DioException catch (e) {
+      return Left(_mapDioFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AiMatchResultEntity>>> runAiMatching({
+    required int offerId,
+  }) async {
+    try {
+      final models = await _dataSource.runAiMatching(offerId: offerId);
+      return Right(models.map((m) => m.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(_mapDioFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AiMatchResultEntity>>> getAiMatchingResults({
+    required int offerId,
+  }) async {
+    try {
+      final models = await _dataSource.getAiMatchingResults(offerId: offerId);
+      return Right(models.map((m) => m.toEntity()).toList());
     } on DioException catch (e) {
       return Left(_mapDioFailure(e));
     } catch (e) {

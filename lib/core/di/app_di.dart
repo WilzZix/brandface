@@ -37,6 +37,8 @@ import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:brandface/domain/usecase/notification/get_notifications_use_case.dart';
 import 'package:brandface/domain/usecase/notification/mark_all_notifications_read_use_case.dart';
 import 'package:brandface/domain/usecase/notification/mark_notification_read_use_case.dart';
+import 'package:brandface/domain/usecase/ai_matching/get_ai_matching_results_use_case.dart';
+import 'package:brandface/domain/usecase/ai_matching/run_ai_matching_use_case.dart';
 import 'package:brandface/domain/usecase/offer/apply_to_offer_use_case.dart';
 import 'package:brandface/domain/usecase/offer/create_offer_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_available_offers_use_case.dart';
@@ -50,6 +52,7 @@ import 'package:brandface/domain/usecase/profile/get_influencer_reviews_use_case
 import 'package:brandface/domain/usecase/profile/get_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_social_media_account_stats_use_case.dart';
 import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/collaboration_offers_cubit.dart';
@@ -185,6 +188,10 @@ class AppDi {
     sl.registerLazySingleton(() => CreateAwardUseCase(repository: sl()));
     sl.registerLazySingleton(() => DeleteAwardUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetAmbassadorsUseCase(repository: sl()));
+    sl.registerLazySingleton(
+      () => GetAiMatchingResultsUseCase(repository: sl()),
+    );
+    sl.registerLazySingleton(() => RunAiMatchingUseCase(repository: sl()));
 
     ///Repository
     sl.registerLazySingleton<ILoginRepository>(
@@ -311,6 +318,13 @@ class AppDi {
     sl.registerFactory(() => DeleteAccountCubit(deleteAccountUseCase: sl()));
     sl.registerFactory(
       () => AmbassadorsCubit(getAmbassadorsUseCase: sl()),
+    );
+    sl.registerFactory(
+      () => AiMatchingCubit(
+        offerRepository: sl(),
+        getResultsUseCase: sl(),
+        runMatchingUseCase: sl(),
+      ),
     );
   }
 }

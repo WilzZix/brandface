@@ -4,14 +4,19 @@ import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/registration/registration_entity.dart';
+import 'package:brandface/domain/usecase/registration/params/fill_brand_profile_param.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
+import 'package:brandface/presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import 'package:brandface/presentation/registration/ui/fill_profile_information_page.dart';
+import 'package:brandface/presentation/registration/ui/components/choose_spoken_language.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/components/ui_components/title_description_widget.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/services/app_language_service.dart';
 import 'package:brandface/utils/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +34,20 @@ class BrandProfilePage extends StatefulWidget {
 }
 
 class _BrandProfilePageState extends State<BrandProfilePage> {
+  final _appLanguageService = AppLanguageService(prefs: sl());
+  AppLocale _selectedLocale = AppLocale.uz;
+
+  @override
+  void initState() {
+    super.initState();
+    _appLanguageService.getAppLocale().then((locale) {
+      if (mounted) setState(() => _selectedLocale = locale);
+    });
+  }
+
+  String _localeName(AppLocale locale) =>
+      locale == AppLocale.uz ? "O'zbek" : 'Русский';
+
   void _showDeleteConfirmation(BuildContext context) {
     BrandfaceBottomSheet.openBottomSheet<void>(
       context: context,
@@ -53,19 +72,36 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
   Widget build(BuildContext context) {
     return BlocProvider<DeleteAccountCubit>(
       create: (_) => sl<DeleteAccountCubit>(),
-      child: BlocListener<DeleteAccountCubit, DeleteAccountState>(
-        listener: (context, state) async {
-          if (state is DeleteAccountSuccess) {
-            final prefs = sl<SharedPreferences>();
-            await prefs.clear();
-            if (context.mounted) context.go(LoginPage.tag);
-          } else if (state is DeleteAccountFailure) {
-            BrandfaceBottomSheet.openFailureBottomSheet(
-              context: context,
-              message: state.failure.localized,
-            );
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<DeleteAccountCubit, DeleteAccountState>(
+            listener: (context, state) async {
+              if (state is DeleteAccountSuccess) {
+                final prefs = sl<SharedPreferences>();
+                await prefs.clear();
+                if (context.mounted) context.go(LoginPage.tag);
+              } else if (state is DeleteAccountFailure) {
+                BrandfaceBottomSheet.openFailureBottomSheet(
+                  context: context,
+                  message: state.failure.localized,
+                );
+              }
+            },
+          ),
+          BlocListener<FillBrandProfileBloc, FillBrandProfileState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                failure: (failure) {
+                  BrandfaceBottomSheet.openFailureBottomSheet(
+                    context: context,
+                    message: failure.localized,
+                  );
+                },
+                orElse: () {},
+              );
+            },
+          ),
+        ],
         child: Builder(builder: (ctx) => _buildScaffold(ctx)),
       ),
     );
@@ -143,6 +179,34 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    Text(t.registration.spoken_languages, style: Typographies.titleSmall),
+                    const SizedBox(height: 8),
+                    BlocBuilder<ProfileInformationCubit, ProfileInformationState>(
+                      builder: (context, profileState) {
+                        final initialIds = profileState.maybeWhen(
+                          infoLoaded: (data) =>
+                              data.languageIds?.map((l) => l.id ?? 0).where((id) => id > 0).toList(),
+                          orElse: () => null,
+                        );
+                        return ChooseSpokenLanguage(
+                          key: ValueKey(initialIds?.join(',')),
+                          title: t.common.select,
+                          label: t.registration.spoken_languages,
+                          initialValue: initialIds,
+                          onItemSelected: (ids) {
+                            final profileId = sl<ProfileService>().getProfileId();
+                            if (profileId == null) return;
+                            context.read<FillBrandProfileBloc>().add(
+                              FillBrandProfileEvent.fillBrandProfile(
+                                profileId: profileId.toString(),
+                                params: FillBrandProfileParam(languageIds: ids),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
                     Text(t.registration.contact_details, style: Typographies.titleSmall),
                     const SizedBox(height: 8),
                     AppContainer(
@@ -173,6 +237,70 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  GestureDetector(
+                    onTap: () async {
+                      final tempLocale = _selectedLocale;
+                      AppLocale pickedLocale = tempLocale;
+
+                      await BrandfaceBottomSheet.openBottomSheet<String>(
+                        context: context,
+                        header: t.profile.app_language,
+                        onConfirm: () {
+                          setState(() => _selectedLocale = pickedLocale);
+                          _appLanguageService.setAppLocal(pickedLocale);
+                          LocaleSettings.setLocale(pickedLocale);
+                          Navigator.of(context).pop();
+                        },
+                        builder: (bsContext, bottomState) {
+                          return Column(
+                            children: [AppLocale.uz, AppLocale.ru].map((item) {
+                              return GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  bottomState(() => pickedLocale = item);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 14,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          _localeName(item),
+                                          style: Typographies.labelLarge,
+                                        ),
+                                        if (item == pickedLocale)
+                                          SvgPicture.asset(AppAssets.icCheck),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(t.profile.app_language, style: Typographies.titleMedium),
+                        const Spacer(),
+                        Text(
+                          _localeName(_selectedLocale),
+                          style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
+                        ),
+                        const SizedBox(width: 8),
+                        SvgPicture.asset(AppAssets.icChevronRight),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 16),
                   GestureDetector(
                     onTap: () async {
                       final prefs = sl<SharedPreferences>();

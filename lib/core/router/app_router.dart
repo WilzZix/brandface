@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/registration/registration_entity.dart';
+import '../../presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
 import '../../presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import '../../presentation/home_page/brand/bloc/collaboration_offers_cubit.dart';
 import '../../presentation/home_page/brand/bloc/create_offer/create_offer_cubit.dart';
@@ -21,6 +22,8 @@ import '../../presentation/home_page/bloc/home_cubit.dart';
 import '../../presentation/home_page/brand/ui/brand_profile_page.dart';
 import '../../presentation/home_page/brand/ui/brand_offer_detail_page.dart';
 import '../../presentation/home_page/brand/ui/collaboration_offers_page.dart';
+import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
+import '../../presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import '../../presentation/home_page/home_page.dart';
 import '../../presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import '../../presentation/home_page/notifications/notifications_page.dart';
@@ -28,7 +31,6 @@ import '../../presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import '../../presentation/home_page/offers/bloc/offers_feed_cubit.dart';
 import '../../presentation/home_page/offers/offer_detail_page.dart';
 import '../../presentation/home_page/offers/offers_from_brands_page.dart';
-import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import '../../presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import '../../presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
 import '../../presentation/home_page/profile/ui/billing.dart';
@@ -102,15 +104,36 @@ class AppRouter {
       GoRoute(
         path: BrandHomePage.tag,
         name: BrandHomePage.tag,
-        builder: (_, _) => BlocProvider<BrandStatsCubit>(
-          create: (context) => sl<BrandStatsCubit>()..loadStats(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider<BrandStatsCubit>(
+              create: (context) => sl<BrandStatsCubit>()..loadStats(),
+            ),
+            BlocProvider<AiMatchingCubit>(
+              create: (context) => sl<AiMatchingCubit>()..init(),
+            ),
+          ],
           child: BrandHomePage(),
         ),
       ),
       GoRoute(
         path: BrandProfilePage.tag,
         name: BrandProfilePage.tag,
-        builder: (_, _) => BrandProfilePage(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider<LanguageCubit>(
+              create: (context) => sl<LanguageCubit>(),
+            ),
+            BlocProvider<ProfileInformationCubit>(
+              create: (context) =>
+                  sl<ProfileInformationCubit>()..getInfluencerProfileInformation(),
+            ),
+            BlocProvider<FillBrandProfileBloc>(
+              create: (context) => sl<FillBrandProfileBloc>(),
+            ),
+          ],
+          child: BrandProfilePage(),
+        ),
       ),
       GoRoute(
         path: ProfilePage.tag,
