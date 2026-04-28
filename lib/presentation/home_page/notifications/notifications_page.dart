@@ -1,5 +1,6 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/notification/notification_entity.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_state.dart';
@@ -28,7 +29,7 @@ class NotificationsPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           scrolledUnderElevation: 0,
-          title: Text('Notifications', style: Typographies.titleLarge),
+          title: Text(t.notifications.title, style: Typographies.titleLarge),
           actions: [
             BlocBuilder<NotificationsCubit, NotificationsState>(
               builder: (context, state) {
@@ -49,7 +50,7 @@ class NotificationsPage extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          'Read all',
+                          t.notifications.read_all,
                           style: Typographies.labelLarge.copyWith(
                             color: canMarkAll
                                 ? AppColors.black
@@ -197,7 +198,7 @@ class _NotificationCard extends StatelessWidget {
 
   String _formatDate(DateTime? value) {
     if (value == null) {
-      return 'Unknown date';
+      return t.common.unknown_date;
     }
 
     const monthNames = [
@@ -239,7 +240,7 @@ class _NotificationsEmptyState extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
-        'You have no notifications yet.',
+        t.notifications.no_notifications,
         style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
         textAlign: TextAlign.center,
       ),
@@ -265,13 +266,13 @@ class _NotificationsErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              failure?.message ?? 'Notifications could not be loaded.',
+              failure?.message ?? t.notifications.error_load,
               style: Typographies.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
@@ -282,7 +283,7 @@ class _NotificationsErrorState extends StatelessWidget {
                 backgroundColor: AppColors.black,
                 foregroundColor: AppColors.white,
               ),
-              child: const Text('Try again'),
+              child: Text(t.common.try_again),
             ),
           ],
         ),

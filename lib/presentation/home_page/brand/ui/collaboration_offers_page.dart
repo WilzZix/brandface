@@ -344,12 +344,12 @@ class _SortBottomSheet extends StatelessWidget {
             Text('Sort by', style: Typographies.titleMedium),
             const SizedBox(height: 8),
             _SortTile(
-              label: 'Sort by views',
+              label: t.brand.sort_by_views,
               selected: current == _SortOption.views,
               onTap: () => Navigator.of(context).pop(_SortOption.views),
             ),
             _SortTile(
-              label: 'Sort by applications',
+              label: t.brand.sort_by_applications,
               selected: current == _SortOption.applications,
               onTap: () => Navigator.of(context).pop(_SortOption.applications),
             ),

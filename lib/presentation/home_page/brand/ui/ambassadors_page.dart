@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_state.dart';
@@ -69,7 +70,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
           icon: SvgPicture.asset(AppAssets.icArrowLeft),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Ambassadors'),
+        title: Text(t.brand.ambassadors),
         centerTitle: false,
         titleTextStyle: Typographies.titleMedium,
       ),
@@ -92,7 +93,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
                       onChanged: (q) =>
                           context.read<AmbassadorsCubit>().search(q),
                       decoration: InputDecoration(
-                        hintText: 'Search',
+                        hintText: t.brand.search,
                         hintStyle: Typographies.bodyMedium.copyWith(
                           color: AppColors.grey,
                         ),
@@ -137,7 +138,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
               builder: (context, state) {
                 if (state is AmbassadorsLoaded) {
                   return Text(
-                    '${state.ambassadors.length} ambassadors found',
+                    t.brand.ambassadors_found(count: state.ambassadors.length),
                     style: Typographies.bodyMedium.copyWith(
                       color: AppColors.mutedBlack,
                     ),
@@ -145,7 +146,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
                 }
                 if (state is AmbassadorsLoading) {
                   return Text(
-                    '... ambassadors found',
+                    t.brand.ambassadors_found(count: 0),
                     style: Typographies.bodyMedium.copyWith(
                       color: AppColors.mutedBlack,
                     ),
@@ -175,7 +176,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
                   if (state.ambassadors.isEmpty) {
                     return Center(
                       child: Text(
-                        'No ambassadors found',
+                        t.brand.no_ambassadors_found,
                         style: Typographies.bodyMedium
                             .copyWith(color: AppColors.grey),
                       ),
@@ -217,10 +218,10 @@ class _AmbassadorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final followersText = ambassador.followersCount != null
-        ? '${_formatFollowers(ambassador.followersCount!)} followers'
+        ? t.brand.followers_count(count: _formatFollowers(ambassador.followersCount!))
         : null;
     final experienceText = ambassador.yearsOfExperience != null
-        ? '${ambassador.yearsOfExperience} years exp.'
+        ? t.brand.years_experience(count: ambassador.yearsOfExperience!)
         : null;
 
     return Container(
@@ -423,22 +424,22 @@ class _SortBottomSheet extends StatelessWidget {
             Text('Sort by', style: Typographies.titleMedium),
             const SizedBox(height: 8),
             _SortTile(
-              label: 'Sort by ranking',
+              label: t.brand.sort_by_ranking,
               selected: current == _SortOption.ranking,
               onTap: () => Navigator.of(context).pop(_SortOption.ranking),
             ),
             _SortTile(
-              label: 'Sort by newly joined',
+              label: t.brand.sort_by_newly_joined,
               selected: current == _SortOption.newlyJoined,
               onTap: () => Navigator.of(context).pop(_SortOption.newlyJoined),
             ),
             _SortTile(
-              label: 'Sort by number of followers',
+              label: t.brand.sort_by_followers,
               selected: current == _SortOption.followers,
               onTap: () => Navigator.of(context).pop(_SortOption.followers),
             ),
             _SortTile(
-              label: 'Sort by experience',
+              label: t.brand.sort_by_experience,
               selected: current == _SortOption.experience,
               onTap: () => Navigator.of(context).pop(_SortOption.experience),
             ),

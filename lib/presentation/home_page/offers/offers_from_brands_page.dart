@@ -1,5 +1,6 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/offer/offer_summary_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_cubit.dart';
@@ -26,10 +27,11 @@ class OffersFromBrandsPage extends StatefulWidget {
 
 class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
   int? _selectedNicheId;
-  String _selectedNicheLabel = 'Niche type';
+  String? _selectedNicheLabel;
 
   @override
   Widget build(BuildContext context) {
+    final nicheLabel = _selectedNicheLabel ?? t.common.niche_type;
     return BlocListener<OffersFeedCubit, OffersFeedState>(
       listenWhen: (previous, current) =>
           previous.failure != current.failure &&
@@ -45,7 +47,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
         appBar: AppBar(
           scrolledUnderElevation: 0,
           centerTitle: false,
-          title: const Text('Offers from brands'),
+          title: Text(t.offer.page_title),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(80),
             child: Padding(
@@ -72,7 +74,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                _selectedNicheLabel,
+                                nicheLabel,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: Typographies.labelLarge.copyWith(
@@ -135,7 +137,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                         child: LinearProgressIndicator(minHeight: 2),
                       ),
                     if (state.offers.isEmpty)
-                      _OffersEmptyState(selectedNicheLabel: _selectedNicheLabel)
+                      _OffersEmptyState(selectedNicheLabel: nicheLabel)
                     else
                       ...List<Widget>.generate(state.offers.length, (index) {
                         final offer = state.offers[index];
@@ -190,7 +192,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
                 shrinkWrap: true,
                 children: [
                   ListTile(
-                    title: const Text('All niches'),
+                    title: Text(t.offer.all_niches),
                     trailing: _selectedNicheId == null
                         ? Icon(Icons.check, color: AppColors.primaryDark)
                         : null,
@@ -217,7 +219,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
 
         setState(() {
           _selectedNicheId = selectedNiche?.id;
-          _selectedNicheLabel = selectedNiche?.name ?? 'Niche type';
+          _selectedNicheLabel = selectedNiche?.name;
         });
 
         await offersFeedCubit.loadAvailableOffers(
@@ -288,7 +290,7 @@ class _OfferCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Deadline',
+                      t.common.deadline,
                       style: Typographies.titleSmall.copyWith(
                         color: AppColors.grey,
                       ),
@@ -306,7 +308,7 @@ class _OfferCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Categories',
+                        t.registration.categories,
                         style: Typographies.titleSmall.copyWith(
                           color: AppColors.grey,
                         ),
@@ -367,7 +369,7 @@ class _OfferCard extends StatelessWidget {
     ];
 
     if (parts.isEmpty) {
-      return 'Open collaboration offer for influencers.';
+      return t.offer.open_collaboration;
     }
 
     return parts.join(' • ');
@@ -391,7 +393,7 @@ class _OfferCard extends StatelessWidget {
 
   static String _formatDate(DateTime? value) {
     if (value == null) {
-      return 'No deadline';
+      return t.offer.no_deadline;
     }
 
     final day = value.day.toString().padLeft(2, '0');
@@ -409,9 +411,10 @@ class _OffersEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtitle = selectedNicheLabel == 'Niche type'
-        ? 'Pull to refresh and check again soon.'
-        : 'No offers found for $selectedNicheLabel.';
+    final isDefault = selectedNicheLabel == t.common.niche_type;
+    final subtitle = isDefault
+        ? t.common.pull_refresh_check_soon
+        : t.offer.no_offers_for_niche(niche: selectedNicheLabel);
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.6,
@@ -420,7 +423,7 @@ class _OffersEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'No offers are available right now.',
+              t.offer.no_offers_available,
               style: Typographies.titleMedium,
               textAlign: TextAlign.center,
             ),
@@ -452,20 +455,20 @@ class _OffersErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              failure?.message ?? 'Offers could not be loaded.',
+              failure?.message ?? t.offer.offers_error_load,
               style: Typographies.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
+              child: AppButtons.primary(title: t.common.try_again, onTap: onRetry),
             ),
           ],
         ),

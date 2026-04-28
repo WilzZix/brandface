@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/utils/extansions/app_exts.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _ContactDetailsState extends State<ContactDetails> {
   Widget build(BuildContext context) {
     if (widget.contactData == null || widget.contactData!.isEmpty) {
       return Text(
-        'Kontakt ma’lumotlari mavjud emas',
+        t.common.no_contact_details,
         style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
       );
     }

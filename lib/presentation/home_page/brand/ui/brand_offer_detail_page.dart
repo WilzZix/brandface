@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/offer/offer_detail_entity.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_state.dart';
@@ -22,7 +23,7 @@ class BrandOfferDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: const Text('Collaboration offer details'),
+        title: Text(t.brand.collaboration_offer_details),
       ),
       body: BlocBuilder<OfferDetailCubit, OfferDetailState>(
         builder: (context, state) {
@@ -33,7 +34,7 @@ class BrandOfferDetailPage extends StatelessWidget {
           if (state.status == OfferDetailStatus.failure && state.offer == null) {
             return Center(
               child: Text(
-                state.failure?.message ?? 'Failed to load offer.',
+                state.failure?.message ?? t.brand.offer_failed_load,
                 style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -70,30 +71,30 @@ class _BrandOfferDetailBody extends StatelessWidget {
         children: [
           _StatCardsRow(offer: offer),
           const SizedBox(height: 24),
-          Text('General info', style: Typographies.titleSmall),
+          Text(t.offer.general_info, style: Typographies.titleSmall),
           const SizedBox(height: 8),
           AppContainer(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TitleDescriptionWidget(
-                  title: 'Offer title',
+                  title: t.offer.offer_title,
                   descriptionItem: Text(offer.title, style: Typographies.bodyMedium),
                 ),
                 const SizedBox(height: 16),
                 TitleDescriptionWidget(
-                  title: 'Niches',
+                  title: t.registration.niches,
                   descriptionItem: Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: offer.categories.isEmpty
-                        ? [const AppBadge(title: 'No category')]
+                        ? [AppBadge(title: t.offer.no_category)]
                         : offer.categories.map((c) => AppBadge(title: c)).toList(),
                   ),
                 ),
                 const SizedBox(height: 16),
                 TitleDescriptionWidget(
-                  title: 'Description',
+                  title: t.offer.description,
                   descriptionItem: Text(
                     _valueOrFallback(offer.description),
                     style: Typographies.bodyMedium,
@@ -101,7 +102,7 @@ class _BrandOfferDetailBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TitleDescriptionWidget(
-                  title: 'Status',
+                  title: t.offer.status,
                   descriptionItem: Text(
                     _capitalize(offer.status),
                     style: Typographies.bodyMedium,
@@ -111,41 +112,41 @@ class _BrandOfferDetailBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Text('Requirements', style: Typographies.titleSmall),
+          Text(t.offer.requirements, style: Typographies.titleSmall),
           const SizedBox(height: 8),
           AppContainer(
             child: Column(
               children: [
                 RowTitleDescription(
-                  title: 'Country',
+                  title: t.offer.country,
                   description: _valueOrFallback(offer.requiredRegion),
                 ),
                 RowTitleDescription(
-                  title: 'City',
+                  title: t.offer.city,
                   description: _valueOrFallback(offer.requiredCity),
                 ),
                 RowTitleDescription(
-                  title: 'Followers max',
+                  title: t.offer.followers_max,
                   description: _intOrFallback(offer.requiredFollowersMax),
                 ),
                 RowTitleDescription(
-                  title: 'Followers min',
+                  title: t.offer.followers_min,
                   description: _intOrFallback(offer.requiredFollowersMin),
                 ),
                 RowTitleDescription(
-                  title: 'Languages',
+                  title: t.offer.languages,
                   description: _listOrFallback(offer.requiredLanguages),
                 ),
                 RowTitleDescription(
-                  title: 'Engagement rate',
+                  title: t.offer.engagement_rate,
                   description: _valueOrFallback(offer.requiredEngagementRate),
                 ),
                 RowTitleDescription(
-                  title: 'Content type',
+                  title: t.offer.content_type,
                   description: _listOrFallback(offer.requiredContentTypes),
                 ),
                 RowTitleDescription(
-                  title: 'Gender',
+                  title: t.offer.gender,
                   description: _valueOrFallback(
                     offer.requiredGender == null ? null : _capitalize(offer.requiredGender!),
                   ),
@@ -155,21 +156,21 @@ class _BrandOfferDetailBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Text('Collaboration details', style: Typographies.titleSmall),
+          Text(t.offer.collaboration_details, style: Typographies.titleSmall),
           const SizedBox(height: 8),
           AppContainer(
             child: Column(
               children: [
                 RowTitleDescription(
-                  title: 'Duration',
+                  title: t.offer.duration,
                   description: _valueOrFallback(offer.duration),
                 ),
                 RowTitleDescription(
-                  title: 'Deadline',
+                  title: t.common.deadline,
                   description: _formatDate(offer.deadline),
                 ),
                 RowTitleDescription(
-                  title: 'Visibility',
+                  title: t.offer.visibility,
                   description: _capitalize(offer.visibility),
                   showDivider: false,
                 ),
@@ -184,20 +185,20 @@ class _BrandOfferDetailBody extends StatelessWidget {
 
   String _valueOrFallback(String? value) {
     final trimmed = value?.trim();
-    if (trimmed == null || trimmed.isEmpty) return 'Not specified';
+    if (trimmed == null || trimmed.isEmpty) return t.common.not_specified;
     return trimmed;
   }
 
-  String _intOrFallback(int? value) => value?.toString() ?? 'Any';
+  String _intOrFallback(int? value) => value?.toString() ?? t.common.any;
 
   String _listOrFallback(List<String> values) =>
-      values.isEmpty ? 'Any' : values.join(', ');
+      values.isEmpty ? t.common.any : values.join(', ');
 
   String _capitalize(String value) =>
       value.isEmpty ? value : value[0].toUpperCase() + value.substring(1);
 
   String _formatDate(DateTime? value) {
-    if (value == null) return 'Open';
+    if (value == null) return t.offer.open_deadline;
     final local = value.toLocal();
     final d = local.day.toString().padLeft(2, '0');
     final m = local.month.toString().padLeft(2, '0');
@@ -216,7 +217,7 @@ class _StatCardsRow extends StatelessWidget {
       children: [
         Expanded(
           child: _StatCard(
-            label: 'Views',
+            label: t.brand.views,
             value: _formatCount(offer.viewsCount),
             showArrow: false,
             highlighted: false,
@@ -229,7 +230,7 @@ class _StatCardsRow extends StatelessWidget {
               // TODO: navigate to applications list
             },
             child: _StatCard(
-              label: 'Applications',
+              label: t.brand.applications,
               value: _formatCount(offer.applicationsCount),
               showArrow: true,
               highlighted: true,
@@ -358,7 +359,7 @@ class _BottomActionBar extends StatelessWidget {
                     Icon(Icons.check, color: AppColors.primaryDark, size: 20),
                     const SizedBox(width: 6),
                     Text(
-                      'Complete',
+                      t.brand.offer_complete,
                       style: Typographies.labelMedium.copyWith(
                         color: AppColors.primaryDark,
                       ),

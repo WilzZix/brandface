@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
@@ -41,7 +42,7 @@ class _BillingState extends State<Billing> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(title: const Text('Billing'), centerTitle: false),
+        appBar: AppBar(title: Text(t.profile.billing), centerTitle: false),
         body: BlocBuilder<BillingCubit, BillingState>(
           builder: (context, state) {
             final dashboard = state.dashboard;
@@ -115,11 +116,11 @@ class _BillingState extends State<Billing> {
   Widget _buildTabSelector() {
     return Row(
       children: [
-        _tabItem('Plan', 0),
+        _tabItem(t.billing.plan_tab, 0),
         const SizedBox(width: 8),
-        _tabItem('My cards', 1),
+        _tabItem(t.billing.my_cards_tab, 1),
         const SizedBox(width: 8),
-        _tabItem('Billing history', 2),
+        _tabItem(t.billing.history_tab, 2),
       ],
     );
   }
@@ -161,13 +162,13 @@ class _BillingState extends State<Billing> {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
-        Text('Current plan', style: Typographies.titleSmall),
+        Text(t.billing.current_plan, style: Typographies.titleSmall),
         const SizedBox(height: 12),
         AppContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _statusBadge(plan?.name ?? 'No plan'),
+              _statusBadge(plan?.name ?? t.billing.no_plan),
               const SizedBox(height: 16),
               const Divider(height: 1),
               const SizedBox(height: 16),
@@ -181,24 +182,24 @@ class _BillingState extends State<Billing> {
               const SizedBox(height: 20),
               ..._buildFeatureItems(plan),
               if (_buildFeatureItems(plan).isEmpty) ...[
-                _checkItem('No feature details available'),
+                _checkItem(t.billing.no_feature_details),
               ],
               const SizedBox(height: 20),
               _payAsYouGoBanner(),
               const SizedBox(height: 16),
-              _priceRow('Contact unlock:', _formatUsd(plan?.contactPriceUsd)),
+              _priceRow(t.billing.contact_unlock, _formatUsd(plan?.contactPriceUsd)),
               _priceRow(
-                'Profile / Offer boost:',
+                t.billing.profile_offer_boost,
                 boostPackage == null
                     ? _formatUsd(plan?.boostPriceUsd)
-                    : '${_formatUsd(boostPackage.priceUsd)} / ${boostPackage.days} days',
+                    : '${_formatUsd(boostPackage.priceUsd)} / ${t.billing.days(days: boostPackage.days)}',
               ),
               const SizedBox(height: 20),
               if (boostPackage != null)
                 SizedBox(
                   width: double.infinity,
                   child: AppButtons.primary(
-                    title: state.isMutating ? 'Processing...' : 'Boost profile',
+                    title: state.isMutating ? t.billing.processing : t.billing.boost_profile,
                     onTap: state.isMutating
                         ? null
                         : () => _showBoostPackages(context, dashboard),
@@ -212,7 +213,7 @@ class _BillingState extends State<Billing> {
                       : () => context.read<BillingCubit>().cancelSubscription(),
                   child: Center(
                     child: Text(
-                      'Cancel subscription',
+                      t.billing.cancel_subscription,
                       style: Typographies.labelLarge.copyWith(
                         color: AppColors.red,
                       ),
@@ -248,7 +249,7 @@ class _BillingState extends State<Billing> {
                   children: [
                     SvgPicture.asset(AppAssets.icAdd),
                     const SizedBox(width: 8),
-                    Text('Add new card', style: Typographies.labelLarge),
+                    Text(t.billing.add_new_card, style: Typographies.labelLarge),
                   ],
                 ),
               ),
@@ -267,12 +268,12 @@ class _BillingState extends State<Billing> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${_cardLabel(card.cardType)} ending in ${card.lastFour}',
+                        t.billing.card_ending_in(cardType: _cardLabel(card.cardType), lastFour: card.lastFour),
                         style: Typographies.titleMedium,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Expiry ${card.expiryMonth.toString().padLeft(2, '0')}/${card.expiryYear}',
+                        t.billing.card_expiry(month: card.expiryMonth.toString().padLeft(2, '0'), year: card.expiryYear),
                         style: Typographies.titleSmall.copyWith(
                           color: AppColors.mutedBlack,
                         ),
@@ -293,7 +294,7 @@ class _BillingState extends State<Billing> {
                         : () =>
                               context.read<BillingCubit>().deleteCard(card.id),
                     child: Text(
-                      'Delete',
+                      t.billing.delete_card,
                       style: Typographies.titleSmall.copyWith(
                         color: AppColors.red,
                       ),
@@ -307,7 +308,7 @@ class _BillingState extends State<Billing> {
                             card.id,
                           ),
                     child: Text(
-                      card.isDefault ? 'Default' : 'Set default',
+                      card.isDefault ? t.billing.default_card : t.billing.set_default_card,
                       style: Typographies.titleSmall.copyWith(
                         color: card.isDefault
                             ? AppColors.primaryDark
@@ -351,7 +352,7 @@ class _BillingState extends State<Billing> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                item.planName ?? 'Transaction #${item.id}',
+                item.planName ?? t.billing.transaction_label(id: item.id),
                 style: Typographies.titleMedium,
               ),
               const SizedBox(height: 12),
@@ -361,23 +362,23 @@ class _BillingState extends State<Billing> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TitleDescriptionWidget(
-                    title: 'Issue date',
+                    title: t.billing.issue_date,
                     descriptionItem: Text(
                       _formatDate(item.createdAt),
                       style: Typographies.bodyMedium,
                     ),
                   ),
                   TitleDescriptionWidget(
-                    title: 'Amount',
+                    title: t.billing.amount,
                     descriptionItem: Text(
                       _formatAmount(item.amount, item.currency),
                       style: Typographies.bodyMedium,
                     ),
                   ),
                   TitleDescriptionWidget(
-                    title: 'Status',
+                    title: t.offer.status,
                     descriptionItem: Text(
-                      item.status ?? 'Unknown',
+                      item.status ?? t.common.unknown,
                       style: Typographies.bodyMedium,
                     ),
                   ),
@@ -421,7 +422,7 @@ class _BillingState extends State<Billing> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('Start date', style: Typographies.bodySmall),
+            Text(t.billing.start_date, style: Typographies.bodySmall),
             Text(date, style: Typographies.titleMedium),
           ],
         ),
@@ -454,7 +455,7 @@ class _BillingState extends State<Billing> {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
-        'Pay-as-you-go add-ons (transparent)',
+        t.billing.pay_as_you_go,
         style: Typographies.titleSmall,
       ),
     );
@@ -538,7 +539,7 @@ class _BillingState extends State<Billing> {
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(content: Text('Add a payment card first.')),
+          SnackBar(content: Text(t.billing.add_payment_card_first)),
         );
       return;
     }
@@ -589,17 +590,17 @@ class _BillingState extends State<Billing> {
 
   static String _buildMonthlySubtitle(BillingPlanEntity? plan) {
     if (plan == null) {
-      return 'No active subscription';
+      return t.billing.no_active_subscription;
     }
 
-    return '${_formatUsd(plan.priceMonthlyUsd)} / month';
+    return '${_formatUsd(plan.priceMonthlyUsd)} ${t.billing.per_month}';
   }
 
   static String _formatAmount(String? amount, String? currency) {
     final safeAmount = amount?.trim();
     final safeCurrency = currency?.trim();
     if (safeAmount == null || safeAmount.isEmpty) {
-      return 'Unknown';
+      return t.common.unknown;
     }
 
     if (safeCurrency == null || safeCurrency.isEmpty) {
@@ -611,7 +612,7 @@ class _BillingState extends State<Billing> {
 
   static String _formatDate(DateTime? value) {
     if (value == null) {
-      return 'Unknown';
+      return t.common.unknown;
     }
 
     const monthNames = [
@@ -664,20 +665,20 @@ class _BillingErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Billing data could not be loaded.',
+              t.billing.error_load,
               style: Typographies.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
+              child: AppButtons.primary(title: t.common.try_again, onTap: onRetry),
             ),
           ],
         ),
@@ -732,7 +733,7 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Add payment card', style: Typographies.titleMedium),
+            Text(t.billing.add_payment_card, style: Typographies.titleMedium),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               initialValue: _cardType,
@@ -748,12 +749,12 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
                   _cardType = value ?? 'visa';
                 });
               },
-              decoration: const InputDecoration(labelText: 'Card type'),
+              decoration: InputDecoration(labelText: t.billing.card_type),
             ),
             const SizedBox(height: 12),
             _inputField(
               controller: _lastFourController,
-              label: 'Last four digits',
+              label: t.billing.last_four_digits,
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
@@ -762,7 +763,7 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
                 Expanded(
                   child: _inputField(
                     controller: _monthController,
-                    label: 'Expiry month',
+                    label: t.billing.expiry_month,
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -770,7 +771,7 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
                 Expanded(
                   child: _inputField(
                     controller: _yearController,
-                    label: 'Expiry year',
+                    label: t.billing.expiry_year,
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -779,12 +780,12 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
             const SizedBox(height: 12),
             _inputField(
               controller: _gatewayTokenController,
-              label: 'Gateway token',
+              label: t.billing.gateway_token,
             ),
             const SizedBox(height: 12),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              title: const Text('Set as default'),
+              title: Text(t.billing.set_as_default),
               value: _isDefault,
               onChanged: (value) {
                 setState(() {
@@ -795,7 +796,7 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
-              child: AppButtons.primary(title: 'Save card', onTap: _submit),
+              child: AppButtons.primary(title: t.billing.save_card, onTap: _submit),
             ),
           ],
         ),
@@ -832,7 +833,7 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(content: Text('Fill in valid card details.')),
+          SnackBar(content: Text(t.billing.fill_valid_card_details)),
         );
       return;
     }

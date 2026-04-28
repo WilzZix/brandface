@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/offer/offer_detail_entity.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_state.dart';
@@ -35,8 +36,8 @@ class OfferDetailPage extends StatelessWidget {
           messenger
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(
-                content: Text('Application submitted successfully.'),
+              SnackBar(
+                content: Text(t.offer.application_submitted),
               ),
             );
         }
@@ -45,14 +46,14 @@ class OfferDetailPage extends StatelessWidget {
         appBar: AppBar(
           scrolledUnderElevation: 0,
           centerTitle: false,
-          title: const Text('Offer details'),
+          title: Text(t.offer.offer_details),
         ),
         body: BlocBuilder<OfferDetailCubit, OfferDetailState>(
           builder: (context, state) {
             if (offerId == null) {
-              return const _OfferDetailErrorState(
-                title: 'Offer could not be opened.',
-                subtitle: 'Offer ID was not provided.',
+              return _OfferDetailErrorState(
+                title: t.offer.error_could_not_open,
+                subtitle: t.offer.error_no_id,
               );
             }
 
@@ -66,16 +67,16 @@ class OfferDetailPage extends StatelessWidget {
               return _OfferDetailErrorState(
                 title:
                     state.failure?.message ??
-                    'Offer details could not be loaded.',
-                subtitle: 'Pull back and try opening the offer again.',
+                    t.offer.offers_error_load,
+                subtitle: t.offer.error_retry_message,
               );
             }
 
             final offer = state.offer;
             if (offer == null) {
-              return const _OfferDetailErrorState(
+              return _OfferDetailErrorState(
                 title: 'Offer not found.',
-                subtitle: 'No detail data is available for this offer.',
+                subtitle: t.offer.no_detail_data,
               );
             }
 
@@ -91,10 +92,10 @@ class OfferDetailPage extends StatelessWidget {
             }
 
             final actionTitle = state.isApplied
-                ? 'Applied'
+                ? t.offer.applied
                 : state.isApplying
-                ? 'Submitting...'
-                : 'Apply now';
+                ? t.offer.submitting
+                : t.offer.apply_now;
 
             return Container(
               decoration: BoxDecoration(
@@ -119,7 +120,7 @@ class OfferDetailPage extends StatelessWidget {
                         onTap: () => Navigator.pop(context),
                         child: Center(
                           child: Text(
-                            'Back',
+                            t.common.back,
                             style: Typographies.labelLarge.copyWith(
                               color: AppColors.black,
                             ),
@@ -217,14 +218,14 @@ class _ApplyOfferBottomSheetState extends State<_ApplyOfferBottomSheet> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Apply to this offer', style: Typographies.titleMedium),
+            Text(t.offer.apply_title, style: Typographies.titleMedium),
             const SizedBox(height: 8),
             Text(
-              'Add an optional cover letter for your application.',
+              t.offer.cover_letter_subtitle,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
             ),
             const SizedBox(height: 16),
-            Text('Cover letter', style: Typographies.titleSmall),
+            Text(t.offer.cover_letter_label, style: Typographies.titleSmall),
             const SizedBox(height: 8),
             TextField(
               controller: _controller,
@@ -232,7 +233,7 @@ class _ApplyOfferBottomSheetState extends State<_ApplyOfferBottomSheet> {
               minLines: 5,
               textInputAction: TextInputAction.newline,
               decoration: InputDecoration(
-                hintText: 'Write a short message here',
+                hintText: t.offer.cover_letter_hint,
                 hintStyle: Typographies.bodyMedium.copyWith(
                   color: AppColors.grey,
                 ),
@@ -254,7 +255,7 @@ class _ApplyOfferBottomSheetState extends State<_ApplyOfferBottomSheet> {
             SizedBox(
               width: double.infinity,
               child: AppButtons.primary(
-                title: 'Submit application',
+                title: t.offer.submit_application,
                 onTap: () {
                   Navigator.of(context).pop(_controller.text.trim());
                 },
@@ -265,7 +266,7 @@ class _ApplyOfferBottomSheetState extends State<_ApplyOfferBottomSheet> {
               onTap: () => Navigator.of(context).pop(''),
               child: Center(
                 child: Text(
-                  'Continue without cover letter',
+                  t.offer.continue_without_cover_letter,
                   style: Typographies.labelLarge,
                 ),
               ),
@@ -290,14 +291,14 @@ class _OfferDetailBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('General info', style: Typographies.titleSmall),
+            Text(t.offer.general_info, style: Typographies.titleSmall),
             const SizedBox(height: 8),
             AppContainer(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TitleDescriptionWidget(
-                    title: 'Offer title',
+                    title: t.offer.offer_title,
                     descriptionItem: Text(
                       offer.title,
                       style: Typographies.bodyMedium,
@@ -305,7 +306,7 @@ class _OfferDetailBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TitleDescriptionWidget(
-                    title: 'Brand',
+                    title: t.registration.brand,
                     descriptionItem: Text(
                       offer.brandName,
                       style: Typographies.bodyMedium,
@@ -313,12 +314,12 @@ class _OfferDetailBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TitleDescriptionWidget(
-                    title: 'Categories',
+                    title: t.registration.categories,
                     descriptionItem: Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: offer.categories.isEmpty
-                          ? [const AppBadge(title: 'No category')]
+                          ? [AppBadge(title: t.offer.no_category)]
                           : offer.categories
                                 .map((item) => AppBadge(title: item))
                                 .toList(),
@@ -326,7 +327,7 @@ class _OfferDetailBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TitleDescriptionWidget(
-                    title: 'Description',
+                    title: t.offer.description,
                     descriptionItem: Text(
                       _valueOrFallback(offer.description),
                       style: Typographies.bodyMedium,
@@ -334,7 +335,7 @@ class _OfferDetailBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TitleDescriptionWidget(
-                    title: 'Status',
+                    title: t.offer.status,
                     descriptionItem: Text(
                       _capitalize(offer.status),
                       style: Typographies.bodyMedium,
@@ -344,41 +345,41 @@ class _OfferDetailBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Text('Requirements', style: Typographies.titleSmall),
+            Text(t.offer.requirements, style: Typographies.titleSmall),
             const SizedBox(height: 8),
             AppContainer(
               child: Column(
                 children: [
                   RowTitleDescription(
-                    title: 'Region',
+                    title: t.registration.region,
                     description: _valueOrFallback(offer.requiredRegion),
                   ),
                   RowTitleDescription(
-                    title: 'City',
+                    title: t.offer.city,
                     description: _valueOrFallback(offer.requiredCity),
                   ),
                   RowTitleDescription(
-                    title: 'Followers max',
+                    title: t.offer.followers_max,
                     description: _intOrFallback(offer.requiredFollowersMax),
                   ),
                   RowTitleDescription(
-                    title: 'Followers min',
+                    title: t.offer.followers_min,
                     description: _intOrFallback(offer.requiredFollowersMin),
                   ),
                   RowTitleDescription(
-                    title: 'Languages',
+                    title: t.offer.languages,
                     description: _listOrFallback(offer.requiredLanguages),
                   ),
                   RowTitleDescription(
-                    title: 'Engagement rate',
+                    title: t.offer.engagement_rate,
                     description: _valueOrFallback(offer.requiredEngagementRate),
                   ),
                   RowTitleDescription(
-                    title: 'Content type',
+                    title: t.offer.content_type,
                     description: _listOrFallback(offer.requiredContentTypes),
                   ),
                   RowTitleDescription(
-                    title: 'Gender',
+                    title: t.offer.gender,
                     description: _valueOrFallback(
                       offer.requiredGender == null
                           ? null
@@ -390,33 +391,33 @@ class _OfferDetailBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Text('Collaboration details', style: Typographies.titleSmall),
+            Text(t.offer.collaboration_details, style: Typographies.titleSmall),
             const SizedBox(height: 8),
             AppContainer(
               child: Column(
                 children: [
                   RowTitleDescription(
-                    title: 'Reward',
+                    title: t.offer.reward,
                     description: _rewardText(offer),
                   ),
                   RowTitleDescription(
-                    title: 'Duration',
+                    title: t.offer.duration,
                     description: _valueOrFallback(offer.duration),
                   ),
                   RowTitleDescription(
-                    title: 'Deadline',
+                    title: t.common.deadline,
                     description: _formatDate(offer.deadline),
                   ),
                   RowTitleDescription(
-                    title: 'Visibility',
+                    title: t.offer.visibility,
                     description: _capitalize(offer.visibility),
                   ),
                   RowTitleDescription(
-                    title: 'Views',
+                    title: t.brand.views,
                     description: offer.viewsCount.toString(),
                   ),
                   RowTitleDescription(
-                    title: 'Applications',
+                    title: t.brand.applications,
                     description: offer.applicationsCount.toString(),
                     showDivider: false,
                   ),
@@ -431,7 +432,7 @@ class _OfferDetailBody extends StatelessWidget {
 
   String _listOrFallback(List<String> values) {
     if (values.isEmpty) {
-      return 'Any';
+      return t.common.any;
     }
 
     return values.join(', ');
@@ -439,7 +440,7 @@ class _OfferDetailBody extends StatelessWidget {
 
   String _intOrFallback(int? value) {
     if (value == null) {
-      return 'Any';
+      return t.common.any;
     }
 
     return value.toString();
@@ -448,7 +449,7 @@ class _OfferDetailBody extends StatelessWidget {
   String _valueOrFallback(String? value) {
     final trimmed = value?.trim();
     if (trimmed == null || trimmed.isEmpty) {
-      return 'Not specified';
+      return t.common.not_specified;
     }
 
     return trimmed;
@@ -478,12 +479,12 @@ class _OfferDetailBody extends StatelessWidget {
       return reward;
     }
 
-    return 'Not specified';
+    return t.common.not_specified;
   }
 
   String _formatDate(DateTime? value) {
     if (value == null) {
-      return 'Open';
+      return t.offer.open_deadline;
     }
 
     final local = value.toLocal();

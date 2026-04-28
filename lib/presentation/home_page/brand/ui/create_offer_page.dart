@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
@@ -30,7 +31,7 @@ class _CreateOfferPageState extends State<CreateOfferPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  static const _steps = ['General', 'Requirements', 'Details'];
+  List<String> get _steps => [t.common.general, t.common.requirements_label, t.common.details_label];
 
   @override
   void initState() {
@@ -84,7 +85,7 @@ class _CreateOfferPageState extends State<CreateOfferPage> {
         if (state.status == CreateOfferStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.errorMessage ?? 'An error occurred'),
+              content: Text(state.errorMessage ?? t.common.error_occurred),
               backgroundColor: AppColors.red,
             ),
           );
@@ -92,7 +93,7 @@ class _CreateOfferPageState extends State<CreateOfferPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add new collaboration offer'),
+          title: Text(t.offer.create_title),
           centerTitle: false,
         ),
         body: BlocBuilder<CreateOfferCubit, CreateOfferState>(
@@ -212,14 +213,14 @@ class _Step1General extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Offer title', style: Typographies.titleSmall),
+          Text(t.offer.offer_title, style: Typographies.titleSmall),
           const SizedBox(height: 8),
           _AppTextField(
             controller: titleController,
-            hintText: 'Write offer title',
+            hintText: t.offer.title_hint,
           ),
           const SizedBox(height: 20),
-          Text('Niches', style: Typographies.titleSmall),
+          Text(t.registration.niches, style: Typographies.titleSmall),
           const SizedBox(height: 8),
           BlocBuilder<CategoryCubit, CategoryState>(
             builder: (context, catState) {
@@ -291,7 +292,7 @@ class _Step1General extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Selected niches',
+                    t.registration.selected_niches,
                     style: Typographies.bodySmall.copyWith(
                       color: AppColors.mutedBlack,
                     ),
@@ -307,7 +308,7 @@ class _Step1General extends StatelessWidget {
                           GestureDetector(
                             onTap: () => cubit.removeNiche(n.id),
                             child: Text(
-                              'Delete',
+                              t.common.delete,
                               style: Typographies.labelMedium.copyWith(
                                 color: AppColors.red,
                               ),
@@ -322,11 +323,11 @@ class _Step1General extends StatelessWidget {
             },
           ),
           const SizedBox(height: 20),
-          Text('Description', style: Typographies.titleSmall),
+          Text(t.offer.description, style: Typographies.titleSmall),
           const SizedBox(height: 8),
           _AppTextField(
             controller: descriptionController,
-            hintText: 'Write text here...',
+            hintText: t.common.write_text_here,
             maxLines: 5,
           ),
           const SizedBox(height: 16),
@@ -343,39 +344,39 @@ class _Step1General extends StatelessWidget {
 class _Step2Requirements extends StatelessWidget {
   const _Step2Requirements();
 
-  static const _genderOptions = [
-    _Option(label: 'Any', value: null),
-    _Option(label: 'Male', value: 'male'),
-    _Option(label: 'Female', value: 'female'),
+  List<_Option<String?>> get _genderOptions => [
+    _Option(label: t.common.any, value: null),
+    _Option(label: t.registration.male, value: 'male'),
+    _Option(label: t.registration.female, value: 'female'),
   ];
 
-  static const _ageRanges = [
-    _AgeRange(label: 'Any', min: null, max: null),
-    _AgeRange(label: '13–17', min: 13, max: 17),
-    _AgeRange(label: '18–24', min: 18, max: 24),
-    _AgeRange(label: '25–34', min: 25, max: 34),
-    _AgeRange(label: '35–44', min: 35, max: 44),
-    _AgeRange(label: '45+', min: 45, max: null),
+  List<_AgeRange> get _ageRanges => [
+    _AgeRange(label: t.common.any, min: null, max: null),
+    const _AgeRange(label: '13–17', min: 13, max: 17),
+    const _AgeRange(label: '18–24', min: 18, max: 24),
+    const _AgeRange(label: '25–34', min: 25, max: 34),
+    const _AgeRange(label: '35–44', min: 35, max: 44),
+    const _AgeRange(label: '45+', min: 45, max: null),
   ];
 
-  static const _followersOptions = [
-    _Option<int?>(label: 'Any', value: null),
-    _Option<int?>(label: '1K', value: 1000),
-    _Option<int?>(label: '5K', value: 5000),
-    _Option<int?>(label: '10K', value: 10000),
-    _Option<int?>(label: '50K', value: 50000),
-    _Option<int?>(label: '100K', value: 100000),
-    _Option<int?>(label: '500K', value: 500000),
-    _Option<int?>(label: '1M+', value: 1000000),
+  List<_Option<int?>> get _followersOptions => [
+    _Option<int?>(label: t.common.any, value: null),
+    const _Option<int?>(label: '1K', value: 1000),
+    const _Option<int?>(label: '5K', value: 5000),
+    const _Option<int?>(label: '10K', value: 10000),
+    const _Option<int?>(label: '50K', value: 50000),
+    const _Option<int?>(label: '100K', value: 100000),
+    const _Option<int?>(label: '500K', value: 500000),
+    const _Option<int?>(label: '1M+', value: 1000000),
   ];
 
-  static const _engagementOptions = [
-    _Option(label: 'Any', value: null),
-    _Option(label: '<1%', value: '<1'),
-    _Option(label: '1–2%', value: '1-2'),
-    _Option(label: '2–5%', value: '2-5'),
-    _Option(label: '5–10%', value: '5-10'),
-    _Option(label: '10%+', value: '10+'),
+  List<_Option<String?>> get _engagementOptions => [
+    _Option(label: t.common.any, value: null),
+    const _Option(label: '<1%', value: '<1'),
+    const _Option(label: '1–2%', value: '1-2'),
+    const _Option(label: '2–5%', value: '2-5'),
+    const _Option(label: '5–10%', value: '5-10'),
+    const _Option(label: '10%+', value: '10+'),
   ];
 
   @override
@@ -389,11 +390,11 @@ class _Step2Requirements extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _FieldLabel('Gender'),
+              _FieldLabel(t.registration.gender),
               const SizedBox(height: 8),
               _AppDropdown<String?>(
                 value: cubit.gender,
-                hint: 'Any',
+                hint: t.common.any,
                 items: _genderOptions
                     .map(
                       (o) => DropdownMenuItem<String?>(
@@ -405,11 +406,11 @@ class _Step2Requirements extends StatelessWidget {
                 onChanged: (v) => cubit.setGender(v),
               ),
               const SizedBox(height: 16),
-              _FieldLabel('Age range'),
+              _FieldLabel(t.common.age_range),
               const SizedBox(height: 8),
               _AppDropdown<String>(
                 value: _currentAgeLabel(cubit),
-                hint: 'Any',
+                hint: t.common.any,
                 items: _ageRanges
                     .map(
                       (o) => DropdownMenuItem<String>(
@@ -425,7 +426,7 @@ class _Step2Requirements extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
-              _FieldLabel('Country'),
+              _FieldLabel(t.offer.country),
               const SizedBox(height: 8),
               BlocBuilder<RegionCubit, RegionState>(
                 builder: (context, regionState) {
@@ -435,7 +436,7 @@ class _Step2Requirements extends StatelessWidget {
                   );
                   return _AppDropdown<RegionEntity>(
                     value: cubit.country,
-                    hint: 'Select country',
+                    hint: t.common.select_country,
                     items: regions
                         .map(
                           (r) => DropdownMenuItem<RegionEntity>(
@@ -449,7 +450,7 @@ class _Step2Requirements extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
-              _FieldLabel('City'),
+              _FieldLabel(t.offer.city),
               const SizedBox(height: 8),
               BlocBuilder<CityCubit, CityState>(
                 builder: (context, cityState) {
@@ -458,7 +459,7 @@ class _Step2Requirements extends StatelessWidget {
                       : <CityEntity>[];
                   return _AppDropdown<CityEntity>(
                     value: cubit.city,
-                    hint: 'Select city',
+                    hint: t.choose.select_city,
                     items: cities
                         .map(
                           (c) => DropdownMenuItem<CityEntity>(
@@ -472,11 +473,11 @@ class _Step2Requirements extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
-              _FieldLabel('Followers min'),
+              _FieldLabel(t.offer.followers_min),
               const SizedBox(height: 8),
               _AppDropdown<int?>(
                 value: cubit.followersMin,
-                hint: 'Any',
+                hint: t.common.any,
                 items: _followersOptions
                     .map(
                       (o) => DropdownMenuItem<int?>(
@@ -488,11 +489,11 @@ class _Step2Requirements extends StatelessWidget {
                 onChanged: (v) => cubit.setFollowersMin(v),
               ),
               const SizedBox(height: 16),
-              _FieldLabel('Followers max'),
+              _FieldLabel(t.offer.followers_max),
               const SizedBox(height: 8),
               _AppDropdown<int?>(
                 value: cubit.followersMax,
-                hint: 'Any',
+                hint: t.common.any,
                 items: _followersOptions
                     .map(
                       (o) => DropdownMenuItem<int?>(
@@ -504,11 +505,11 @@ class _Step2Requirements extends StatelessWidget {
                 onChanged: (v) => cubit.setFollowersMax(v),
               ),
               const SizedBox(height: 16),
-              _FieldLabel('Engagement rate'),
+              _FieldLabel(t.offer.engagement_rate),
               const SizedBox(height: 8),
               _AppDropdown<String?>(
                 value: cubit.engagementRate,
-                hint: 'Any',
+                hint: t.common.any,
                 items: _engagementOptions
                     .map(
                       (o) => DropdownMenuItem<String?>(
@@ -543,18 +544,18 @@ class _Step2Requirements extends StatelessWidget {
 class _Step3Details extends StatelessWidget {
   const _Step3Details();
 
-  static const _durationOptions = [
-    _Option(label: 'Any', value: null),
-    _Option(label: '1 week', value: '1_week'),
-    _Option(label: '2 weeks', value: '2_weeks'),
-    _Option(label: '1 month', value: '1_month'),
-    _Option(label: '2 months', value: '2_months'),
-    _Option(label: '3 months', value: '3_months'),
+  List<_Option<String?>> get _durationOptions => [
+    _Option(label: t.common.any, value: null),
+    _Option(label: t.common.duration_1_week, value: '1_week'),
+    _Option(label: t.common.duration_2_weeks, value: '2_weeks'),
+    _Option(label: t.common.duration_1_month, value: '1_month'),
+    _Option(label: t.common.duration_2_months, value: '2_months'),
+    _Option(label: t.common.duration_3_months, value: '3_months'),
   ];
 
-  static const _visibilityOptions = [
-    _Option(label: 'Public', value: 'public'),
-    _Option(label: 'Private', value: 'private'),
+  List<_Option<String?>> get _visibilityOptions => [
+    _Option(label: t.common.public, value: 'public'),
+    _Option(label: t.common.private, value: 'private'),
   ];
 
   @override
@@ -573,11 +574,11 @@ class _Step3Details extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _FieldLabel('Duration'),
+              _FieldLabel(t.offer.duration),
               const SizedBox(height: 8),
               _AppDropdown<String?>(
                 value: cubit.duration,
-                hint: 'Any',
+                hint: t.common.any,
                 items: _durationOptions
                     .map(
                       (o) => DropdownMenuItem<String?>(
@@ -589,7 +590,7 @@ class _Step3Details extends StatelessWidget {
                 onChanged: (v) => cubit.setDuration(v),
               ),
               const SizedBox(height: 16),
-              _FieldLabel('Deadline'),
+              _FieldLabel(t.common.deadline),
               const SizedBox(height: 8),
               GestureDetector(
                 onTap: () async {
@@ -613,7 +614,7 @@ class _Step3Details extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          deadlineText ?? 'DD.MM.YYYY',
+                          deadlineText ?? t.common.date_format_hint,
                           style: Typographies.bodyMedium.copyWith(
                             color: deadlineText != null
                                 ? AppColors.black
@@ -631,11 +632,11 @@ class _Step3Details extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              _FieldLabel('Visibility'),
+              _FieldLabel(t.offer.visibility),
               const SizedBox(height: 8),
               _AppDropdown<String?>(
                 value: cubit.visibility,
-                hint: 'Select visibility',
+                hint: t.common.select_visibility,
                 items: _visibilityOptions
                     .map(
                       (o) => DropdownMenuItem<String?>(
@@ -679,7 +680,7 @@ class _SuccessScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'New collaboration offer\nsuccessfully added',
+            t.offer.new_offer_success,
             textAlign: TextAlign.center,
             style: Typographies.titleMedium,
           ),
@@ -724,7 +725,7 @@ class _BottomButtons extends StatelessWidget {
                   border: Border.all(color: AppColors.borderColor),
                 ),
                 child: Center(
-                  child: Text('Cancel', style: Typographies.labelLarge),
+                  child: Text(t.common.cancel, style: Typographies.labelLarge),
                 ),
               ),
             ),
@@ -750,7 +751,7 @@ class _BottomButtons extends StatelessWidget {
                     ),
                   )
                 : AppButtons.primary(
-                    title: isLastStep ? 'Confirm' : 'Continue',
+                    title: isLastStep ? t.common.confirm : t.common.continue_label,
                     onTap: onContinue,
                   ),
           ),

@@ -1,5 +1,6 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/offer/offer_summary_entity.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_state.dart';
@@ -138,7 +139,7 @@ class _OfferSummaryCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Deadline',
+                      t.common.deadline,
                       style: Typographies.titleSmall.copyWith(
                         color: AppColors.grey,
                       ),
@@ -156,7 +157,7 @@ class _OfferSummaryCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Categories',
+                        t.registration.categories,
                         style: Typographies.titleSmall.copyWith(
                           color: AppColors.grey,
                         ),
@@ -210,7 +211,7 @@ class _OfferSummaryCard extends StatelessWidget {
     ];
 
     if (parts.isEmpty) {
-      return 'Open collaboration offer';
+      return t.offer.open_collaboration;
     }
 
     return parts.join(' | ');
@@ -234,7 +235,7 @@ class _OfferSummaryCard extends StatelessWidget {
 
   static String _formatDate(DateTime? value) {
     if (value == null) {
-      return 'No deadline';
+      return t.offer.no_deadline;
     }
 
     final day = value.day.toString().padLeft(2, '0');
@@ -292,20 +293,20 @@ class _OffersFeedErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              failure?.message ?? 'Offers could not be loaded.',
+              failure?.message ?? t.offer.offers_error_load,
               style: Typographies.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
+              child: AppButtons.primary(title: t.common.try_again, onTap: onRetry),
             ),
           ],
         ),

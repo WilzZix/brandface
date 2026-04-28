@@ -25,8 +25,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final List<AppLocale> _langItems = [AppLocale.uz, AppLocale.ru];
-  AppLocale _selectedLangId = AppLocale.uz;
+  final List<AppLocale> _langItems = [AppLocale.en, AppLocale.uz, AppLocale.ru];
+  AppLocale _selectedLangId = AppLocale.en;
   final AppLanguageService _appLanguageService = AppLanguageService(prefs: sl());
 
   @override
@@ -37,8 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  String _localeName(AppLocale locale) =>
-      locale == AppLocale.uz ? "O'zbek" : 'Русский';
+  String _localeName(AppLocale locale) => switch (locale) {
+        AppLocale.uz => "O'zbek",
+        AppLocale.ru => 'Русский',
+        AppLocale.en => 'English',
+      };
 
   @override
   Widget build(BuildContext context) {

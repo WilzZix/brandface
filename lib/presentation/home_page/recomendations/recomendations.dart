@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/offer_detail_page.dart';
 import 'package:brandface/presentation/home_page/offers/widgets/offers_feed_view.dart';
@@ -13,10 +14,9 @@ class Recommendation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OffersFeedView(
-      title: 'Recommendations for you',
-      emptyTitle: 'No recommendations yet.',
-      emptySubtitle:
-          'We will show matching offers here as soon as they are available.',
+      title: t.home.recommendations_for_you,
+      emptyTitle: t.offer.no_recommendations,
+      emptySubtitle: t.offer.recommendations_subtitle,
       onRefresh: () =>
           context.read<OffersFeedCubit>().loadRecommendedOffers(force: true),
       onRetry: () =>
