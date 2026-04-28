@@ -5,6 +5,7 @@ import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/service_type_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
+import 'package:brandface/domain/entities/profile/influencer_analytics_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/sphere_entity.dart';
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:brandface/domain/entities/profile/review_entity.dart';
@@ -38,6 +39,8 @@ abstract class IProfileRepository {
     required String platform,
     required String username,
   });
+
+  Future<Either<Failure, InfluencerAnalyticsEntity>> getInfluencerAnalytics();
 
   Future<Either<Failure, List<ReviewEntity>>> getInfluencerReviews({
     required int influencerId,

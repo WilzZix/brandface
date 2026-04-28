@@ -12,6 +12,8 @@ import '../../presentation/home_page/brand_home_page.dart';
 import '../../presentation/home_page/bloc/home_cubit.dart';
 import '../../presentation/home_page/brand_profile_page.dart';
 import '../../presentation/home_page/home_page.dart';
+import '../../presentation/home_page/messages/bloc/messages_cubit.dart';
+import '../../presentation/home_page/messages/messages_page.dart';
 import '../../presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import '../../presentation/home_page/notifications/notifications_page.dart';
 import '../../presentation/home_page/offers/bloc/offer_detail_cubit.dart';
@@ -20,11 +22,20 @@ import '../../presentation/home_page/offers/offer_detail_page.dart';
 import '../../presentation/home_page/offers/offers_from_brands_page.dart';
 import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import '../../presentation/home_page/profile/bloc/billing/billing_cubit.dart';
+import '../../presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
+import '../../presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
 import '../../presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
+import '../../presentation/home_page/profile/bloc/stats/stats_cubit.dart';
 import '../../presentation/home_page/profile/ui/billing.dart';
+import '../../presentation/home_page/profile/ui/calendar_page.dart';
+import '../../presentation/home_page/profile/ui/edit_portfolio_page.dart';
+import '../../presentation/home_page/profile/ui/portfolio_details_page.dart';
+import '../../presentation/home_page/profile/ui/portfolio_page.dart';
 import '../../presentation/home_page/profile/ui/profile_information_page.dart';
 import '../../presentation/home_page/profile/ui/profile_page.dart';
 import '../../presentation/home_page/profile/ui/reviews.dart';
+import '../../presentation/home_page/profile/ui/stats_page.dart';
+import '../../presentation/home_page/profile/ui/top_profile_page.dart';
 import '../../presentation/home_page/recomendations/recomendations.dart';
 import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.dart';
 import '../../presentation/login/ui/login_page.dart';
@@ -139,6 +150,14 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: MessagesPage.tag,
+        name: MessagesPage.tag,
+        builder: (_, _) => BlocProvider<MessagesCubit>(
+          create: (context) => sl<MessagesCubit>()..loadMessages(),
+          child: const MessagesPage(),
+        ),
+      ),
+      GoRoute(
         path: OffersFromBrandsPage.tag,
         name: OffersFromBrandsPage.tag,
         builder: (_, _) => MultiBlocProvider(
@@ -196,6 +215,69 @@ class AppRouter {
         builder: (_, _) => BlocProvider<ReviewsCubit>(
           create: (context) => sl<ReviewsCubit>()..loadReviews(),
           child: Reviews(),
+        ),
+      ),
+      GoRoute(
+        path: StatsPage.tag,
+        name: StatsPage.tag,
+        builder: (_, _) => BlocProvider<StatsCubit>(
+          create: (context) => sl<StatsCubit>()..loadAnalytics(),
+          child: const StatsPage(),
+        ),
+      ),
+      GoRoute(
+        path: CalendarPage.tag,
+        name: CalendarPage.tag,
+        builder: (_, _) => const CalendarPage(),
+      ),
+      GoRoute(
+        path: PortfolioPage.tag,
+        name: PortfolioPage.tag,
+        builder: (_, _) => BlocProvider<PortfolioListCubit>(
+          create: (context) => sl<PortfolioListCubit>()..loadPortfolios(),
+          child: const PortfolioPage(),
+        ),
+      ),
+      GoRoute(
+        path: PortfolioDetailsPage.tag,
+        name: PortfolioDetailsPage.tag,
+        builder: (_, state) => BlocProvider<PortfolioItemCubit>(
+          create: (context) {
+            final cubit = sl<PortfolioItemCubit>();
+            final portfolioId = state.extra is int ? state.extra as int : 0;
+            if (portfolioId > 0) {
+              cubit.loadPortfolio(portfolioId);
+            }
+            return cubit;
+          },
+          child: PortfolioDetailsPage(
+            portfolioId: state.extra is int ? state.extra as int : 0,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: EditPortfolioPage.tag,
+        name: EditPortfolioPage.tag,
+        builder: (_, state) => BlocProvider<PortfolioItemCubit>(
+          create: (context) {
+            final cubit = sl<PortfolioItemCubit>();
+            final portfolioId = state.extra is int ? state.extra as int : 0;
+            if (portfolioId > 0) {
+              cubit.loadPortfolio(portfolioId);
+            }
+            return cubit;
+          },
+          child: EditPortfolioPage(
+            portfolioId: state.extra is int ? state.extra as int : 0,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: TopProfilePage.tag,
+        name: TopProfilePage.tag,
+        builder: (_, _) => BlocProvider<BillingCubit>(
+          create: (context) => sl<BillingCubit>()..loadBilling(),
+          child: const TopProfilePage(),
         ),
       ),
       GoRoute(

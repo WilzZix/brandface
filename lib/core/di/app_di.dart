@@ -2,22 +2,28 @@ import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/data_source/network_data_source/billing/billing_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/home/home_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/login/login_data_source.dart';
+import 'package:brandface/data/data_source/network_data_source/message/message_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/notification/notification_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/offer/offer_data_source.dart';
+import 'package:brandface/data/data_source/network_data_source/portfolio/portfolio_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/profile/profile_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/registration/registration_data_source.dart';
 import 'package:brandface/data/repositories/home_repository_impl.dart';
+import 'package:brandface/data/repositories/message_repository_impl.dart';
 import 'package:brandface/data/repositories/notification_repository_impl.dart';
 import 'package:brandface/data/repositories/offer_repository_impl.dart';
 import 'package:brandface/data/repositories/billing_repository_impl.dart';
+import 'package:brandface/data/repositories/portfolio_repository_impl.dart';
 import 'package:brandface/data/repositories/profile_repository_impl.dart';
 import 'package:brandface/data/repositories/registration_repository_impl.dart';
 import 'package:brandface/domain/repository/home_repository.dart';
 import 'package:brandface/domain/repository/login_repository.dart';
+import 'package:brandface/domain/repository/message_repository.dart';
 import 'package:brandface/domain/repository/notification_repository.dart';
 import 'package:brandface/domain/repository/offer_repository.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
+import 'package:brandface/domain/repository/portfolio_repository.dart';
 import 'package:brandface/domain/repository/registration_repository.dart';
 import 'package:brandface/domain/usecase/catalog/category/city_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/get_languages_use_case.dart';
@@ -30,10 +36,12 @@ import 'package:brandface/domain/usecase/billing/cancel_subscription_use_case.da
 import 'package:brandface/domain/usecase/billing/delete_billing_card_use_case.dart';
 import 'package:brandface/domain/usecase/billing/get_billing_dashboard_use_case.dart';
 import 'package:brandface/domain/usecase/billing/set_default_billing_card_use_case.dart';
+import 'package:brandface/domain/usecase/billing/subscribe_billing_plan_use_case.dart';
 import 'package:brandface/domain/usecase/home/get_home_dashboard_use_case.dart';
 import 'package:brandface/domain/usecase/login/delete_account_use_case.dart';
 import 'package:brandface/domain/usecase/login/get_me_use_case.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
+import 'package:brandface/domain/usecase/message/get_conversations_use_case.dart';
 import 'package:brandface/domain/usecase/notification/get_notifications_use_case.dart';
 import 'package:brandface/domain/usecase/notification/mark_all_notifications_read_use_case.dart';
 import 'package:brandface/domain/usecase/notification/mark_notification_read_use_case.dart';
@@ -43,15 +51,26 @@ import 'package:brandface/domain/usecase/offer/get_offer_detail_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_recommended_offers_use_case.dart';
 import 'package:brandface/domain/usecase/profile/create_award_use_case.dart';
 import 'package:brandface/domain/usecase/profile/delete_award_use_case.dart';
+import 'package:brandface/domain/usecase/profile/add_portfolio_image_use_case.dart';
+import 'package:brandface/domain/usecase/profile/get_influencer_analytics_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_reviews_use_case.dart';
+import 'package:brandface/domain/usecase/profile/get_my_portfolios_use_case.dart';
+import 'package:brandface/domain/usecase/profile/get_portfolio_detail_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_profile_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_social_media_account_stats_use_case.dart';
+import 'package:brandface/domain/usecase/profile/remove_portfolio_image_use_case.dart';
+import 'package:brandface/domain/usecase/profile/update_portfolio_use_case.dart';
+import 'package:brandface/domain/usecase/profile/upload_portfolio_file_use_case.dart';
 import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
+import 'package:brandface/presentation/home_page/messages/bloc/messages_cubit.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/stats/stats_cubit.dart';
 import 'package:brandface/domain/usecase/registration/registration_usecase.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
@@ -117,7 +136,13 @@ class AppDi {
     sl.registerLazySingleton<NotificationDataSource>(
       () => NotificationDataSourceImpl(sl()),
     );
+    sl.registerLazySingleton<MessageDataSource>(
+      () => MessageDataSourceImpl(sl()),
+    );
     sl.registerLazySingleton<OfferDataSource>(() => OfferDataSourceImpl(sl()));
+    sl.registerLazySingleton<PortfolioDataSource>(
+      () => PortfolioDataSourceImpl(sl()),
+    );
     sl.registerLazySingleton<ProfileDataSource>(
       () => ProfileDataSourceImpl(sl()),
     );
@@ -151,10 +176,14 @@ class AppDi {
     sl.registerLazySingleton(() => CancelSubscriptionUseCase(repository: sl()));
     sl.registerLazySingleton(() => BoostProfileUseCase(repository: sl()));
     sl.registerLazySingleton(
+      () => SubscribeBillingPlanUseCase(repository: sl()),
+    );
+    sl.registerLazySingleton(
       () => GetInfluencerProfileUseCase(repository: sl()),
     );
     sl.registerLazySingleton(() => GetMeUseCase(iLoginRepository: sl()));
     sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
+    sl.registerLazySingleton(() => GetConversationsUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetLanguagesUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetNotificationsUseCase(repository: sl()));
     sl.registerLazySingleton(
@@ -169,8 +198,21 @@ class AppDi {
     );
     sl.registerLazySingleton(() => GetOfferDetailUseCase(repository: sl()));
     sl.registerLazySingleton(() => ApplyToOfferUseCase(repository: sl()));
+    sl.registerLazySingleton(() => GetMyPortfoliosUseCase(repository: sl()));
+    sl.registerLazySingleton(() => GetPortfolioDetailUseCase(repository: sl()));
+    sl.registerLazySingleton(() => UpdatePortfolioUseCase(repository: sl()));
+    sl.registerLazySingleton(
+      () => UploadPortfolioFileUseCase(repository: sl()),
+    );
+    sl.registerLazySingleton(() => AddPortfolioImageUseCase(repository: sl()));
+    sl.registerLazySingleton(
+      () => RemovePortfolioImageUseCase(repository: sl()),
+    );
     sl.registerLazySingleton(
       () => GetSocialMediaAccountStatsUseCase(repository: sl()),
+    );
+    sl.registerLazySingleton(
+      () => GetInfluencerAnalyticsUseCase(repository: sl()),
     );
     sl.registerLazySingleton(
       () => GetInfluencerReviewsUseCase(repository: sl()),
@@ -194,8 +236,14 @@ class AppDi {
     sl.registerLazySingleton<INotificationRepository>(
       () => NotificationRepositoryImpl(dataSource: sl()),
     );
+    sl.registerLazySingleton<IMessageRepository>(
+      () => MessageRepositoryImpl(dataSource: sl()),
+    );
     sl.registerLazySingleton<IOfferRepository>(
       () => OfferRepositoryImpl(dataSource: sl()),
+    );
+    sl.registerLazySingleton<IPortfolioRepository>(
+      () => PortfolioRepositoryImpl(dataSource: sl()),
     );
     sl.registerLazySingleton<IProfileRepository>(
       () => ProfileRepositoryImpl(
@@ -249,6 +297,18 @@ class AppDi {
         deleteBillingCardUseCase: sl(),
         cancelSubscriptionUseCase: sl(),
         boostProfileUseCase: sl(),
+        subscribeBillingPlanUseCase: sl(),
+      ),
+    );
+    sl.registerFactory(() => StatsCubit(getInfluencerAnalyticsUseCase: sl()));
+    sl.registerFactory(() => PortfolioListCubit(getMyPortfoliosUseCase: sl()));
+    sl.registerFactory(
+      () => PortfolioItemCubit(
+        getPortfolioDetailUseCase: sl(),
+        updatePortfolioUseCase: sl(),
+        uploadPortfolioFileUseCase: sl(),
+        addPortfolioImageUseCase: sl(),
+        removePortfolioImageUseCase: sl(),
       ),
     );
     sl.registerFactory(
@@ -258,6 +318,7 @@ class AppDi {
         markAllNotificationsReadUseCase: sl(),
       ),
     );
+    sl.registerFactory(() => MessagesCubit(getConversationsUseCase: sl()));
     sl.registerFactory(
       () => OffersFeedCubit(
         getAvailableOffersUseCase: sl(),

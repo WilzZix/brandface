@@ -165,16 +165,20 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
   Future<void> _openNicheSelector(BuildContext context) async {
     final categoryCubit = context.read<CategoryCubit>();
     final offersFeedCubit = context.read<OffersFeedCubit>();
-    final categoryState = context.read<CategoryCubit>().state;
+    var categoryState = categoryCubit.state;
+
+    if (!categoryState.maybeWhen(
+      categoryLoaded: (_) => true,
+      orElse: () => false,
+    )) {
+      await categoryCubit.getCategory();
+      if (!mounted) {
+        return;
+      }
+      categoryState = categoryCubit.state;
+    }
 
     await categoryState.maybeWhen(
-      loading: () => showModalBottomSheet<void>(
-        context: context,
-        builder: (context) => const SizedBox(
-          height: 220,
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      ),
       categoryLoadFailure: (failure) async {
         final messenger = ScaffoldMessenger.of(context);
         messenger
@@ -225,9 +229,7 @@ class _OffersFromBrandsPageState extends State<OffersFromBrandsPage> {
           categoryId: _selectedNicheId,
         );
       },
-      orElse: () async {
-        await categoryCubit.getCategory();
-      },
+      orElse: () async {},
     );
   }
 }
