@@ -3,11 +3,14 @@ import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_state.dart';
+import 'package:brandface/presentation/home_page/brand/ui/ambassador_details_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/ambassadors_filter_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class AmbassadorsPage extends StatefulWidget {
   const AmbassadorsPage({super.key});
@@ -22,6 +25,7 @@ enum _SortOption { ranking, newlyJoined, followers, experience }
 
 class _AmbassadorsPageState extends State<AmbassadorsPage> {
   _SortOption _sortOption = _SortOption.ranking;
+  AmbassadorsFilterParams? _filterParams;
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -55,8 +59,19 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
     );
     if (selected != null && selected != _sortOption) {
       setState(() => _sortOption = selected);
-      cubit.load(ordering: _sortToOrdering());
+      cubit.load(ordering: _sortToOrdering(), filter: _filterParams);
     }
+  }
+
+  Future<void> _showFilterPage() async {
+    final cubit = context.read<AmbassadorsCubit>();
+    final result = await context.pushNamed<AmbassadorsFilterParams?>(
+      AmbassadorsFilterPage.tag,
+      extra: _filterParams,
+    );
+    if (!mounted) return;
+    setState(() => _filterParams = result);
+    cubit.load(ordering: _sortToOrdering(), filter: result);
   }
 
   @override
@@ -119,14 +134,19 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: AppColors.lightBg3,
-                    borderRadius: BorderRadius.circular(999),
+                GestureDetector(
+                  onTap: _showFilterPage,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: _filterParams != null && !_filterParams!.isEmpty
+                          ? AppColors.lightGreen
+                          : AppColors.lightBg3,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Center(child: SvgPicture.asset(AppAssets.icFilter)),
                   ),
-                  child: Center(child: SvgPicture.asset(AppAssets.icFilter)),
                 ),
               ],
             ),
@@ -186,8 +206,15 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                     itemCount: state.ambassadors.length,
                     separatorBuilder: (context, index) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) =>
-                        _AmbassadorCard(ambassador: state.ambassadors[index]),
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => context.pushNamed(
+                        AmbassadorDetailsPage.tag,
+                        extra: state.ambassadors[index].id,
+                      ),
+                      child: _AmbassadorCard(
+                        ambassador: state.ambassadors[index],
+                      ),
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

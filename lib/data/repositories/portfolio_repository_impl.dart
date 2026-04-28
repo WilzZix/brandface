@@ -169,4 +169,27 @@ class PortfolioRepositoryImpl implements IPortfolioRepository {
       return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
     }
   }
+
+  @override
+  Future<Either<Failure, List<PortfolioItemEntity>>> getPublicPortfolio({
+    required int influencerId,
+  }) async {
+    try {
+      final items = await _dataSource.getPublicPortfolio(
+        influencerId: influencerId,
+      );
+      return Right(items);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['detail'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
 }

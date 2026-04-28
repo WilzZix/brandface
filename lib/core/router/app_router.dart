@@ -16,6 +16,13 @@ import '../../presentation/home_page/brand/bloc/collaboration_offers_cubit.dart'
 import '../../presentation/home_page/brand/bloc/create_offer/create_offer_cubit.dart';
 import '../../presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import '../../presentation/home_page/brand/ui/ambassadors_page.dart';
+import '../../presentation/home_page/brand/ui/ambassadors_filter_page.dart';
+import '../../presentation/home_page/brand/ui/ambassador_details_page.dart';
+import '../../presentation/home_page/brand/ui/ambassador_portfolio_details_page.dart';
+import '../../presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
+import '../../presentation/home_page/brand/bloc/ambassador_portfolio/ambassador_portfolio_cubit.dart';
+import '../../presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
+import '../../domain/entities/profile/portfolio_entity.dart';
 import '../../presentation/home_page/brand/ui/brand_home_page.dart';
 import '../../presentation/home_page/brand/ui/create_offer_page.dart';
 import '../../presentation/home_page/bloc/home_cubit.dart';
@@ -359,6 +366,50 @@ class AppRouter {
         builder: (_, _) => BlocProvider<AmbassadorsCubit>(
           create: (context) => sl<AmbassadorsCubit>()..load(),
           child: const AmbassadorsPage(),
+        ),
+      ),
+      GoRoute(
+        path: AmbassadorsFilterPage.tag,
+        name: AmbassadorsFilterPage.tag,
+        builder: (_, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => sl<CategoryCubit>()..getCategory(),
+            ),
+            BlocProvider(
+              create: (_) => sl<RegionCubit>()..getCategories(),
+            ),
+          ],
+          child: AmbassadorsFilterPage(
+            initial: state.extra as AmbassadorsFilterParams?,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AmbassadorDetailsPage.tag,
+        name: AmbassadorDetailsPage.tag,
+        builder: (_, state) {
+          final ambassadorId = state.extra as int;
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    sl<AmbassadorDetailCubit>()..load(ambassadorId),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    sl<AmbassadorPortfolioCubit>()..load(ambassadorId),
+              ),
+            ],
+            child: AmbassadorDetailsPage(ambassadorId: ambassadorId),
+          );
+        },
+      ),
+      GoRoute(
+        path: AmbassadorPortfolioDetailsPage.tag,
+        name: AmbassadorPortfolioDetailsPage.tag,
+        builder: (_, state) => AmbassadorPortfolioDetailsPage(
+          item: state.extra as PortfolioItemEntity,
         ),
       ),
       GoRoute(

@@ -52,6 +52,7 @@ import 'package:brandface/domain/usecase/offer/create_offer_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_available_offers_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_offer_detail_use_case.dart';
 import 'package:brandface/domain/usecase/offer/get_recommended_offers_use_case.dart';
+import 'package:brandface/domain/usecase/profile/get_ambassador_detail_use_case.dart';
 import 'package:brandface/domain/usecase/profile/create_award_use_case.dart';
 import 'package:brandface/domain/usecase/profile/delete_award_use_case.dart';
 import 'package:brandface/domain/usecase/profile/get_ambassadors_use_case.dart';
@@ -70,6 +71,8 @@ import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
 import 'package:brandface/presentation/home_page/messages/bloc/messages_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/ambassador_portfolio/ambassador_portfolio_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/collaboration_offers_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/create_offer/create_offer_cubit.dart';
@@ -231,6 +234,9 @@ class AppDi {
     sl.registerLazySingleton(() => DeleteAwardUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetAmbassadorsUseCase(repository: sl()));
     sl.registerLazySingleton(
+      () => GetAmbassadorDetailUseCase(repository: sl()),
+    );
+    sl.registerLazySingleton(
       () => GetAiMatchingResultsUseCase(repository: sl()),
     );
     sl.registerLazySingleton(() => RunAiMatchingUseCase(repository: sl()));
@@ -379,6 +385,12 @@ class AppDi {
     sl.registerFactory(() => DeleteAccountCubit(deleteAccountUseCase: sl()));
     sl.registerFactory(
       () => AmbassadorsCubit(getAmbassadorsUseCase: sl()),
+    );
+    sl.registerFactory(
+      () => AmbassadorDetailCubit(useCase: sl()),
+    );
+    sl.registerFactory(
+      () => AmbassadorPortfolioCubit(portfolioRepository: sl()),
     );
     sl.registerFactory(
       () => AiMatchingCubit(

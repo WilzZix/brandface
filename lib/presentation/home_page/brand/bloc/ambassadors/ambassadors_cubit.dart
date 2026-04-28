@@ -1,8 +1,30 @@
 import 'package:bloc/bloc.dart';
 import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/domain/usecase/profile/get_ambassadors_use_case.dart';
-
 import 'ambassadors_state.dart';
+
+class AmbassadorsFilterParams {
+  final int? categoryId;
+  final int? regionId;
+  final String? gender;
+  final bool? isTop;
+  final bool? isVip;
+
+  const AmbassadorsFilterParams({
+    this.categoryId,
+    this.regionId,
+    this.gender,
+    this.isTop,
+    this.isVip,
+  });
+
+  bool get isEmpty =>
+      categoryId == null &&
+      regionId == null &&
+      (gender == null || gender == 'any') &&
+      isTop != true &&
+      isVip != true;
+}
 
 class AmbassadorsCubit extends Cubit<AmbassadorsState> {
   final GetAmbassadorsUseCase _useCase;
@@ -12,9 +34,19 @@ class AmbassadorsCubit extends Cubit<AmbassadorsState> {
       : _useCase = getAmbassadorsUseCase,
         super(AmbassadorsInitial());
 
-  Future<void> load({String? ordering}) async {
+  Future<void> load({
+    String? ordering,
+    AmbassadorsFilterParams? filter,
+  }) async {
     emit(AmbassadorsLoading());
-    final result = await _useCase.call(params: ordering);
+    final result = await _useCase.call(
+      params: ordering,
+      categoryId: filter?.categoryId,
+      regionId: filter?.regionId,
+      gender: filter?.gender,
+      isTop: filter?.isTop,
+      isVip: filter?.isVip,
+    );
     result.fold(
       ifLeft: (f) => emit(AmbassadorsFailure(f.message)),
       ifRight: (data) {
