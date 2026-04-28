@@ -54,6 +54,12 @@ abstract class BillingDataSource {
     required int packageId,
     required String paymentMethod,
   });
+
+  Future<BillingSubscriptionModel> subscribeToPlan({
+    required int planId,
+    required String paymentMethod,
+    int? cardId,
+  });
 }
 
 class BillingDataSourceImpl implements BillingDataSource {
@@ -140,6 +146,23 @@ class BillingDataSourceImpl implements BillingDataSource {
       data: {'package_id': packageId, 'payment_method': paymentMethod},
     );
     return BillingTransactionModel.fromJson(_extractMap(response.data));
+  }
+
+  @override
+  Future<BillingSubscriptionModel> subscribeToPlan({
+    required int planId,
+    required String paymentMethod,
+    int? cardId,
+  }) async {
+    final response = await _dioClient.post(
+      ApiRoutes.subscribeToPlan,
+      data: {
+        'plan_id': planId,
+        'payment_method': paymentMethod,
+        ...?cardId == null ? null : {'card_id': cardId},
+      },
+    );
+    return BillingSubscriptionModel.fromJson(_extractMap(response.data));
   }
 
   Map<String, dynamic> _extractMap(dynamic payload) {

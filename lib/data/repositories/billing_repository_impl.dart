@@ -116,6 +116,24 @@ class BillingRepositoryImpl implements IBillingRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, BillingSubscriptionEntity>> subscribeToPlan(
+    SubscribeBillingPlanParams params,
+  ) async {
+    try {
+      final subscription = await _dataSource.subscribeToPlan(
+        planId: params.planId,
+        paymentMethod: params.paymentMethod,
+        cardId: params.cardId,
+      );
+      return Right(subscription);
+    } on DioException catch (e) {
+      return Left(_mapFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
   ServerFailure _mapFailure(DioException e) {
     final responseData = e.response?.data;
     String message = e.message ?? 'Serverda xatolik yuz berdi';

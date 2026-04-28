@@ -12,6 +12,7 @@ import 'package:brandface/domain/entities/profile/award_entity.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../models/profile/catalog/influencer_profile_information_model.dart';
 import '../../../models/profile/catalog/social_media_account_stats_model.dart';
+import '../../../models/profile/influencer_analytics_model.dart';
 import '../../../models/profile/profile_model.dart';
 
 abstract class ProfileDataSource {
@@ -35,6 +36,8 @@ abstract class ProfileDataSource {
     required String platform,
     required String username,
   });
+
+  Future<InfluencerAnalyticsModel> getInfluencerAnalytics();
 
   Future<List<ReviewModel>> getInfluencerReviews({required int influencerId});
 
@@ -145,6 +148,16 @@ class ProfileDataSourceImpl implements ProfileDataSource {
         data: {'platform': platform, 'username': username},
       );
       return SocialMediaAccountStatsModel.fromJson(result.data['data']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<InfluencerAnalyticsModel> getInfluencerAnalytics() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.influencerAnalytics);
+      return InfluencerAnalyticsModel.fromApiJson(result.data);
     } catch (e) {
       rethrow;
     }

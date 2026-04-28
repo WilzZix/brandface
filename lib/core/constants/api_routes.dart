@@ -46,6 +46,7 @@ class ApiRoutes {
   static String availableOfferDetail(int id) => 'offers/v1/available/$id/';
   static String applyToOffer(int id) => 'offers/v1/$id/apply/';
   static String conversations = 'messaging/v1/conversations/';
+  static String influencerAnalytics = 'analytics/v1/influencer/';
   static String notifications = 'notifications/v1/';
   static String markNotificationAsRead(int id) => 'notifications/v1/$id/read/';
   static String readAllNotifications = 'notifications/v1/read-all/';
@@ -58,7 +59,15 @@ class ApiRoutes {
   static String billingCard(int cardId) => 'billing/v1/cards/$cardId/';
   static String mySubscription = 'billing/v1/my-subscription/';
   static String billingPlans = 'billing/v1/plans/';
+  static String subscribeToPlan = 'billing/v1/subscribe/';
   static String billingTransactions = 'billing/v1/transactions/';
+  static String portfolio = 'portfolio/v1/';
+  static String portfolioDetail(int id) => 'portfolio/v1/$id/';
+  static String addPortfolioImage(int id) => 'portfolio/v1/$id/images/';
+  static String removePortfolioImage(int id, int imageId) =>
+      'portfolio/v1/$id/images/$imageId/';
+  static String publicPortfolio(int influencerId) =>
+      'portfolio/v1/influencers/$influencerId/';
   static String uploadFile = 'uploads/v1/upload/file/';
   static String ambassadors = 'profiles/v1/influencers/';
 

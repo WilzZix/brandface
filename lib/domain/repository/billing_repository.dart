@@ -30,6 +30,18 @@ class BoostProfileParams {
   });
 }
 
+class SubscribeBillingPlanParams {
+  final int planId;
+  final String paymentMethod;
+  final int? cardId;
+
+  const SubscribeBillingPlanParams({
+    required this.planId,
+    required this.paymentMethod,
+    this.cardId,
+  });
+}
+
 abstract class IBillingRepository {
   Future<Either<Failure, BillingDashboardEntity>> getBillingDashboard();
 
@@ -45,5 +57,9 @@ abstract class IBillingRepository {
 
   Future<Either<Failure, BillingTransactionEntity>> boostProfile(
     BoostProfileParams params,
+  );
+
+  Future<Either<Failure, BillingSubscriptionEntity>> subscribeToPlan(
+    SubscribeBillingPlanParams params,
   );
 }

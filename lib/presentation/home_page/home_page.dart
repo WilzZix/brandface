@@ -3,6 +3,7 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/home/home_dashboard_entity.dart';
 import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
 import 'package:brandface/presentation/home_page/bloc/home_state.dart';
+import 'package:brandface/presentation/home_page/messages/messages_page.dart';
 import 'package:brandface/presentation/home_page/offers/offer_detail_page.dart';
 import 'package:brandface/presentation/home_page/profile/ui/profile_page.dart';
 import 'package:brandface/presentation/home_page/recomendations/recomendations.dart';
@@ -306,6 +307,7 @@ class _HomePageState extends State<HomePage> {
               child: HomePageContainer(
                 title: dashboard.messagesCount.toString(),
                 description: t.common.messages,
+                onTap: () => context.pushNamed(MessagesPage.tag),
               ),
             ),
           ],
@@ -366,25 +368,31 @@ class HomePageContainer extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+    this.onTap,
   });
 
   final String title;
   final String description;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      decoration: BoxDecoration(
-        color: AppColors.lightBg3,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: Typographies.headlineMedium),
-          Text(description, style: Typographies.bodyMedium),
-        ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        decoration: BoxDecoration(
+          color: AppColors.lightBg3,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: Typographies.headlineMedium),
+            Text(description, style: Typographies.bodyMedium),
+          ],
+        ),
       ),
     );
   }
