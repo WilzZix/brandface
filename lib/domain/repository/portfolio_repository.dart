@@ -23,4 +23,8 @@ abstract class IPortfolioRepository {
     required int portfolioId,
     required int imageId,
   });
+
+  Future<Either<Failure, List<PortfolioItemEntity>>> getPublicPortfolio({
+    required int influencerId,
+  });
 }

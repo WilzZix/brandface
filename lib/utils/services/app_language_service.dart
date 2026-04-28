@@ -19,9 +19,9 @@ class AppLanguageService {
       case 'uz':
         return AppLocale.uz;
       case 'en':
-        return AppLocale.uz;
+        return AppLocale.en;
       default:
-        return AppLocale.ru;
+        return AppLocale.en;
     }
   }
 }

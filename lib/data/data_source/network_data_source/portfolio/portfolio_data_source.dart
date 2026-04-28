@@ -20,6 +20,8 @@ abstract class PortfolioDataSource {
     required int portfolioId,
     required int imageId,
   });
+
+  Future<List<PortfolioModel>> getPublicPortfolio({required int influencerId});
 }
 
 class PortfolioDataSourceImpl implements PortfolioDataSource {
@@ -125,5 +127,22 @@ class PortfolioDataSourceImpl implements PortfolioDataSource {
     await _dioClient.delete(
       ApiRoutes.removePortfolioImage(portfolioId, imageId),
     );
+  }
+
+  @override
+  Future<List<PortfolioModel>> getPublicPortfolio({
+    required int influencerId,
+  }) async {
+    final result = await _dioClient.get(ApiRoutes.publicPortfolio(influencerId));
+    final payload = result.data;
+    final list = payload is List
+        ? payload
+        : payload is Map && payload['data'] is List
+            ? payload['data'] as List
+            : const [];
+    return list
+        .map((item) =>
+            PortfolioModel.fromJson(Map<String, dynamic>.from(item as Map)))
+        .toList(growable: false);
   }
 }

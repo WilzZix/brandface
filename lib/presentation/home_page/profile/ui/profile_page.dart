@@ -29,11 +29,23 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  List<AppLocale> langItems = [AppLocale.ru, AppLocale.uz];
-  AppLocale _selectedLangId = AppLocale.ru;
-  final AppLanguageService _appLanguageService = AppLanguageService(
-    prefs: sl(),
-  );
+  final List<AppLocale> _langItems = [AppLocale.en, AppLocale.uz, AppLocale.ru];
+  AppLocale _selectedLangId = AppLocale.en;
+  final AppLanguageService _appLanguageService = AppLanguageService(prefs: sl());
+
+  @override
+  void initState() {
+    super.initState();
+    _appLanguageService.getAppLocale().then((locale) {
+      if (mounted) setState(() => _selectedLangId = locale);
+    });
+  }
+
+  String _localeName(AppLocale locale) => switch (locale) {
+        AppLocale.uz => "O'zbek",
+        AppLocale.ru => 'Русский',
+        AppLocale.en => 'English',
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -156,40 +168,41 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 16),
             GestureDetector(
               onTap: () async {
+                final tempLocale = _selectedLangId;
+                AppLocale pickedLocale = tempLocale;
+
                 await BrandfaceBottomSheet.openBottomSheet<String>(
                   context: context,
-                  header: t.choose.spoken_language,
+                  header: t.profile.app_language,
                   onConfirm: () {
-                    _appLanguageService.setAppLocal(_selectedLangId);
-                    context.pop();
+                    setState(() => _selectedLangId = pickedLocale);
+                    _appLanguageService.setAppLocal(pickedLocale);
+                    LocaleSettings.setLocale(pickedLocale);
+                    Navigator.of(context).pop();
                   },
-                  builder: (context, bottomState) {
+                  builder: (bsContext, bottomState) {
                     return Column(
-                      children: langItems.map((item) {
+                      children: _langItems.map((item) {
                         return GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           onTap: () {
-                            bottomState(() {
-                              _selectedLangId = item;
-                            });
+                            bottomState(() => pickedLocale = item);
                           },
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Container(
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 14,
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    item.name,
+                                    _localeName(item),
                                     style: Typographies.labelLarge,
                                   ),
-                                  if (item.countryCode ==
-                                      _selectedLangId.countryCode)
+                                  if (item == pickedLocale)
                                     SvgPicture.asset(AppAssets.icCheck),
                                 ],
                               ),
@@ -205,7 +218,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(t.profile.app_language, style: Typographies.titleMedium),
-                  Spacer(),
+                  const Spacer(),
+                  Text(
+                    _localeName(_selectedLangId),
+                    style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
+                  ),
+                  const SizedBox(width: 8),
                   SvgPicture.asset(AppAssets.icChevronRight),
                 ],
               ),

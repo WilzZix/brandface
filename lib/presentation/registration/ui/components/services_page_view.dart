@@ -84,31 +84,80 @@ class _ServicesPageViewState extends State<ServicesPageView>
         );
       },
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(t.registration.services, style: Typographies.titleMedium),
             const SizedBox(height: 24),
-            SizedBox(
-              height: 24,
-              child: ListView.separated(
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGreen,
-                      border: Border.all(color: AppColors.primaryDark, width: 1),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(t.registration.service_creating_reels_placeholder, style: Typographies.labelMedium),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(width: 8);
-                },
-              ),
+            BlocBuilder<ServiceTypeCubit, ServiceTypeState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  loading: () => const SizedBox(
+                    height: 32,
+                    child: Center(child: LinearProgressIndicator()),
+                  ),
+                  serviceTypeLoaded: (serviceTypes) {
+                    if (serviceTypes.isEmpty) return const SizedBox.shrink();
+                    return SizedBox(
+                      height: 32,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: serviceTypes.length,
+                        separatorBuilder: (context, index) => const SizedBox(width: 8),
+                        itemBuilder: (context, index) {
+                          final service = serviceTypes[index];
+                          final isSelected = _selectedNichesItems.any(
+                            (e) => e.id == service.id,
+                          );
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isSelected) {
+                                  _selectedNichesItems.removeWhere(
+                                    (e) => e.id == service.id,
+                                  );
+                                } else {
+                                  _selectedNichesItems.add(
+                                    LangItemModel(
+                                      name: service.name,
+                                      id: service.id,
+                                    ),
+                                  );
+                                }
+                                _updateData();
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppColors.primaryDark
+                                    : AppColors.lightGreen,
+                                border: Border.all(
+                                  color: AppColors.primaryDark,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              child: Text(
+                                service.name,
+                                style: Typographies.labelMedium.copyWith(
+                                  color: isSelected ? AppColors.lightBg : null,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  orElse: () => const SizedBox.shrink(),
+                );
+              },
             ),
             SizedBox(height: 16),
             ChooseServices(

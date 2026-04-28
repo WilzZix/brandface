@@ -45,6 +45,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
   String? _selectedCityName;
   int? _selectedSphereId;
   String? _selectedSphereName;
+  List<int> _selectedLanguageIds = [];
 
   @override
   void initState() {
@@ -59,6 +60,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
       regionId: _selectedRegionId,
       cityId: _selectedCityId,
       sphereId: _selectedSphereId,
+      languageIds: _selectedLanguageIds.isEmpty ? null : _selectedLanguageIds,
       description: _bioController.text.isEmpty ? null : _bioController.text,
     );
     widget.onChanged(_param);
@@ -98,6 +100,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
         );
       },
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -326,6 +329,16 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
                     );
                   },
                 );
+              },
+            ),
+            const SizedBox(height: 24),
+            ChooseSpokenLanguage(
+              title: t.common.select,
+              label: t.registration.spoken_languages,
+              initialValue: _selectedLanguageIds.isEmpty ? null : _selectedLanguageIds,
+              onItemSelected: (ids) {
+                _selectedLanguageIds = ids;
+                _updateData();
               },
             ),
             const SizedBox(height: 24),

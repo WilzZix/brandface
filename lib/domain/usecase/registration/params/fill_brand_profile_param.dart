@@ -9,6 +9,7 @@ class FillBrandProfileParam {
   final String? website;
   final List<Contact>? contacts;
   final List<int>? categoryIds;
+  final List<int>? languageIds;
 
   FillBrandProfileParam({
     this.logoId,
@@ -19,6 +20,7 @@ class FillBrandProfileParam {
     this.website,
     this.contacts,
     this.categoryIds,
+    this.languageIds,
   });
 
   FillBrandProfileParam copyWith({
@@ -30,6 +32,7 @@ class FillBrandProfileParam {
     String? website,
     List<Contact>? contacts,
     List<int>? categoryIds,
+    List<int>? languageIds,
   }) => FillBrandProfileParam(
     logoId: logoId ?? this.logoId,
     regionId: regionId ?? this.regionId,
@@ -39,6 +42,7 @@ class FillBrandProfileParam {
     website: website ?? this.website,
     contacts: contacts ?? this.contacts,
     categoryIds: categoryIds ?? this.categoryIds,
+    languageIds: languageIds ?? this.languageIds,
   );
 
   Map<String, dynamic> toJson() {
@@ -51,6 +55,7 @@ class FillBrandProfileParam {
       'website': website,
       'contacts': contacts?.map((e) => e.toJson()).toList(),
       'category_ids': categoryIds,
+      'language_ids': languageIds,
     }..removeWhere((key, value) => value == null);
   }
 }

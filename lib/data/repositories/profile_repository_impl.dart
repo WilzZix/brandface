@@ -1,4 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
+import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
@@ -334,6 +336,63 @@ class ProfileRepositoryImpl implements IProfileRepository {
       return Left(
         ServerFailure(
           e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AmbassadorEntity>>> getAmbassadors({
+    String? ordering,
+    int? categoryId,
+    int? regionId,
+    String? gender,
+    bool? isTop,
+    bool? isVip,
+  }) async {
+    try {
+      final data = await _dataSource.getAmbassadors(
+        ordering: ordering,
+        categoryId: categoryId,
+        regionId: regionId,
+        gender: gender,
+        isTop: isTop,
+        isVip: isVip,
+      );
+      return Right(data);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['detail'] ??
+              e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AmbassadorDetailEntity>> getAmbassadorDetail({
+    required int ambassadorId,
+  }) async {
+    try {
+      final detail = await _dataSource.getAmbassadorDetail(
+        ambassadorId: ambassadorId,
+      );
+      return Right(detail);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['detail'] ??
               e.message ??
               'Serverda xatolik yuz berdi',
           statusCode: e.response?.statusCode,

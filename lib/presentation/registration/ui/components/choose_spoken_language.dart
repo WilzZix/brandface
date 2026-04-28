@@ -1,11 +1,9 @@
-import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
@@ -44,21 +42,10 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
 
   String _getSelectedLabel(List<LanguageEntity> allLanguages) {
     if (_selectedLangIds.isEmpty) return widget.title;
-
     return allLanguages
         .where((lang) => _selectedLangIds.contains(lang.id))
         .map((lang) => lang.name)
         .join(', ');
-  }
-
-  void _toggleLanguage(int id, StateSetter bottomState) {
-    bottomState(() {
-      if (_selectedLangIds.contains(id)) {
-        _selectedLangIds.remove(id);
-      } else {
-        _selectedLangIds.add(id);
-      }
-    });
   }
 
   @override
@@ -84,48 +71,48 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
               onTap: isLoading
                   ? null
                   : () async {
+                      // Snapshot for cancel-rollback support
+                      final tempIds = List<int>.from(_selectedLangIds);
+
                       await BrandfaceBottomSheet.openBottomSheet<void>(
                         context: context,
                         header: t.choose.spoken_language,
                         onConfirm: () {
-                          widget.onItemSelected(_selectedLangIds);
-                          setState(() {});
-                          context.pop();
+                          setState(() {
+                            _selectedLangIds
+                              ..clear()
+                              ..addAll(tempIds);
+                          });
+                          widget.onItemSelected(List<int>.from(_selectedLangIds));
+                          Navigator.of(context).pop();
                         },
-                        builder: (context, bottomState) {
-                          return state.when(
-                            initial: () => const SizedBox.shrink(),
-                            loading: () => const Padding(
-                              padding: EdgeInsets.all(24.0),
-                              child: Center(child: CircularProgressIndicator()),
-                            ),
-                            loadFailure: (failure) => Center(
+                        builder: (bsContext, bottomState) {
+                          if (languages.isEmpty) {
+                            return Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
-                                child: Text(failure.localized),
+                                child: Text(t.registration.no_languages_found),
                               ),
-                            ),
-                            loaded: (langs) {
-                              if (langs.isEmpty) {
-                                return Center(
-                                  child: Text(t.registration.no_languages_found),
+                            );
+                          }
+                          return SingleChildScrollView(
+                            child: Column(
+                              children: languages.map((item) {
+                                return ChooseLangItem(
+                                  title: item.name,
+                                  isSelected: tempIds.contains(item.id),
+                                  onTap: () {
+                                    bottomState(() {
+                                      if (tempIds.contains(item.id)) {
+                                        tempIds.remove(item.id);
+                                      } else {
+                                        tempIds.add(item.id);
+                                      }
+                                    });
+                                  },
                                 );
-                              }
-                              return SingleChildScrollView(
-                                child: Column(
-                                  children: langs.map((item) {
-                                    return ChooseLangItem(
-                                      title: item.name,
-                                      isSelected: _selectedLangIds.contains(
-                                        item.id,
-                                      ),
-                                      onTap: () =>
-                                          _toggleLanguage(item.id, bottomState),
-                                    );
-                                  }).toList(),
-                                ),
-                              );
-                            },
+                              }).toList(),
+                            ),
                           );
                         },
                       );

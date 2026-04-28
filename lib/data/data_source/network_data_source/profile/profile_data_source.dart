@@ -1,4 +1,6 @@
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/data/models/profile/ambassador_detail_model.dart';
+import 'package:brandface/data/models/profile/ambassador_model.dart';
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
 import 'package:brandface/data/models/profile/catalog/city_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
@@ -43,6 +45,17 @@ abstract class ProfileDataSource {
   Future<AwardEntity> createAward({required String title});
 
   Future<void> deleteAward({required int awardId});
+
+  Future<List<AmbassadorModel>> getAmbassadors({
+    String? ordering,
+    int? categoryId,
+    int? regionId,
+    String? gender,
+    bool? isTop,
+    bool? isVip,
+  });
+
+  Future<AmbassadorDetailModel> getAmbassadorDetail({required int ambassadorId});
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -217,6 +230,69 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   Future<void> deleteAward({required int awardId}) async {
     try {
       await _dioClient.delete(ApiRoutes.deleteAward(awardId));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<AmbassadorModel>> getAmbassadors({
+    String? ordering,
+    int? categoryId,
+    int? regionId,
+    String? gender,
+    bool? isTop,
+    bool? isVip,
+  }) async {
+    try {
+      final queryParams = <String, dynamic>{};
+      if (ordering != null) queryParams['ordering'] = ordering;
+      if (categoryId != null) queryParams['category_id'] = categoryId;
+      if (regionId != null) queryParams['region_id'] = regionId;
+      if (gender != null && gender != 'any') queryParams['gender'] = gender;
+      if (isTop == true) queryParams['is_top'] = true;
+      if (isVip == true) queryParams['is_vip'] = true;
+
+      final response = await _dioClient.get(
+        ApiRoutes.ambassadors,
+        queryParameters: queryParams.isEmpty ? null : queryParams,
+      );
+      final payload = response.data;
+
+      List<dynamic> list;
+      if (payload is List) {
+        list = payload;
+      } else if (payload is Map) {
+        final inner = payload['results'] ?? payload['data'];
+        list = inner is List ? inner : [];
+      } else {
+        list = [];
+      }
+
+      return list.map((item) {
+        final map = item is Map<String, dynamic>
+            ? item
+            : Map<String, dynamic>.from(item as Map);
+        return AmbassadorModel.fromJson(map);
+      }).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AmbassadorDetailModel> getAmbassadorDetail({
+    required int ambassadorId,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        ApiRoutes.profile(ambassadorId.toString()),
+      );
+      final payload = response.data;
+      final data = payload is Map && payload['data'] is Map
+          ? Map<String, dynamic>.from(payload['data'] as Map)
+          : Map<String, dynamic>.from(payload as Map);
+      return AmbassadorDetailModel.fromJson(data);
     } catch (e) {
       rethrow;
     }

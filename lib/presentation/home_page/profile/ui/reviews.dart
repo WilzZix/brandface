@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/reviews/reviews_state.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
@@ -34,7 +35,7 @@ class _ReviewsState extends State<Reviews> {
           ..showSnackBar(SnackBar(content: Text(state.failure!.message)));
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Reviews'), centerTitle: false),
+        appBar: AppBar(title: Text(t.reviews.title), centerTitle: false),
         body: BlocBuilder<ReviewsCubit, ReviewsState>(
           builder: (context, state) {
             if (state.status == ReviewsStatus.loading &&
@@ -46,7 +47,7 @@ class _ReviewsState extends State<Reviews> {
                 state.reviews.isEmpty) {
               return _ReviewsErrorState(
                 message:
-                    state.failure?.message ?? 'Reviews could not be loaded.',
+                    state.failure?.message ?? t.reviews.error_load,
                 onRetry: () =>
                     context.read<ReviewsCubit>().loadReviews(force: true),
               );
@@ -58,7 +59,7 @@ class _ReviewsState extends State<Reviews> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  Text('Average', style: Typographies.titleLarge),
+                  Text(t.reviews.average, style: Typographies.titleLarge),
                   const SizedBox(height: 8),
                   AppContainer(
                     child: Row(
@@ -73,7 +74,7 @@ class _ReviewsState extends State<Reviews> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  Text('Client reviews', style: Typographies.titleLarge),
+                  Text(t.reviews.client_reviews, style: Typographies.titleLarge),
                   const SizedBox(height: 8),
                   Expanded(
                     child: RefreshIndicator(
@@ -110,7 +111,7 @@ class _ReviewsState extends State<Reviews> {
                                       const SizedBox(height: 12),
                                       Text(
                                         review.text.isEmpty
-                                            ? 'No review text provided.'
+                                            ? t.reviews.no_review_text
                                             : review.text,
                                         style: Typographies.bodySmall,
                                       ),
@@ -150,7 +151,7 @@ class _ReviewsState extends State<Reviews> {
 
   static String _formatReviewDate(DateTime? value) {
     if (value == null) {
-      return 'Unknown date';
+      return t.common.unknown_date;
     }
 
     final day = value.day.toString().padLeft(2, '0');
@@ -182,14 +183,14 @@ class _ReviewsErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
+              child: AppButtons.primary(title: t.common.try_again, onTap: onRetry),
             ),
           ],
         ),

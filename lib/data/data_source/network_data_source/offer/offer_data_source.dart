@@ -1,9 +1,13 @@
 import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/network/dio_client.dart';
+import 'package:brandface/data/models/ai_matching/ai_match_result_model.dart';
 import 'package:brandface/data/models/offer/offer_detail_model.dart';
 import 'package:brandface/data/models/offer/offer_summary_model.dart';
+import 'package:brandface/domain/entities/offer/create_offer_params.dart';
 
 abstract class OfferDataSource {
+  Future<List<OfferSummaryModel>> getBrandOffers({String? status});
+
   Future<List<OfferSummaryModel>> getAvailableOffers({int? categoryId});
 
   Future<List<OfferSummaryModel>> getRecommendedOffers();
@@ -11,12 +15,30 @@ abstract class OfferDataSource {
   Future<OfferDetailModel> getAvailableOfferDetail({required int id});
 
   Future<void> applyToOffer({required int id, String? coverLetter});
+
+  Future<void> createOffer(CreateOfferParams params);
+
+  Future<List<AiMatchResultModel>> runAiMatching({required int offerId});
+
+  Future<List<AiMatchResultModel>> getAiMatchingResults({required int offerId});
 }
 
 class OfferDataSourceImpl implements OfferDataSource {
   final DioClient _dioClient;
 
   OfferDataSourceImpl(this._dioClient);
+
+  @override
+  Future<List<OfferSummaryModel>> getBrandOffers({String? status}) async {
+    final response = await _dioClient.get(
+      ApiRoutes.brandOffers,
+      queryParameters: status == null ? null : {'status': status},
+    );
+    return _extractList(response.data)
+        .map((item) => OfferSummaryModel.fromJson(_readMap(item)))
+        .where((item) => item.id != 0)
+        .toList();
+  }
 
   @override
   Future<List<OfferSummaryModel>> getAvailableOffers({int? categoryId}) async {
@@ -65,6 +87,33 @@ class OfferDataSourceImpl implements OfferDataSource {
           ? {}
           : {'cover_letter': coverLetter.trim()},
     );
+  }
+
+  @override
+  Future<void> createOffer(CreateOfferParams params) async {
+    await _dioClient.post(ApiRoutes.brandOffers, data: params.toJson());
+  }
+
+  @override
+  Future<List<AiMatchResultModel>> runAiMatching({required int offerId}) async {
+    final response = await _dioClient.post(ApiRoutes.aiMatchRun(offerId));
+    return _parseAiResults(response.data);
+  }
+
+  @override
+  Future<List<AiMatchResultModel>> getAiMatchingResults({
+    required int offerId,
+  }) async {
+    final response = await _dioClient.get(ApiRoutes.aiMatchResults(offerId));
+    return _parseAiResults(response.data);
+  }
+
+  List<AiMatchResultModel> _parseAiResults(dynamic data) {
+    final list = data is List ? data : (data is Map ? data['data'] ?? [] : []);
+    return (list as List)
+        .whereType<Map>()
+        .map((e) => AiMatchResultModel.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
   }
 
   List<dynamic> _extractList(dynamic payload) {

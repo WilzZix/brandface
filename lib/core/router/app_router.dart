@@ -1,26 +1,57 @@
 import 'package:brandface/core/navigation/app_navigator_key.dart';
 import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/city/city_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/splash_screen/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/registration/registration_entity.dart';
-import '../../presentation/home_page/brand_home_page.dart';
+import '../../presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
+import '../../presentation/home_page/brand/bloc/brand_stats_cubit.dart';
+import '../../presentation/home_page/brand/bloc/collaboration_offers_cubit.dart';
+import '../../presentation/home_page/brand/bloc/create_offer/create_offer_cubit.dart';
+import '../../presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
+import '../../presentation/home_page/brand/ui/ambassadors_page.dart';
+import '../../presentation/home_page/brand/ui/ambassadors_filter_page.dart';
+import '../../presentation/home_page/brand/ui/ambassador_details_page.dart';
+import '../../presentation/home_page/brand/ui/ambassador_portfolio_details_page.dart';
+import '../../presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
+import '../../presentation/home_page/brand/bloc/ambassador_portfolio/ambassador_portfolio_cubit.dart';
+import '../../domain/entities/profile/portfolio_entity.dart';
+import '../../presentation/home_page/brand/ui/brand_home_page.dart';
+import '../../presentation/home_page/brand/ui/create_offer_page.dart';
 import '../../presentation/home_page/bloc/home_cubit.dart';
-import '../../presentation/home_page/brand_profile_page.dart';
+import '../../presentation/home_page/brand/ui/brand_profile_menu_page.dart';
+import '../../presentation/home_page/brand/ui/brand_profile_page.dart';
+import '../../presentation/home_page/brand/ui/ai_matching_results_page.dart';
+import '../../presentation/home_page/brand/ui/favourites_page.dart';
+import '../../presentation/home_page/brand/bloc/favourites/favourites_cubit.dart';
+import '../../presentation/home_page/brand/ui/brand_analytics_page.dart';
+import '../../presentation/home_page/brand/bloc/brand_analytics/brand_analytics_cubit.dart';
+import '../../presentation/home_page/brand/ui/brand_plan_page.dart';
+import '../../presentation/home_page/brand/ui/brand_offer_detail_page.dart';
+import '../../presentation/home_page/brand/ui/collaboration_offers_page.dart';
+import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
+import '../../presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import '../../presentation/home_page/home_page.dart';
 import '../../presentation/home_page/messages/bloc/messages_cubit.dart';
 import '../../presentation/home_page/messages/messages_page.dart';
 import '../../presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import '../../presentation/home_page/notifications/notifications_page.dart';
+import '../../presentation/home_page/notifications/notification_details_page.dart';
+import '../../domain/entities/notification/notification_entity.dart';
 import '../../presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import '../../presentation/home_page/offers/bloc/offers_feed_cubit.dart';
 import '../../presentation/home_page/offers/offer_detail_page.dart';
 import '../../presentation/home_page/offers/offers_from_brands_page.dart';
-import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
+import '../../domain/entities/billing/billing_entities.dart';
+import '../../presentation/home_page/brand/ui/brand_my_cards_page.dart';
+import '../../presentation/home_page/brand/ui/add_payment_method_page.dart';
+import '../../presentation/home_page/brand/ui/sms_otp_page.dart';
 import '../../presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import '../../presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
 import '../../presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
@@ -103,12 +134,41 @@ class AppRouter {
       GoRoute(
         path: BrandHomePage.tag,
         name: BrandHomePage.tag,
-        builder: (_, _) => BrandHomePage(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider<BrandStatsCubit>(
+              create: (context) => sl<BrandStatsCubit>()..loadStats(),
+            ),
+            BlocProvider<AiMatchingCubit>(
+              create: (context) => sl<AiMatchingCubit>()..init(),
+            ),
+          ],
+          child: BrandHomePage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandProfileMenuPage.tag,
+        name: BrandProfileMenuPage.tag,
+        builder: (_, _) => const BrandProfileMenuPage(),
       ),
       GoRoute(
         path: BrandProfilePage.tag,
         name: BrandProfilePage.tag,
-        builder: (_, _) => BrandProfilePage(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider<LanguageCubit>(
+              create: (context) => sl<LanguageCubit>(),
+            ),
+            BlocProvider<ProfileInformationCubit>(
+              create: (context) =>
+                  sl<ProfileInformationCubit>()..getInfluencerProfileInformation(),
+            ),
+            BlocProvider<FillBrandProfileBloc>(
+              create: (context) => sl<FillBrandProfileBloc>(),
+            ),
+          ],
+          child: const BrandProfilePage(),
+        ),
       ),
       GoRoute(
         path: ProfilePage.tag,
@@ -147,6 +207,13 @@ class AppRouter {
         builder: (_, _) => BlocProvider<NotificationsCubit>(
           create: (context) => sl<NotificationsCubit>()..loadNotifications(),
           child: NotificationsPage(),
+        ),
+      ),
+      GoRoute(
+        path: NotificationDetailsPage.tag,
+        name: NotificationDetailsPage.tag,
+        builder: (_, state) => NotificationDetailsPage(
+          notification: state.extra as NotificationEntity,
         ),
       ),
       GoRoute(
@@ -286,6 +353,153 @@ class AppRouter {
         builder: (_, _) => BlocProvider<BillingCubit>(
           create: (context) => sl<BillingCubit>()..loadBilling(),
           child: Billing(),
+        ),
+      ),
+      GoRoute(
+        path: CollaborationOffersPage.tag,
+        name: CollaborationOffersPage.tag,
+        builder: (_, _) => BlocProvider<CollaborationOffersCubit>(
+          create: (context) => sl<CollaborationOffersCubit>()..loadActive(),
+          child: CollaborationOffersPage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandOfferDetailPage.tag,
+        name: BrandOfferDetailPage.tag,
+        builder: (_, state) => BlocProvider<OfferDetailCubit>(
+          create: (context) {
+            final cubit = sl<OfferDetailCubit>();
+            final offerId = state.extra is int ? state.extra as int : null;
+            if (offerId != null) cubit.loadOffer(offerId);
+            return cubit;
+          },
+          child: BrandOfferDetailPage(
+            offerId: state.extra is int ? state.extra as int : 0,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AmbassadorsPage.tag,
+        name: AmbassadorsPage.tag,
+        builder: (_, _) => BlocProvider<AmbassadorsCubit>(
+          create: (context) => sl<AmbassadorsCubit>()..load(),
+          child: const AmbassadorsPage(),
+        ),
+      ),
+      GoRoute(
+        path: AmbassadorsFilterPage.tag,
+        name: AmbassadorsFilterPage.tag,
+        builder: (_, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => sl<CategoryCubit>()..getCategory(),
+            ),
+            BlocProvider(
+              create: (_) => sl<RegionCubit>()..getCategories(),
+            ),
+          ],
+          child: AmbassadorsFilterPage(
+            initial: state.extra as AmbassadorsFilterParams?,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AmbassadorDetailsPage.tag,
+        name: AmbassadorDetailsPage.tag,
+        builder: (_, state) {
+          final ambassadorId = state.extra as int;
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    sl<AmbassadorDetailCubit>()..load(ambassadorId),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    sl<AmbassadorPortfolioCubit>()..load(ambassadorId),
+              ),
+            ],
+            child: AmbassadorDetailsPage(ambassadorId: ambassadorId),
+          );
+        },
+      ),
+      GoRoute(
+        path: AmbassadorPortfolioDetailsPage.tag,
+        name: AmbassadorPortfolioDetailsPage.tag,
+        builder: (_, state) => AmbassadorPortfolioDetailsPage(
+          item: state.extra as PortfolioItemEntity,
+        ),
+      ),
+      GoRoute(
+        path: AiMatchingResultsPage.tag,
+        name: AiMatchingResultsPage.tag,
+        builder: (_, _) => BlocProvider<AiMatchingCubit>(
+          create: (context) => sl<AiMatchingCubit>()..init(),
+          child: const AiMatchingResultsPage(),
+        ),
+      ),
+      GoRoute(
+        path: FavouritesPage.tag,
+        name: FavouritesPage.tag,
+        builder: (_, _) => BlocProvider<FavouritesCubit>(
+          create: (context) => sl<FavouritesCubit>()..load(),
+          child: const FavouritesPage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandPlanPage.tag,
+        name: BrandPlanPage.tag,
+        builder: (_, _) => BlocProvider<BillingCubit>(
+          create: (context) => sl<BillingCubit>()..loadBilling(),
+          child: const BrandPlanPage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandAnalyticsPage.tag,
+        name: BrandAnalyticsPage.tag,
+        builder: (_, _) => BlocProvider<BrandAnalyticsCubit>(
+          create: (context) => sl<BrandAnalyticsCubit>()..load(),
+          child: const BrandAnalyticsPage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandMyCardsPage.tag,
+        name: BrandMyCardsPage.tag,
+        builder: (_, _) => BlocProvider<BillingCubit>(
+          create: (context) => sl<BillingCubit>()..loadBilling(),
+          child: const BrandMyCardsPage(),
+        ),
+      ),
+      GoRoute(
+        path: AddPaymentMethodPage.tag,
+        name: AddPaymentMethodPage.tag,
+        builder: (_, state) => BlocProvider<BillingCubit>(
+          create: (context) => sl<BillingCubit>()..loadBilling(),
+          child: AddPaymentMethodPage(
+            editCard: state.extra is BillingCardEntity
+                ? state.extra as BillingCardEntity
+                : null,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: SmsOtpPage.tag,
+        name: SmsOtpPage.tag,
+        builder: (_, state) => SmsOtpPage(
+          args: state.extra as SmsOtpArgs,
+        ),
+      ),
+      GoRoute(
+        path: CreateOfferPage.tag,
+        name: CreateOfferPage.tag,
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<CreateOfferCubit>()),
+            BlocProvider(create: (_) => sl<CategoryCubit>()),
+            BlocProvider(create: (_) => sl<RegionCubit>()),
+            BlocProvider(create: (_) => sl<CityCubit>()),
+          ],
+          child: const CreateOfferPage(),
         ),
       ),
     ],

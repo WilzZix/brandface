@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 24),
                       Center(child: SvgPicture.asset(AppAssets.icOnBoarding)),
                       const SizedBox(height: 24),
-                      Text('Menu', style: Typographies.headlineSmall),
+                      Text(t.common.menu, style: Typographies.headlineSmall),
                       const SizedBox(height: 32),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
@@ -108,6 +108,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 18),
                       Divider(color: AppColors.borderColor),
                       const SizedBox(height: 18),
                       GestureDetector(
@@ -124,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 18),
                       Divider(color: AppColors.borderColor),
                       const SizedBox(height: 18),
                       Row(
@@ -288,7 +290,7 @@ class _HomePageState extends State<HomePage> {
       if (isPendingApproval)
         const SliverToBoxAdapter(child: SizedBox(height: 24)),
       SliverToBoxAdapter(
-        child: Text('Offers and messages', style: Typographies.titleLarge),
+        child: Text(t.home.offers_and_messages, style: Typographies.titleLarge),
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 16)),
       SliverToBoxAdapter(
@@ -297,14 +299,14 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: HomePageContainer(
                 title: dashboard.activeOffersCount.toString(),
-                description: 'Active offers',
+                description: t.common.active_offers,
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: HomePageContainer(
                 title: dashboard.messagesCount.toString(),
-                description: 'Messages',
+                description: t.common.messages,
                 onTap: () => context.pushNamed(MessagesPage.tag),
               ),
             ),
@@ -313,7 +315,7 @@ class _HomePageState extends State<HomePage> {
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 32)),
       SliverToBoxAdapter(
-        child: Text('Recommended for You', style: Typographies.titleLarge),
+        child: Text(t.common.recommended_for_you, style: Typographies.titleLarge),
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 16)),
       if (dashboard.recommendations.isEmpty)
@@ -487,21 +489,21 @@ class _RecommendedOfferCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _InfoColumn(
-                  label: 'Deadline',
+                  label: t.common.deadline,
                   value: _formatDeadline(item.deadline),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: categories.isEmpty
                       ? _InfoColumn(
-                          label: 'Reward',
+                          label: t.offer.reward,
                           value: _buildRewardText(item),
                         )
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Categories',
+                              t.registration.categories,
                               style: Typographies.titleSmall.copyWith(
                                 color: AppColors.grey,
                               ),
@@ -548,12 +550,12 @@ class _RecommendedOfferCard extends StatelessWidget {
       return trimmed;
     }
 
-    return 'New recommendation tailored to your profile.';
+    return t.home.new_recommendation;
   }
 
   String _formatDeadline(DateTime? deadline) {
     if (deadline == null) {
-      return 'Open';
+      return t.common.open;
     }
 
     final day = deadline.day.toString().padLeft(2, '0');
@@ -578,7 +580,7 @@ class _RecommendedOfferCard extends StatelessWidget {
       return reward;
     }
 
-    return 'Flexible';
+    return t.home.flexible_reward;
   }
 
   String _formatScore(double score) {
@@ -627,8 +629,8 @@ class _HomeEmptyRecommendations extends StatelessWidget {
       ),
       child: Text(
         isPendingApproval
-            ? 'Your profile is still under review. Offers and recommendations will appear after approval.'
-            : 'Recommendations will appear here once matching results are ready.',
+            ? t.home.pending_approval_text
+            : t.home.empty_recommendations,
         style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
       ),
     );
@@ -655,7 +657,7 @@ class _PendingApprovalBanner extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Your profile is pending approval. Messages and notifications are available now, and offer tools will unlock after moderation.',
+              t.home.pending_approval_banner,
               style: Typographies.bodyMedium.copyWith(color: AppColors.black),
             ),
           ),
@@ -680,13 +682,13 @@ class _HomeErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              failure?.message ?? 'Home page data could not be loaded.',
+              failure?.message ?? t.home.error_load,
               style: Typographies.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
@@ -697,7 +699,7 @@ class _HomeErrorState extends StatelessWidget {
                 backgroundColor: AppColors.black,
                 foregroundColor: AppColors.white,
               ),
-              child: const Text('Try again'),
+              child: Text(t.common.try_again),
             ),
           ],
         ),

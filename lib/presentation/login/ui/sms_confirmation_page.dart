@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:brandface/core/di/app_di.dart';
-import 'package:brandface/presentation/home_page/brand_home_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_home_page.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/ui/registration_page.dart';

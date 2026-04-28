@@ -1,6 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/presentation/home_page/brand_home_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_home_page.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/registration/bloc/audience/audience_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
@@ -394,6 +394,7 @@ class _FillProfileInformationPageState
               BlocProvider(create: (context) => sl<RegionCubit>()),
               BlocProvider(create: (context) => sl<CityCubit>()),
               BlocProvider(create: (context) => sl<SphereCubit>()),
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
             ],
             child: BrandInfoPageView(
               key: const PageStorageKey<String>('pageOne'),
@@ -559,7 +560,10 @@ class _FillProfileInformationPageState
                   ],
                 ),
               ),
-        body: _isProfileLoading
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: _isProfileLoading
             ? const Center(child: CircularProgressIndicator())
             : Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -665,6 +669,7 @@ class _FillProfileInformationPageState
                   ],
                 ),
               ),
+          ),
       ),
     );
   }
