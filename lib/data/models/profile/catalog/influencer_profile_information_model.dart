@@ -29,6 +29,7 @@ class InfluencerProfileInformationModel
     super.contacts,
     super.isVerified = false,
     super.isTop = false,
+    super.topExpiresAt,
     super.averageRating,
     super.totalReviews = 0,
     super.moderationStatus = 'pending',
@@ -104,6 +105,9 @@ class InfluencerProfileInformationModel
 
       isVerified: json['is_verified'] ?? false,
       isTop: json['is_top'] ?? false,
+      topExpiresAt: json['top_expires_at'] != null
+          ? DateTime.tryParse(json['top_expires_at'].toString())
+          : null,
       averageRating: (json['average_rating'] as num?)?.toDouble(),
       totalReviews: json['total_reviews'] ?? 0,
       moderationStatus: json['moderation_status'] ?? 'pending',

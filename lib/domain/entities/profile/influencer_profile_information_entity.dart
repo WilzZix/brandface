@@ -27,6 +27,7 @@ class InfluencerProfileInformationEntity extends Equatable {
   final List<ContactEntity>? contacts;
   final bool isVerified;
   final bool isTop;
+  final DateTime? topExpiresAt;
   final double? averageRating;
   final int totalReviews;
   final String moderationStatus;
@@ -58,6 +59,7 @@ class InfluencerProfileInformationEntity extends Equatable {
     this.contacts,
     this.isVerified = false,
     this.isTop = false,
+    this.topExpiresAt,
     this.averageRating,
     this.totalReviews = 0,
     this.moderationStatus = 'pending',
@@ -114,6 +116,7 @@ class InfluencerProfileInformationEntity extends Equatable {
     contacts,
     isVerified,
     isTop,
+    topExpiresAt,
     averageRating,
     totalReviews,
     moderationStatus,

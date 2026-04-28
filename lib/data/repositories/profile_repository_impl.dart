@@ -5,6 +5,7 @@ import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/service_type_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
+import 'package:brandface/domain/entities/profile/influencer_analytics_entity.dart';
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/entities/profile/review_entity.dart';
@@ -210,6 +211,27 @@ class ProfileRepositoryImpl implements IProfileRepository {
       return Left(
         ServerFailure(
           e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, InfluencerAnalyticsEntity>>
+  getInfluencerAnalytics() async {
+    try {
+      final analytics = await _dataSource.getInfluencerAnalytics();
+      return Right(analytics);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['message'] ??
+              e.response?.data?['detail'] ??
               e.message ??
               'Serverda xatolik yuz berdi',
           statusCode: e.response?.statusCode,

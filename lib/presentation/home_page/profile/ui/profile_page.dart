@@ -1,5 +1,9 @@
 import 'package:brandface/presentation/home_page/profile/ui/profile_information_page.dart';
+import 'package:brandface/presentation/home_page/profile/ui/calendar_page.dart';
+import 'package:brandface/presentation/home_page/profile/ui/portfolio_page.dart';
 import 'package:brandface/presentation/home_page/profile/ui/reviews.dart';
+import 'package:brandface/presentation/home_page/profile/ui/stats_page.dart';
+import 'package:brandface/presentation/home_page/profile/ui/top_profile_page.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -52,7 +56,10 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(t.registration.profile_information, style: Typographies.titleMedium),
+                  Text(
+                    t.registration.profile_information,
+                    style: Typographies.titleMedium,
+                  ),
                   Spacer(),
                   SvgPicture.asset(AppAssets.icChevronRight),
                 ],
@@ -61,13 +68,16 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(t.profile.stats, style: Typographies.titleMedium),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
+            GestureDetector(
+              onTap: () => context.pushNamed(StatsPage.tag),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(t.profile.stats, style: Typographies.titleMedium),
+                  Spacer(),
+                  SvgPicture.asset(AppAssets.icChevronRight),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
@@ -85,24 +95,30 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(t.profile.calendar, style: Typographies.titleMedium),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
+            GestureDetector(
+              onTap: () => context.pushNamed(CalendarPage.tag),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(t.profile.calendar, style: Typographies.titleMedium),
+                  Spacer(),
+                  SvgPicture.asset(AppAssets.icChevronRight),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(t.profile.portfolio, style: Typographies.titleMedium),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
+            GestureDetector(
+              onTap: () => context.pushNamed(PortfolioPage.tag),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(t.profile.portfolio, style: Typographies.titleMedium),
+                  Spacer(),
+                  SvgPicture.asset(AppAssets.icChevronRight),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
@@ -121,13 +137,19 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(t.profile.make_profile_top, style: Typographies.titleMedium),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
+            GestureDetector(
+              onTap: () => context.pushNamed(TopProfilePage.tag),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    t.profile.make_profile_top,
+                    style: Typographies.titleMedium,
+                  ),
+                  Spacer(),
+                  SvgPicture.asset(AppAssets.icChevronRight),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
@@ -194,7 +216,10 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(t.profile.terms_and_conditions, style: Typographies.titleMedium),
+                Text(
+                  t.profile.terms_and_conditions,
+                  style: Typographies.titleMedium,
+                ),
                 Spacer(),
                 SvgPicture.asset(AppAssets.icChevronRight),
               ],
