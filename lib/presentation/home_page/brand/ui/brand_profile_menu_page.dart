@@ -25,7 +25,7 @@ class BrandProfileMenuPage extends StatefulWidget {
 }
 
 class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
-  final List<AppLocale> _langItems = [AppLocale.uz, AppLocale.ru];
+  final List<AppLocale> _langItems = [AppLocale.en, AppLocale.uz, AppLocale.ru];
   AppLocale _selectedLocale = AppLocale.uz;
   final AppLanguageService _appLanguageService = AppLanguageService(prefs: sl());
 
@@ -37,8 +37,11 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
     });
   }
 
-  String _localeName(AppLocale locale) =>
-      locale == AppLocale.uz ? "O'zbek" : 'Русский';
+  String _localeName(AppLocale locale) => switch (locale) {
+        AppLocale.uz => "O'zbek",
+        AppLocale.ru => 'Русский',
+        AppLocale.en => 'English',
+      };
 
   @override
   Widget build(BuildContext context) {
