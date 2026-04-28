@@ -69,6 +69,10 @@ import 'package:brandface/domain/usecase/profile/update_portfolio_use_case.dart'
 import 'package:brandface/domain/usecase/profile/upload_portfolio_file_use_case.dart';
 import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
 import 'package:brandface/presentation/home_page/messages/bloc/messages_cubit.dart';
+import 'package:brandface/data/data_source/network_data_source/favourites/favourites_data_source.dart';
+import 'package:brandface/data/repositories/favourites_repository_impl.dart';
+import 'package:brandface/domain/repository/favourites_repository.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/favourites/favourites_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
@@ -152,6 +156,9 @@ class AppDi {
       () => MessageDataSourceImpl(sl()),
     );
     sl.registerLazySingleton<OfferDataSource>(() => OfferDataSourceImpl(sl()));
+    sl.registerLazySingleton<FavouritesDataSource>(
+      () => FavouritesDataSourceImpl(sl()),
+    );
     sl.registerLazySingleton<PortfolioDataSource>(
       () => PortfolioDataSourceImpl(sl()),
     );
@@ -262,6 +269,9 @@ class AppDi {
     );
     sl.registerLazySingleton<IOfferRepository>(
       () => OfferRepositoryImpl(dataSource: sl()),
+    );
+    sl.registerLazySingleton<IFavouritesRepository>(
+      () => FavouritesRepositoryImpl(dataSource: sl()),
     );
     sl.registerLazySingleton<IPortfolioRepository>(
       () => PortfolioRepositoryImpl(dataSource: sl()),
@@ -391,6 +401,9 @@ class AppDi {
     );
     sl.registerFactory(
       () => AmbassadorPortfolioCubit(portfolioRepository: sl()),
+    );
+    sl.registerFactory(
+      () => FavouritesCubit(repository: sl()),
     );
     sl.registerFactory(
       () => AiMatchingCubit(

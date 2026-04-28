@@ -73,4 +73,6 @@ class ApiRoutes {
 
   static String aiMatchRun(int offerId) => 'ai/v1/offers/$offerId/match/';
   static String aiMatchResults(int offerId) => 'ai/v1/offers/$offerId/results/';
+  static String favourites = 'favourites/v1/';
+  static String favouriteItem(int influencerId) => 'favourites/v1/$influencerId/';
 }
