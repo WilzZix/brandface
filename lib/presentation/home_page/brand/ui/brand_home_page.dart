@@ -7,6 +7,9 @@ import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_match
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_state.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_profile_menu_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/ai_matching_results_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/favourites_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/ambassadors_page.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -17,7 +20,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../notifications/notifications_page.dart';
-import 'ambassadors_page.dart';
 import 'collaboration_offers_page.dart';
 
 class BrandHomePage extends StatefulWidget {
@@ -281,15 +283,18 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.brand.brandfaces,
-                              style: Typographies.titleMedium,
-                            ),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
+                        GestureDetector(
+                          onTap: () {},
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                t.brand.brandfaces,
+                                style: Typographies.titleMedium,
+                              ),
+                              SvgPicture.asset(AppAssets.icChevronRight),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
@@ -311,53 +316,68 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.brand.influencers,
-                              style: Typographies.titleMedium,
-                            ),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
+                        GestureDetector(
+                          onTap: () =>
+                              context.pushNamed(AmbassadorsPage.tag),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                t.brand.influencers,
+                                style: Typographies.titleMedium,
+                              ),
+                              SvgPicture.asset(AppAssets.icChevronRight),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.brand.favourites,
-                              style: Typographies.titleMedium,
-                            ),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
+                        GestureDetector(
+                          onTap: () =>
+                              context.pushNamed(FavouritesPage.tag),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                t.brand.favourites,
+                                style: Typographies.titleMedium,
+                              ),
+                              SvgPicture.asset(AppAssets.icChevronRight),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 8),
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.brand.ai_matching,
-                              style: Typographies.titleMedium,
-                            ),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
+                        GestureDetector(
+                          onTap: () =>
+                              context.pushNamed(AiMatchingResultsPage.tag),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                t.brand.ai_matching,
+                                style: Typographies.titleMedium,
+                              ),
+                              SvgPicture.asset(AppAssets.icChevronRight),
+                            ],
+                          ),
                         ),
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.brand.analytics,
-                              style: Typographies.titleMedium,
-                            ),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
+                        GestureDetector(
+                          onTap: () {},
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                t.brand.analytics,
+                                style: Typographies.titleMedium,
+                              ),
+                              SvgPicture.asset(AppAssets.icChevronRight),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).padding.bottom + 16,
