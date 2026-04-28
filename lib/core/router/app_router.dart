@@ -19,6 +19,7 @@ import '../../presentation/home_page/brand/ui/ambassadors_page.dart';
 import '../../presentation/home_page/brand/ui/brand_home_page.dart';
 import '../../presentation/home_page/brand/ui/create_offer_page.dart';
 import '../../presentation/home_page/bloc/home_cubit.dart';
+import '../../presentation/home_page/brand/ui/brand_profile_menu_page.dart';
 import '../../presentation/home_page/brand/ui/brand_profile_page.dart';
 import '../../presentation/home_page/brand/ui/brand_offer_detail_page.dart';
 import '../../presentation/home_page/brand/ui/collaboration_offers_page.dart';
@@ -128,6 +129,11 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: BrandProfileMenuPage.tag,
+        name: BrandProfileMenuPage.tag,
+        builder: (_, _) => const BrandProfileMenuPage(),
+      ),
+      GoRoute(
         path: BrandProfilePage.tag,
         name: BrandProfilePage.tag,
         builder: (_, _) => MultiBlocProvider(
@@ -143,7 +149,7 @@ class AppRouter {
               create: (context) => sl<FillBrandProfileBloc>(),
             ),
           ],
-          child: BrandProfilePage(),
+          child: const BrandProfilePage(),
         ),
       ),
       GoRoute(

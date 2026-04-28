@@ -14,16 +14,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Billing extends StatefulWidget {
-  const Billing({super.key});
+  const Billing({super.key, this.initialTab = 0});
 
   static const String tag = '/billing';
+
+  final int initialTab;
 
   @override
   State<Billing> createState() => _BillingState();
 }
 
 class _BillingState extends State<Billing> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialTab;
+  }
 
   @override
   Widget build(BuildContext context) {

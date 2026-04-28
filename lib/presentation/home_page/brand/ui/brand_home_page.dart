@@ -6,7 +6,7 @@ import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_match
 import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_state.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_state.dart';
-import 'package:brandface/presentation/home_page/brand/ui/brand_profile_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_profile_menu_page.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -52,7 +52,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                   backgroundColor: AppColors.lightBg,
                   pinned: true,
                   leading: GestureDetector(
-                    onTap: () => context.pushNamed(BrandProfilePage.tag),
+                    onTap: () => context.pushNamed(BrandProfileMenuPage.tag),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8.0,
