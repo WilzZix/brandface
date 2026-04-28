@@ -30,14 +30,66 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (err.response?.statusCode == 401) {
-      _handleUnauthorized();
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    if (err.response?.statusCode != 401) {
+      return super.onError(err, handler);
     }
-    super.onError(err, handler);
+
+    // Refresh token request o'zi 401 bersa — cheksiz loop oldini olish
+    if (err.requestOptions.path.contains('refresh-token')) {
+      await _showUnauthorizedAndLogout();
+      return handler.next(err);
+    }
+
+    try {
+      final newAccess = await _refreshAccessToken();
+      if (newAccess == null) {
+        await _showUnauthorizedAndLogout();
+        return handler.next(err);
+      }
+
+      // So'rovni yangi token bilan qayta yuborish
+      final opts = err.requestOptions;
+      opts.headers['Authorization'] = 'Bearer $newAccess';
+      final response = await _dio.fetch(opts);
+      return handler.resolve(response);
+    } catch (_) {
+      await _showUnauthorizedAndLogout();
+      return handler.next(err);
+    }
   }
 
-  Future<void> _handleUnauthorized() async {
+  Future<String?> _refreshAccessToken() {
+    // Bir vaqtda bir nechta 401 kelsa bitta refresh qilish
+    _refreshFuture ??= _doRefresh().whenComplete(() => _refreshFuture = null);
+    return _refreshFuture!;
+  }
+
+  Future<String?> _doRefresh() async {
+    final refreshToken = _authLocalService.getRefreshToken();
+    if (refreshToken == null || refreshToken.isEmpty) return null;
+
+    final response = await _dio.post(
+      ApiRoutes.refreshToken,
+      data: {'refresh': refreshToken},
+      options: Options(headers: {}), // Authorization header'siz
+    );
+
+    final data = response.data;
+    final newAccess = data['access'] as String?;
+    if (newAccess == null || newAccess.isEmpty) return null;
+
+    await _authLocalService.saveTokens(
+      accessToken: newAccess,
+      refreshToken: data['refresh'] as String? ?? refreshToken,
+    );
+    return newAccess;
+  }
+
+  Future<void> _showUnauthorizedAndLogout() async {
     if (_isShowingUnauthorizedSheet) return;
     _isShowingUnauthorizedSheet = true;
 
@@ -53,7 +105,7 @@ class AuthInterceptor extends Interceptor {
       context: context,
       isScrollControlled: true,
       constraints: const BoxConstraints(maxWidth: double.infinity),
-      builder: (_) => _UnauthorizedBottomSheet(),
+      builder: (_) => const _UnauthorizedBottomSheet(),
     );
 
     _isShowingUnauthorizedSheet = false;
