@@ -73,6 +73,10 @@ import 'package:brandface/data/data_source/network_data_source/favourites/favour
 import 'package:brandface/data/repositories/favourites_repository_impl.dart';
 import 'package:brandface/domain/repository/favourites_repository.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/favourites/favourites_cubit.dart';
+import 'package:brandface/data/data_source/network_data_source/analytics/brand_analytics_data_source.dart';
+import 'package:brandface/data/repositories/brand_analytics_repository_impl.dart';
+import 'package:brandface/domain/repository/brand_analytics_repository.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/brand_analytics/brand_analytics_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
@@ -158,6 +162,9 @@ class AppDi {
     sl.registerLazySingleton<OfferDataSource>(() => OfferDataSourceImpl(sl()));
     sl.registerLazySingleton<FavouritesDataSource>(
       () => FavouritesDataSourceImpl(sl()),
+    );
+    sl.registerLazySingleton<BrandAnalyticsDataSource>(
+      () => BrandAnalyticsDataSourceImpl(sl()),
     );
     sl.registerLazySingleton<PortfolioDataSource>(
       () => PortfolioDataSourceImpl(sl()),
@@ -272,6 +279,9 @@ class AppDi {
     );
     sl.registerLazySingleton<IFavouritesRepository>(
       () => FavouritesRepositoryImpl(dataSource: sl()),
+    );
+    sl.registerLazySingleton<IBrandAnalyticsRepository>(
+      () => BrandAnalyticsRepositoryImpl(dataSource: sl()),
     );
     sl.registerLazySingleton<IPortfolioRepository>(
       () => PortfolioRepositoryImpl(dataSource: sl()),
@@ -411,6 +421,9 @@ class AppDi {
         getResultsUseCase: sl(),
         runMatchingUseCase: sl(),
       ),
+    );
+    sl.registerFactory(
+      () => BrandAnalyticsCubit(repository: sl()),
     );
   }
 }

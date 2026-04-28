@@ -10,6 +10,7 @@ import 'package:brandface/presentation/home_page/brand/ui/brand_profile_menu_pag
 import 'package:brandface/presentation/home_page/brand/ui/ai_matching_results_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/favourites_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/ambassadors_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_analytics_page.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -367,7 +368,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () => context.pushNamed(BrandAnalyticsPage.tag),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

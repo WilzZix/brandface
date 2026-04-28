@@ -4,11 +4,13 @@ import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/notification/notification_entity.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_state.dart';
+import 'package:brandface/presentation/home_page/notifications/notification_details_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -112,9 +114,16 @@ class NotificationsPage extends StatelessWidget {
 
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () => context.read<NotificationsCubit>().markAsRead(
-                      notification,
-                    ),
+                    onTap: () {
+                      // Mark as read then open details
+                      context
+                          .read<NotificationsCubit>()
+                          .markAsRead(notification);
+                      context.pushNamed(
+                        NotificationDetailsPage.tag,
+                        extra: notification,
+                      );
+                    },
                     child: _NotificationCard(notification: notification),
                   );
                 },

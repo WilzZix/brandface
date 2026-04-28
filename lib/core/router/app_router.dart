@@ -30,6 +30,9 @@ import '../../presentation/home_page/brand/ui/brand_profile_page.dart';
 import '../../presentation/home_page/brand/ui/ai_matching_results_page.dart';
 import '../../presentation/home_page/brand/ui/favourites_page.dart';
 import '../../presentation/home_page/brand/bloc/favourites/favourites_cubit.dart';
+import '../../presentation/home_page/brand/ui/brand_analytics_page.dart';
+import '../../presentation/home_page/brand/bloc/brand_analytics/brand_analytics_cubit.dart';
+import '../../presentation/home_page/brand/ui/brand_plan_page.dart';
 import '../../presentation/home_page/brand/ui/brand_offer_detail_page.dart';
 import '../../presentation/home_page/brand/ui/collaboration_offers_page.dart';
 import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
@@ -39,10 +42,16 @@ import '../../presentation/home_page/messages/bloc/messages_cubit.dart';
 import '../../presentation/home_page/messages/messages_page.dart';
 import '../../presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import '../../presentation/home_page/notifications/notifications_page.dart';
+import '../../presentation/home_page/notifications/notification_details_page.dart';
+import '../../domain/entities/notification/notification_entity.dart';
 import '../../presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import '../../presentation/home_page/offers/bloc/offers_feed_cubit.dart';
 import '../../presentation/home_page/offers/offer_detail_page.dart';
 import '../../presentation/home_page/offers/offers_from_brands_page.dart';
+import '../../domain/entities/billing/billing_entities.dart';
+import '../../presentation/home_page/brand/ui/brand_my_cards_page.dart';
+import '../../presentation/home_page/brand/ui/add_payment_method_page.dart';
+import '../../presentation/home_page/brand/ui/sms_otp_page.dart';
 import '../../presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import '../../presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
 import '../../presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
@@ -198,6 +207,13 @@ class AppRouter {
         builder: (_, _) => BlocProvider<NotificationsCubit>(
           create: (context) => sl<NotificationsCubit>()..loadNotifications(),
           child: NotificationsPage(),
+        ),
+      ),
+      GoRoute(
+        path: NotificationDetailsPage.tag,
+        name: NotificationDetailsPage.tag,
+        builder: (_, state) => NotificationDetailsPage(
+          notification: state.extra as NotificationEntity,
         ),
       ),
       GoRoute(
@@ -428,6 +444,49 @@ class AppRouter {
         builder: (_, _) => BlocProvider<FavouritesCubit>(
           create: (context) => sl<FavouritesCubit>()..load(),
           child: const FavouritesPage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandPlanPage.tag,
+        name: BrandPlanPage.tag,
+        builder: (_, _) => BlocProvider<BillingCubit>(
+          create: (context) => sl<BillingCubit>()..loadBilling(),
+          child: const BrandPlanPage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandAnalyticsPage.tag,
+        name: BrandAnalyticsPage.tag,
+        builder: (_, _) => BlocProvider<BrandAnalyticsCubit>(
+          create: (context) => sl<BrandAnalyticsCubit>()..load(),
+          child: const BrandAnalyticsPage(),
+        ),
+      ),
+      GoRoute(
+        path: BrandMyCardsPage.tag,
+        name: BrandMyCardsPage.tag,
+        builder: (_, _) => BlocProvider<BillingCubit>(
+          create: (context) => sl<BillingCubit>()..loadBilling(),
+          child: const BrandMyCardsPage(),
+        ),
+      ),
+      GoRoute(
+        path: AddPaymentMethodPage.tag,
+        name: AddPaymentMethodPage.tag,
+        builder: (_, state) => BlocProvider<BillingCubit>(
+          create: (context) => sl<BillingCubit>()..loadBilling(),
+          child: AddPaymentMethodPage(
+            editCard: state.extra is BillingCardEntity
+                ? state.extra as BillingCardEntity
+                : null,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: SmsOtpPage.tag,
+        name: SmsOtpPage.tag,
+        builder: (_, state) => SmsOtpPage(
+          args: state.extra as SmsOtpArgs,
         ),
       ),
       GoRoute(

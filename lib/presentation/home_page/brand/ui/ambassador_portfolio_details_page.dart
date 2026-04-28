@@ -113,7 +113,7 @@ class AmbassadorPortfolioDetailsPage extends StatelessWidget {
                       : ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: item.images.length,
-                          separatorBuilder: (_, __) =>
+                          separatorBuilder: (c, i) =>
                               const SizedBox(width: 12),
                           itemBuilder: (_, i) =>
                               _GalleryImage(imageUrl: item.images[i].imageUrl),
@@ -154,7 +154,7 @@ class _HeroImage extends StatelessWidget {
         width: double.infinity,
         height: 180,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, _) => Container(
+        errorBuilder: (ctx, err, st) => Container(
           height: 180,
           color: AppColors.borderColor,
           alignment: Alignment.center,
@@ -179,7 +179,7 @@ class _GalleryImage extends StatelessWidget {
         width: 157,
         height: 157,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, _) => Container(
+        errorBuilder: (ctx, err, st) => Container(
           width: 157,
           height: 157,
           color: AppColors.borderColor,

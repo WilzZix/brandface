@@ -78,13 +78,19 @@ class AuthInterceptor extends Interceptor {
       options: Options(headers: {}), // Authorization header'siz
     );
 
-    final data = response.data;
-    final newAccess = data['access'] as String?;
+    final body = response.data;
+    // API returns { "message": "...", "data": { "access": "...", "refresh": "..." } }
+    // but some versions return { "access": "..." } at root — handle both
+    final payload = (body is Map && body['data'] is Map)
+        ? Map<String, dynamic>.from(body['data'] as Map)
+        : (body is Map ? Map<String, dynamic>.from(body) : <String, dynamic>{});
+
+    final newAccess = payload['access'] as String?;
     if (newAccess == null || newAccess.isEmpty) return null;
 
     await _authLocalService.saveTokens(
       accessToken: newAccess,
-      refreshToken: data['refresh'] as String? ?? refreshToken,
+      refreshToken: payload['refresh'] as String? ?? refreshToken,
     );
     return newAccess;
   }

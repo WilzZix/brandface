@@ -2,6 +2,8 @@ import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_profile_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_plan_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/brand_my_cards_page.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/ui/billing.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
@@ -61,13 +63,13 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
             ),
             Divider(color: AppColors.borderColor),
             _menuItem(
-              title: t.profile.billing,
-              onTap: () => _openBilling(context, initialTab: 0),
+              title: 'Plan',
+              onTap: () => context.pushNamed(BrandPlanPage.tag),
             ),
             Divider(color: AppColors.borderColor),
             _menuItem(
               title: t.billing.my_cards_tab,
-              onTap: () => _openBilling(context, initialTab: 1),
+              onTap: () => context.pushNamed(BrandMyCardsPage.tag),
             ),
             Divider(color: AppColors.borderColor),
             _menuItem(
