@@ -47,7 +47,7 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
           child: Text(
-            'Confirm delete',
+            t.profile.confirm_delete,
             style: Typographies.labelLarge,
           ),
         );
@@ -82,7 +82,7 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
   Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile information'),
+        title: Text(t.registration.profile_information),
         centerTitle: false,
         actions: [
           GestureDetector(

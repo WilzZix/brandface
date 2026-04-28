@@ -106,7 +106,7 @@ class _AudienceAndFollowersPageViewState
 
   void _addSocialAccount() {
     if (_selectedPlatform == null || _controllerSocial.text.trim().isEmpty) {
-      _showErrorSnackBar('Fill required fields');
+      _showErrorSnackBar(t.validation.fill_required_fields);
       return;
     }
 
@@ -123,7 +123,7 @@ class _AudienceAndFollowersPageViewState
       );
 
       if (isDuplicate) {
-        _showErrorSnackBar('Account already added');
+        _showErrorSnackBar(t.validation.account_already_added);
         return;
       }
 

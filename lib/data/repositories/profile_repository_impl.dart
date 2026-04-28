@@ -1,11 +1,13 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
+import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/service_type_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
 import 'package:brandface/domain/entities/profile/influencer_analytics_entity.dart';
+import 'package:brandface/domain/entities/profile/catalog/sphere_entity.dart';
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/entities/profile/review_entity.dart';
@@ -95,6 +97,42 @@ class ProfileRepositoryImpl implements IProfileRepository {
       final List<RegionEntity> entities = servicesData
           .map((model) => model.toEntity())
           .toList();
+      return Right(entities);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CityEntity>>> getCities() async {
+    try {
+      final data = await _dataSource.getCities();
+      final List<CityEntity> entities = data.map((model) => model.toEntity()).toList();
+      return Right(entities);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SphereEntity>>> getSpheres() async {
+    try {
+      final data = await _dataSource.getSpheres();
+      final List<SphereEntity> entities = data.map((model) => model.toEntity()).toList();
       return Right(entities);
     } on DioException catch (e) {
       return Left(

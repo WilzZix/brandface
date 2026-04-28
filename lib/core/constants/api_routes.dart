@@ -1,5 +1,6 @@
 class ApiRoutes {
   static String baseUrl = 'https://api.influerax.com/api/';
+  static String mediaBaseUrl = 'https://api.influerax.com';
 
   ///Login
   static String sendOtp = 'accounts/v1/auth/send-otp/';
@@ -24,6 +25,7 @@ class ApiRoutes {
   static String serviceType = 'catalog/v1/service-types/';
   static String regions = 'catalog/v1/regions/';
   static String cities = 'catalog/v1/cities/';
+  static String spheres = 'catalog/v1/spheres/';
   static String languages = 'catalog/v1/languages/';
   static String socialProfileStats = 'profiles/v1/social/channel-stats/';
 

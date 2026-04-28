@@ -50,6 +50,10 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsChooseUz choose = TranslationsChooseUz._(_root);
 	late final TranslationsContactUz contact = TranslationsContactUz._(_root);
 	late final TranslationsOptionalItemsUz optional_items = TranslationsOptionalItemsUz._(_root);
+	late final TranslationsHomeUz home = TranslationsHomeUz._(_root);
+	late final TranslationsBrandUz brand = TranslationsBrandUz._(_root);
+	late final TranslationsOfferUz offer = TranslationsOfferUz._(_root);
+	late final TranslationsReviewsUz reviews = TranslationsReviewsUz._(_root);
 	late final TranslationsErrorsUz errors = TranslationsErrorsUz._(_root);
 }
 
@@ -282,6 +286,18 @@ class TranslationsRegistrationUz {
 
 	/// uz: 'Pricing options'
 	String get pricing_options => 'Pricing options';
+
+	/// uz: 'do not have account'
+	String get do_not_have_account => 'do not have account';
+
+	/// uz: 'No languages found'
+	String get no_languages_found => 'No languages found';
+
+	/// uz: 'Creating reels'
+	String get service_creating_reels_placeholder => 'Creating reels';
+
+	/// uz: 'Business'
+	String get niche_business_placeholder => 'Business';
 }
 
 // Path: common
@@ -324,6 +340,39 @@ class TranslationsCommonUz {
 
 	/// uz: 'Set as main'
 	String get set_as_main => 'Set as main';
+
+	/// uz: 'OK'
+	String get ok => 'OK';
+
+	/// uz: 'Submit'
+	String get submit => 'Submit';
+
+	/// uz: 'Loading...'
+	String get loading => 'Loading...';
+
+	/// uz: 'Deadline'
+	String get deadline => 'Deadline';
+
+	/// uz: 'Menu'
+	String get menu => 'Menu';
+
+	/// uz: 'Messages'
+	String get messages => 'Messages';
+
+	/// uz: 'Active offers'
+	String get active_offers => 'Active offers';
+
+	/// uz: 'Recommended for You'
+	String get recommended_for_you => 'Recommended for You';
+
+	/// uz: 'Offers from brands'
+	String get offers_from_brands => 'Offers from brands';
+
+	/// uz: 'Niche type'
+	String get niche_type => 'Niche type';
+
+	/// uz: 'Offer title here'
+	String get offer_title_placeholder => 'Offer title here';
 }
 
 // Path: profile
@@ -385,8 +434,20 @@ class TranslationsProfileUz {
 	/// uz: 'Delete account'
 	String get delete_account => 'Delete account';
 
+	/// uz: 'Are you sure you want to delete your account? This action cannot be undone.'
+	String get delete_account_confirm => 'Are you sure you want to delete your account? This action cannot be undone.';
+
 	/// uz: 'Age $from - $to'
 	String age_range({required Object from, required Object to}) => 'Age ${from} - ${to}';
+
+	/// uz: 'Confirm delete'
+	String get confirm_delete => 'Confirm delete';
+
+	/// uz: 'Total followers'
+	String get total_followers => 'Total followers';
+
+	/// uz: 'Engagement rate'
+	String get engagement_rate => 'Engagement rate';
 }
 
 // Path: validation
@@ -408,6 +469,12 @@ class TranslationsValidationUz {
 
 	/// uz: 'Name is too short'
 	String get name_too_short => 'Name is too short';
+
+	/// uz: 'Fill required fields'
+	String get fill_required_fields => 'Fill required fields';
+
+	/// uz: 'Account already added'
+	String get account_already_added => 'Account already added';
 }
 
 // Path: choose
@@ -515,6 +582,150 @@ class TranslationsOptionalItemsUz {
 	String get event_appearance_fee => 'Event appearance fee';
 }
 
+// Path: home
+class TranslationsHomeUz {
+	TranslationsHomeUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Offers and messages'
+	String get offers_and_messages => 'Offers and messages';
+
+	/// uz: 'Recommendations for you'
+	String get recommendations_for_you => 'Recommendations for you';
+}
+
+// Path: brand
+class TranslationsBrandUz {
+	TranslationsBrandUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Brand'
+	String get title => 'Brand';
+
+	/// uz: 'Offers and applications'
+	String get offers_and_applications => 'Offers and applications';
+
+	/// uz: 'New applications'
+	String get new_applications => 'New applications';
+
+	/// uz: 'AI Matching'
+	String get ai_matching => 'AI Matching';
+
+	/// uz: 'TOP'
+	String get top_label => 'TOP';
+
+	/// uz: 'No active campaigns yet'
+	String get no_active_campaigns_yet => 'No active campaigns yet';
+
+	/// uz: 'Collaboration Offers'
+	String get collaboration_offers => 'Collaboration Offers';
+
+	/// uz: 'Brandfaces'
+	String get brandfaces => 'Brandfaces';
+
+	/// uz: 'Ambassadors'
+	String get ambassadors => 'Ambassadors';
+
+	/// uz: 'Influencers'
+	String get influencers => 'Influencers';
+
+	/// uz: 'Favourites'
+	String get favourites => 'Favourites';
+
+	/// uz: 'Analytics'
+	String get analytics => 'Analytics';
+
+	/// uz: 'Influencer'
+	String get influencer_tab => 'Influencer';
+
+	/// uz: 'Ambassadors'
+	String get ambassadors_tab => 'Ambassadors';
+
+	/// uz: 'Brand profile'
+	String get brand_profile => 'Brand profile';
+
+	/// uz: 'Website'
+	String get website => 'Website';
+}
+
+// Path: offer
+class TranslationsOfferUz {
+	TranslationsOfferUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Offer details'
+	String get offer_details => 'Offer details';
+
+	/// uz: 'Offer title'
+	String get offer_title => 'Offer title';
+
+	/// uz: 'Description'
+	String get description => 'Description';
+
+	/// uz: 'Status'
+	String get status => 'Status';
+
+	/// uz: 'Requirements'
+	String get requirements => 'Requirements';
+
+	/// uz: 'Country'
+	String get country => 'Country';
+
+	/// uz: 'City'
+	String get city => 'City';
+
+	/// uz: 'Followers max'
+	String get followers_max => 'Followers max';
+
+	/// uz: 'Followers min'
+	String get followers_min => 'Followers min';
+
+	/// uz: 'Languages'
+	String get languages => 'Languages';
+
+	/// uz: 'Engagement rate'
+	String get engagement_rate => 'Engagement rate';
+
+	/// uz: 'Content type'
+	String get content_type => 'Content type';
+
+	/// uz: 'Gender'
+	String get gender => 'Gender';
+
+	/// uz: 'Collaboration Details'
+	String get collaboration_details => 'Collaboration Details';
+
+	/// uz: 'Duration'
+	String get duration => 'Duration';
+
+	/// uz: 'Visibility'
+	String get visibility => 'Visibility';
+}
+
+// Path: reviews
+class TranslationsReviewsUz {
+	TranslationsReviewsUz._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// uz: 'Average'
+	String get average => 'Average';
+
+	/// uz: 'Client reviews'
+	String get client_reviews => 'Client reviews';
+}
+
 // Path: errors
 class TranslationsErrorsUz {
 	TranslationsErrorsUz._(this._root);
@@ -531,6 +742,12 @@ class TranslationsErrorsUz {
 
 	/// uz: 'An unknown error occurred'
 	String get unknown => 'An unknown error occurred';
+
+	/// uz: 'Session expired'
+	String get session_expired => 'Session expired';
+
+	/// uz: 'You will be redirected to the login page to sign in again.'
+	String get redirect_to_login => 'You will be redirected to the login page to sign in again.';
 
 	late final TranslationsErrorsServerUz server = TranslationsErrorsServerUz._(_root);
 }
@@ -632,6 +849,10 @@ extension on Translations {
 			'registration.kpi_based_model' => 'KPI-based model',
 			'registration.available_for_offline_events' => 'Available for offline events',
 			'registration.pricing_options' => 'Pricing options',
+			'registration.do_not_have_account' => 'do not have account',
+			'registration.no_languages_found' => 'No languages found',
+			'registration.service_creating_reels_placeholder' => 'Creating reels',
+			'registration.niche_business_placeholder' => 'Business',
 			'common.select' => 'Select',
 			'common.confirm' => 'Confirm',
 			'common.cancel' => 'Cancel',
@@ -643,6 +864,17 @@ extension on Translations {
 			'common.please_enter_text' => 'Please enter some text',
 			'common.email' => 'Email',
 			'common.set_as_main' => 'Set as main',
+			'common.ok' => 'OK',
+			'common.submit' => 'Submit',
+			'common.loading' => 'Loading...',
+			'common.deadline' => 'Deadline',
+			'common.menu' => 'Menu',
+			'common.messages' => 'Messages',
+			'common.active_offers' => 'Active offers',
+			'common.recommended_for_you' => 'Recommended for You',
+			'common.offers_from_brands' => 'Offers from brands',
+			'common.niche_type' => 'Niche type',
+			'common.offer_title_placeholder' => 'Offer title here',
 			'profile.profile_page' => 'Profile page',
 			'profile.stats' => 'Stats',
 			'profile.reviews' => 'Reviews',
@@ -660,11 +892,17 @@ extension on Translations {
 			'profile.pricing_tariffs' => 'Pricing / Tariffs',
 			'profile.payment_type' => 'Payment type',
 			'profile.delete_account' => 'Delete account',
+			'profile.delete_account_confirm' => 'Are you sure you want to delete your account? This action cannot be undone.',
 			'profile.age_range' => ({required Object from, required Object to}) => 'Age ${from} - ${to}',
+			'profile.confirm_delete' => 'Confirm delete',
+			'profile.total_followers' => 'Total followers',
+			'profile.engagement_rate' => 'Engagement rate',
 			'validation.name_required' => 'Please enter your name and surname',
 			'validation.name_full_required' => 'Please enter your full name and surname',
 			'validation.name_letters_only' => 'Name must contain only letters',
 			'validation.name_too_short' => 'Name is too short',
+			'validation.fill_required_fields' => 'Fill required fields',
+			'validation.account_already_added' => 'Account already added',
 			'choose.select_niche' => 'Select niche',
 			'choose.select_gender' => 'Select gender',
 			'choose.select_geography' => 'Select geography',
@@ -691,9 +929,47 @@ extension on Translations {
 			'optional_items.willing_to_work_kpi' => 'Willing to work on KPI-based model',
 			'optional_items.campaign_based_fee' => 'Campaign-based fee',
 			'optional_items.event_appearance_fee' => 'Event appearance fee',
+			'home.offers_and_messages' => 'Offers and messages',
+			'home.recommendations_for_you' => 'Recommendations for you',
+			'brand.title' => 'Brand',
+			'brand.offers_and_applications' => 'Offers and applications',
+			'brand.new_applications' => 'New applications',
+			'brand.ai_matching' => 'AI Matching',
+			'brand.top_label' => 'TOP',
+			'brand.no_active_campaigns_yet' => 'No active campaigns yet',
+			'brand.collaboration_offers' => 'Collaboration Offers',
+			'brand.brandfaces' => 'Brandfaces',
+			'brand.ambassadors' => 'Ambassadors',
+			'brand.influencers' => 'Influencers',
+			'brand.favourites' => 'Favourites',
+			'brand.analytics' => 'Analytics',
+			'brand.influencer_tab' => 'Influencer',
+			'brand.ambassadors_tab' => 'Ambassadors',
+			'brand.brand_profile' => 'Brand profile',
+			'brand.website' => 'Website',
+			'offer.offer_details' => 'Offer details',
+			'offer.offer_title' => 'Offer title',
+			'offer.description' => 'Description',
+			'offer.status' => 'Status',
+			'offer.requirements' => 'Requirements',
+			'offer.country' => 'Country',
+			'offer.city' => 'City',
+			'offer.followers_max' => 'Followers max',
+			'offer.followers_min' => 'Followers min',
+			'offer.languages' => 'Languages',
+			'offer.engagement_rate' => 'Engagement rate',
+			'offer.content_type' => 'Content type',
+			'offer.gender' => 'Gender',
+			'offer.collaboration_details' => 'Collaboration Details',
+			'offer.duration' => 'Duration',
+			'offer.visibility' => 'Visibility',
+			'reviews.average' => 'Average',
+			'reviews.client_reviews' => 'Client reviews',
 			'errors.network' => 'Network connection problem, please check your internet',
 			'errors.parsing' => 'Data processing error',
 			'errors.unknown' => 'An unknown error occurred',
+			'errors.session_expired' => 'Session expired',
+			'errors.redirect_to_login' => 'You will be redirected to the login page to sign in again.',
 			'errors.server.defaultMsg' => ({required Object code}) => 'Server error (${code})',
 			'errors.server.badRequest' => 'Bad request',
 			'errors.server.unauthorized' => 'Session expired, please log in again',

@@ -1,4 +1,5 @@
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
+import 'package:brandface/data/models/profile/catalog/city_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
@@ -15,7 +16,7 @@ class InfluencerProfileInformationModel
     super.avatarId,
     super.bio,
     super.region,
-    super.cityId,
+    super.city,
     super.birthDate,
     super.gender,
     super.categories,
@@ -52,11 +53,10 @@ class InfluencerProfileInformationModel
       // JSONda avatar_id yo'q, lekin modelda bo'lsa qolgani ma'qul
       bio: json['bio'],
 
-      // JSONda region ob'ekt bo'lib kelyapti: {"id": 3, "name": "Bukhoro", ...}
       region: json['region'] != null
           ? RegionModel.fromJson(json['region'])
-          : json['region_id'],
-      cityId: json['city'] != null ? json['city']['id'] : json['city_id'],
+          : null,
+      city: json['city'] != null ? CityModel.fromJson(json['city']) : null,
 
       birthDate: json['birth_date'] != null
           ? DateTime.tryParse(json['birth_date'])

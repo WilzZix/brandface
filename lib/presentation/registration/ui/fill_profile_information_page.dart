@@ -6,8 +6,10 @@ import 'package:brandface/presentation/registration/bloc/audience/audience_cubit
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/city/city_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/sphere/sphere_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
@@ -30,6 +32,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/di/app_di.dart';
+import '../bloc/upload/upload_cubit.dart';
 import '../../../domain/entities/registration/registration_entity.dart';
 import '../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
@@ -98,8 +101,11 @@ class _FillProfileInformationPageState
           'My Pricing/Tariffs',
         ];
         widgets = [
-          BlocProvider(
-            create: (context) => sl<LanguageCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+            ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
@@ -189,8 +195,11 @@ class _FillProfileInformationPageState
           'Contract',
         ];
         widgets = [
-          BlocProvider(
-            create: (context) => sl<LanguageCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+            ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
@@ -235,8 +244,11 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<RegionCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: AudienceAndFollowersPageView(
               key: const PageStorageKey<String>('pageFour'),
               initialParam: _finalParam,
@@ -245,11 +257,23 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<AwardCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<AwardCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: AmbassadorExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
-              onChanged: (p1) {},
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  yearsOfExperience: p1.yearsOfExperience,
+                  partners: p1.partners,
+                  referralExperience: p1.referralExperience,
+                  previousBrandCollaborations: p1.previousBrandCollaborations,
+                  caseStudyAvailable: p1.caseStudyAvailable,
+                  conversionMetricsAvailable: p1.conversionMetricsAvailable,
+                );
+              },
             ),
           ),
           AmbassadorContractPageView(
@@ -270,8 +294,11 @@ class _FillProfileInformationPageState
           'My Pricing/Tariffs',
         ];
         widgets = [
-          BlocProvider(
-            create: (context) => sl<LanguageCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<LanguageCubit>()),
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+            ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
               key: const PageStorageKey<String>('pageOne'),
@@ -316,8 +343,11 @@ class _FillProfileInformationPageState
               },
             ),
           ),
-          BlocProvider(
-            create: (context) => sl<RegionCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<AudienceCubit>()),
+            ],
             child: BrandfaceSegmentPageView(
               key: const PageStorageKey<String>('pageFour'),
               onChanged: (p1) {
@@ -329,7 +359,21 @@ class _FillProfileInformationPageState
             create: (context) => sl<AwardCubit>(),
             child: BrandfaceCameraExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
-              onChanged: (p1) {},
+              onChanged: (p1) {
+                _finalParam = _finalParam.copyWith(
+                  yearsOfExperience: p1.yearsOfExperience,
+                  hasAdExperience: p1.hasAdExperience,
+                  pressMentions: p1.pressMentions,
+                  agencyRepresentation: p1.agencyRepresentation,
+                  partners: p1.partners,
+                  pricing: p1.pricing != null
+                      ? (_finalParam.pricing ?? Pricing()).copyWith(
+                          exclusivityAvailable:
+                              p1.pricing!.exclusivityAvailable,
+                        )
+                      : _finalParam.pricing,
+                );
+              },
             ),
           ),
           BrandfacePricingPageView(
@@ -344,17 +388,25 @@ class _FillProfileInformationPageState
       case 'brand':
         titles = ['General info', 'Categories'];
         widgets = [
-          BrandInfoPageView(
-            key: const PageStorageKey<String>('pageOne'),
-            onChanged: (p1) {
-              _brandParam = _brandParam.copyWith(
-                regionId: p1.regionId,
-                cityId: p1.cityId,
-                sphereId: p1.sphereId,
-                logoId: p1.logoId,
-                description: p1.description,
-              );
-            },
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<UploadCubit>()),
+              BlocProvider(create: (context) => sl<RegionCubit>()),
+              BlocProvider(create: (context) => sl<CityCubit>()),
+              BlocProvider(create: (context) => sl<SphereCubit>()),
+            ],
+            child: BrandInfoPageView(
+              key: const PageStorageKey<String>('pageOne'),
+              onChanged: (p1) {
+                _brandParam = _brandParam.copyWith(
+                  regionId: p1.regionId,
+                  cityId: p1.cityId,
+                  sphereId: p1.sphereId,
+                  logoId: p1.logoId,
+                  description: p1.description,
+                );
+              },
+            ),
           ),
           BlocProvider(
             create: (context) => sl<CategoryCubit>(),

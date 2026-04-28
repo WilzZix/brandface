@@ -80,6 +80,9 @@ class _FromToInputFieldState extends State<FromToInputField> {
             SizedBox(width: 16),
             Expanded(
               child: TextField(
+                onChanged: (value) {
+                  widget.onChanged?.call();
+                },
                 controller: widget.controllerTo,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(

@@ -8,7 +8,11 @@ class RegionModel extends RegionEntity {
   });
 
   factory RegionModel.fromJson(Map<String, dynamic> json) {
-    return RegionModel(id: json['id'], name: json['name'], code: json['code']);
+    return RegionModel(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      code: json['code'] ?? '',
+    );
   }
 
   RegionEntity toEntity() {

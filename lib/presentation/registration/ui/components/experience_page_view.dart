@@ -31,6 +31,7 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
   late FillInfluencerProfileParam _param;
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _awardController = TextEditingController();
+  final List<LangItemModel> _selectedPartners = [];
 
   @override
   void initState() {
@@ -41,6 +42,13 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
       _experienceController.text = years.toString();
     }
     _experienceController.addListener(_handleExperienceChange);
+  }
+
+  void _updatePartners() {
+    _param = _param.copyWith(
+      partners: _selectedPartners.map((e) => e.id.toString()).toList(),
+    );
+    widget.onChanged(_param);
   }
 
   void _handleExperienceChange() {
@@ -84,10 +92,46 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
           const SizedBox(height: 8),
           ChoosePartners(
             onItemSelected: (LangItemModel p1) {
-              _param = _param.copyWith(partners: [p1.id.toString()]);
-              widget.onChanged(_param);
+              if (_selectedPartners.any((e) => e.id == p1.id)) return;
+              setState(() {
+                _selectedPartners.add(p1);
+              });
+              _updatePartners();
             },
           ),
+          if (_selectedPartners.isNotEmpty)
+            ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _selectedPartners.length,
+              itemBuilder: (context, index) {
+                final partner = _selectedPartners[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(partner.name, style: Typographies.bodyMedium),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedPartners.removeAt(index);
+                          });
+                          _updatePartners();
+                        },
+                        child: Text(
+                          t.common.delete,
+                          style: Typographies.labelLarge.copyWith(
+                            color: AppColors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           SizedBox(height: 16),
           BlocConsumer<AwardCubit, AwardState>(
             listener: (context, state) {

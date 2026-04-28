@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/i18n/strings.g.dart';
 import 'notifications/notifications_page.dart';
 import 'offers/offers_from_brands_page.dart';
 
@@ -100,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Offers from brands',
+                              t.common.offers_from_brands,
                               style: Typographies.titleMedium,
                             ),
                             SvgPicture.asset(AppAssets.icChevronRight),
@@ -116,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Recommended for You',
+                              t.common.recommended_for_you,
                               style: Typographies.titleMedium,
                             ),
                             SvgPicture.asset(AppAssets.icChevronRight),
@@ -125,16 +126,12 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Divider(color: AppColors.borderColor),
                       const SizedBox(height: 18),
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => context.pushNamed(MessagesPage.tag),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Messages', style: Typographies.titleMedium),
-                            SvgPicture.asset(AppAssets.icChevronRight),
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(t.common.messages, style: Typographies.titleMedium),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
                       ),
                     ],
                   ),

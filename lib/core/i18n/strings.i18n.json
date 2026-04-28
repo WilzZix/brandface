@@ -70,7 +70,11 @@
     "available_for_long_term_contract": "Available for long-term contract?",
     "kpi_based_model": "KPI-based model",
     "available_for_offline_events": "Available for offline events",
-    "pricing_options": "Pricing options"
+    "pricing_options": "Pricing options",
+    "do_not_have_account": "do not have account",
+    "no_languages_found": "No languages found",
+    "service_creating_reels_placeholder": "Creating reels",
+    "niche_business_placeholder": "Business"
   },
   "common": {
     "select": "Select",
@@ -83,7 +87,18 @@
     "write_text_here": "Write text here...",
     "please_enter_text": "Please enter some text",
     "email": "Email",
-    "set_as_main": "Set as main"
+    "set_as_main": "Set as main",
+    "ok": "OK",
+    "submit": "Submit",
+    "loading": "Loading...",
+    "deadline": "Deadline",
+    "menu": "Menu",
+    "messages": "Messages",
+    "active_offers": "Active offers",
+    "recommended_for_you": "Recommended for You",
+    "offers_from_brands": "Offers from brands",
+    "niche_type": "Niche type",
+    "offer_title_placeholder": "Offer title here"
   },
   "profile": {
     "profile_page": "Profile page",
@@ -104,13 +119,18 @@
     "payment_type": "Payment type",
     "delete_account": "Delete account",
     "delete_account_confirm": "Are you sure you want to delete your account? This action cannot be undone.",
-    "age_range": "Age $from - $to"
+    "age_range": "Age $from - $to",
+    "confirm_delete": "Confirm delete",
+    "total_followers": "Total followers",
+    "engagement_rate": "Engagement rate"
   },
   "validation": {
     "name_required": "Please enter your name and surname",
     "name_full_required": "Please enter your full name and surname",
     "name_letters_only": "Name must contain only letters",
-    "name_too_short": "Name is too short"
+    "name_too_short": "Name is too short",
+    "fill_required_fields": "Fill required fields",
+    "account_already_added": "Account already added"
   },
   "choose": {
     "select_niche": "Select niche",
@@ -144,10 +164,56 @@
     "campaign_based_fee": "Campaign-based fee",
     "event_appearance_fee": "Event appearance fee"
   },
+  "home": {
+    "offers_and_messages": "Offers and messages",
+    "recommendations_for_you": "Recommendations for you"
+  },
+  "brand": {
+    "title": "Brand",
+    "offers_and_applications": "Offers and applications",
+    "new_applications": "New applications",
+    "ai_matching": "AI Matching",
+    "top_label": "TOP",
+    "no_active_campaigns_yet": "No active campaigns yet",
+    "collaboration_offers": "Collaboration Offers",
+    "brandfaces": "Brandfaces",
+    "ambassadors": "Ambassadors",
+    "influencers": "Influencers",
+    "favourites": "Favourites",
+    "analytics": "Analytics",
+    "influencer_tab": "Influencer",
+    "ambassadors_tab": "Ambassadors",
+    "brand_profile": "Brand profile",
+    "website": "Website"
+  },
+  "offer": {
+    "offer_details": "Offer details",
+    "offer_title": "Offer title",
+    "description": "Description",
+    "status": "Status",
+    "requirements": "Requirements",
+    "country": "Country",
+    "city": "City",
+    "followers_max": "Followers max",
+    "followers_min": "Followers min",
+    "languages": "Languages",
+    "engagement_rate": "Engagement rate",
+    "content_type": "Content type",
+    "gender": "Gender",
+    "collaboration_details": "Collaboration Details",
+    "duration": "Duration",
+    "visibility": "Visibility"
+  },
+  "reviews": {
+    "average": "Average",
+    "client_reviews": "Client reviews"
+  },
   "errors": {
     "network": "Network connection problem, please check your internet",
     "parsing": "Data processing error",
     "unknown": "An unknown error occurred",
+    "session_expired": "Session expired",
+    "redirect_to_login": "You will be redirected to the login page to sign in again.",
     "server": {
       "defaultMsg": "Server error ($code)",
       "badRequest": "Bad request",

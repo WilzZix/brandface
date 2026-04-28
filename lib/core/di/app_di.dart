@@ -25,9 +25,11 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/domain/repository/portfolio_repository.dart';
 import 'package:brandface/domain/repository/registration_repository.dart';
+import 'package:brandface/domain/usecase/catalog/category/city_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/get_languages_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
+import 'package:brandface/domain/usecase/catalog/category/sphere_use_case.dart';
 import 'package:brandface/domain/usecase/billing/add_billing_card_use_case.dart';
 import 'package:brandface/domain/usecase/billing/boost_profile_use_case.dart';
 import 'package:brandface/domain/usecase/billing/cancel_subscription_use_case.dart';
@@ -75,8 +77,10 @@ import 'package:brandface/presentation/registration/bloc/audience/audience_cubit
 import 'package:brandface/presentation/registration/bloc/award/award_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/city/city_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/service_type/service_type_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/sphere/sphere_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/get_profile/get_profile_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
@@ -95,8 +99,13 @@ import '../../presentation/home_page/profile/bloc/delete_account/delete_account_
 import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import '../../presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
 import '../../presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
+import '../../data/data_source/network_data_source/upload/upload_data_source.dart';
+import '../../data/repositories/upload_repository_impl.dart';
+import '../../domain/repository/upload_repository.dart';
+import '../../domain/usecase/upload/upload_file_usecase.dart';
 import '../../presentation/registration/bloc/fill_brand_profile/fill_brand_profile_bloc.dart';
 import '../../presentation/registration/bloc/fill_profile/fill_profile_bloc.dart';
+import '../../presentation/registration/bloc/upload/upload_cubit.dart';
 import '../../utils/services/app_auth_local_service.dart';
 import '../../utils/services/app_catalog_service.dart';
 import '../../utils/services/profile_service.dart';
@@ -137,6 +146,9 @@ class AppDi {
     sl.registerLazySingleton<ProfileDataSource>(
       () => ProfileDataSourceImpl(sl()),
     );
+    sl.registerLazySingleton<UploadDataSource>(
+      () => UploadDataSourceImpl(dioClient: sl()),
+    );
 
     ///Use case
     sl.registerLazySingleton(() => SendOtpUseCase(sl()));
@@ -149,6 +161,8 @@ class AppDi {
     sl.registerLazySingleton(() => CategoryUseCase(repository: sl()));
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
     sl.registerLazySingleton(() => RegionUseCase(repository: sl()));
+    sl.registerLazySingleton(() => CityUseCase(repository: sl()));
+    sl.registerLazySingleton(() => SphereUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetProfileUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetHomeDashboardUseCase(repository: sl()));
     sl.registerLazySingleton(
@@ -238,9 +252,13 @@ class AppDi {
         catalogLocalService: sl(),
       ),
     );
+    sl.registerLazySingleton<IUploadRepository>(
+      () => UploadRepositoryImpl(dataSource: sl()),
+    );
+    sl.registerLazySingleton(() => UploadFileUseCase(sl()));
 
     ///Bloc
-    sl.registerFactory(() => InitAppCubit(sharedPrefService: sl()));
+    sl.registerFactory(() => InitAppCubit(sharedPrefService: sl(), profileService: sl()));
     sl.registerFactory(
       () => LoginBloc(
         loginUseCase: sl(),
@@ -268,6 +286,8 @@ class AppDi {
     sl.registerFactory(() => CategoryCubit(categoryUseCase: sl()));
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));
     sl.registerFactory(() => RegionCubit(regionUseCase: sl()));
+    sl.registerFactory(() => CityCubit(cityUseCase: sl()));
+    sl.registerFactory(() => SphereCubit(sphereUseCase: sl()));
     sl.registerFactory(() => HomeCubit(getHomeDashboardUseCase: sl()));
     sl.registerFactory(
       () => BillingCubit(
@@ -319,9 +339,11 @@ class AppDi {
     );
     sl.registerFactory(() => LanguageCubit(getLanguagesUseCase: sl()));
     sl.registerFactory(() => AudienceCubit(accountStatsUseCase: sl()));
-    sl.registerFactory(
-      () => AwardCubit(createAwardUseCase: sl(), deleteAwardUseCase: sl()),
-    );
+    sl.registerFactory(() => AwardCubit(
+          createAwardUseCase: sl(),
+          deleteAwardUseCase: sl(),
+        ));
+    sl.registerFactory(() => UploadCubit(uploadFileUseCase: sl()));
     sl.registerFactory(
       () => ProfileInformationCubit(
         influencerProfileUseCase: sl(),

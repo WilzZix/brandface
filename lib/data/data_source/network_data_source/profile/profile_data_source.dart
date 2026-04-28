@@ -1,8 +1,10 @@
 import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
+import 'package:brandface/data/models/profile/catalog/city_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
+import 'package:brandface/data/models/profile/catalog/sphere_model.dart';
 import 'package:brandface/data/models/profile/review_model.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
 
@@ -22,6 +24,10 @@ abstract class ProfileDataSource {
   Future<ServiceTypeModel> getServices();
 
   Future<List<RegionModel>> getRegions();
+
+  Future<List<CityModel>> getCities();
+
+  Future<List<SphereModel>> getSpheres();
 
   Future<LanguageModel> getLanguages();
 
@@ -71,6 +77,28 @@ class ProfileDataSourceImpl implements ProfileDataSource {
       final List<dynamic> data = result.data['data'];
 
       return data.map((json) => RegionModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CityModel>> getCities() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.cities);
+      final List<dynamic> data = result.data['data'];
+      return data.map((json) => CityModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<SphereModel>> getSpheres() async {
+    try {
+      final result = await _dioClient.get(ApiRoutes.spheres);
+      final List<dynamic> data = result.data['data'];
+      return data.map((json) => SphereModel.fromJson(json)).toList();
     } catch (e) {
       rethrow;
     }

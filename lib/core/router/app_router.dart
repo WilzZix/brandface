@@ -1,3 +1,4 @@
+import 'package:brandface/core/navigation/app_navigator_key.dart';
 import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import '../../domain/entities/registration/registration_entity.dart';
 import '../../presentation/home_page/brand_home_page.dart';
 import '../../presentation/home_page/bloc/home_cubit.dart';
+import '../../presentation/home_page/brand_profile_page.dart';
 import '../../presentation/home_page/home_page.dart';
 import '../../presentation/home_page/messages/bloc/messages_cubit.dart';
 import '../../presentation/home_page/messages/messages_page.dart';
@@ -45,6 +47,7 @@ import '../di/app_di.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
+    navigatorKey: appNavigatorKey,
     initialLocation: SplashScreen.tag,
     // redirect: (context, state) {
     //   final authService = sl<IAuthLocalService>();
@@ -101,6 +104,11 @@ class AppRouter {
         path: BrandHomePage.tag,
         name: BrandHomePage.tag,
         builder: (_, _) => BrandHomePage(),
+      ),
+      GoRoute(
+        path: BrandProfilePage.tag,
+        name: BrandProfilePage.tag,
+        builder: (_, _) => BrandProfilePage(),
       ),
       GoRoute(
         path: ProfilePage.tag,
