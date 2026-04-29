@@ -1,9 +1,13 @@
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
+import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
+import 'package:brandface/domain/usecase/registration/upload_profile_file_use_case.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
+import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -34,11 +38,16 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
   final TextEditingController _fullNameController = TextEditingController();
   FillInfluencerProfileParam _fillInfluencerProfileParam =
       FillInfluencerProfileParam();
+  bool _isUploadingAvatar = false;
+  String? _avatarUrl;
+  String? _avatarFileName;
 
   @override
   void initState() {
     super.initState();
-    _fillInfluencerProfileParam = widget.initialParam ?? FillInfluencerProfileParam();
+    _fillInfluencerProfileParam =
+        widget.initialParam ?? FillInfluencerProfileParam();
+    _avatarUrl = widget.initialParam?.avatarUrl;
     _profileInfoController.text = widget.initialParam?.bio ?? '';
     _fullNameController.text = widget.initialParam?.displayName ?? '';
   }
@@ -60,31 +69,45 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
               SizedBox(
                 height: 96,
                 width: 96,
-                child: Image.asset(
-                  'assets/images/im_person_avatar_sample.png',
-                  fit: BoxFit.cover,
-                ),
+                child: ProfileImage(imageUrl: _avatarUrl, size: 96),
               ),
               SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(999),
-                      color: AppColors.primary,
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(AppAssets.icAttachFile),
-                        SizedBox(width: 8),
-                        Text(
-                          t.registration.choose_file,
-                          style: Typographies.bodyMedium,
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: _isUploadingAvatar ? null : _pickAndUploadAvatar,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 24,
+                      ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(999),
+                        color: _isUploadingAvatar
+                            ? AppColors.lightBg2
+                            : AppColors.primary,
+                      ),
+                      child: Row(
+                        children: [
+                          if (_isUploadingAvatar)
+                            const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          else
+                            SvgPicture.asset(AppAssets.icAttachFile),
+                          SizedBox(width: 8),
+                          Text(
+                            _isUploadingAvatar
+                                ? 'Uploading...'
+                                : t.registration.choose_file,
+                            style: Typographies.bodyMedium,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 8),
@@ -94,18 +117,23 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                       color: AppColors.grey,
                     ),
                   ),
+                  if (_avatarFileName != null) ...[
+                    const SizedBox(height: 4),
+                    SizedBox(
+                      width: 190,
+                      child: Text(
+                        _avatarFileName!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Typographies.bodySmall.copyWith(
+                          color: AppColors.mutedBlack,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ],
-          ),
-          SizedBox(height: 24),
-          ProfileAvatarItem(
-            onTap: (int p1) {
-              _fillInfluencerProfileParam = _fillInfluencerProfileParam
-                  .copyWith(avatarId: p1);
-              widget.onChanged(_fillInfluencerProfileParam);
-            },
-            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           ),
           SizedBox(height: 40),
           Column(
@@ -118,7 +146,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                 label: t.registration.full_name,
                 onChanged: (val) {
                   _fillInfluencerProfileParam = _fillInfluencerProfileParam
-                      .copyWith(displayName:val);
+                      .copyWith(displayName: val);
                   widget.onChanged(_fillInfluencerProfileParam);
                 },
                 validator: (value) {
@@ -126,14 +154,16 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                     return t.validation.name_required;
                   }
 
-                  final nameParts = value.trim().split(RegExp('rs+'));
+                  final nameParts = value
+                      .trim()
+                      .split(' ')
+                      .where((part) => part.isNotEmpty)
+                      .toList();
                   if (nameParts.length < 2) {
                     return t.validation.name_full_required;
                   }
 
-                  final nameRegExp = RegExp(r"^[a-zA-Zа-яА-ЯёЁқҚғҒҳҲўЎʼ' ]+$");
-
-                  if (!nameRegExp.hasMatch(value)) {
+                  if (!_containsOnlyNameLetters(value)) {
                     return t.validation.name_letters_only;
                   }
 
@@ -205,6 +235,86 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
         ],
       ),
     );
+  }
+
+  Future<void> _pickAndUploadAvatar() async {
+    final result = await FilePicker.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['svg', 'png', 'jpg', 'jpeg', 'gif'],
+      withData: false,
+    );
+
+    if (!mounted || result == null || result.files.isEmpty) {
+      return;
+    }
+
+    final selectedFile = result.files.single;
+    final path = selectedFile.path;
+    if (path == null || path.isEmpty) {
+      _showMessage('Selected file path is unavailable.');
+      return;
+    }
+
+    setState(() {
+      _isUploadingAvatar = true;
+      _avatarFileName = selectedFile.name;
+    });
+
+    final uploadResult = await sl<UploadProfileFileUseCase>().call(
+      params: path,
+    );
+    UploadedFileEntity? uploadedFile;
+    Object? uploadFailure;
+    uploadResult.fold(
+      ifLeft: (failure) => uploadFailure = failure,
+      ifRight: (file) => uploadedFile = file,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _isUploadingAvatar = false;
+    });
+
+    if (uploadedFile == null) {
+      _showMessage(uploadFailure?.toString() ?? 'File upload failed.');
+      return;
+    }
+
+    _fillInfluencerProfileParam = _fillInfluencerProfileParam.copyWith(
+      avatarId: uploadedFile!.id,
+      avatarUrl: uploadedFile!.fileUrl,
+    );
+    setState(() {
+      _avatarUrl = uploadedFile!.fileUrl;
+      _avatarFileName = selectedFile.name;
+    });
+    widget.onChanged(_fillInfluencerProfileParam);
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  bool _containsOnlyNameLetters(String value) {
+    for (final rune in value.runes) {
+      final isLatinUpper = rune >= 65 && rune <= 90;
+      final isLatinLower = rune >= 97 && rune <= 122;
+      final isCyrillic = rune >= 0x0400 && rune <= 0x04FF;
+      final isSpaceOrApostrophe = rune == 32 || rune == 39 || rune == 0x02BC;
+      if (!isLatinUpper &&
+          !isLatinLower &&
+          !isCyrillic &&
+          !isSpaceOrApostrophe) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   @override

@@ -100,7 +100,10 @@ class AppRouter {
       GoRoute(
         path: BrandHomePage.tag,
         name: BrandHomePage.tag,
-        builder: (_, _) => BrandHomePage(),
+        builder: (_, _) => BlocProvider<HomeCubit>(
+          create: (context) => sl<HomeCubit>()..loadHome(),
+          child: const BrandHomePage(),
+        ),
       ),
       GoRoute(
         path: ProfilePage.tag,

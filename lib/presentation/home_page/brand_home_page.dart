@@ -1,7 +1,11 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
+import 'package:brandface/presentation/home_page/bloc/home_state.dart';
+import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,144 +29,162 @@ class _BrandHomePageState extends State<BrandHomePage> {
     });
   }
 
+  String _resolveBrandName(dynamic profile) {
+    final displayName = profile?.displayName?.toString().trim();
+    if (displayName != null && displayName.isNotEmpty) {
+      return displayName;
+    }
+
+    return 'Brand';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  scrolledUnderElevation: 0,
-                  backgroundColor: AppColors.lightBg,
-                  pinned: true,
-                  leading: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 10,
-                    ),
-                    child: SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Image.asset(
-                        'assets/images/im_person_avatar_sample.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  title: Text('Brand', style: Typographies.titleMedium),
-                  actions: [
-                    GestureDetector(
-                      onTap: () => context.pushNamed(NotificationsPage.tag),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.lightGreen,
-                          borderRadius: BorderRadius.circular(999),
+          BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              final profile = state.dashboard?.profile;
+              final showNotificationBadge =
+                  (state.dashboard?.unreadNotificationsCount ?? 0) > 0;
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      scrolledUnderElevation: 0,
+                      backgroundColor: AppColors.lightBg,
+                      pinned: true,
+                      leading: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 10,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0,
-                            vertical: 12,
-                          ),
-                          child: Stack(
-                            children: [
-                              SvgPicture.asset(AppAssets.icBell),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  height: 8,
-                                  width: 8,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.orange,
-                                  ),
-                                ),
+                        child: _BrandAvatar(logoUrl: profile?.avatarUrl),
+                      ),
+                      title: Text(
+                        _resolveBrandName(profile),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Typographies.titleMedium,
+                      ),
+                      actions: [
+                        GestureDetector(
+                          onTap: () => context.pushNamed(NotificationsPage.tag),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.lightGreen,
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                                vertical: 12,
                               ),
-                            ],
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  SvgPicture.asset(AppAssets.icBell),
+                                  if (showNotificationBadge)
+                                    Positioned(
+                                      right: -2,
+                                      top: -1,
+                                      child: Container(
+                                        height: 8,
+                                        width: 8,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColors.orange,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
+                        SizedBox(width: 16),
+                      ],
+                    ),
+                    SliverToBoxAdapter(child: SizedBox(height: 32)),
+                    SliverToBoxAdapter(
+                      child: Text(
+                        'My campaigns',
+                        style: Typographies.titleLarge,
                       ),
                     ),
-                    SizedBox(width: 16),
-                  ],
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 32)),
-                SliverToBoxAdapter(
-                  child: Text(
-                    'My campaigns',
-                    style: Typographies.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _BrandStatCard(
-                          title: '0',
-                          description: 'Active campaigns',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: _BrandStatCard(
-                          title: '0',
-                          description: 'Influencers hired',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 32)),
-                SliverToBoxAdapter(
-                  child: Text(
-                    'Recent activity',
-                    style: Typographies.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverList.separated(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.lightBg3,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverToBoxAdapter(
+                      child: Row(
                         children: [
-                          Text(
-                            'Campaign title here',
-                            style: Typographies.titleMedium,
+                          Expanded(
+                            child: _BrandStatCard(
+                              title: '0',
+                              description: 'Active campaigns',
+                            ),
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            'No active campaigns yet',
-                            style: Typographies.bodySmall.copyWith(
-                              color: AppColors.grey,
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: _BrandStatCard(
+                              title: '0',
+                              description: 'Influencers hired',
                             ),
                           ),
                         ],
                       ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 16),
+                    ),
+                    SliverToBoxAdapter(child: SizedBox(height: 32)),
+                    SliverToBoxAdapter(
+                      child: Text(
+                        'Recent activity',
+                        style: Typographies.titleLarge,
+                      ),
+                    ),
+                    SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverList.separated(
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.lightBg3,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Campaign title here',
+                                style: Typographies.titleMedium,
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'No active campaigns yet',
+                                style: Typographies.bodySmall.copyWith(
+                                  color: AppColors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 16),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 16 + MediaQuery.of(context).padding.bottom,
+                      ),
+                    ),
+                  ],
                 ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 16 + MediaQuery.of(context).padding.bottom,
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
           IgnorePointer(
             ignoring: !_isOpen,
@@ -176,9 +198,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 56 + MediaQuery.of(context).padding.top,
-                      ),
+                      SizedBox(height: 56 + MediaQuery.of(context).padding.top),
                       Center(child: SvgPicture.asset(AppAssets.icLogo)),
                       SizedBox(height: 24),
                       Text('Menu', style: Typographies.headlineSmall),
@@ -195,7 +215,10 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Find influencers', style: Typographies.titleMedium),
+                          Text(
+                            'Find influencers',
+                            style: Typographies.titleMedium,
+                          ),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -270,4 +293,9 @@ class _BrandStatCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _BrandAvatar extends ProfileImage {
+  const _BrandAvatar({String? logoUrl})
+    : super(imageUrl: logoUrl, size: 40, borderRadius: 8);
 }

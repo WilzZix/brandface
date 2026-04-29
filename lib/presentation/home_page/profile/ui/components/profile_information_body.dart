@@ -1,13 +1,13 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/partners.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/services_item.dart';
+import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/utils/extansions/app_exts.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../domain/entities/profile/influencer_profile_information_entity.dart';
 import '../../../../../uikit/components/ui_components/app_container.dart';
 import '../../../../../uikit/components/ui_components/title_description_widget.dart';
-import '../../../../../uikit/tokens/colors.dart';
 import '../../../../../uikit/typography/typography.dart';
 import 'awards.dart';
 import 'categories.dart';
@@ -32,7 +32,7 @@ class ProfileInformationBody extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Image.asset('assets/images/im_person_avatar_sample.png'),
+                  _ProfileInfoAvatar(avatarUrl: data.avatarUrl),
                   SizedBox(width: 16),
                   Text(
                     data.displayName.toString(),
@@ -57,7 +57,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.date_of_birth,
                 descriptionItem: Text(
-                  data.birthDate!.toDotFormat(),
+                  data.birthDate?.toDotFormat() ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -65,7 +65,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.gender,
                 descriptionItem: Text(
-                  data.gender!.toCapitalized(),
+                  data.gender?.toCapitalized() ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -111,7 +111,10 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.men,
                 descriptionItem: Text(
-                  t.profile.age_range(from: data.audience?.menAgeFrom ?? '', to: data.audience?.menAgeTo ?? ''),
+                  t.profile.age_range(
+                    from: data.audience?.menAgeFrom ?? '',
+                    to: data.audience?.menAgeTo ?? '',
+                  ),
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -119,7 +122,10 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.female,
                 descriptionItem: Text(
-                  t.profile.age_range(from: data.audience?.womenAgeFrom ?? '', to: data.audience?.womenAgeTo ?? ''),
+                  t.profile.age_range(
+                    from: data.audience?.womenAgeFrom ?? '',
+                    to: data.audience?.womenAgeTo ?? '',
+                  ),
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -127,7 +133,7 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.gender,
                 descriptionItem: Text(
-                  data.gender!.toCapitalized(),
+                  data.gender?.toCapitalized() ?? '',
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -216,4 +222,9 @@ class ProfileInformationBody extends StatelessWidget {
       ],
     );
   }
+}
+
+class _ProfileInfoAvatar extends ProfileImage {
+  const _ProfileInfoAvatar({String? avatarUrl})
+    : super(imageUrl: avatarUrl, size: 40);
 }

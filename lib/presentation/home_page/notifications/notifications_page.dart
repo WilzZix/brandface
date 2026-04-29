@@ -3,6 +3,7 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/notification/notification_entity.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_state.dart';
+import 'package:brandface/uikit/components/ui_components/app_empty_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -84,13 +85,14 @@ class NotificationsPage extends StatelessWidget {
                 onRefresh: () => context
                     .read<NotificationsCubit>()
                     .loadNotifications(force: true),
-                child: ListView(
+                child: CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
-                  children: const [_NotificationsEmptyState()],
+                  slivers: const [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: AppEmptyState(title: 'No notifications found'),
+                    ),
+                  ],
                 ),
               );
             }
@@ -223,27 +225,6 @@ class _NotificationCard extends StatelessWidget {
     final minute = local.minute.toString().padLeft(2, '0');
 
     return '$day $month $year, $hour:$minute';
-  }
-}
-
-class _NotificationsEmptyState extends StatelessWidget {
-  const _NotificationsEmptyState();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.lightBg3,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Text(
-        'You have no notifications yet.',
-        style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
-        textAlign: TextAlign.center,
-      ),
-    );
   }
 }
 

@@ -1,13 +1,12 @@
-import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/domain/entities/message/conversation_entity.dart';
 import 'package:brandface/presentation/home_page/messages/bloc/messages_cubit.dart';
 import 'package:brandface/presentation/home_page/messages/bloc/messages_state.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
+import 'package:brandface/uikit/components/ui_components/app_empty_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class MessagesPage extends StatelessWidget {
   const MessagesPage({super.key});
@@ -64,48 +63,56 @@ class MessagesPage extends StatelessWidget {
                 color: AppColors.black,
                 onRefresh: () =>
                     context.read<MessagesCubit>().loadMessages(force: true),
-                child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(
-                    16,
-                    16,
-                    16,
-                    MediaQuery.of(context).padding.bottom + 20,
-                  ),
-                  children: [
-                    Text(
-                      '${conversations.length} Messages found',
-                      style: Typographies.titleMedium,
-                    ),
-                    const SizedBox(height: 16),
-                    if (state.status == MessagesStatus.loading)
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 12),
-                        child: LinearProgressIndicator(minHeight: 2),
-                      ),
-                    if (conversations.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 140),
-                        child: Center(child: Text('No messages yet.')),
+                child: conversations.isEmpty
+                    ? const CustomScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: AppEmptyState(title: 'No messages found'),
+                          ),
+                        ],
                       )
-                    else
-                      ...List<Widget>.generate(conversations.length, (index) {
-                        final item = conversations[index];
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            bottom: index == conversations.length - 1 ? 0 : 16,
+                    : ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(
+                          16,
+                          16,
+                          16,
+                          MediaQuery.of(context).padding.bottom + 20,
+                        ),
+                        children: [
+                          Text(
+                            '${conversations.length} Messages found',
+                            style: Typographies.titleMedium,
                           ),
-                          child: _MessageCard(
-                            conversation: item,
-                            highlight: index == 0,
-                            onDelete: () => context
-                                .read<MessagesCubit>()
-                                .dismissConversation(item.id),
-                          ),
-                        );
-                      }),
-                  ],
-                ),
+                          const SizedBox(height: 16),
+                          if (state.status == MessagesStatus.loading)
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 12),
+                              child: LinearProgressIndicator(minHeight: 2),
+                            ),
+                          ...List<Widget>.generate(conversations.length, (
+                            index,
+                          ) {
+                            final item = conversations[index];
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: index == conversations.length - 1
+                                    ? 0
+                                    : 16,
+                              ),
+                              child: _MessageCard(
+                                conversation: item,
+                                highlight: index == 0,
+                                onDelete: () => context
+                                    .read<MessagesCubit>()
+                                    .dismissConversation(item.id),
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
               );
             },
           ),

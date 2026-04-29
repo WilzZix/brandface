@@ -64,7 +64,21 @@ class _FillProfileInformationPageState
   FillBrandProfileParam _brandParam = FillBrandProfileParam();
   int _currentPage = 0;
 
-  bool get _isBrand => widget.registrationEntity.role == 'brand';
+  String get _normalizedRole {
+    switch (widget.registrationEntity.role.trim().toLowerCase()) {
+      case 'ambassador':
+        return 'ambassador';
+      case 'brandface':
+        return 'brandface';
+      case 'brand':
+        return 'brand';
+      case 'influencer':
+      default:
+        return 'influencer';
+    }
+  }
+
+  bool get _isBrand => _normalizedRole == 'brand';
 
   int get _totalPages => _cachedWidgets.length;
 
@@ -84,10 +98,10 @@ class _FillProfileInformationPageState
   }
 
   void _buildWidgetsAndTitles() {
-    final List<String> titles;
-    final List<Widget> widgets;
+    List<String> titles = const [];
+    List<Widget> widgets = const [];
 
-    switch (widget.registrationEntity.role) {
+    switch (_normalizedRole) {
       case 'influencer':
         titles = [
           'General info',
@@ -346,6 +360,7 @@ class _FillProfileInformationPageState
         widgets = [
           BrandInfoPageView(
             key: const PageStorageKey<String>('pageOne'),
+            initialParam: _brandParam,
             onChanged: (p1) {
               _brandParam = _brandParam.copyWith(
                 regionId: p1.regionId,
@@ -366,21 +381,23 @@ class _FillProfileInformationPageState
             ),
           ),
         ];
-
-      default:
-        titles = [];
-        widgets = [];
     }
 
     setState(() {
       _pageTitles = titles;
       _cachedWidgets = widgets;
+      _currentPage = 0;
       _isProfileLoading = false;
     });
   }
 
   void _saveAndContinueLater() {
     if (_isBrand) {
+      if (widget.registrationEntity.isEditMode) {
+        context.read<FillBrandProfileBloc>().updateMyBrandProfile(_brandParam);
+        return;
+      }
+
       context.read<FillBrandProfileBloc>().add(
         FillBrandProfileEvent.fillBrandProfile(
           profileId: widget.registrationEntity.profileId.toString(),
@@ -397,8 +414,28 @@ class _FillProfileInformationPageState
     }
   }
 
-  String get _pageViewTitle =>
-      '${_pageTitles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
+  String get _pageViewTitle {
+    if (_pageTitles.isEmpty || _totalPages == 0) {
+      return 'General info';
+    }
+
+    final safePage = _currentPage.clamp(0, _pageTitles.length - 1);
+    return '${_pageTitles[safePage]} (${safePage + 1}/$_totalPages)';
+  }
+
+  void _handlePreviousTap() {
+    if (_currentPage > 0) {
+      pageController.previousPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+      return;
+    }
+
+    if (widget.registrationEntity.isEditMode) {
+      Navigator.of(context).maybePop();
+    }
+  }
 
   @override
   void dispose() {
@@ -446,7 +483,18 @@ class _FillProfileInformationPageState
           listener: (context, state) {
             state.maybeWhen(
               profileLoaded: (data) {
-                _finalParam = data.toParam();
+                if (_isBrand) {
+                  _brandParam = FillBrandProfileParam(
+                    logoId: data.avatarId,
+                    logoUrl: data.avatarUrl,
+                    regionId: data.regionId,
+                    cityId: data.cityId,
+                    description: data.bio,
+                    categoryIds: data.categoryIds,
+                  );
+                } else {
+                  _finalParam = data.toParam();
+                }
                 _buildWidgetsAndTitles();
               },
               profileLoadFailure: (_) {
@@ -478,6 +526,13 @@ class _FillProfileInformationPageState
                             curve: Curves.easeInOut,
                           );
                         } else if (_isBrand) {
+                          if (widget.registrationEntity.isEditMode) {
+                            context
+                                .read<FillBrandProfileBloc>()
+                                .updateMyBrandProfile(_brandParam);
+                            return;
+                          }
+
                           context.read<FillBrandProfileBloc>().add(
                             FillBrandProfileEvent.fillBrandProfile(
                               profileId: widget.registrationEntity.profileId
@@ -526,14 +581,7 @@ class _FillProfileInformationPageState
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         GestureDetector(
-                          onTap: _currentPage > 0
-                              ? () {
-                                  pageController.previousPage(
-                                    duration: const Duration(milliseconds: 400),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
-                              : null,
+                          onTap: _handlePreviousTap,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 24,

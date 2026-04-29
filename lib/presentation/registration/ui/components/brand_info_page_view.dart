@@ -1,11 +1,15 @@
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
+import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
+import 'package:brandface/domain/usecase/registration/upload_profile_file_use_case.dart';
 import 'package:brandface/uikit/components/inputs/bio_input_field.dart';
+import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
@@ -13,9 +17,14 @@ import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'choose_spoken_language.dart';
 
 class BrandInfoPageView extends StatefulWidget {
-  const BrandInfoPageView({super.key, required this.onChanged});
+  const BrandInfoPageView({
+    super.key,
+    required this.onChanged,
+    this.initialParam,
+  });
 
   final Function(FillBrandProfileParam) onChanged;
+  final FillBrandProfileParam? initialParam;
 
   @override
   State<BrandInfoPageView> createState() => _BrandInfoPageViewState();
@@ -25,6 +34,9 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     with AutomaticKeepAliveClientMixin<BrandInfoPageView> {
   FillBrandProfileParam _param = FillBrandProfileParam();
   final TextEditingController _bioController = TextEditingController();
+  bool _isUploadingLogo = false;
+  String? _logoUrl;
+  String? _logoFileName;
 
   final List<LangItemModel> _regions = [
     LangItemModel(name: 'Tashkent', id: 0),
@@ -56,6 +68,17 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
   int? _selectedSphereId;
   String? _selectedSphereName;
 
+  @override
+  void initState() {
+    super.initState();
+    _param = widget.initialParam ?? FillBrandProfileParam();
+    _logoUrl = widget.initialParam?.logoUrl;
+    _bioController.text = widget.initialParam?.description ?? '';
+    _selectedRegionId = widget.initialParam?.regionId;
+    _selectedCityId = widget.initialParam?.cityId;
+    _selectedSphereId = widget.initialParam?.sphereId;
+  }
+
   void _updateData() {
     _param = _param.copyWith(
       regionId: _selectedRegionId,
@@ -73,38 +96,55 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(t.registration.upload_profile_picture, style: Typographies.titleMedium),
+          Text(
+            t.registration.upload_profile_picture,
+            style: Typographies.titleMedium,
+          ),
           const SizedBox(height: 24),
           Row(
             children: [
               SizedBox(
                 height: 96,
                 width: 96,
-                child: Image.asset(
-                  'assets/images/im_person_avatar_sample.png',
-                  fit: BoxFit.cover,
-                ),
+                child: ProfileImage(imageUrl: _logoUrl, size: 96),
               ),
               const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 24,
-                    ),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(999),
-                      color: AppColors.primary,
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(AppAssets.icAttachFile),
-                        const SizedBox(width: 8),
-                        Text(t.registration.choose_file, style: Typographies.bodyMedium),
-                      ],
+                  GestureDetector(
+                    onTap: _isUploadingLogo ? null : _pickAndUploadLogo,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 24,
+                      ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(999),
+                        color: _isUploadingLogo
+                            ? AppColors.lightBg2
+                            : AppColors.primary,
+                      ),
+                      child: Row(
+                        children: [
+                          if (_isUploadingLogo)
+                            const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          else
+                            SvgPicture.asset(AppAssets.icAttachFile),
+                          const SizedBox(width: 8),
+                          Text(
+                            _isUploadingLogo
+                                ? 'Uploading...'
+                                : t.registration.choose_file,
+                            style: Typographies.bodyMedium,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -114,17 +154,23 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
                       color: AppColors.grey,
                     ),
                   ),
+                  if (_logoFileName != null) ...[
+                    const SizedBox(height: 4),
+                    SizedBox(
+                      width: 190,
+                      child: Text(
+                        _logoFileName!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Typographies.bodySmall.copyWith(
+                          color: AppColors.mutedBlack,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ],
-          ),
-          const SizedBox(height: 24),
-          ProfileAvatarItem(
-            onTap: (int id) {
-              _param = _param.copyWith(logoId: id);
-              widget.onChanged(_param);
-            },
-            items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           ),
           const SizedBox(height: 40),
           Text(t.registration.region, style: Typographies.titleMedium),
@@ -243,6 +289,69 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
         ],
       ),
     );
+  }
+
+  Future<void> _pickAndUploadLogo() async {
+    final result = await FilePicker.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['svg', 'png', 'jpg', 'jpeg', 'gif'],
+      withData: false,
+    );
+
+    if (!mounted || result == null || result.files.isEmpty) {
+      return;
+    }
+
+    final selectedFile = result.files.single;
+    final path = selectedFile.path;
+    if (path == null || path.isEmpty) {
+      _showMessage('Selected file path is unavailable.');
+      return;
+    }
+
+    setState(() {
+      _isUploadingLogo = true;
+      _logoFileName = selectedFile.name;
+    });
+
+    final uploadResult = await sl<UploadProfileFileUseCase>().call(
+      params: path,
+    );
+    UploadedFileEntity? uploadedFile;
+    Object? uploadFailure;
+    uploadResult.fold(
+      ifLeft: (failure) => uploadFailure = failure,
+      ifRight: (file) => uploadedFile = file,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _isUploadingLogo = false;
+    });
+
+    if (uploadedFile == null) {
+      _showMessage(uploadFailure?.toString() ?? 'File upload failed.');
+      return;
+    }
+
+    _param = _param.copyWith(
+      logoId: uploadedFile!.id,
+      logoUrl: uploadedFile!.fileUrl,
+    );
+    setState(() {
+      _logoUrl = uploadedFile!.fileUrl;
+      _logoFileName = selectedFile.name;
+    });
+    widget.onChanged(_param);
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override

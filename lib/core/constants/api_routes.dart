@@ -31,6 +31,7 @@ class ApiRoutes {
       'profiles/v1/influencers/$profileId/';
 
   static String myProfile = 'profiles/v1/my/';
+  static String myGeneralProfile = 'profiles/v1/my/general/';
   static String influencerReviews(int influencerId) =>
       'profiles/v1/influencers/$influencerId/reviews/';
 

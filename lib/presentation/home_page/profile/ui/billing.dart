@@ -10,6 +10,7 @@ import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Billing extends StatefulWidget {
@@ -241,7 +242,7 @@ class _BillingState extends State<Billing> {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: GestureDetector(
-              onTap: state.isMutating ? null : () => _showAddCardSheet(context),
+              onTap: state.isMutating ? null : () => _openAddCardPage(context),
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -513,12 +514,9 @@ class _BillingState extends State<Billing> {
     ];
   }
 
-  Future<void> _showAddCardSheet(BuildContext context) async {
-    final result = await showModalBottomSheet<AddBillingCardParams>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (_) => const _AddCardBottomSheet(),
+  Future<void> _openAddCardPage(BuildContext context) async {
+    final result = await Navigator.of(context).push<AddBillingCardParams>(
+      MaterialPageRoute(builder: (_) => const _AddCardPage()),
     );
 
     if (!context.mounted || result == null) {
@@ -686,116 +684,132 @@ class _BillingErrorState extends StatelessWidget {
   }
 }
 
-class _AddCardBottomSheet extends StatefulWidget {
-  const _AddCardBottomSheet();
+class _AddCardPage extends StatefulWidget {
+  const _AddCardPage();
 
   @override
-  State<_AddCardBottomSheet> createState() => _AddCardBottomSheetState();
+  State<_AddCardPage> createState() => _AddCardPageState();
 }
 
-class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
-  final TextEditingController _lastFourController = TextEditingController();
-  final TextEditingController _monthController = TextEditingController();
-  final TextEditingController _yearController = TextEditingController();
-  final TextEditingController _gatewayTokenController = TextEditingController();
-  String _cardType = 'visa';
-  bool _isDefault = true;
+class _AddCardPageState extends State<_AddCardPage> {
+  final TextEditingController _holderController = TextEditingController();
+  final TextEditingController _cardNumberController = TextEditingController();
+  final TextEditingController _expiryController = TextEditingController();
+  final TextEditingController _ccvController = TextEditingController();
 
   @override
   void dispose() {
-    _lastFourController.dispose();
-    _monthController.dispose();
-    _yearController.dispose();
-    _gatewayTokenController.dispose();
+    _holderController.dispose();
+    _cardNumberController.dispose();
+    _expiryController.dispose();
+    _ccvController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedPadding(
-      duration: const Duration(milliseconds: 200),
-      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+    return Scaffold(
+      backgroundColor: AppColors.lightBg,
+      appBar: AppBar(
+        backgroundColor: AppColors.lightBg,
+        elevation: 0,
+        centerTitle: false,
+        leadingWidth: 64,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, color: AppColors.mutedBlack, size: 34),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
+        titleSpacing: 0,
+        title: Text('Add new payment method', style: Typographies.titleLarge),
+      ),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Center(
-              child: Container(
-                height: 4,
-                width: 96,
-                decoration: BoxDecoration(
-                  color: AppColors.mutedBlack,
-                  borderRadius: BorderRadius.circular(999),
-                ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                children: [
+                  _cardField(
+                    controller: _holderController,
+                    label: 'Card holder',
+                    hintText: 'Write card holder name',
+                    textCapitalization: TextCapitalization.words,
+                  ),
+                  const SizedBox(height: 24),
+                  _cardField(
+                    controller: _cardNumberController,
+                    label: 'Card number',
+                    hintText: 'Write card number',
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      _CardNumberInputFormatter(),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _cardField(
+                          controller: _expiryController,
+                          label: 'Expire date',
+                          hintText: 'MM/YY',
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            _ExpiryDateInputFormatter(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _cardField(
+                          controller: _ccvController,
+                          label: 'CCV',
+                          hintText: 'CCV',
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            Text('Add payment card', style: Typographies.titleMedium),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              initialValue: _cardType,
-              items: const [
-                DropdownMenuItem(value: 'visa', child: Text('Visa')),
-                DropdownMenuItem(
-                  value: 'mastercard',
-                  child: Text('Mastercard'),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _cardType = value ?? 'visa';
-                });
-              },
-              decoration: const InputDecoration(labelText: 'Card type'),
-            ),
-            const SizedBox(height: 12),
-            _inputField(
-              controller: _lastFourController,
-              label: 'Last four digits',
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _inputField(
-                    controller: _monthController,
-                    label: 'Expiry month',
-                    keyboardType: TextInputType.number,
+            AnimatedPadding(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16 + MediaQuery.viewInsetsOf(context).bottom,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 56,
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).maybePop(),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.black,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: Text('Cancel', style: Typographies.labelLarge),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _inputField(
-                    controller: _yearController,
-                    label: 'Expiry year',
-                    keyboardType: TextInputType.number,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: AppButtons.primary(title: 'Confirm', onTap: _submit),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _inputField(
-              controller: _gatewayTokenController,
-              label: 'Gateway token',
-            ),
-            const SizedBox(height: 12),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Set as default'),
-              value: _isDefault,
-              onChanged: (value) {
-                setState(() {
-                  _isDefault = value;
-                });
-              },
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: AppButtons.primary(title: 'Save card', onTap: _submit),
+                ],
+              ),
             ),
           ],
         ),
@@ -803,49 +817,161 @@ class _AddCardBottomSheetState extends State<_AddCardBottomSheet> {
     );
   }
 
-  Widget _inputField({
+  Widget _cardField({
     required TextEditingController controller,
     required String label,
+    required String hintText,
     TextInputType? keyboardType,
+    TextCapitalization textCapitalization = TextCapitalization.none,
+    List<TextInputFormatter>? inputFormatters,
   }) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Typographies.titleSmall.copyWith(color: AppColors.black),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 56,
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            textCapitalization: textCapitalization,
+            inputFormatters: inputFormatters,
+            style: Typographies.bodyLarge.copyWith(color: AppColors.black),
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: Typographies.bodyLarge.copyWith(
+                color: AppColors.mutedBlack,
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+              filled: true,
+              fillColor: AppColors.lightBg,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999),
+                borderSide: BorderSide(color: AppColors.borderColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999),
+                borderSide: BorderSide(color: AppColors.black),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   void _submit() {
-    final month = int.tryParse(_monthController.text.trim());
-    final year = int.tryParse(_yearController.text.trim());
-    final lastFour = _lastFourController.text.trim();
-    final gatewayToken = _gatewayTokenController.text.trim();
+    final holder = _holderController.text.trim();
+    final cardNumber = _digitsOnly(_cardNumberController.text);
+    final expiry = _digitsOnly(_expiryController.text);
+    final ccv = _digitsOnly(_ccvController.text);
 
-    if (month == null ||
-        year == null ||
-        lastFour.length != 4 ||
-        gatewayToken.isEmpty) {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(content: Text('Fill in valid card details.')),
-        );
+    if (holder.isEmpty ||
+        cardNumber.length < 13 ||
+        expiry.length != 4 ||
+        ccv.length < 3) {
+      _showValidationMessage();
       return;
     }
 
+    final month = int.tryParse(expiry.substring(0, 2));
+    final year = int.tryParse(expiry.substring(2, 4));
+    if (month == null || year == null || month < 1 || month > 12) {
+      _showValidationMessage();
+      return;
+    }
+
+    final lastFour = cardNumber.substring(cardNumber.length - 4);
     Navigator.of(context).pop(
       AddBillingCardParams(
-        cardType: _cardType,
+        cardType: _detectCardType(cardNumber),
         lastFour: lastFour,
         expiryMonth: month,
-        expiryYear: year,
-        isDefault: _isDefault,
-        gatewayToken: gatewayToken,
+        expiryYear: 2000 + year,
+        isDefault: true,
+        gatewayToken:
+            'manual-$lastFour-${DateTime.now().millisecondsSinceEpoch}',
       ),
     );
   }
+
+  void _showValidationMessage() {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        const SnackBar(content: Text('Fill in valid card details.')),
+      );
+  }
+
+  static String _digitsOnly(String value) {
+    return _digitsOnlyText(value);
+  }
+
+  static String _detectCardType(String cardNumber) {
+    if (cardNumber.startsWith('5')) {
+      return 'mastercard';
+    }
+
+    return 'visa';
+  }
+}
+
+class _CardNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digits = _digitsOnlyText(newValue.text);
+    final limited = digits.length > 19 ? digits.substring(0, 19) : digits;
+    final buffer = StringBuffer();
+
+    for (var i = 0; i < limited.length; i++) {
+      if (i > 0 && i % 4 == 0) {
+        buffer.write(' ');
+      }
+      buffer.write(limited[i]);
+    }
+
+    final text = buffer.toString();
+    return TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+  }
+}
+
+class _ExpiryDateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digits = _digitsOnlyText(newValue.text);
+    final limited = digits.length > 4 ? digits.substring(0, 4) : digits;
+    final text = limited.length > 2
+        ? '${limited.substring(0, 2)}/${limited.substring(2)}'
+        : limited;
+
+    return TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+  }
+}
+
+String _digitsOnlyText(String value) {
+  final buffer = StringBuffer();
+  for (final codeUnit in value.codeUnits) {
+    if (codeUnit >= 48 && codeUnit <= 57) {
+      buffer.writeCharCode(codeUnit);
+    }
+  }
+
+  return buffer.toString();
 }

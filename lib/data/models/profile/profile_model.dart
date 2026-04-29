@@ -5,6 +5,7 @@ import '../../../domain/usecase/registration/params/fill_influencer_profile_para
 class ProfileModel {
   final String? displayName;
   final int? avatarId;
+  final String? avatarUrl;
   final String? bio;
   final int? regionId;
   final int? cityId;
@@ -25,6 +26,7 @@ class ProfileModel {
   ProfileModel({
     this.displayName,
     this.avatarId,
+    this.avatarUrl,
     this.bio,
     this.regionId,
     this.cityId,
@@ -47,6 +49,7 @@ class ProfileModel {
     return ProfileModel(
       displayName: json['display_name'] as String?,
       avatarId: json['avatar_id'] as int?,
+      avatarUrl: json['avatar_url'] as String?,
       bio: json['bio'] as String?,
       regionId: json['region_id'] as int?,
       cityId: json['city_id'] as int?,
@@ -84,6 +87,7 @@ class ProfileModel {
     return ProfileEntity(
       displayName: displayName,
       avatarId: avatarId,
+      avatarUrl: avatarUrl,
       bio: bio,
       regionId: regionId,
       cityId: cityId,
@@ -106,6 +110,7 @@ class ProfileModel {
   ProfileModel copyWith({
     String? displayName,
     int? avatarId,
+    String? avatarUrl,
     String? bio,
     int? regionId,
     int? cityId,
@@ -125,6 +130,7 @@ class ProfileModel {
   }) => ProfileModel(
     displayName: displayName ?? this.displayName,
     avatarId: avatarId ?? this.avatarId,
+    avatarUrl: avatarUrl ?? this.avatarUrl,
     bio: bio ?? this.bio,
     regionId: regionId ?? this.regionId,
     cityId: cityId ?? this.cityId,
@@ -189,10 +195,12 @@ class Audience {
           ?.map((e) => e as String)
           .toList(),
       socialMediaAccounts: (json['social_channels'] as List?)
-          ?.map((e) => SocialMediaAccount(
-                platform: e['platform'] as String? ?? '',
-                username: e['username'] as String? ?? '',
-              ))
+          ?.map(
+            (e) => SocialMediaAccount(
+              platform: e['platform'] as String? ?? '',
+              username: e['username'] as String? ?? '',
+            ),
+          )
           .toList(),
     );
   }

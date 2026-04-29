@@ -5,6 +5,7 @@ import '../../usecase/registration/params/fill_influencer_profile_param.dart';
 class ProfileEntity extends Equatable {
   final String? displayName;
   final int? avatarId;
+  final String? avatarUrl;
   final String? bio;
   final int? regionId;
   final int? cityId;
@@ -25,6 +26,7 @@ class ProfileEntity extends Equatable {
   const ProfileEntity({
     this.displayName,
     this.avatarId,
+    this.avatarUrl,
     this.bio,
     this.regionId,
     this.cityId,
@@ -47,6 +49,7 @@ class ProfileEntity extends Equatable {
     return FillInfluencerProfileParam(
       displayName: displayName,
       avatarId: avatarId,
+      avatarUrl: avatarUrl,
       bio: bio,
       regionId: regionId,
       cityId: cityId,
@@ -109,6 +112,7 @@ class ProfileEntity extends Equatable {
   List<Object?> get props => [
     displayName,
     avatarId,
+    avatarUrl,
     bio,
     regionId,
     cityId,
@@ -175,10 +179,12 @@ class AudienceEntity extends Equatable {
           ? List<String>.from(json['social_media_stats'])
           : null,
       socialMediaAccounts: (json['social_channels'] as List?)
-          ?.map((e) => SocialMediaAccount(
-                platform: e['platform'] as String? ?? '',
-                username: e['username'] as String? ?? '',
-              ))
+          ?.map(
+            (e) => SocialMediaAccount(
+              platform: e['platform'] as String? ?? '',
+              username: e['username'] as String? ?? '',
+            ),
+          )
           .toList(),
     );
   }

@@ -75,6 +75,7 @@ class InfluencerProfileInformationEntity extends Equatable {
     return ProfileEntity(
       displayName: displayName,
       avatarId: avatarId,
+      avatarUrl: avatarUrl,
       bio: bio,
       regionId: region?.id,
       cityId: cityId,

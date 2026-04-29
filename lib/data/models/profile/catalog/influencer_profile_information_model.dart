@@ -46,9 +46,14 @@ class InfluencerProfileInformationModel
   ) {
     return InfluencerProfileInformationModel(
       id: json['id'] ?? 0,
-      displayName: json['display_name'],
-      avatarUrl: json['avatar_url'],
-      avatarId: json['avatar_id'],
+      displayName: _readFirstString(json, const ['display_name', 'brand_name']),
+      avatarUrl: _readFileUrl(json, const [
+        'avatar_url',
+        'logo_url',
+        'logo',
+        'file',
+      ]),
+      avatarId: json['avatar_id'] ?? json['logo_id'],
       // JSONda avatar_id yo'q, lekin modelda bo'lsa qolgani ma'qul
       bio: json['bio'],
 
@@ -131,6 +136,55 @@ class InfluencerProfileInformationModel
           ? DateTime.tryParse(json['created_at']) ?? DateTime.now()
           : DateTime.now(),
     );
+  }
+
+  static String? _readFirstString(
+    Map<String, dynamic> json,
+    List<String> keys,
+  ) {
+    for (final key in keys) {
+      final value = json[key]?.toString().trim();
+      if (value != null && value.isNotEmpty) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  static String? _readFileUrl(Map<String, dynamic> json, List<String> keys) {
+    for (final key in keys) {
+      final value = json[key];
+      if (value is Map) {
+        final nested = _readFirstString(
+          Map<String, dynamic>.from(value),
+          const ['file', 'url', 'image_url'],
+        );
+        if (nested != null) {
+          return _absoluteUrl(nested);
+        }
+        continue;
+      }
+
+      final text = value?.toString().trim();
+      if (text != null && text.isNotEmpty) {
+        return _absoluteUrl(text);
+      }
+    }
+
+    return null;
+  }
+
+  static String _absoluteUrl(String value) {
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value;
+    }
+
+    if (value.startsWith('/')) {
+      return 'https://api.influerax.com$value';
+    }
+
+    return 'https://api.influerax.com/$value';
   }
 
   // Model-ni Entity-ga o'tkazish

@@ -90,7 +90,9 @@ import '../../domain/usecase/login/verify_otp_usecase.dart';
 import '../../domain/usecase/registration/brand_registration_usecase.dart';
 import '../../domain/usecase/registration/fill_brand_profile_usecase.dart';
 import '../../domain/usecase/registration/fill_profile_info_usecase.dart';
+import '../../domain/usecase/registration/update_my_brand_profile_usecase.dart';
 import '../../domain/usecase/registration/update_my_profile_usecase.dart';
+import '../../domain/usecase/registration/upload_profile_file_use_case.dart';
 import '../../presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
 import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import '../../presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
@@ -146,6 +148,8 @@ class AppDi {
     sl.registerLazySingleton(() => FillProfileInfoUsecase(sl()));
     sl.registerLazySingleton(() => UpdateMyProfileUsecase(sl()));
     sl.registerLazySingleton(() => FillBrandProfileUsecase(sl()));
+    sl.registerLazySingleton(() => UpdateMyBrandProfileUsecase(sl()));
+    sl.registerLazySingleton(() => UploadProfileFileUseCase(repository: sl()));
     sl.registerLazySingleton(() => CategoryUseCase(repository: sl()));
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
     sl.registerLazySingleton(() => RegionUseCase(repository: sl()));
@@ -263,7 +267,10 @@ class AppDi {
       ),
     );
     sl.registerFactory(
-      () => FillBrandProfileBloc(fillBrandProfileUsecase: sl()),
+      () => FillBrandProfileBloc(
+        fillBrandProfileUsecase: sl(),
+        updateMyBrandProfileUsecase: sl(),
+      ),
     );
     sl.registerFactory(() => CategoryCubit(categoryUseCase: sl()));
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));
