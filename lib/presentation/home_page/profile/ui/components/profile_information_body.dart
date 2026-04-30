@@ -7,6 +7,7 @@ import 'package:brandface/domain/usecase/profile/params/social_medi_params.dart'
 import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/partners.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/services_item.dart';
+import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/utils/extansions/app_exts.dart';
 import 'package:flutter/material.dart';
 
@@ -116,7 +117,10 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.men,
                 descriptionItem: Text(
-                  t.profile.age_range(from: data.audience?.menAgeFrom ?? '', to: data.audience?.menAgeTo ?? ''),
+                  t.profile.age_range(
+                    from: data.audience?.menAgeFrom ?? '',
+                    to: data.audience?.menAgeTo ?? '',
+                  ),
                   style: Typographies.bodyMedium,
                 ),
               ),
@@ -124,7 +128,10 @@ class ProfileInformationBody extends StatelessWidget {
               TitleDescriptionWidget(
                 title: t.registration.female,
                 descriptionItem: Text(
-                  t.profile.age_range(from: data.audience?.womenAgeFrom ?? '', to: data.audience?.womenAgeTo ?? ''),
+                  t.profile.age_range(
+                    from: data.audience?.womenAgeFrom ?? '',
+                    to: data.audience?.womenAgeTo ?? '',
+                  ),
                   style: Typographies.bodyMedium,
                 ),
               ),

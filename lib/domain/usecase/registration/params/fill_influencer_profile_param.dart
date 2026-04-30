@@ -1,6 +1,7 @@
 class FillInfluencerProfileParam {
   final String? displayName;
   final int? avatarId;
+  final String? avatarUrl;
   final String? bio;
   final int? regionId;
   final int? cityId;
@@ -27,6 +28,7 @@ class FillInfluencerProfileParam {
   FillInfluencerProfileParam({
     this.displayName,
     this.avatarId,
+    this.avatarUrl,
     this.bio,
     this.regionId,
     this.cityId,
@@ -54,6 +56,7 @@ class FillInfluencerProfileParam {
   FillInfluencerProfileParam copyWith({
     String? displayName,
     int? avatarId,
+    String? avatarUrl,
     String? bio,
     int? regionId,
     int? cityId,
@@ -79,6 +82,7 @@ class FillInfluencerProfileParam {
   }) => FillInfluencerProfileParam(
     displayName: displayName ?? this.displayName,
     avatarId: avatarId ?? this.avatarId,
+    avatarUrl: avatarUrl ?? this.avatarUrl,
     bio: bio ?? this.bio,
     regionId: regionId ?? this.regionId,
     cityId: cityId ?? this.cityId,

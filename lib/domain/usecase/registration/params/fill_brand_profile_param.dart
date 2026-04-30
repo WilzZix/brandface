@@ -2,6 +2,7 @@ import 'package:brandface/domain/usecase/registration/params/fill_influencer_pro
 
 class FillBrandProfileParam {
   final int? logoId;
+  final String? logoUrl;
   final int? regionId;
   final int? cityId;
   final int? sphereId;
@@ -13,6 +14,7 @@ class FillBrandProfileParam {
 
   FillBrandProfileParam({
     this.logoId,
+    this.logoUrl,
     this.regionId,
     this.cityId,
     this.sphereId,
@@ -25,6 +27,7 @@ class FillBrandProfileParam {
 
   FillBrandProfileParam copyWith({
     int? logoId,
+    String? logoUrl,
     int? regionId,
     int? cityId,
     int? sphereId,
@@ -35,6 +38,7 @@ class FillBrandProfileParam {
     List<int>? languageIds,
   }) => FillBrandProfileParam(
     logoId: logoId ?? this.logoId,
+    logoUrl: logoUrl ?? this.logoUrl,
     regionId: regionId ?? this.regionId,
     cityId: cityId ?? this.cityId,
     sphereId: sphereId ?? this.sphereId,

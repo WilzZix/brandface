@@ -61,6 +61,7 @@ class ProfileEntity extends Equatable {
     return FillInfluencerProfileParam(
       displayName: displayName,
       avatarId: avatarId,
+      avatarUrl: avatarUrl,
       bio: bio,
       regionId: regionId,
       cityId: cityId,

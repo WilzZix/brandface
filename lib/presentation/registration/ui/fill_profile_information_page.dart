@@ -70,7 +70,21 @@ class _FillProfileInformationPageState
   int _currentPage = 0;
   bool _navigateOnSave = false;
 
-  bool get _isBrand => widget.registrationEntity.role == 'brand';
+  String get _normalizedRole {
+    switch (widget.registrationEntity.role.trim().toLowerCase()) {
+      case 'ambassador':
+        return 'ambassador';
+      case 'brandface':
+        return 'brandface';
+      case 'brand':
+        return 'brand';
+      case 'influencer':
+      default:
+        return 'influencer';
+    }
+  }
+
+  bool get _isBrand => _normalizedRole == 'brand';
 
   int get _totalPages => _cachedWidgets.length;
 
@@ -90,8 +104,8 @@ class _FillProfileInformationPageState
   }
 
   void _buildWidgetsAndTitles() {
-    final List<String> titles;
-    final List<Widget> widgets;
+    List<String> titles = const [];
+    List<Widget> widgets = const [];
 
     switch (widget.registrationEntity.role.toLowerCase()) {
       case 'influencer':
@@ -440,6 +454,7 @@ class _FillProfileInformationPageState
     setState(() {
       _pageTitles = titles;
       _cachedWidgets = widgets;
+      _currentPage = 0;
       _isProfileLoading = false;
     });
   }
@@ -468,6 +483,11 @@ class _FillProfileInformationPageState
       return;
     }
     if (_isBrand) {
+      if (widget.registrationEntity.isEditMode) {
+        context.read<FillBrandProfileBloc>().updateMyBrandProfile(_brandParam);
+        return;
+      }
+
       context.read<FillBrandProfileBloc>().add(
         FillBrandProfileEvent.fillBrandProfile(
           profileId: profileId,
@@ -646,14 +666,7 @@ class _FillProfileInformationPageState
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         GestureDetector(
-                          onTap: _currentPage > 0
-                              ? () {
-                                  pageController.previousPage(
-                                    duration: const Duration(milliseconds: 400),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
-                              : null,
+                          onTap: _handlePreviousTap,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 24,

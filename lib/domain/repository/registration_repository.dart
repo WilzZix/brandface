@@ -1,4 +1,5 @@
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/domain/entities/registration/registration_entity.dart';
 import 'package:brandface/domain/usecase/registration/params/brand_registration_params.dart';
 import 'package:brandface/domain/usecase/registration/params/fill_brand_profile_param.dart';

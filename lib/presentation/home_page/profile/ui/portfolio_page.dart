@@ -3,6 +3,7 @@ import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_list_state.dart';
 import 'package:brandface/presentation/home_page/profile/ui/portfolio_details_page.dart';
+import 'package:brandface/uikit/components/ui_components/app_empty_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -64,16 +65,13 @@ class PortfolioPage extends StatelessWidget {
                             .read<PortfolioListCubit>()
                             .loadPortfolios(force: true),
                         child: state.items.isEmpty
-                            ? ListView(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                children: [
-                                  SizedBox(height: 120),
-                                  Center(
-                                    child: Text(
-                                      'Portfolio items not found.',
-                                      style: Typographies.bodyMedium.copyWith(
-                                        color: AppColors.mutedBlack,
-                                      ),
+                            ? const CustomScrollView(
+                                physics: AlwaysScrollableScrollPhysics(),
+                                slivers: [
+                                  SliverFillRemaining(
+                                    hasScrollBody: false,
+                                    child: AppEmptyState(
+                                      title: 'No portfolio found',
                                     ),
                                   ),
                                 ],

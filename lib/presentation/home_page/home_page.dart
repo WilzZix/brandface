@@ -7,6 +7,7 @@ import 'package:brandface/presentation/home_page/messages/messages_page.dart';
 import 'package:brandface/presentation/home_page/offers/offer_detail_page.dart';
 import 'package:brandface/presentation/home_page/profile/ui/profile_page.dart';
 import 'package:brandface/presentation/home_page/recomendations/recomendations.dart';
+import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -240,9 +241,9 @@ class _HomePageState extends State<HomePage> {
           child: _ProfileAvatar(avatarUrl: profile?.avatarUrl),
         ),
       ),
-      title: Text(
-        _resolveDisplayName(profile),
-        style: Typographies.titleMedium,
+      title: _HomeProfileTitle(
+        displayName: _resolveDisplayName(profile),
+        status: _resolveProfileStatus(profile),
       ),
       actions: [
         GestureDetector(
@@ -361,6 +362,114 @@ class _HomePageState extends State<HomePage> {
 
     return 'BrandFace';
   }
+
+  _ProfileStatus _resolveProfileStatus(dynamic profile) {
+    if (profile == null) {
+      return _ProfileStatus.pending;
+    }
+
+    if (profile.isVerified == true) {
+      return _ProfileStatus.verified;
+    }
+
+    final status = profile.moderationStatus?.toString().trim().toLowerCase();
+    switch (status) {
+      case 'approved':
+      case 'verified':
+        return _ProfileStatus.verified;
+      case 'rejected':
+        return _ProfileStatus.rejected;
+      case 'blocked':
+      case 'banned':
+        return _ProfileStatus.blocked;
+      case 'pending':
+      default:
+        return _ProfileStatus.pending;
+    }
+  }
+}
+
+enum _ProfileStatus { verified, pending, rejected, blocked }
+
+class _HomeProfileTitle extends StatelessWidget {
+  const _HomeProfileTitle({required this.displayName, required this.status});
+
+  final String displayName;
+  final _ProfileStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final config = _statusConfig(status);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          displayName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Typographies.titleMedium.copyWith(color: AppColors.black),
+        ),
+        const SizedBox(height: 2),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(config.icon, size: 16, color: config.color),
+            const SizedBox(width: 4),
+            Text(
+              config.label,
+              style: Typographies.bodySmall.copyWith(
+                color: const Color(0xFF4A5565),
+                letterSpacing: 0.25,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  _ProfileStatusConfig _statusConfig(_ProfileStatus status) {
+    switch (status) {
+      case _ProfileStatus.verified:
+        return _ProfileStatusConfig(
+          label: 'Verified',
+          icon: Icons.verified,
+          color: AppColors.primaryDark,
+        );
+      case _ProfileStatus.rejected:
+        return _ProfileStatusConfig(
+          label: 'Rejected',
+          icon: Icons.cancel,
+          color: AppColors.red,
+        );
+      case _ProfileStatus.blocked:
+        return _ProfileStatusConfig(
+          label: 'Blocked',
+          icon: Icons.block,
+          color: AppColors.red,
+        );
+      case _ProfileStatus.pending:
+        return _ProfileStatusConfig(
+          label: 'Pending',
+          icon: Icons.schedule,
+          color: AppColors.orange,
+        );
+    }
+  }
+}
+
+class _ProfileStatusConfig {
+  const _ProfileStatusConfig({
+    required this.label,
+    required this.icon,
+    required this.color,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color color;
 }
 
 class HomePageContainer extends StatelessWidget {
@@ -398,32 +507,9 @@ class HomePageContainer extends StatelessWidget {
   }
 }
 
-class _ProfileAvatar extends StatelessWidget {
-  const _ProfileAvatar({this.avatarUrl});
-
-  final String? avatarUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    final imageUrl = avatarUrl?.trim();
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(999),
-      child: imageUrl != null && imageUrl.isNotEmpty
-          ? Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => Image.asset(
-                'assets/images/im_person_avatar_sample.png',
-                fit: BoxFit.cover,
-              ),
-            )
-          : Image.asset(
-              'assets/images/im_person_avatar_sample.png',
-              fit: BoxFit.cover,
-            ),
-    );
-  }
+class _ProfileAvatar extends ProfileImage {
+  const _ProfileAvatar({String? avatarUrl})
+    : super(imageUrl: avatarUrl, size: 40, borderRadius: 999);
 }
 
 class _RecommendedOfferCard extends StatelessWidget {

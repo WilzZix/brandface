@@ -87,13 +87,14 @@ class NotificationsPage extends StatelessWidget {
                 onRefresh: () => context
                     .read<NotificationsCubit>()
                     .loadNotifications(force: true),
-                child: ListView(
+                child: CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
-                  children: const [_NotificationsEmptyState()],
+                  slivers: const [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: AppEmptyState(title: 'No notifications found'),
+                    ),
+                  ],
                 ),
               );
             }

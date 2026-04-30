@@ -1,0 +1,68 @@
+import 'package:brandface/uikit/tokens/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+class ProfileImage extends StatelessWidget {
+  const ProfileImage({
+    super.key,
+    this.imageUrl,
+    this.size = 40,
+    this.borderRadius = 8,
+  });
+
+  final String? imageUrl;
+  final double size;
+  final double borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    final url = imageUrl?.trim();
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: url == null || url.isEmpty
+            ? const _ProfileImageFallback()
+            : _NetworkProfileImage(imageUrl: url),
+      ),
+    );
+  }
+}
+
+class _NetworkProfileImage extends StatelessWidget {
+  const _NetworkProfileImage({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl.toLowerCase().endsWith('.svg')) {
+      return SvgPicture.network(
+        imageUrl,
+        fit: BoxFit.cover,
+        placeholderBuilder: (_) =>
+            const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      );
+    }
+
+    return Image.network(
+      imageUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (_, _, _) => const _ProfileImageFallback(),
+    );
+  }
+}
+
+class _ProfileImageFallback extends StatelessWidget {
+  const _ProfileImageFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: AppColors.lightBg2,
+      child: Icon(Icons.person_rounded, color: AppColors.grey, size: 28),
+    );
+  }
+}

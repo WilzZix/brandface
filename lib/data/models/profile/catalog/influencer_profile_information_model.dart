@@ -139,6 +139,55 @@ class InfluencerProfileInformationModel
     );
   }
 
+  static String? _readFirstString(
+    Map<String, dynamic> json,
+    List<String> keys,
+  ) {
+    for (final key in keys) {
+      final value = json[key]?.toString().trim();
+      if (value != null && value.isNotEmpty) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  static String? _readFileUrl(Map<String, dynamic> json, List<String> keys) {
+    for (final key in keys) {
+      final value = json[key];
+      if (value is Map) {
+        final nested = _readFirstString(
+          Map<String, dynamic>.from(value),
+          const ['file', 'url', 'image_url'],
+        );
+        if (nested != null) {
+          return _absoluteUrl(nested);
+        }
+        continue;
+      }
+
+      final text = value?.toString().trim();
+      if (text != null && text.isNotEmpty) {
+        return _absoluteUrl(text);
+      }
+    }
+
+    return null;
+  }
+
+  static String _absoluteUrl(String value) {
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value;
+    }
+
+    if (value.startsWith('/')) {
+      return 'https://api.influerax.com$value';
+    }
+
+    return 'https://api.influerax.com/$value';
+  }
+
   // Model-ni Entity-ga o'tkazish
   InfluencerProfileInformationEntity toEntity() => this;
 }

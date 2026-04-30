@@ -112,6 +112,7 @@ class ProfileModel {
   ProfileModel copyWith({
     String? displayName,
     int? avatarId,
+    String? avatarUrl,
     String? bio,
     int? regionId,
     int? cityId,
@@ -131,6 +132,7 @@ class ProfileModel {
   }) => ProfileModel(
     displayName: displayName ?? this.displayName,
     avatarId: avatarId ?? this.avatarId,
+    avatarUrl: avatarUrl ?? this.avatarUrl,
     bio: bio ?? this.bio,
     regionId: regionId ?? this.regionId,
     cityId: cityId ?? this.cityId,
