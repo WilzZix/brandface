@@ -24,10 +24,12 @@ class GeneralInfoPageView extends StatefulWidget {
     super.key,
     required this.onChanged,
     this.initialParam,
+    this.initialAvatarUrl,
   });
 
   final Function(FillInfluencerProfileParam) onChanged;
   final FillInfluencerProfileParam? initialParam;
+  final String? initialAvatarUrl;
 
   @override
   State<GeneralInfoPageView> createState() => _GeneralInfoPageViewState();
@@ -49,6 +51,15 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
         widget.initialParam ?? FillInfluencerProfileParam();
     _profileInfoController.text = widget.initialParam?.bio ?? '';
     _fullNameController.text = widget.initialParam?.displayName ?? '';
+    final initialAvatarId = widget.initialParam?.avatarId;
+    final initialAvatarUrl = widget.initialAvatarUrl;
+    if (initialAvatarId != null &&
+        initialAvatarUrl != null &&
+        initialAvatarUrl.isNotEmpty) {
+      _uploadedItems.add(
+        UploadedAvatarItem(id: initialAvatarId, url: initialAvatarUrl),
+      );
+    }
   }
 
   Future<void> _pickAndUpload() async {
@@ -104,6 +115,16 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                   child: ClipOval(
                     child: _pickedImage != null
                         ? Image.file(_pickedImage!, fit: BoxFit.cover)
+                        : (widget.initialAvatarUrl != null &&
+                              widget.initialAvatarUrl!.isNotEmpty)
+                        ? Image.network(
+                            widget.initialAvatarUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => Image.asset(
+                              'assets/images/im_person_avatar_sample.png',
+                              fit: BoxFit.cover,
+                            ),
+                          )
                         : Image.asset(
                             'assets/images/im_person_avatar_sample.png',
                             fit: BoxFit.cover,

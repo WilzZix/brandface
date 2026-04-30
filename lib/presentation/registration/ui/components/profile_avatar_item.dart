@@ -10,9 +10,11 @@ import '../../../../core/i18n/strings.g.dart';
 
 class UploadedAvatarItem {
   final int id;
-  final File file;
+  final File? file;
+  final String? url;
 
-  const UploadedAvatarItem({required this.id, required this.file});
+  const UploadedAvatarItem({required this.id, this.file, this.url})
+    : assert(file != null || url != null);
 }
 
 class ProfileAvatarItem extends StatefulWidget {
@@ -63,11 +65,18 @@ class _ProfileAvatarItemState extends State<ProfileAvatarItem> {
                   clipBehavior: Clip.none,
                   children: [
                     ClipOval(
-                      child: Image.file(
-                        item.file,
+                      child: SizedBox(
                         width: 48,
                         height: 48,
-                        fit: BoxFit.cover,
+                        child: item.file != null
+                            ? Image.file(item.file!, fit: BoxFit.cover)
+                            : Image.network(
+                                item.url!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, _, _) => Container(
+                                  color: AppColors.lightBg2,
+                                ),
+                              ),
                       ),
                     ),
                     Positioned(

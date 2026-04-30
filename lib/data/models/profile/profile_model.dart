@@ -5,6 +5,7 @@ import '../../../domain/usecase/registration/params/fill_influencer_profile_para
 class ProfileModel {
   final String? displayName;
   final int? avatarId;
+  final String? avatarUrl;
   final String? bio;
   final int? regionId;
   final int? cityId;
@@ -25,6 +26,7 @@ class ProfileModel {
   ProfileModel({
     this.displayName,
     this.avatarId,
+    this.avatarUrl,
     this.bio,
     this.regionId,
     this.cityId,
@@ -46,7 +48,10 @@ class ProfileModel {
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
       displayName: json['display_name'] as String?,
-      avatarId: json['avatar_id'] as int?,
+      avatarId: (json['avatar_id'] ?? json['logo_id']) as int?,
+      avatarUrl:
+          (json['avatar_url'] ?? json['logo_url'] ?? json['photo_url'])
+              as String?,
       bio: json['bio'] as String?,
       regionId: json['region_id'] as int?,
       cityId: json['city_id'] as int?,
@@ -84,6 +89,7 @@ class ProfileModel {
     return ProfileEntity(
       displayName: displayName,
       avatarId: avatarId,
+      avatarUrl: avatarUrl,
       bio: bio,
       regionId: regionId,
       cityId: cityId,

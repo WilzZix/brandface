@@ -8,4 +8,8 @@ class FillBrandProfileEvent with _$FillBrandProfileEvent {
     required String profileId,
     required FillBrandProfileParam params,
   }) = _FillBrandProfile;
+
+  const factory FillBrandProfileEvent.updateGeneral({
+    required Map<String, dynamic> payload,
+  }) = _UpdateGeneral;
 }

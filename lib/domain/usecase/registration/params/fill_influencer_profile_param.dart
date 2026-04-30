@@ -131,6 +131,33 @@ class FillInfluencerProfileParam {
       "pricing": pricing?.toJson(),
     }..removeWhere((key, value) => value == null);
   }
+
+  Map<String, dynamic> toGeneralPatchJson() {
+    return {
+      "display_name": displayName,
+      "avatar_id": avatarId,
+      "bio": bio,
+      "region_id": regionId,
+      "city_id": cityId,
+      "birth_date": birthDate?.toIso8601String().split('T').first,
+      "gender": gender,
+      "professional_category": professionalCategory,
+      "years_of_experience": yearsOfExperience,
+      "has_ad_experience": hasAdExperience,
+      "press_mentions": pressMentions,
+      "agency_representation": agencyRepresentation,
+      "referral_experience": referralExperience,
+      "previous_brand_collaborations": previousBrandCollaborations,
+      "case_study_available": caseStudyAvailable,
+      "conversion_metrics_available": conversionMetricsAvailable,
+      "partners": partners,
+      "contacts": contacts?.map((e) => e.toJson()).toList(),
+      "category_ids": categoryIds,
+      "service_ids": serviceIds,
+      "language_ids": languageIds,
+      "active_brand_ids": activeBrandIds,
+    }..removeWhere((key, value) => value == null);
+  }
 }
 
 class Audience {
@@ -312,23 +339,29 @@ class Pricing {
       "available_for_long_term": availableForLongTerm,
       "works_on_net_model": worksOnNetModel,
       "open_to_similar_offers": openToSimilarOffers,
-      "hourly_rate_min_uzs": hourlyRateMinUzs,
-      "hourly_rate_max_uzs": hourlyRateMaxUzs,
-      "hourly_rate_min_usd": hourlyRateMinUsd,
-      "hourly_rate_max_usd": hourlyRateMaxUsd,
-      "daily_rate_min_uzs": dailyRateMinUzs,
-      "daily_rate_max_uzs": dailyRateMaxUzs,
+      "hourly_rate_min_uzs": _cleanNumeric(hourlyRateMinUzs),
+      "hourly_rate_max_uzs": _cleanNumeric(hourlyRateMaxUzs),
+      "hourly_rate_min_usd": _cleanNumeric(hourlyRateMinUsd),
+      "hourly_rate_max_usd": _cleanNumeric(hourlyRateMaxUsd),
+      "daily_rate_min_uzs": _cleanNumeric(dailyRateMinUzs),
+      "daily_rate_max_uzs": _cleanNumeric(dailyRateMaxUzs),
       "accepts_barter": acceptsBarter,
       "payment_types": paymentTypes,
       "exclusivity_available": exclusivityAvailable,
-      "campaign_fee": campaignFee,
+      "campaign_fee": _cleanNumeric(campaignFee),
       "campaign_fee_currency": campaignFeeCurrency,
-      "monthly_exclusivity_fee": monthlyExclusivityFee,
-      "event_appearance_fee": eventAppearanceFee,
+      "monthly_exclusivity_fee": _cleanNumeric(monthlyExclusivityFee),
+      "event_appearance_fee": _cleanNumeric(eventAppearanceFee),
       "kpi_based_model": kpiBasedModel,
       "available_for_offline_events": availableForOfflineEvents,
       "monthly_content_capacity": monthlyContentCapacity,
     }..removeWhere((key, value) => value == null);
+  }
+
+  static String? _cleanNumeric(String? raw) {
+    if (raw == null) return null;
+    final cleaned = raw.replaceAll(RegExp(r'[^0-9.]'), '');
+    return cleaned.isEmpty ? null : cleaned;
   }
 }
 

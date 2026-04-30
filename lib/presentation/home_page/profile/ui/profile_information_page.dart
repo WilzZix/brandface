@@ -2,17 +2,16 @@ import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/registration/registration_entity.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
-import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/presentation/registration/ui/fill_profile_information_page.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/services/auth_logout_service.dart';
 import 'package:brandface/utils/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/di/app_di.dart';
 import '../../../../core/i18n/strings.g.dart';
 import '../bloc/profile_information/profile_information_cubit.dart';
@@ -62,11 +61,7 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
       child: BlocListener<DeleteAccountCubit, DeleteAccountState>(
         listener: (context, state) async {
           if (state is DeleteAccountSuccess) {
-            final prefs = sl<SharedPreferences>();
-            await prefs.clear();
-            if (context.mounted) {
-              context.go(LoginPage.tag);
-            }
+            await sl<AuthLogoutService>().logout(context);
           } else if (state is DeleteAccountFailure) {
             BrandfaceBottomSheet.openFailureBottomSheet(
               context: context,
@@ -90,7 +85,9 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
               context.pushNamed(
                 FillProfileInformationPage.tag,
                 extra: RegistrationEntity(
-                  role: sl<ProfileService>().getRole() ?? 'influencer',
+                  role: sl<ProfileService>().getResolvedRole(
+                  fallback: 'brandface',
+                ),
                   profileId: sl<ProfileService>().getProfileId() ?? 1,
                   isEditMode: true,
                 ),

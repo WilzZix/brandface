@@ -39,7 +39,7 @@ class BrandProfilePage extends StatelessWidget {
               context.pushNamed(
                 FillProfileInformationPage.tag,
                 extra: RegistrationEntity(
-                  role: profileService.getRole() ?? 'brand',
+                  role: profileService.getResolvedRole(fallback: 'brand'),
                   profileId: profileService.getProfileId() ?? 0,
                   isEditMode: true,
                 ),

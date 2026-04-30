@@ -55,13 +55,14 @@ extension LoginEventPatterns on LoginEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SendOtp value)?  sendOtp,TResult Function( _VerifyOtp value)?  verifyOtp,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SendOtp value)?  sendOtp,TResult Function( _VerifyOtp value)?  verifyOtp,TResult Function( _Reset value)?  reset,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SendOtp() when sendOtp != null:
 return sendOtp(_that);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that);case _:
+return verifyOtp(_that);case _Reset() when reset != null:
+return reset(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return verifyOtp(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SendOtp value)  sendOtp,required TResult Function( _VerifyOtp value)  verifyOtp,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SendOtp value)  sendOtp,required TResult Function( _VerifyOtp value)  verifyOtp,required TResult Function( _Reset value)  reset,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _SendOtp():
 return sendOtp(_that);case _VerifyOtp():
-return verifyOtp(_that);case _:
+return verifyOtp(_that);case _Reset():
+return reset(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return verifyOtp(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SendOtp value)?  sendOtp,TResult? Function( _VerifyOtp value)?  verifyOtp,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SendOtp value)?  sendOtp,TResult? Function( _VerifyOtp value)?  verifyOtp,TResult? Function( _Reset value)?  reset,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SendOtp() when sendOtp != null:
 return sendOtp(_that);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that);case _:
+return verifyOtp(_that);case _Reset() when reset != null:
+return reset(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return verifyOtp(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String phone)?  sendOtp,TResult Function( VerifyOtpParams params)?  verifyOtp,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String phone)?  sendOtp,TResult Function( VerifyOtpParams params)?  verifyOtp,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that.params);case _:
+return verifyOtp(_that.params);case _Reset() when reset != null:
+return reset();case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return verifyOtp(_that.params);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String phone)  sendOtp,required TResult Function( VerifyOtpParams params)  verifyOtp,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String phone)  sendOtp,required TResult Function( VerifyOtpParams params)  verifyOtp,required TResult Function()  reset,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _SendOtp():
 return sendOtp(_that.phone);case _VerifyOtp():
-return verifyOtp(_that.params);case _:
+return verifyOtp(_that.params);case _Reset():
+return reset();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return verifyOtp(_that.params);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String phone)?  sendOtp,TResult? Function( VerifyOtpParams params)?  verifyOtp,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String phone)?  sendOtp,TResult? Function( VerifyOtpParams params)?  verifyOtp,TResult? Function()?  reset,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that.params);case _:
+return verifyOtp(_that.params);case _Reset() when reset != null:
+return reset();case _:
   return null;
 
 }
@@ -346,6 +352,38 @@ as VerifyOtpParams,
 
 
 }
+
+/// @nodoc
+
+
+class _Reset implements LoginEvent {
+  const _Reset();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Reset);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LoginEvent.reset()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 mixin _$LoginState {

@@ -7,4 +7,6 @@ class LoginEvent with _$LoginEvent {
   const factory LoginEvent.sendOtp({required String phone}) = _SendOtp;
 
   const factory LoginEvent.verifyOtp({required VerifyOtpParams params}) = _VerifyOtp;
+
+  const factory LoginEvent.reset() = _Reset;
 }

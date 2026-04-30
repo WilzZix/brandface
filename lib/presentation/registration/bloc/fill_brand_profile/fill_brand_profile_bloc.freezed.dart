@@ -55,12 +55,13 @@ extension FillBrandProfileEventPatterns on FillBrandProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _FillBrandProfile value)?  fillBrandProfile,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _FillBrandProfile value)?  fillBrandProfile,TResult Function( _UpdateGeneral value)?  updateGeneral,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _FillBrandProfile() when fillBrandProfile != null:
-return fillBrandProfile(_that);case _:
+return fillBrandProfile(_that);case _UpdateGeneral() when updateGeneral != null:
+return updateGeneral(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return fillBrandProfile(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _FillBrandProfile value)  fillBrandProfile,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _FillBrandProfile value)  fillBrandProfile,required TResult Function( _UpdateGeneral value)  updateGeneral,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _FillBrandProfile():
-return fillBrandProfile(_that);case _:
+return fillBrandProfile(_that);case _UpdateGeneral():
+return updateGeneral(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -100,12 +102,13 @@ return fillBrandProfile(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _FillBrandProfile value)?  fillBrandProfile,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _FillBrandProfile value)?  fillBrandProfile,TResult? Function( _UpdateGeneral value)?  updateGeneral,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _FillBrandProfile() when fillBrandProfile != null:
-return fillBrandProfile(_that);case _:
+return fillBrandProfile(_that);case _UpdateGeneral() when updateGeneral != null:
+return updateGeneral(_that);case _:
   return null;
 
 }
@@ -122,11 +125,12 @@ return fillBrandProfile(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String profileId,  FillBrandProfileParam params)?  fillBrandProfile,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String profileId,  FillBrandProfileParam params)?  fillBrandProfile,TResult Function( Map<String, dynamic> payload)?  updateGeneral,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _FillBrandProfile() when fillBrandProfile != null:
-return fillBrandProfile(_that.profileId,_that.params);case _:
+return fillBrandProfile(_that.profileId,_that.params);case _UpdateGeneral() when updateGeneral != null:
+return updateGeneral(_that.payload);case _:
   return orElse();
 
 }
@@ -144,11 +148,12 @@ return fillBrandProfile(_that.profileId,_that.params);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String profileId,  FillBrandProfileParam params)  fillBrandProfile,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String profileId,  FillBrandProfileParam params)  fillBrandProfile,required TResult Function( Map<String, dynamic> payload)  updateGeneral,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _FillBrandProfile():
-return fillBrandProfile(_that.profileId,_that.params);case _:
+return fillBrandProfile(_that.profileId,_that.params);case _UpdateGeneral():
+return updateGeneral(_that.payload);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +170,12 @@ return fillBrandProfile(_that.profileId,_that.params);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String profileId,  FillBrandProfileParam params)?  fillBrandProfile,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String profileId,  FillBrandProfileParam params)?  fillBrandProfile,TResult? Function( Map<String, dynamic> payload)?  updateGeneral,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _FillBrandProfile() when fillBrandProfile != null:
-return fillBrandProfile(_that.profileId,_that.params);case _:
+return fillBrandProfile(_that.profileId,_that.params);case _UpdateGeneral() when updateGeneral != null:
+return updateGeneral(_that.payload);case _:
   return null;
 
 }
@@ -271,6 +277,78 @@ class __$FillBrandProfileCopyWithImpl<$Res>
 profileId: null == profileId ? _self.profileId : profileId // ignore: cast_nullable_to_non_nullable
 as String,params: null == params ? _self.params : params // ignore: cast_nullable_to_non_nullable
 as FillBrandProfileParam,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _UpdateGeneral implements FillBrandProfileEvent {
+  const _UpdateGeneral({required final  Map<String, dynamic> payload}): _payload = payload;
+  
+
+ final  Map<String, dynamic> _payload;
+ Map<String, dynamic> get payload {
+  if (_payload is EqualUnmodifiableMapView) return _payload;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_payload);
+}
+
+
+/// Create a copy of FillBrandProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateGeneralCopyWith<_UpdateGeneral> get copyWith => __$UpdateGeneralCopyWithImpl<_UpdateGeneral>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateGeneral&&const DeepCollectionEquality().equals(other._payload, _payload));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_payload));
+
+@override
+String toString() {
+  return 'FillBrandProfileEvent.updateGeneral(payload: $payload)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateGeneralCopyWith<$Res> implements $FillBrandProfileEventCopyWith<$Res> {
+  factory _$UpdateGeneralCopyWith(_UpdateGeneral value, $Res Function(_UpdateGeneral) _then) = __$UpdateGeneralCopyWithImpl;
+@useResult
+$Res call({
+ Map<String, dynamic> payload
+});
+
+
+
+
+}
+/// @nodoc
+class __$UpdateGeneralCopyWithImpl<$Res>
+    implements _$UpdateGeneralCopyWith<$Res> {
+  __$UpdateGeneralCopyWithImpl(this._self, this._then);
+
+  final _UpdateGeneral _self;
+  final $Res Function(_UpdateGeneral) _then;
+
+/// Create a copy of FillBrandProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? payload = null,}) {
+  return _then(_UpdateGeneral(
+payload: null == payload ? _self._payload : payload // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>,
   ));
 }
 

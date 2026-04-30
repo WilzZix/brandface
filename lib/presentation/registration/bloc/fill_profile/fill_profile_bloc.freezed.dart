@@ -55,12 +55,13 @@ extension FillProfileEventPatterns on FillProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _FillProfile value)?  fillProfile,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _FillProfile value)?  fillProfile,TResult Function( _UpdateSection value)?  updateSection,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _FillProfile() when fillProfile != null:
-return fillProfile(_that);case _:
+return fillProfile(_that);case _UpdateSection() when updateSection != null:
+return updateSection(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return fillProfile(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _FillProfile value)  fillProfile,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _FillProfile value)  fillProfile,required TResult Function( _UpdateSection value)  updateSection,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _FillProfile():
-return fillProfile(_that);case _:
+return fillProfile(_that);case _UpdateSection():
+return updateSection(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -100,12 +102,13 @@ return fillProfile(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _FillProfile value)?  fillProfile,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _FillProfile value)?  fillProfile,TResult? Function( _UpdateSection value)?  updateSection,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _FillProfile() when fillProfile != null:
-return fillProfile(_that);case _:
+return fillProfile(_that);case _UpdateSection() when updateSection != null:
+return updateSection(_that);case _:
   return null;
 
 }
@@ -122,11 +125,12 @@ return fillProfile(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String profile,  FillInfluencerProfileParam params)?  fillProfile,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String profile,  FillInfluencerProfileParam params)?  fillProfile,TResult Function( MyProfileSection section,  Map<String, dynamic> payload)?  updateSection,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _FillProfile() when fillProfile != null:
-return fillProfile(_that.profile,_that.params);case _:
+return fillProfile(_that.profile,_that.params);case _UpdateSection() when updateSection != null:
+return updateSection(_that.section,_that.payload);case _:
   return orElse();
 
 }
@@ -144,11 +148,12 @@ return fillProfile(_that.profile,_that.params);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String profile,  FillInfluencerProfileParam params)  fillProfile,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String profile,  FillInfluencerProfileParam params)  fillProfile,required TResult Function( MyProfileSection section,  Map<String, dynamic> payload)  updateSection,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _FillProfile():
-return fillProfile(_that.profile,_that.params);case _:
+return fillProfile(_that.profile,_that.params);case _UpdateSection():
+return updateSection(_that.section,_that.payload);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +170,12 @@ return fillProfile(_that.profile,_that.params);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String profile,  FillInfluencerProfileParam params)?  fillProfile,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String profile,  FillInfluencerProfileParam params)?  fillProfile,TResult? Function( MyProfileSection section,  Map<String, dynamic> payload)?  updateSection,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _FillProfile() when fillProfile != null:
-return fillProfile(_that.profile,_that.params);case _:
+return fillProfile(_that.profile,_that.params);case _UpdateSection() when updateSection != null:
+return updateSection(_that.section,_that.payload);case _:
   return null;
 
 }
@@ -271,6 +277,80 @@ class __$FillProfileCopyWithImpl<$Res>
 profile: null == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as String,params: null == params ? _self.params : params // ignore: cast_nullable_to_non_nullable
 as FillInfluencerProfileParam,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _UpdateSection implements FillProfileEvent {
+  const _UpdateSection({required this.section, required final  Map<String, dynamic> payload}): _payload = payload;
+  
+
+ final  MyProfileSection section;
+ final  Map<String, dynamic> _payload;
+ Map<String, dynamic> get payload {
+  if (_payload is EqualUnmodifiableMapView) return _payload;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_payload);
+}
+
+
+/// Create a copy of FillProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateSectionCopyWith<_UpdateSection> get copyWith => __$UpdateSectionCopyWithImpl<_UpdateSection>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateSection&&(identical(other.section, section) || other.section == section)&&const DeepCollectionEquality().equals(other._payload, _payload));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,section,const DeepCollectionEquality().hash(_payload));
+
+@override
+String toString() {
+  return 'FillProfileEvent.updateSection(section: $section, payload: $payload)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateSectionCopyWith<$Res> implements $FillProfileEventCopyWith<$Res> {
+  factory _$UpdateSectionCopyWith(_UpdateSection value, $Res Function(_UpdateSection) _then) = __$UpdateSectionCopyWithImpl;
+@useResult
+$Res call({
+ MyProfileSection section, Map<String, dynamic> payload
+});
+
+
+
+
+}
+/// @nodoc
+class __$UpdateSectionCopyWithImpl<$Res>
+    implements _$UpdateSectionCopyWith<$Res> {
+  __$UpdateSectionCopyWithImpl(this._self, this._then);
+
+  final _UpdateSection _self;
+  final $Res Function(_UpdateSection) _then;
+
+/// Create a copy of FillProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? section = null,Object? payload = null,}) {
+  return _then(_UpdateSection(
+section: null == section ? _self.section : section // ignore: cast_nullable_to_non_nullable
+as MyProfileSection,payload: null == payload ? _self._payload : payload // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>,
   ));
 }
 

@@ -8,4 +8,9 @@ class FillProfileEvent with _$FillProfileEvent {
     required String profile,
     required FillInfluencerProfileParam params,
   }) = _FillProfile;
+
+  const factory FillProfileEvent.updateSection({
+    required MyProfileSection section,
+    required Map<String, dynamic> payload,
+  }) = _UpdateSection;
 }

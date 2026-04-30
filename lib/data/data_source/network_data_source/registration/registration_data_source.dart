@@ -29,6 +29,11 @@ abstract class RegistrationDataSource {
   Future<void> updateMyInfluencerProfile({
     required FillInfluencerProfileParam params,
   });
+
+  Future<void> updateMyProfileSection({
+    required String url,
+    required Map<String, dynamic> payload,
+  });
 }
 
 class RegistrationDataSourceImpl implements RegistrationDataSource {
@@ -125,6 +130,19 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
         ApiRoutes.myProfile,
         data: params.toJson(),
       );
+      if (kDebugMode) debugPrint(response.toString());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateMyProfileSection({
+    required String url,
+    required Map<String, dynamic> payload,
+  }) async {
+    try {
+      final response = await _dioClient.patch(url, data: payload);
       if (kDebugMode) debugPrint(response.toString());
     } catch (e) {
       rethrow;

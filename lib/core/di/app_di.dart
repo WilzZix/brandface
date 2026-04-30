@@ -115,6 +115,7 @@ import '../../domain/usecase/registration/brand_registration_usecase.dart';
 import '../../domain/usecase/registration/fill_brand_profile_usecase.dart';
 import '../../domain/usecase/registration/fill_profile_info_usecase.dart';
 import '../../domain/usecase/registration/update_my_profile_usecase.dart';
+import '../../domain/usecase/registration/update_my_profile_section_usecase.dart';
 import '../../presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
 import '../../presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import '../../presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
@@ -128,6 +129,7 @@ import '../../presentation/registration/bloc/fill_profile/fill_profile_bloc.dart
 import '../../presentation/registration/bloc/upload/upload_cubit.dart';
 import '../../utils/services/app_auth_local_service.dart';
 import '../../utils/services/app_catalog_service.dart';
+import '../../utils/services/auth_logout_service.dart';
 import '../../utils/services/profile_service.dart';
 
 final sl = GetIt.instance;
@@ -139,6 +141,7 @@ class AppDi {
     sl.registerLazySingleton<IAuthLocalService>(() => AuthLocalService(sl()));
     sl.registerLazySingleton<IAppCatalogService>(() => AppCatalogService(sl()));
     sl.registerLazySingleton(() => ProfileService(sl()));
+    sl.registerLazySingleton(() => AuthLogoutService(sl()));
     sl.registerLazySingleton(() => Dio());
     sl.registerLazySingleton(() => DioClient(sl(), sharedPrefService: sl()));
 
@@ -183,6 +186,7 @@ class AppDi {
     sl.registerLazySingleton(() => BrandRegistrationUsecase(sl()));
     sl.registerLazySingleton(() => FillProfileInfoUsecase(sl()));
     sl.registerLazySingleton(() => UpdateMyProfileUsecase(sl()));
+    sl.registerLazySingleton(() => UpdateMyProfileSectionUseCase(sl()));
     sl.registerLazySingleton(() => FillBrandProfileUsecase(sl()));
     sl.registerLazySingleton(() => CategoryUseCase(repository: sl()));
     sl.registerLazySingleton(() => ServiceTypeUseCase(repository: sl()));
@@ -318,11 +322,14 @@ class AppDi {
     sl.registerFactory(
       () => FillProfileBloc(
         fillProfileInfoUsecase: sl(),
-        updateMyProfileUsecase: sl(),
+        updateSectionUseCase: sl(),
       ),
     );
     sl.registerFactory(
-      () => FillBrandProfileBloc(fillBrandProfileUsecase: sl()),
+      () => FillBrandProfileBloc(
+        fillBrandProfileUsecase: sl(),
+        updateSectionUseCase: sl(),
+      ),
     );
     sl.registerFactory(() => CategoryCubit(categoryUseCase: sl()));
     sl.registerFactory(() => ServiceTypeCubit(serviceTypeUseCase: sl()));

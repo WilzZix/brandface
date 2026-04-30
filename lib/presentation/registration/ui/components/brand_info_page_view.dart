@@ -23,9 +23,16 @@ import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'choose_spoken_language.dart';
 
 class BrandInfoPageView extends StatefulWidget {
-  const BrandInfoPageView({super.key, required this.onChanged});
+  const BrandInfoPageView({
+    super.key,
+    required this.onChanged,
+    this.initialLogoUrl,
+    this.initialLogoId,
+  });
 
   final Function(FillBrandProfileParam) onChanged;
+  final String? initialLogoUrl;
+  final int? initialLogoId;
 
   @override
   State<BrandInfoPageView> createState() => _BrandInfoPageViewState();
@@ -53,6 +60,12 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     context.read<RegionCubit>().getCategories();
     context.read<CityCubit>().getCities();
     context.read<SphereCubit>().getSpheres();
+    final logoId = widget.initialLogoId;
+    final logoUrl = widget.initialLogoUrl;
+    if (logoId != null && logoUrl != null && logoUrl.isNotEmpty) {
+      _uploadedItems.add(UploadedAvatarItem(id: logoId, url: logoUrl));
+      _param = _param.copyWith(logoId: logoId);
+    }
   }
 
   void _updateData() {
@@ -114,6 +127,16 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
                   child: ClipOval(
                     child: _pickedImage != null
                         ? Image.file(_pickedImage!, fit: BoxFit.cover)
+                        : (widget.initialLogoUrl != null &&
+                              widget.initialLogoUrl!.isNotEmpty)
+                        ? Image.network(
+                            widget.initialLogoUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => Image.asset(
+                              'assets/images/im_person_avatar_sample.png',
+                              fit: BoxFit.cover,
+                            ),
+                          )
                         : Image.asset(
                             'assets/images/im_person_avatar_sample.png',
                             fit: BoxFit.cover,

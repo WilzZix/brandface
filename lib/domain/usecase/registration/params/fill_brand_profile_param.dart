@@ -58,6 +58,8 @@ class FillBrandProfileParam {
       'language_ids': languageIds,
     }..removeWhere((key, value) => value == null);
   }
+
+  Map<String, dynamic> toGeneralPatchJson() => toJson();
 }
 
 class FillBrandProfileRequestParams {

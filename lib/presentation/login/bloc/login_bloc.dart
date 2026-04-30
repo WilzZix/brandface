@@ -37,6 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
        super(const LoginState.initial()) {
     on<_SendOtp>(_sendOtp);
     on<_VerifyOtp>(_verifyOtp);
+    on<_Reset>((event, emit) => emit(const LoginState.initial()));
   }
 
   Future<void> _sendOtp(_SendOtp event, Emitter<LoginState> emit) async {

@@ -14,8 +14,8 @@ class DioClient {
     : _sharedPrefService = sharedPrefService {
     _dio
       ..options.baseUrl = ApiRoutes.baseUrl
-      ..options.connectTimeout = const Duration(seconds: 5)
-      ..options.receiveTimeout = const Duration(seconds: 5)
+      ..options.connectTimeout = const Duration(seconds: 45)
+      ..options.receiveTimeout = const Duration(seconds: 45)
       ..options.responseType = ResponseType.json
       ..interceptors.add(AuthInterceptor(_dio, _sharedPrefService))
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))

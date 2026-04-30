@@ -21,15 +21,15 @@ class ServiceTypeModel {
 class ServiceTypeData {
   final int id;
   final String name;
-  final String code;
+  final String? code;
 
   ServiceTypeData({required this.id, required this.name, required this.code});
 
   factory ServiceTypeData.fromJson(Map<String, dynamic> json) {
     return ServiceTypeData(
-      id: json['id'],
-      name: json['name'],
-      code: json['code'],
+      id: json['id'] as int,
+      name: (json['name'] as String?) ?? '',
+      code: json['code'] as String?,
     );
   }
 

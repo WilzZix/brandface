@@ -28,4 +28,9 @@ abstract class IRegistrationRepository {
   Future<Either<Failure, void>> updateMyProfile({
     required FillInfluencerProfileParam params,
   });
+
+  Future<Either<Failure, void>> updateMyProfileSection({
+    required String url,
+    required Map<String, dynamic> payload,
+  });
 }

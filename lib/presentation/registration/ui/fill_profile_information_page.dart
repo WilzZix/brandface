@@ -36,6 +36,7 @@ import '../bloc/upload/upload_cubit.dart';
 import '../../../domain/entities/registration/registration_entity.dart';
 import '../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../domain/usecase/registration/update_my_profile_section_usecase.dart';
 import 'components/audience_and_followers_page_view.dart';
 import 'components/experience_page_view.dart';
 import 'components/general_info_page_view.dart';
@@ -65,7 +66,9 @@ class _FillProfileInformationPageState
   PageController pageController = PageController();
   FillInfluencerProfileParam _finalParam = FillInfluencerProfileParam();
   FillBrandProfileParam _brandParam = FillBrandProfileParam();
+  String? _initialAvatarUrl;
   int _currentPage = 0;
+  bool _navigateOnSave = false;
 
   bool get _isBrand => widget.registrationEntity.role == 'brand';
 
@@ -90,7 +93,7 @@ class _FillProfileInformationPageState
     final List<String> titles;
     final List<Widget> widgets;
 
-    switch (widget.registrationEntity.role) {
+    switch (widget.registrationEntity.role.toLowerCase()) {
       case 'influencer':
         titles = [
           'General info',
@@ -108,6 +111,7 @@ class _FillProfileInformationPageState
             ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
+              initialAvatarUrl: _initialAvatarUrl,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(
@@ -202,6 +206,7 @@ class _FillProfileInformationPageState
             ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
+              initialAvatarUrl: _initialAvatarUrl,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(
@@ -301,6 +306,7 @@ class _FillProfileInformationPageState
             ],
             child: GeneralInfoPageView(
               initialParam: _finalParam,
+              initialAvatarUrl: _initialAvatarUrl,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(
@@ -397,6 +403,8 @@ class _FillProfileInformationPageState
               BlocProvider(create: (context) => sl<LanguageCubit>()),
             ],
             child: BrandInfoPageView(
+              initialLogoUrl: _initialAvatarUrl,
+              initialLogoId: _finalParam.avatarId,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (p1) {
                 _brandParam = _brandParam.copyWith(
@@ -421,6 +429,10 @@ class _FillProfileInformationPageState
         ];
 
       default:
+        debugPrint(
+          '[FillProfileInformation] Unknown role: '
+          '"${widget.registrationEntity.role}"',
+        );
         titles = [];
         widgets = [];
     }
@@ -433,25 +445,67 @@ class _FillProfileInformationPageState
   }
 
   void _saveAndContinueLater() {
+    _navigateOnSave = true;
+    _saveCurrentSection();
+  }
+
+  bool get _isEditMode => widget.registrationEntity.isEditMode;
+
+  MyProfileSection _sectionForCurrentPage() {
+    if (_isBrand) return MyProfileSection.general;
+    final title = (_currentPage < _pageTitles.length)
+        ? _pageTitles[_currentPage]
+        : '';
+    if (title == 'Audience and followers') return MyProfileSection.audience;
+    if (title == 'My Pricing/Tariffs') return MyProfileSection.pricing;
+    return MyProfileSection.general;
+  }
+
+  void _saveCurrentSection() {
+    final profileId = widget.registrationEntity.profileId.toString();
+    if (_isEditMode) {
+      _dispatchSectionUpdate();
+      return;
+    }
     if (_isBrand) {
       context.read<FillBrandProfileBloc>().add(
         FillBrandProfileEvent.fillBrandProfile(
-          profileId: widget.registrationEntity.profileId.toString(),
+          profileId: profileId,
           params: _brandParam,
         ),
       );
     } else {
       context.read<FillProfileBloc>().add(
-        FillProfileEvent.fillProfile(
-          profile: widget.registrationEntity.profileId.toString(),
-          params: _finalParam,
-        ),
+        FillProfileEvent.fillProfile(profile: profileId, params: _finalParam),
       );
     }
   }
 
-  String get _pageViewTitle =>
-      '${_pageTitles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
+  void _dispatchSectionUpdate() {
+    if (_isBrand) {
+      context.read<FillBrandProfileBloc>().add(
+        FillBrandProfileEvent.updateGeneral(
+          payload: _brandParam.toGeneralPatchJson(),
+        ),
+      );
+      return;
+    }
+    final section = _sectionForCurrentPage();
+    final Map<String, dynamic> payload = switch (section) {
+      MyProfileSection.audience =>
+        _finalParam.audience?.toJson() ?? const {},
+      MyProfileSection.pricing => _finalParam.pricing?.toJson() ?? const {},
+      MyProfileSection.general => _finalParam.toGeneralPatchJson(),
+    };
+    context.read<FillProfileBloc>().add(
+      FillProfileEvent.updateSection(section: section, payload: payload),
+    );
+  }
+
+  String get _pageViewTitle {
+    if (_pageTitles.isEmpty || _currentPage >= _pageTitles.length) return '';
+    return '${_pageTitles[_currentPage]} (${_currentPage + 1}/$_totalPages)';
+  }
 
   @override
   void dispose() {
@@ -467,9 +521,13 @@ class _FillProfileInformationPageState
           listener: (context, state) {
             state.maybeWhen(
               filled: () {
-                context.go(HomePage.tag);
+                if (_navigateOnSave) {
+                  _navigateOnSave = false;
+                  context.go(HomePage.tag);
+                }
               },
               fillingFailure: (failure) {
+                _navigateOnSave = false;
                 BrandfaceBottomSheet.openFailureBottomSheet(
                   context: context,
                   message: failure.localized,
@@ -483,9 +541,13 @@ class _FillProfileInformationPageState
           listener: (context, state) {
             state.maybeWhen(
               filled: () {
-                context.go(BrandHomePage.tag);
+                if (_navigateOnSave) {
+                  _navigateOnSave = false;
+                  context.go(BrandHomePage.tag);
+                }
               },
               failure: (failure) {
+                _navigateOnSave = false;
                 BrandfaceBottomSheet.openFailureBottomSheet(
                   context: context,
                   message: failure.localized,
@@ -500,6 +562,7 @@ class _FillProfileInformationPageState
             state.maybeWhen(
               profileLoaded: (data) {
                 _finalParam = data.toParam();
+                _initialAvatarUrl = data.avatarUrl;
                 _buildWidgetsAndTitles();
               },
               profileLoadFailure: (_) {
@@ -525,26 +588,13 @@ class _FillProfileInformationPageState
                     AppButtons.primary(
                       title: t.onboarding.kContinue,
                       onTap: () {
-                        if (_currentPage < _totalPages - 1) {
+                        final isLast = _currentPage >= _totalPages - 1;
+                        _navigateOnSave = isLast;
+                        _saveCurrentSection();
+                        if (!isLast) {
                           pageController.nextPage(
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInOut,
-                          );
-                        } else if (_isBrand) {
-                          context.read<FillBrandProfileBloc>().add(
-                            FillBrandProfileEvent.fillBrandProfile(
-                              profileId: widget.registrationEntity.profileId
-                                  .toString(),
-                              params: _brandParam,
-                            ),
-                          );
-                        } else {
-                          context.read<FillProfileBloc>().add(
-                            FillProfileEvent.fillProfile(
-                              profile: widget.registrationEntity.profileId
-                                  .toString(),
-                              params: _finalParam,
-                            ),
                           );
                         }
                       },
@@ -565,6 +615,20 @@ class _FillProfileInformationPageState
           behavior: HitTestBehavior.opaque,
           child: _isProfileLoading
             ? const Center(child: CircularProgressIndicator())
+            : _cachedWidgets.isEmpty
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    'Unknown role: "${widget.registrationEntity.role}"\n'
+                    'Expected: influencer, ambassador, brandface, or brand.',
+                    textAlign: TextAlign.center,
+                    style: Typographies.bodyMedium.copyWith(
+                      color: AppColors.red,
+                    ),
+                  ),
+                ),
+              )
             : Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(

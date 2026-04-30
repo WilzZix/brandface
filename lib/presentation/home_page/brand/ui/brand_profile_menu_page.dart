@@ -6,16 +6,15 @@ import 'package:brandface/presentation/home_page/brand/ui/brand_plan_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_my_cards_page.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/ui/billing.dart';
-import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:brandface/utils/services/app_language_service.dart';
+import 'package:brandface/utils/services/auth_logout_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class BrandProfileMenuPage extends StatefulWidget {
   const BrandProfileMenuPage({super.key});
@@ -108,9 +107,7 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
             const Spacer(),
             GestureDetector(
               onTap: () async {
-                final prefs = sl<SharedPreferences>();
-                await prefs.clear();
-                if (context.mounted) context.go(LoginPage.tag);
+                await sl<AuthLogoutService>().logout(context);
               },
               child: Text(
                 t.profile.log_out,

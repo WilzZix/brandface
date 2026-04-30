@@ -1,5 +1,6 @@
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/login/ui/term_of_use_page.dart';
+import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -27,6 +28,21 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<LoginBloc>().add(const LoginEvent.reset());
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
@@ -41,7 +57,10 @@ class _LoginPageState extends State<LoginPage> {
             );
           },
           otpReceivingFailure: (msg) {
-            //TODO error handling
+            BrandfaceBottomSheet.openFailureBottomSheet(
+              context: context,
+              message: msg,
+            );
           },
           orElse: () {},
         );

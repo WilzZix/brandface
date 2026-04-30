@@ -23,6 +23,14 @@ class ProfileService {
     return _prefs.getString('user_role');
   }
 
+  String getResolvedRole({required String fallback}) {
+    final stored = _prefs.getString('user_role');
+    if (stored == null || stored.isEmpty || stored.toLowerCase() == 'guest') {
+      return fallback;
+    }
+    return stored;
+  }
+
   // Ma'lumotlarni o'chirish (Logout uchun)
   Future<bool> clearAll() async {
     return await _prefs.clear();

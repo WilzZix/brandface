@@ -4,19 +4,18 @@ import 'package:brandface/presentation/home_page/profile/ui/portfolio_page.dart'
 import 'package:brandface/presentation/home_page/profile/ui/reviews.dart';
 import 'package:brandface/presentation/home_page/profile/ui/stats_page.dart';
 import 'package:brandface/presentation/home_page/profile/ui/top_profile_page.dart';
-import 'package:brandface/presentation/login/ui/login_page.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/constants/app_assets.dart';
 import '../../../../../core/di/app_di.dart';
 import '../../../../../core/i18n/strings.g.dart';
 import '../../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../../utils/services/app_language_service.dart';
+import '../../../../../utils/services/auth_logout_service.dart';
 import 'billing.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -245,11 +244,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Spacer(),
             GestureDetector(
               onTap: () async {
-                final prefs = sl<SharedPreferences>();
-                await prefs.clear();
-                if (context.mounted) {
-                  context.go(LoginPage.tag);
-                }
+                await sl<AuthLogoutService>().logout(context);
               },
               child: Text(
                 t.profile.log_out,

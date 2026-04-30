@@ -29,7 +29,7 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView>
   FillInfluencerProfileParam _param = FillInfluencerProfileParam(
     audience: Audience(),
   );
-  final List<LangItemModel> _selectedSegments = [];
+  LangItemModel? _selectedSegment;
   final List<LangItemModel> _selectedGeographies = [];
   final List<SocialMediaAccount> _selectedSocialMediaAccounts = [];
   final Map<String, SocialMediaAccountStatsEntity> _statsMap = {};
@@ -49,6 +49,13 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView>
     LangItemModel(name: 'Mass market', id: 2),
     LangItemModel(name: 'Budget', id: 3),
   ];
+
+  static const Map<int, String> _segmentCodes = {
+    0: 'luxury',
+    1: 'premium',
+    2: 'mass',
+    3: 'budget',
+  };
 
   @override
   void initState() {
@@ -76,7 +83,9 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView>
     final currentAudience = _param.audience ?? Audience();
     _param = _param.copyWith(
       audience: currentAudience.copyWith(
-        brandSegment: _selectedSegments.map((e) => e.name).join(','),
+        brandSegment: _selectedSegment == null
+            ? null
+            : _segmentCodes[_selectedSegment!.id],
         menAgeFrom: int.tryParse(_controllerFrom.text),
         menAgeTo: int.tryParse(_controllerTo.text),
         womenAgeFrom: int.tryParse(_controllerFromWomen.text),
@@ -190,17 +199,11 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView>
               spacing: 8,
               runSpacing: 8,
               children: _segments.map((segment) {
-                final isSelected = _selectedSegments.any(
-                  (e) => e.id == segment.id,
-                );
+                final isSelected = _selectedSegment?.id == segment.id;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (isSelected) {
-                        _selectedSegments.removeWhere((e) => e.id == segment.id);
-                      } else {
-                        _selectedSegments.add(segment);
-                      }
+                      _selectedSegment = isSelected ? null : segment;
                     });
                     _handleUpdate();
                   },
