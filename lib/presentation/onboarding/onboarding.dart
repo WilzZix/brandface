@@ -1,4 +1,6 @@
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/services/app_auth_local_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -50,8 +52,10 @@ class _OnboardingState extends State<Onboarding> {
                 Spacer(),
                 AppButtons.primary(
                   title: t.onboarding.kContinue,
-                  onTap: () {
-                    context.push(LoginPage.tag);
+                  onTap: () async {
+                    await sl<IAuthLocalService>().markOnboardingSeen();
+                    if (!context.mounted) return;
+                    context.go(LoginPage.tag);
                   },
                 ),
                 SizedBox(height: 16 + MediaQuery.of(context).padding.bottom),

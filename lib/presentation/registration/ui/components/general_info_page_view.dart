@@ -5,7 +5,6 @@ import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/registration/bloc/upload/upload_cubit.dart';
 import 'package:brandface/presentation/registration/ui/components/profile_avatar_item.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
-import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:file_picker/file_picker.dart';
@@ -43,6 +42,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
   FillInfluencerProfileParam _fillInfluencerProfileParam =
       FillInfluencerProfileParam();
   File? _pickedImage;
+  String? _currentAvatarUrl;
   final List<UploadedAvatarItem> _uploadedItems = [];
 
   @override
@@ -52,6 +52,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
         widget.initialParam ?? FillInfluencerProfileParam();
     _profileInfoController.text = widget.initialParam?.bio ?? '';
     _fullNameController.text = widget.initialParam?.displayName ?? '';
+    _currentAvatarUrl = widget.initialAvatarUrl;
     final initialAvatarId = widget.initialParam?.avatarId;
     final initialAvatarUrl = widget.initialAvatarUrl;
     if (initialAvatarId != null &&
@@ -85,14 +86,22 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
         state.maybeWhen(
           uploaded: (entity) {
             setState(() {
+              _currentAvatarUrl = entity.fileUrl;
               _uploadedItems.add(
-                UploadedAvatarItem(id: entity.id, file: _pickedImage!),
+                UploadedAvatarItem(id: entity.id, file: _pickedImage),
               );
             });
             _fillInfluencerProfileParam = _fillInfluencerProfileParam.copyWith(
               avatarId: entity.id,
             );
             widget.onChanged(_fillInfluencerProfileParam);
+          },
+          failure: (_) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(content: Text('Image upload failed')),
+              );
           },
           orElse: () {},
         );
@@ -115,10 +124,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                   child: ClipOval(
                     child: _pickedImage != null
                         ? Image.file(_pickedImage!, fit: BoxFit.cover)
-                        : (widget.initialAvatarUrl != null &&
-                              widget.initialAvatarUrl!.isNotEmpty)
+                        : (_currentAvatarUrl != null &&
+                              _currentAvatarUrl!.isNotEmpty)
                         ? Image.network(
-                            widget.initialAvatarUrl!,
+                            _currentAvatarUrl!,
                             fit: BoxFit.cover,
                             errorBuilder: (_, _, _) => Image.asset(
                               'assets/images/im_person_avatar_sample.png',

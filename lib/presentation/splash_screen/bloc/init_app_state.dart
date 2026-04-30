@@ -4,5 +4,9 @@ part of 'init_app_cubit.dart';
 class InitAppState with _$InitAppState {
   const factory InitAppState.initial() = _Initial;
 
-  const factory InitAppState.appInitialized(bool isLoggedIn, {String? role}) = _AppInitialized;
+  const factory InitAppState.appInitialized(
+    bool isLoggedIn, {
+    String? role,
+    @Default(false) bool hasSeenOnboarding,
+  }) = _AppInitialized;
 }

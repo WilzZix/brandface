@@ -10,6 +10,10 @@ abstract class IAuthLocalService {
   Future<void> clearCache();
 
   bool isLoggedIn();
+
+  bool hasSeenOnboarding();
+
+  Future<void> markOnboardingSeen();
 }
 
 class AuthLocalService implements IAuthLocalService {
@@ -17,6 +21,7 @@ class AuthLocalService implements IAuthLocalService {
 
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
+  static const _onboardingSeenKey = 'onboarding_seen';
 
   AuthLocalService(this._prefs);
 
@@ -43,5 +48,13 @@ class AuthLocalService implements IAuthLocalService {
     await _prefs.remove(_accessTokenKey);
     await _prefs.remove(_refreshTokenKey);
     await _prefs.clear();
+  }
+
+  @override
+  bool hasSeenOnboarding() => _prefs.getBool(_onboardingSeenKey) ?? false;
+
+  @override
+  Future<void> markOnboardingSeen() async {
+    await _prefs.setBool(_onboardingSeenKey, true);
   }
 }

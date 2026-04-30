@@ -42,6 +42,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     with AutomaticKeepAliveClientMixin<BrandInfoPageView> {
   FillBrandProfileParam _param = FillBrandProfileParam();
   File? _pickedImage;
+  String? _currentLogoUrl;
   final List<UploadedAvatarItem> _uploadedItems = [];
 
   final TextEditingController _bioController = TextEditingController();
@@ -62,6 +63,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     context.read<SphereCubit>().getSpheres();
     final logoId = widget.initialLogoId;
     final logoUrl = widget.initialLogoUrl;
+    _currentLogoUrl = logoUrl;
     if (logoId != null && logoUrl != null && logoUrl.isNotEmpty) {
       _uploadedItems.add(UploadedAvatarItem(id: logoId, url: logoUrl));
       _param = _param.copyWith(logoId: logoId);
@@ -101,12 +103,20 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
         state.maybeWhen(
           uploaded: (entity) {
             setState(() {
+              _currentLogoUrl = entity.fileUrl;
               _uploadedItems.add(
-                UploadedAvatarItem(id: entity.id, file: _pickedImage!),
+                UploadedAvatarItem(id: entity.id, file: _pickedImage),
               );
             });
             _param = _param.copyWith(logoId: entity.id);
             widget.onChanged(_param);
+          },
+          failure: (_) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(content: Text('Image upload failed')),
+              );
           },
           orElse: () {},
         );
@@ -126,10 +136,10 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
                   child: ClipOval(
                     child: _pickedImage != null
                         ? Image.file(_pickedImage!, fit: BoxFit.cover)
-                        : (widget.initialLogoUrl != null &&
-                              widget.initialLogoUrl!.isNotEmpty)
+                        : (_currentLogoUrl != null &&
+                              _currentLogoUrl!.isNotEmpty)
                         ? Image.network(
-                            widget.initialLogoUrl!,
+                            _currentLogoUrl!,
                             fit: BoxFit.cover,
                             errorBuilder: (_, _, _) => Image.asset(
                               'assets/images/im_person_avatar_sample.png',

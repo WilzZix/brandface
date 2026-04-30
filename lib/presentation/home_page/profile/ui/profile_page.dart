@@ -63,6 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             SizedBox(height: 24),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => context.pushNamed(ProfileInformationPage.tag),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,6 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => context.pushNamed(StatsPage.tag),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 16),
             Divider(color: AppColors.borderColor),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => context.pushNamed(Reviews.tag),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,6 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => context.pushNamed(CalendarPage.tag),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -121,6 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => context.pushNamed(PortfolioPage.tag),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,6 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => context.pushNamed(Billing.tag),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,6 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => context.pushNamed(TopProfilePage.tag),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,6 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Divider(color: AppColors.borderColor),
             SizedBox(height: 16),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () async {
                 final tempLocale = _selectedLangId;
                 AppLocale pickedLocale = tempLocale;
@@ -243,6 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Spacer(),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () async {
                 await sl<AuthLogoutService>().logout(context);
               },

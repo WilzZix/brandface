@@ -24,6 +24,7 @@ class InitAppCubit extends Cubit<InitAppState> {
     emit(InitAppState.appInitialized(
       _sharedPrefService.isLoggedIn(),
       role: _profileService.getRole(),
+      hasSeenOnboarding: _sharedPrefService.hasSeenOnboarding(),
     ));
   }
 }

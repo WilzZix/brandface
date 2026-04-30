@@ -122,11 +122,11 @@ return appInitialized(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( bool isLoggedIn,  String? role)?  appInitialized,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( bool isLoggedIn,  String? role,  bool hasSeenOnboarding)?  appInitialized,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _AppInitialized() when appInitialized != null:
-return appInitialized(_that.isLoggedIn,_that.role);case _:
+return appInitialized(_that.isLoggedIn,_that.role,_that.hasSeenOnboarding);case _:
   return orElse();
 
 }
@@ -144,11 +144,11 @@ return appInitialized(_that.isLoggedIn,_that.role);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( bool isLoggedIn,  String? role)  appInitialized,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( bool isLoggedIn,  String? role,  bool hasSeenOnboarding)  appInitialized,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _AppInitialized():
-return appInitialized(_that.isLoggedIn,_that.role);case _:
+return appInitialized(_that.isLoggedIn,_that.role,_that.hasSeenOnboarding);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +165,11 @@ return appInitialized(_that.isLoggedIn,_that.role);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( bool isLoggedIn,  String? role)?  appInitialized,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( bool isLoggedIn,  String? role,  bool hasSeenOnboarding)?  appInitialized,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _AppInitialized() when appInitialized != null:
-return appInitialized(_that.isLoggedIn,_that.role);case _:
+return appInitialized(_that.isLoggedIn,_that.role,_that.hasSeenOnboarding);case _:
   return null;
 
 }
@@ -213,11 +213,12 @@ String toString() {
 
 
 class _AppInitialized implements InitAppState {
-  const _AppInitialized(this.isLoggedIn, {this.role});
+  const _AppInitialized(this.isLoggedIn, {this.role, this.hasSeenOnboarding = false});
   
 
  final  bool isLoggedIn;
  final  String? role;
+@JsonKey() final  bool hasSeenOnboarding;
 
 /// Create a copy of InitAppState
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +230,16 @@ _$AppInitializedCopyWith<_AppInitialized> get copyWith => __$AppInitializedCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppInitialized&&(identical(other.isLoggedIn, isLoggedIn) || other.isLoggedIn == isLoggedIn)&&(identical(other.role, role) || other.role == role));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppInitialized&&(identical(other.isLoggedIn, isLoggedIn) || other.isLoggedIn == isLoggedIn)&&(identical(other.role, role) || other.role == role)&&(identical(other.hasSeenOnboarding, hasSeenOnboarding) || other.hasSeenOnboarding == hasSeenOnboarding));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoggedIn,role);
+int get hashCode => Object.hash(runtimeType,isLoggedIn,role,hasSeenOnboarding);
 
 @override
 String toString() {
-  return 'InitAppState.appInitialized(isLoggedIn: $isLoggedIn, role: $role)';
+  return 'InitAppState.appInitialized(isLoggedIn: $isLoggedIn, role: $role, hasSeenOnboarding: $hasSeenOnboarding)';
 }
 
 
@@ -249,7 +250,7 @@ abstract mixin class _$AppInitializedCopyWith<$Res> implements $InitAppStateCopy
   factory _$AppInitializedCopyWith(_AppInitialized value, $Res Function(_AppInitialized) _then) = __$AppInitializedCopyWithImpl;
 @useResult
 $Res call({
- bool isLoggedIn, String? role
+ bool isLoggedIn, String? role, bool hasSeenOnboarding
 });
 
 
@@ -266,11 +267,12 @@ class __$AppInitializedCopyWithImpl<$Res>
 
 /// Create a copy of InitAppState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? isLoggedIn = null,Object? role = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? isLoggedIn = null,Object? role = freezed,Object? hasSeenOnboarding = null,}) {
   return _then(_AppInitialized(
 null == isLoggedIn ? _self.isLoggedIn : isLoggedIn // ignore: cast_nullable_to_non_nullable
 as bool,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,hasSeenOnboarding: null == hasSeenOnboarding ? _self.hasSeenOnboarding : hasSeenOnboarding // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
