@@ -1,5 +1,4 @@
 import 'package:brandface/core/constants/api_routes.dart';
-import 'package:brandface/data/models/profile/portfolio_model.dart';
 import 'package:brandface/domain/usecase/registration/params/brand_registration_params.dart';
 import 'package:brandface/domain/usecase/registration/params/fill_brand_profile_param.dart';
 import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
@@ -128,22 +127,7 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
   }) async {
     try {
       final response = await _dioClient.patch(
-        ApiRoutes.myGeneralProfile,
-        data: params.toJson(),
-      );
-      if (kDebugMode) debugPrint(response.toString());
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> updateMyBrandProfile({
-    required FillBrandProfileParam params,
-  }) async {
-    try {
-      final response = await _dioClient.patch(
-        ApiRoutes.myGeneralProfile,
+        ApiRoutes.myProfile,
         data: params.toJson(),
       );
       if (kDebugMode) debugPrint(response.toString());
@@ -160,24 +144,6 @@ class RegistrationDataSourceImpl implements RegistrationDataSource {
     try {
       final response = await _dioClient.patch(url, data: payload);
       if (kDebugMode) debugPrint(response.toString());
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<UploadedFileModel> uploadFile({required String path}) async {
-    try {
-      final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(path),
-      });
-      final response = await _dioClient.post(
-        ApiRoutes.uploadFile,
-        data: formData,
-      );
-      return UploadedFileModel.fromJson(
-        Map<String, dynamic>.from(response.data as Map),
-      );
     } catch (e) {
       rethrow;
     }

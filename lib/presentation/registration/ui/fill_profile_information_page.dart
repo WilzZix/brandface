@@ -67,8 +67,12 @@ class _FillProfileInformationPageState
   FillInfluencerProfileParam _finalParam = FillInfluencerProfileParam();
   FillBrandProfileParam _brandParam = FillBrandProfileParam();
   String? _initialAvatarUrl;
+  String _moderationStatus = 'pending';
   int _currentPage = 0;
   bool _navigateOnSave = false;
+
+  bool get _isApproved => _moderationStatus.toLowerCase() == 'approved';
+  bool get _audienceAndPricingLocked => _isEditMode && !_isApproved;
 
   String get _normalizedRole {
     switch (widget.registrationEntity.role.trim().toLowerCase()) {
@@ -176,6 +180,7 @@ class _FillProfileInformationPageState
             child: AudienceAndFollowersPageView(
               key: const PageStorageKey<String>('pageFour'),
               initialParam: _finalParam,
+              readOnly: _audienceAndPricingLocked,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(audience: p1.audience);
               },
@@ -197,6 +202,7 @@ class _FillProfileInformationPageState
           MyPricingTariffsPageView(
             key: const PageStorageKey<String>('pageSix'),
             initialParam: _finalParam,
+            readOnly: _audienceAndPricingLocked,
             onChanged: (p1) {
               _finalParam = _finalParam.copyWith(pricing: p1.pricing);
             },
@@ -271,6 +277,7 @@ class _FillProfileInformationPageState
             child: AudienceAndFollowersPageView(
               key: const PageStorageKey<String>('pageFour'),
               initialParam: _finalParam,
+              readOnly: _audienceAndPricingLocked,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(audience: p1.audience);
               },
@@ -464,6 +471,15 @@ class _FillProfileInformationPageState
     _saveCurrentSection();
   }
 
+  void _handlePreviousTap() {
+    if (_currentPage > 0) {
+      pageController.previousPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   bool get _isEditMode => widget.registrationEntity.isEditMode;
 
   MyProfileSection _sectionForCurrentPage() {
@@ -483,11 +499,6 @@ class _FillProfileInformationPageState
       return;
     }
     if (_isBrand) {
-      if (widget.registrationEntity.isEditMode) {
-        context.read<FillBrandProfileBloc>().updateMyBrandProfile(_brandParam);
-        return;
-      }
-
       context.read<FillBrandProfileBloc>().add(
         FillBrandProfileEvent.fillBrandProfile(
           profileId: profileId,
@@ -511,6 +522,16 @@ class _FillProfileInformationPageState
       return;
     }
     final section = _sectionForCurrentPage();
+    if ((section == MyProfileSection.audience ||
+            section == MyProfileSection.pricing) &&
+        _audienceAndPricingLocked) {
+      // Profile not approved — skip server update; UI is read-only.
+      if (_navigateOnSave) {
+        _navigateOnSave = false;
+        context.go(_isBrand ? BrandHomePage.tag : HomePage.tag);
+      }
+      return;
+    }
     final Map<String, dynamic> payload = switch (section) {
       MyProfileSection.audience =>
         _finalParam.audience?.toJson() ?? const {},
@@ -583,6 +604,7 @@ class _FillProfileInformationPageState
               profileLoaded: (data) {
                 _finalParam = data.toParam();
                 _initialAvatarUrl = data.avatarUrl;
+                _moderationStatus = data.moderationStatus ?? 'pending';
                 _buildWidgetsAndTitles();
               },
               profileLoadFailure: (_) {

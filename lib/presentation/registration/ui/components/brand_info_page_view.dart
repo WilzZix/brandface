@@ -14,9 +14,9 @@ import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
@@ -80,15 +80,14 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
   }
 
   Future<void> _pickAndUpload() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-      maxWidth: 800,
-      maxHeight: 800,
+    final result = await FilePicker.pickFiles(
+      type: FileType.image,
+      withData: false,
     );
-    if (picked == null) return;
-    final file = File(picked.path);
+    if (!mounted || result == null || result.files.isEmpty) return;
+    final path = result.files.single.path;
+    if (path == null || path.isEmpty) return;
+    final file = File(path);
     setState(() => _pickedImage = file);
     if (!mounted) return;
     context.read<UploadCubit>().uploadFile(file);

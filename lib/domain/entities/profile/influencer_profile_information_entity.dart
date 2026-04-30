@@ -98,6 +98,7 @@ class InfluencerProfileInformationEntity extends Equatable {
       languageIds: languageIds?.map((l) => l.id).whereType<int>().toList(),
       audience: audience,
       pricing: pricing,
+      moderationStatus: moderationStatus,
     );
   }
 

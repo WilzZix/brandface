@@ -13,16 +13,19 @@ import '../../../../uikit/typography/typography.dart';
 import 'choose_geography.dart';
 import 'choose_social_media_platform.dart';
 import 'choose_spoken_language.dart';
+import 'profile_section_readonly_banner.dart';
 
 class AudienceAndFollowersPageView extends StatefulWidget {
   const AudienceAndFollowersPageView({
     super.key,
     required this.onChanged,
     this.initialParam,
+    this.readOnly = false,
   });
 
   final Function(FillInfluencerProfileParam) onChanged;
   final FillInfluencerProfileParam? initialParam;
+  final bool readOnly;
 
   @override
   State<AudienceAndFollowersPageView> createState() =>
@@ -201,13 +204,25 @@ class _AudienceAndFollowersPageViewState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (widget.readOnly) const ProfileSectionReadOnlyBanner(),
             const SizedBox(height: 16),
-            _buildGeographySection(),
-            const SizedBox(height: 32),
-            _buildAgeSection(),
-            const SizedBox(height: 32),
-            _buildSocialMediaSection(),
-            const SizedBox(height: 32),
+            IgnorePointer(
+              ignoring: widget.readOnly,
+              child: Opacity(
+                opacity: widget.readOnly ? 0.6 : 1.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildGeographySection(),
+                    const SizedBox(height: 32),
+                    _buildAgeSection(),
+                    const SizedBox(height: 32),
+                    _buildSocialMediaSection(),
+                    const SizedBox(height: 32),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

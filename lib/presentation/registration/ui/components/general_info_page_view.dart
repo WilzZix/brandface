@@ -12,7 +12,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/inputs/bio_input_field.dart';
@@ -65,15 +64,14 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
   }
 
   Future<void> _pickAndUpload() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-      maxWidth: 800,
-      maxHeight: 800,
+    final result = await FilePicker.pickFiles(
+      type: FileType.image,
+      withData: false,
     );
-    if (picked == null) return;
-    final file = File(picked.path);
+    if (!mounted || result == null || result.files.isEmpty) return;
+    final path = result.files.single.path;
+    if (path == null || path.isEmpty) return;
+    final file = File(path);
     setState(() => _pickedImage = file);
     if (!mounted) return;
     context.read<UploadCubit>().uploadFile(file);
@@ -307,69 +305,6 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
         ),
       ),
     );
-  }
-
-  Future<void> _pickAndUploadAvatar() async {
-    final result = await FilePicker.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: const ['svg', 'png', 'jpg', 'jpeg', 'gif'],
-      withData: false,
-    );
-
-    if (!mounted || result == null || result.files.isEmpty) {
-      return;
-    }
-
-    final selectedFile = result.files.single;
-    final path = selectedFile.path;
-    if (path == null || path.isEmpty) {
-      _showMessage('Selected file path is unavailable.');
-      return;
-    }
-
-    setState(() {
-      _isUploadingAvatar = true;
-      _avatarFileName = selectedFile.name;
-    });
-
-    final uploadResult = await sl<UploadProfileFileUseCase>().call(
-      params: path,
-    );
-    UploadedFileEntity? uploadedFile;
-    Object? uploadFailure;
-    uploadResult.fold(
-      ifLeft: (failure) => uploadFailure = failure,
-      ifRight: (file) => uploadedFile = file,
-    );
-
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _isUploadingAvatar = false;
-    });
-
-    if (uploadedFile == null) {
-      _showMessage(uploadFailure?.toString() ?? 'File upload failed.');
-      return;
-    }
-
-    _fillInfluencerProfileParam = _fillInfluencerProfileParam.copyWith(
-      avatarId: uploadedFile!.id,
-      avatarUrl: uploadedFile!.fileUrl,
-    );
-    setState(() {
-      _avatarUrl = uploadedFile!.fileUrl;
-      _avatarFileName = selectedFile.name;
-    });
-    widget.onChanged(_fillInfluencerProfileParam);
-  }
-
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   bool _containsOnlyNameLetters(String value) {

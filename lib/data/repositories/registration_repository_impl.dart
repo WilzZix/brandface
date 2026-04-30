@@ -1,7 +1,6 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/data/data_source/network_data_source/registration/registration_data_source.dart';
 
-import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/domain/entities/registration/registration_entity.dart';
 import 'package:brandface/domain/usecase/registration/params/brand_registration_params.dart';
 import 'package:brandface/domain/usecase/registration/params/fill_brand_profile_param.dart';
@@ -9,7 +8,7 @@ import 'package:brandface/domain/usecase/registration/params/fill_influencer_pro
 
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
 
-import 'package:dart_either/dart_either.dart';
+import 'package:dart_either/src/dart_either.dart';
 import 'package:dio/dio.dart';
 
 import '../../domain/repository/registration_repository.dart';
@@ -133,44 +132,6 @@ class RegistrationRepositoryImpl implements IRegistrationRepository {
     try {
       await _dataSource.updateMyProfileSection(url: url, payload: payload);
       return const Right(null);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> updateMyBrandProfile({
-    required FillBrandProfileParam params,
-  }) async {
-    try {
-      await _dataSource.updateMyBrandProfile(params: params);
-      return const Right(null);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, UploadedFileEntity>> uploadFile({
-    required String path,
-  }) async {
-    try {
-      final uploadedFile = await _dataSource.uploadFile(path: path);
-      return Right(uploadedFile);
     } on DioException catch (e) {
       return Left(
         ServerFailure(

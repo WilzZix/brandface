@@ -5,6 +5,7 @@ import 'package:brandface/domain/entities/notification/notification_entity.dart'
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_cubit.dart';
 import 'package:brandface/presentation/home_page/notifications/bloc/notifications_state.dart';
 import 'package:brandface/presentation/home_page/notifications/notification_details_page.dart';
+import 'package:brandface/uikit/components/ui_components/app_empty_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';

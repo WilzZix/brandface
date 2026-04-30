@@ -28,6 +28,7 @@ class ProfileEntity extends Equatable {
   final List<int>? activeBrandIds;
   final AudienceEntity? audience;
   final PricingEntity? pricing;
+  final String? moderationStatus;
 
   const ProfileEntity({
     this.displayName,
@@ -55,6 +56,7 @@ class ProfileEntity extends Equatable {
     this.activeBrandIds,
     this.audience,
     this.pricing,
+    this.moderationStatus,
   });
 
   FillInfluencerProfileParam toParam() {
@@ -153,6 +155,7 @@ class ProfileEntity extends Equatable {
     activeBrandIds,
     audience,
     pricing,
+    moderationStatus,
   ];
 }
 

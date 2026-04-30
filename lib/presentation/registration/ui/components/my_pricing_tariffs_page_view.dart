@@ -9,16 +9,19 @@ import '../../../../uikit/typography/typography.dart';
 import 'choose_currency.dart';
 import 'choose_payment_type.dart';
 import 'choose_spoken_language.dart';
+import 'profile_section_readonly_banner.dart';
 
 class MyPricingTariffsPageView extends StatefulWidget {
   const MyPricingTariffsPageView({
     super.key,
     required this.initialParam,
     required this.onChanged,
+    this.readOnly = false,
   });
 
   final FillInfluencerProfileParam initialParam;
   final Function(FillInfluencerProfileParam) onChanged;
+  final bool readOnly;
 
   @override
   State<MyPricingTariffsPageView> createState() =>
@@ -76,6 +79,23 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (widget.readOnly) const ProfileSectionReadOnlyBanner(),
+          IgnorePointer(
+            ignoring: widget.readOnly,
+            child: Opacity(
+              opacity: widget.readOnly ? 0.6 : 1.0,
+              child: _buildForm(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
           Text(t.registration.currency, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChooseCurrency(
@@ -166,8 +186,7 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
                 );
               },
             ),
-        ],
-      ),
+      ],
     );
   }
 }
