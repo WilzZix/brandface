@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 
 import 'catalog/city_entity.dart';
 import 'catalog/region_entity.dart';
+import 'catalog/sphere_entity.dart';
 
 class InfluencerProfileInformationEntity extends Equatable {
   final int id;
@@ -15,6 +16,8 @@ class InfluencerProfileInformationEntity extends Equatable {
   final String? bio;
   final RegionEntity? region;
   final CityEntity? city;
+  final SphereEntity? sphere;
+  final String? website;
   final DateTime? birthDate;
   final String? gender;
   final List<CategoryData>? categories;
@@ -47,6 +50,8 @@ class InfluencerProfileInformationEntity extends Equatable {
     this.bio,
     this.region,
     this.city,
+    this.sphere,
+    this.website,
     this.birthDate,
     this.gender,
     this.categories,
@@ -105,6 +110,8 @@ class InfluencerProfileInformationEntity extends Equatable {
     bio,
     region,
     city,
+    sphere,
+    website,
     birthDate,
     gender,
     categories,

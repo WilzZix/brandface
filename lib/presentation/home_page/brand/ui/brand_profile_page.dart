@@ -114,7 +114,10 @@ class _BrandProfileBody extends StatelessWidget {
                 const SizedBox(height: 16),
                 TitleDescriptionWidget(
                   title: t.registration.sphere,
-                  descriptionItem: Text('—', style: Typographies.bodyMedium),
+                  descriptionItem: Text(
+                    data.sphere?.name ?? '—',
+                    style: Typographies.bodyMedium,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TitleDescriptionWidget(
@@ -127,7 +130,10 @@ class _BrandProfileBody extends StatelessWidget {
                 const SizedBox(height: 16),
                 TitleDescriptionWidget(
                   title: t.brand.website,
-                  descriptionItem: Text('—', style: Typographies.bodyMedium),
+                  descriptionItem: Text(
+                    data.website?.isNotEmpty == true ? data.website! : '—',
+                    style: Typographies.bodyMedium,
+                  ),
                 ),
               ],
             ),
@@ -195,10 +201,13 @@ class _AvatarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (avatarUrl != null && avatarUrl!.isNotEmpty) {
+      final url = avatarUrl!.startsWith('http')
+          ? avatarUrl!
+          : '${ApiRoutes.mediaBaseUrl}$avatarUrl';
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Image.network(
-          '${ApiRoutes.mediaBaseUrl}$avatarUrl',
+          url,
           width: 72,
           height: 72,
           fit: BoxFit.cover,

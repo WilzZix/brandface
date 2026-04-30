@@ -3,6 +3,7 @@ import 'package:brandface/data/models/profile/catalog/city_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
+import 'package:brandface/data/models/profile/catalog/sphere_model.dart';
 
 import '../../../../domain/entities/profile/influencer_profile_information_entity.dart';
 import '../../../../domain/entities/profile/profile_entity.dart';
@@ -17,6 +18,8 @@ class InfluencerProfileInformationModel
     super.bio,
     super.region,
     super.city,
+    super.sphere,
+    super.website,
     super.birthDate,
     super.gender,
     super.categories,
@@ -47,16 +50,19 @@ class InfluencerProfileInformationModel
   ) {
     return InfluencerProfileInformationModel(
       id: json['id'] ?? 0,
-      displayName: json['display_name'],
-      avatarUrl: json['avatar_url'],
-      avatarId: json['avatar_id'],
-      // JSONda avatar_id yo'q, lekin modelda bo'lsa qolgani ma'qul
-      bio: json['bio'],
+      displayName: json['display_name'] ?? json['brand_name'],
+      avatarUrl: json['avatar_url'] ?? json['logo_url'],
+      avatarId: json['avatar_id'] ?? json['logo_id'],
+      bio: json['bio'] ?? json['description'],
 
       region: json['region'] != null
           ? RegionModel.fromJson(json['region'])
           : null,
       city: json['city'] != null ? CityModel.fromJson(json['city']) : null,
+      sphere: json['sphere'] != null
+          ? SphereModel.fromJson(json['sphere'])
+          : null,
+      website: json['website'] as String?,
 
       birthDate: json['birth_date'] != null
           ? DateTime.tryParse(json['birth_date'])
