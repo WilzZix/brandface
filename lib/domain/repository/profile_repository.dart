@@ -59,6 +59,7 @@ abstract class IProfileRepository {
     String? gender,
     bool? isTop,
     bool? isVip,
+    String? role,
   });
 
   Future<Either<Failure, AmbassadorDetailEntity>> getAmbassadorDetail({

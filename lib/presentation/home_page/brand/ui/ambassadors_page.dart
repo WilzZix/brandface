@@ -12,10 +12,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+class AmbassadorsPageArguments {
+  final String? role;
+  final String? title;
+
+  const AmbassadorsPageArguments({this.role, this.title});
+}
+
 class AmbassadorsPage extends StatefulWidget {
-  const AmbassadorsPage({super.key});
+  const AmbassadorsPage({super.key, this.title});
 
   static const String tag = '/ambassadors';
+
+  final String? title;
 
   @override
   State<AmbassadorsPage> createState() => _AmbassadorsPageState();
@@ -85,7 +94,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
           icon: SvgPicture.asset(AppAssets.icArrowLeft),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(t.brand.ambassadors),
+        title: Text(widget.title ?? t.brand.ambassadors),
         centerTitle: false,
         titleTextStyle: Typographies.titleMedium,
       ),

@@ -4,6 +4,13 @@ import 'package:brandface/data/models/message/conversation_model.dart';
 
 abstract class MessageDataSource {
   Future<List<ConversationModel>> getConversations();
+
+  Future<int> startConversation({required int otherUserId});
+
+  Future<void> sendMessage({
+    required int conversationId,
+    required String text,
+  });
 }
 
 class MessageDataSourceImpl implements MessageDataSource {
@@ -19,6 +26,31 @@ class MessageDataSourceImpl implements MessageDataSource {
     return list
         .map((item) => ConversationModel.fromJson(_readMap(item)))
         .toList();
+  }
+
+  @override
+  Future<int> startConversation({required int otherUserId}) async {
+    final response = await _dioClient.post(
+      ApiRoutes.conversations,
+      data: {'other_user_id': otherUserId},
+    );
+    final map = _readMap(response.data);
+    final id = (map['id'] ?? map['conversation_id']) as int?;
+    if (id == null) {
+      throw StateError('Conversation id missing in response');
+    }
+    return id;
+  }
+
+  @override
+  Future<void> sendMessage({
+    required int conversationId,
+    required String text,
+  }) async {
+    await _dioClient.post(
+      ApiRoutes.sendMessage(conversationId),
+      data: {'text': text},
+    );
   }
 
   List<dynamic> _extractList(dynamic payload) {

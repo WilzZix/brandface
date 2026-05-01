@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "351204829912",
+    "project_id": "brandface-bb716",
+    "storage_bucket": "brandface-bb716.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351204829912:android:8703147e00435402d185ad",
+        "android_client_info": {
+          "package_name": "com.anysoft.brandface.brandface"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-vzB6vbW7dJjeLYWnPtqLMkTKWhB352I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

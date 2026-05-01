@@ -23,6 +23,27 @@ class MessageRepositoryImpl implements IMessageRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, void>> sendEnquiry({
+    required int otherUserId,
+    required String text,
+  }) async {
+    try {
+      final conversationId = await _dataSource.startConversation(
+        otherUserId: otherUserId,
+      );
+      await _dataSource.sendMessage(
+        conversationId: conversationId,
+        text: text,
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(_mapDioFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
   ServerFailure _mapDioFailure(DioException e) {
     final responseData = e.response?.data;
     String message = e.message ?? 'Serverda xatolik yuz berdi';

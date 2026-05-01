@@ -19,6 +19,7 @@ import '../../presentation/home_page/brand/ui/ambassadors_page.dart';
 import '../../presentation/home_page/brand/ui/ambassadors_filter_page.dart';
 import '../../presentation/home_page/brand/ui/ambassador_details_page.dart';
 import '../../presentation/home_page/brand/ui/ambassador_portfolio_details_page.dart';
+import '../../presentation/home_page/brand/ui/send_enquiry_page.dart';
 import '../../presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
 import '../../presentation/home_page/brand/bloc/ambassador_portfolio/ambassador_portfolio_cubit.dart';
 import '../../domain/entities/profile/portfolio_entity.dart';
@@ -381,10 +382,14 @@ class AppRouter {
       GoRoute(
         path: AmbassadorsPage.tag,
         name: AmbassadorsPage.tag,
-        builder: (_, _) => BlocProvider<AmbassadorsCubit>(
-          create: (context) => sl<AmbassadorsCubit>()..load(),
-          child: const AmbassadorsPage(),
-        ),
+        builder: (_, state) {
+          final args = state.extra as AmbassadorsPageArguments?;
+          return BlocProvider<AmbassadorsCubit>(
+            create: (context) =>
+                sl<AmbassadorsCubit>()..load(role: args?.role),
+            child: AmbassadorsPage(title: args?.title),
+          );
+        },
       ),
       GoRoute(
         path: AmbassadorsFilterPage.tag,
@@ -428,6 +433,13 @@ class AppRouter {
         name: AmbassadorPortfolioDetailsPage.tag,
         builder: (_, state) => AmbassadorPortfolioDetailsPage(
           item: state.extra as PortfolioItemEntity,
+        ),
+      ),
+      GoRoute(
+        path: SendEnquiryPage.tag,
+        name: SendEnquiryPage.tag,
+        builder: (_, state) => SendEnquiryPage(
+          arguments: state.extra as SendEnquiryArguments,
         ),
       ),
       GoRoute(

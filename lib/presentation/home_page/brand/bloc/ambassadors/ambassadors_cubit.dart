@@ -29,15 +29,20 @@ class AmbassadorsFilterParams {
 class AmbassadorsCubit extends Cubit<AmbassadorsState> {
   final GetAmbassadorsUseCase _useCase;
   List<AmbassadorEntity> _allAmbassadors = [];
+  String? _role;
 
   AmbassadorsCubit({required GetAmbassadorsUseCase getAmbassadorsUseCase})
       : _useCase = getAmbassadorsUseCase,
         super(AmbassadorsInitial());
 
+  void setRole(String? role) => _role = role;
+
   Future<void> load({
     String? ordering,
     AmbassadorsFilterParams? filter,
+    String? role,
   }) async {
+    if (role != null) _role = role;
     emit(AmbassadorsLoading());
     final result = await _useCase.call(
       params: ordering,
@@ -46,6 +51,7 @@ class AmbassadorsCubit extends Cubit<AmbassadorsState> {
       gender: filter?.gender,
       isTop: filter?.isTop,
       isVip: filter?.isVip,
+      role: _role,
     );
     result.fold(
       ifLeft: (f) => emit(AmbassadorsFailure(f.message)),

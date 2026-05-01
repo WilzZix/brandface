@@ -7,6 +7,7 @@ import 'package:brandface/presentation/home_page/brand/bloc/ambassador_detail/am
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_portfolio/ambassador_portfolio_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_portfolio/ambassador_portfolio_state.dart';
 import 'package:brandface/presentation/home_page/brand/ui/ambassador_portfolio_details_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/send_enquiry_page.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -821,11 +822,10 @@ class _BottomButtons extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Coming soon')),
-                );
-              },
+              onPressed: () => context.pushNamed(
+                SendEnquiryPage.tag,
+                extra: SendEnquiryArguments(otherUserId: ambassadorId),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 elevation: 0,

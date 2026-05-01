@@ -49,6 +49,8 @@ class ApiRoutes {
   static String availableOfferDetail(int id) => 'offers/v1/available/$id/';
   static String applyToOffer(int id) => 'offers/v1/$id/apply/';
   static String conversations = 'messaging/v1/conversations/';
+  static String sendMessage(int conversationId) =>
+      'messaging/v1/conversations/$conversationId/messages/send/';
   static String influencerAnalytics = 'analytics/v1/influencer/';
   static String notifications = 'notifications/v1/';
   static String markNotificationAsRead(int id) => 'notifications/v1/$id/read/';

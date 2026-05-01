@@ -42,6 +42,7 @@ import 'package:brandface/domain/usecase/login/delete_account_use_case.dart';
 import 'package:brandface/domain/usecase/login/get_me_use_case.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:brandface/domain/usecase/message/get_conversations_use_case.dart';
+import 'package:brandface/domain/usecase/message/send_enquiry_use_case.dart';
 import 'package:brandface/domain/usecase/notification/get_notifications_use_case.dart';
 import 'package:brandface/domain/usecase/notification/mark_all_notifications_read_use_case.dart';
 import 'package:brandface/domain/usecase/notification/mark_notification_read_use_case.dart';
@@ -69,6 +70,7 @@ import 'package:brandface/domain/usecase/profile/update_portfolio_use_case.dart'
 import 'package:brandface/domain/usecase/profile/upload_portfolio_file_use_case.dart';
 import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
 import 'package:brandface/presentation/home_page/messages/bloc/messages_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/send_enquiry/send_enquiry_cubit.dart';
 import 'package:brandface/data/data_source/network_data_source/favourites/favourites_data_source.dart';
 import 'package:brandface/data/repositories/favourites_repository_impl.dart';
 import 'package:brandface/domain/repository/favourites_repository.dart';
@@ -214,6 +216,7 @@ class AppDi {
     sl.registerLazySingleton(() => GetMeUseCase(iLoginRepository: sl()));
     sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
     sl.registerLazySingleton(() => GetConversationsUseCase(repository: sl()));
+    sl.registerLazySingleton(() => SendEnquiryUseCase(sl()));
     sl.registerLazySingleton(() => GetLanguagesUseCase(repository: sl()));
     sl.registerLazySingleton(() => GetNotificationsUseCase(repository: sl()));
     sl.registerLazySingleton(
@@ -303,7 +306,13 @@ class AppDi {
     sl.registerLazySingleton(() => UploadFileUseCase(sl()));
 
     ///Bloc
-    sl.registerFactory(() => InitAppCubit(sharedPrefService: sl(), profileService: sl()));
+    sl.registerFactory(
+      () => InitAppCubit(
+        sharedPrefService: sl(),
+        profileService: sl(),
+        dioClient: sl(),
+      ),
+    );
     sl.registerFactory(
       () => LoginBloc(
         loginUseCase: sl(),
@@ -372,6 +381,7 @@ class AppDi {
       ),
     );
     sl.registerFactory(() => MessagesCubit(getConversationsUseCase: sl()));
+    sl.registerFactory(() => SendEnquiryCubit(useCase: sl()));
     sl.registerFactory(
       () => OffersFeedCubit(
         getAvailableOffersUseCase: sl(),

@@ -77,6 +77,7 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
             ),
             Divider(color: AppColors.borderColor),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => _showLanguagePicker(context),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -106,6 +107,7 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
             ),
             const Spacer(),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () async {
                 await sl<AuthLogoutService>().logout(context);
               },
@@ -123,6 +125,7 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
 
   Widget _menuItem({required String title, required VoidCallback onTap}) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),

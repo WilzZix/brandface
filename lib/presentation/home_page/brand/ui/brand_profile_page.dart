@@ -7,6 +7,7 @@ import 'package:brandface/data/models/profile/catalog/category_model.dart';
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/entities/registration/registration_entity.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import 'package:brandface/presentation/registration/ui/fill_profile_information_page.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
@@ -15,6 +16,7 @@ import 'package:brandface/uikit/components/ui_components/badge.dart';
 import 'package:brandface/uikit/components/ui_components/title_description_widget.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/services/auth_logout_service.dart';
 import 'package:brandface/utils/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,8 +28,42 @@ class BrandProfilePage extends StatelessWidget {
 
   static const String tag = '/brand-profile-page';
 
+  void _showDeleteConfirmation(BuildContext context) {
+    BrandfaceBottomSheet.openBottomSheet<void>(
+      context: context,
+      header: t.profile.delete_account,
+      onConfirm: () {
+        context.pop();
+        context.read<DeleteAccountCubit>().deleteAccount();
+      },
+      builder: (_, _) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+        child: Text(t.profile.confirm_delete, style: Typographies.labelLarge),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    return BlocProvider<DeleteAccountCubit>(
+      create: (_) => sl<DeleteAccountCubit>(),
+      child: BlocListener<DeleteAccountCubit, DeleteAccountState>(
+        listener: (context, state) async {
+          if (state is DeleteAccountSuccess) {
+            await sl<AuthLogoutService>().logout(context);
+          } else if (state is DeleteAccountFailure) {
+            BrandfaceBottomSheet.openFailureBottomSheet(
+              context: context,
+              message: state.failure.localized,
+            );
+          }
+        },
+        child: Builder(builder: (context) => _buildScaffold(context)),
+      ),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(t.brand.brand_profile),
@@ -52,25 +88,54 @@ class BrandProfilePage extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocConsumer<ProfileInformationCubit, ProfileInformationState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            failure: (failure) {
-              BrandfaceBottomSheet.openFailureBottomSheet(
-                context: context,
-                message: failure.localized,
-              );
-            },
-            orElse: () {},
-          );
-        },
-        builder: (context, state) {
-          return state.maybeWhen(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            infoLoaded: (data) => _BrandProfileBody(data: data),
-            orElse: () => const SizedBox.shrink(),
-          );
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child:
+                BlocConsumer<ProfileInformationCubit, ProfileInformationState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                      failure: (failure) {
+                        BrandfaceBottomSheet.openFailureBottomSheet(
+                          context: context,
+                          message: failure.localized,
+                        );
+                      },
+                      orElse: () {},
+                    );
+                  },
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      infoLoaded: (data) => _BrandProfileBody(data: data),
+                      orElse: () => const SizedBox.shrink(),
+                    );
+                  },
+                ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: MediaQuery.of(context).padding.bottom + 16,
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => _showDeleteConfirmation(context),
+                child: Text(
+                  t.profile.delete_account,
+                  style: Typographies.titleMedium.copyWith(
+                    color: AppColors.red,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

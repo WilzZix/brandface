@@ -38,16 +38,19 @@ class AuthInterceptor extends Interceptor {
       return super.onError(err, handler);
     }
 
+    final skipDialog =
+        err.requestOptions.extra['skipUnauthorizedDialog'] == true;
+
     // Refresh token request o'zi 401 bersa — cheksiz loop oldini olish
     if (err.requestOptions.path.contains('refresh-token')) {
-      await _showUnauthorizedAndLogout();
+      if (!skipDialog) await _showUnauthorizedAndLogout();
       return handler.next(err);
     }
 
     try {
       final newAccess = await _refreshAccessToken();
       if (newAccess == null) {
-        await _showUnauthorizedAndLogout();
+        if (!skipDialog) await _showUnauthorizedAndLogout();
         return handler.next(err);
       }
 
@@ -57,7 +60,7 @@ class AuthInterceptor extends Interceptor {
       final response = await _dio.fetch(opts);
       return handler.resolve(response);
     } catch (_) {
-      await _showUnauthorizedAndLogout();
+      if (!skipDialog) await _showUnauthorizedAndLogout();
       return handler.next(err);
     }
   }

@@ -267,6 +267,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Text(t.common.menu, style: Typographies.headlineSmall),
                         SizedBox(height: 32),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () {
                             context.pushNamed(CollaborationOffersPage.tag);
                           },
@@ -285,7 +286,14 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
                         GestureDetector(
-                          onTap: () {},
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => context.pushNamed(
+                            AmbassadorsPage.tag,
+                            extra: AmbassadorsPageArguments(
+                              role: 'brandface',
+                              title: t.brand.brandfaces,
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -301,8 +309,14 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
                         GestureDetector(
-                          onTap: () =>
-                              context.pushNamed(AmbassadorsPage.tag),
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => context.pushNamed(
+                            AmbassadorsPage.tag,
+                            extra: AmbassadorsPageArguments(
+                              role: 'ambassador',
+                              title: t.brand.ambassadors,
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -318,8 +332,14 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
                         GestureDetector(
-                          onTap: () =>
-                              context.pushNamed(AmbassadorsPage.tag),
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => context.pushNamed(
+                            AmbassadorsPage.tag,
+                            extra: AmbassadorsPageArguments(
+                              role: 'influencer',
+                              title: t.brand.influencers,
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -335,6 +355,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () =>
                               context.pushNamed(FavouritesPage.tag),
                           child: Row(
@@ -352,6 +373,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () =>
                               context.pushNamed(AiMatchingResultsPage.tag),
                           child: Row(
@@ -368,6 +390,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         Divider(color: AppColors.borderColor),
                         SizedBox(height: 8),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () => context.pushNamed(BrandAnalyticsPage.tag),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

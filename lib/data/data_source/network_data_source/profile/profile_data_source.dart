@@ -53,6 +53,7 @@ abstract class ProfileDataSource {
     String? gender,
     bool? isTop,
     bool? isVip,
+    String? role,
   });
 
   Future<AmbassadorDetailModel> getAmbassadorDetail({required int ambassadorId});
@@ -243,6 +244,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     String? gender,
     bool? isTop,
     bool? isVip,
+    String? role,
   }) async {
     try {
       final queryParams = <String, dynamic>{};
@@ -252,6 +254,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
       if (gender != null && gender != 'any') queryParams['gender'] = gender;
       if (isTop == true) queryParams['is_top'] = true;
       if (isVip == true) queryParams['is_vip'] = true;
+      if (role != null && role.isNotEmpty) queryParams['role'] = role;
 
       final response = await _dioClient.get(
         ApiRoutes.ambassadors,

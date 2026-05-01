@@ -15,6 +15,7 @@ class GetAmbassadorsUseCase {
     String? gender,
     bool? isTop,
     bool? isVip,
+    String? role,
   }) {
     return repository.getAmbassadors(
       ordering: params,
@@ -23,6 +24,7 @@ class GetAmbassadorsUseCase {
       gender: gender,
       isTop: isTop,
       isVip: isVip,
+      role: role,
     );
   }
 }

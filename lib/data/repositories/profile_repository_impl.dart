@@ -354,6 +354,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
     String? gender,
     bool? isTop,
     bool? isVip,
+    String? role,
   }) async {
     try {
       final data = await _dataSource.getAmbassadors(
@@ -363,6 +364,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
         gender: gender,
         isTop: isTop,
         isVip: isVip,
+        role: role,
       );
       return Right(data);
     } on DioException catch (e) {
