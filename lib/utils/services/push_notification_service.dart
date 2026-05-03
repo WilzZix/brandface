@@ -47,6 +47,24 @@ class PushNotificationService {
     }
   }
 
+  Future<void> subscribeToTopic(String topic) async {
+    try {
+      await _messaging.subscribeToTopic(topic);
+      if (kDebugMode) debugPrint('[FCM] subscribed to topic: $topic');
+    } catch (e, st) {
+      debugPrint('[FCM] subscribeToTopic($topic) failed: $e\n$st');
+    }
+  }
+
+  Future<void> unsubscribeFromTopic(String topic) async {
+    try {
+      await _messaging.unsubscribeFromTopic(topic);
+      if (kDebugMode) debugPrint('[FCM] unsubscribed from topic: $topic');
+    } catch (e, st) {
+      debugPrint('[FCM] unsubscribeFromTopic($topic) failed: $e\n$st');
+    }
+  }
+
   Future<void> _initLocalNotifications() async {
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
