@@ -27,9 +27,38 @@ class PushNotificationService {
         _tokenRepository = tokenRepository;
 
   Future<void> init() async {
+    await _initLocalNotifications();
     await _requestPermission();
     await _retrieveAndStoreToken();
     _listenForTokenRefresh();
+  }
+
+  Future<void> _initLocalNotifications() async {
+    const androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iosSettings = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+    const initSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: iosSettings,
+    );
+
+    await _localNotifications.initialize(settings: initSettings);
+
+    const androidChannel = AndroidNotificationChannel(
+      androidChannelId,
+      androidChannelName,
+      description: androidChannelDescription,
+      importance: Importance.high,
+    );
+
+    await _localNotifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(androidChannel);
   }
 
   Future<void> _requestPermission() async {
