@@ -18,6 +18,8 @@ class PushNotificationService {
   final NotificationTokenRepository _tokenRepository;
 
   StreamSubscription<String>? _tokenRefreshSub;
+  StreamSubscription<RemoteMessage>? _foregroundSub;
+  StreamSubscription<RemoteMessage>? _openedAppSub;
 
   PushNotificationService({
     required FirebaseMessaging messaging,
@@ -38,8 +40,11 @@ class PushNotificationService {
     await _retrieveAndStoreToken();
     _listenForTokenRefresh();
 
-    FirebaseMessaging.onMessage.listen(_onForegroundMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp);
+    _foregroundSub?.cancel();
+    _openedAppSub?.cancel();
+    _foregroundSub = FirebaseMessaging.onMessage.listen(_onForegroundMessage);
+    _openedAppSub =
+        FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp);
 
     final initial = await _messaging.getInitialMessage();
     if (initial != null) {
@@ -147,7 +152,7 @@ class PushNotificationService {
     if (notification == null) return;
 
     await _localNotifications.show(
-      id: notification.hashCode,
+      id: (message.messageId?.hashCode ?? notification.hashCode) & 0x7FFFFFFF,
       title: notification.title,
       body: notification.body,
       notificationDetails: NotificationDetails(
@@ -207,6 +212,10 @@ class PushNotificationService {
 
   Future<void> dispose() async {
     await _tokenRefreshSub?.cancel();
+    await _foregroundSub?.cancel();
+    await _openedAppSub?.cancel();
     _tokenRefreshSub = null;
+    _foregroundSub = null;
+    _openedAppSub = null;
   }
 }
