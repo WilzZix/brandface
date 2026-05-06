@@ -11,6 +11,7 @@ import 'package:brandface/presentation/home_page/brand/ui/send_enquiry_page.dart
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -807,9 +808,7 @@ class _BottomButtons extends StatelessWidget {
           Expanded(
             child: OutlinedButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Coming soon')),
-                );
+                context.showAppSnackBar('Coming soon');
               },
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: AppColors.borderColor),

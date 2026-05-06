@@ -172,7 +172,8 @@
     "spoken_language": "Разговорный язык",
     "select_region": "Выбрать регион",
     "select_city": "Выбрать город",
-    "select_sphere": "Выбрать сферу"
+    "select_sphere": "Выбрать сферу",
+    "select_payment_type": "Выбрать тип оплаты"
   },
   "contact": {
     "phone": "Телефон",
@@ -233,6 +234,9 @@
     "sort_by_experience": "Сортировать по опыту",
     "sort_by_views": "Сортировать по просмотрам",
     "sort_by_applications": "Сортировать по заявкам",
+    "filter": "Фильтр",
+    "rank_type": "Тип ранга",
+    "vip_label": "VIP",
     "ambassadors_found": "Найдено $count амбассадоров",
     "no_ambassadors_found": "Амбассадоры не найдены",
     "followers_count": "$count подписчиков",

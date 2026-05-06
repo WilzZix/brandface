@@ -4,6 +4,7 @@ import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_cubit.
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,19 +28,16 @@ class OfferDetailPage extends StatelessWidget {
           (previous.failure != current.failure && current.failure != null) ||
           (!previous.isApplied && current.isApplied),
       listener: (context, state) {
-        final messenger = ScaffoldMessenger.of(context);
         if (state.failure != null) {
-          messenger
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(state.failure!.message)));
+          context.showAppSnackBar(
+            state.failure!.message,
+            type: AppSnackBarType.error,
+          );
         } else if (state.isApplied) {
-          messenger
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(t.offer.application_submitted),
-              ),
-            );
+          context.showAppSnackBar(
+            t.offer.application_submitted,
+            type: AppSnackBarType.success,
+          );
         }
       },
       child: Scaffold(

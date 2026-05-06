@@ -20,6 +20,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
+import '../../../../utils/extansions/snackbar_x.dart';
 import 'choose_spoken_language.dart';
 
 class BrandInfoPageView extends StatefulWidget {
@@ -112,11 +113,10 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
             widget.onChanged(_param);
           },
           failure: (_) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(content: Text('Image upload failed')),
-              );
+            context.showAppSnackBar(
+              'Image upload failed',
+              type: AppSnackBarType.error,
+            );
           },
           orElse: () {},
         );

@@ -5,6 +5,7 @@ import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/app_empty_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,10 +25,10 @@ class MessagesPage extends StatelessWidget {
           return;
         }
 
-        final messenger = ScaffoldMessenger.of(context);
-        messenger
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(failure.message)));
+        context.showAppSnackBar(
+          failure.message,
+          type: AppSnackBarType.error,
+        );
       },
       child: Scaffold(
         backgroundColor: AppColors.lightBg,

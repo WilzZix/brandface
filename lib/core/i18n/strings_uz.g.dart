@@ -285,6 +285,7 @@ class _TranslationsChooseUz implements TranslationsChooseEn {
 	@override String get select_region => 'Viloyat tanlash';
 	@override String get select_city => 'Shahar tanlash';
 	@override String get select_sphere => 'Soha tanlash';
+	@override String get select_payment_type => 'To\'lov turini tanlash';
 }
 
 // Path: contact
@@ -373,6 +374,9 @@ class _TranslationsBrandUz implements TranslationsBrandEn {
 	@override String get sort_by_experience => 'Tajribaga ko\'ra saralash';
 	@override String get sort_by_views => 'Ko\'rishlar bo\'yicha saralash';
 	@override String get sort_by_applications => 'Arizalar bo\'yicha saralash';
+	@override String get filter => 'Filtr';
+	@override String get rank_type => 'Daraja turi';
+	@override String get vip_label => 'VIP';
 	@override String ambassadors_found({required Object count}) => '${count} ambassador topildi';
 	@override String get no_ambassadors_found => 'Ambassador topilmadi';
 	@override String followers_count({required Object count}) => '${count} ta obunachi';
@@ -708,6 +712,7 @@ extension on TranslationsUz {
 			'choose.select_region' => 'Viloyat tanlash',
 			'choose.select_city' => 'Shahar tanlash',
 			'choose.select_sphere' => 'Soha tanlash',
+			'choose.select_payment_type' => 'To\'lov turini tanlash',
 			'contact.phone' => 'Telefon',
 			'contact.telegram' => 'Telegram',
 			'contact.instagram' => 'Instagram',
@@ -760,6 +765,9 @@ extension on TranslationsUz {
 			'brand.sort_by_experience' => 'Tajribaga ko\'ra saralash',
 			'brand.sort_by_views' => 'Ko\'rishlar bo\'yicha saralash',
 			'brand.sort_by_applications' => 'Arizalar bo\'yicha saralash',
+			'brand.filter' => 'Filtr',
+			'brand.rank_type' => 'Daraja turi',
+			'brand.vip_label' => 'VIP',
 			'brand.ambassadors_found' => ({required Object count}) => '${count} ambassador topildi',
 			'brand.no_ambassadors_found' => 'Ambassador topilmadi',
 			'brand.followers_count' => ({required Object count}) => '${count} ta obunachi',

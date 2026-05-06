@@ -606,6 +606,9 @@ class TranslationsChooseEn {
 
 	/// en: 'Select sphere'
 	String get select_sphere => 'Select sphere';
+
+	/// en: 'Select payment type'
+	String get select_payment_type => 'Select payment type';
 }
 
 // Path: contact
@@ -798,6 +801,15 @@ class TranslationsBrandEn {
 
 	/// en: 'Sort by applications'
 	String get sort_by_applications => 'Sort by applications';
+
+	/// en: 'Filter'
+	String get filter => 'Filter';
+
+	/// en: 'Rank type'
+	String get rank_type => 'Rank type';
+
+	/// en: 'VIP'
+	String get vip_label => 'VIP';
 
 	/// en: '$count ambassadors found'
 	String ambassadors_found({required Object count}) => '${count} ambassadors found';
@@ -1356,6 +1368,7 @@ extension on Translations {
 			'choose.select_region' => 'Select region',
 			'choose.select_city' => 'Select city',
 			'choose.select_sphere' => 'Select sphere',
+			'choose.select_payment_type' => 'Select payment type',
 			'contact.phone' => 'Phone',
 			'contact.telegram' => 'Telegram',
 			'contact.instagram' => 'Instagram',
@@ -1408,6 +1421,9 @@ extension on Translations {
 			'brand.sort_by_experience' => 'Sort by experience',
 			'brand.sort_by_views' => 'Sort by views',
 			'brand.sort_by_applications' => 'Sort by applications',
+			'brand.filter' => 'Filter',
+			'brand.rank_type' => 'Rank type',
+			'brand.vip_label' => 'VIP',
 			'brand.ambassadors_found' => ({required Object count}) => '${count} ambassadors found',
 			'brand.no_ambassadors_found' => 'No ambassadors found',
 			'brand.followers_count' => ({required Object count}) => '${count} followers',

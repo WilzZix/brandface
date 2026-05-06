@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
@@ -66,7 +67,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
       appBar: AppBar(
         backgroundColor: AppColors.lightBg,
         scrolledUnderElevation: 0,
-        title: Text('Filter', style: Typographies.titleMedium),
+        title: Text(t.brand.filter, style: Typographies.titleMedium),
         centerTitle: false,
       ),
       body: Column(
@@ -78,25 +79,25 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _DropdownField(
-                    label: 'Services',
+                    label: t.registration.services,
                     value: _categoryName,
                     onTap: () => _pickCategory(context),
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
-                    label: 'Geography',
+                    label: t.registration.geography,
                     value: _regionName,
                     onTap: () => _pickRegion(context),
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
-                    label: 'Gender',
+                    label: t.registration.gender,
                     value: _genderLabel(_gender),
                     onTap: () => _pickGender(context),
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
-                    label: 'Rank type',
+                    label: t.brand.rank_type,
                     value: _rankLabel(_rankType),
                     onTap: () => _pickRank(context),
                   ),
@@ -123,7 +124,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: Text('Cancel', style: Typographies.labelLarge),
+                    child: Text(t.common.cancel, style: Typographies.labelLarge),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -140,7 +141,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     child: Text(
-                      'Continue',
+                      t.onboarding.kContinue,
                       style: Typographies.labelLarge.copyWith(
                         color: AppColors.black,
                       ),
@@ -158,9 +159,9 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
   String? _genderLabel(String? val) {
     switch (val) {
       case 'male':
-        return 'Male';
+        return t.registration.male;
       case 'female':
-        return 'Female';
+        return t.registration.female;
       default:
         return null;
     }
@@ -169,9 +170,9 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
   String? _rankLabel(String? val) {
     switch (val) {
       case 'top':
-        return 'TOP';
+        return t.brand.top_label;
       case 'vip':
-        return 'VIP';
+        return t.brand.vip_label;
       default:
         return null;
     }
@@ -186,7 +187,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     if (items.isEmpty) return;
     final result = await _showPicker(
       context: context,
-      title: 'Services',
+      title: t.registration.services,
       items: items.map((e) => _PickerItem(id: e.id, name: e.name)).toList(),
     );
     if (result != null) {
@@ -206,7 +207,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     if (items.isEmpty) return;
     final result = await _showPicker(
       context: context,
-      title: 'Geography',
+      title: t.registration.geography,
       items: items.map((e) => _PickerItem(id: e.id, name: e.name)).toList(),
     );
     if (result != null) {
@@ -220,10 +221,10 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
   Future<void> _pickGender(BuildContext context) async {
     final result = await _showPicker(
       context: context,
-      title: 'Gender',
-      items: const [
-        _PickerItem(id: 0, name: 'Male', value: 'male'),
-        _PickerItem(id: 1, name: 'Female', value: 'female'),
+      title: t.registration.gender,
+      items: [
+        _PickerItem(id: 0, name: t.registration.male, value: 'male'),
+        _PickerItem(id: 1, name: t.registration.female, value: 'female'),
       ],
     );
     if (result != null) {
@@ -234,10 +235,10 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
   Future<void> _pickRank(BuildContext context) async {
     final result = await _showPicker(
       context: context,
-      title: 'Rank type',
-      items: const [
-        _PickerItem(id: 0, name: 'TOP', value: 'top'),
-        _PickerItem(id: 1, name: 'VIP', value: 'vip'),
+      title: t.brand.rank_type,
+      items: [
+        _PickerItem(id: 0, name: t.brand.top_label, value: 'top'),
+        _PickerItem(id: 1, name: t.brand.vip_label, value: 'vip'),
       ],
     );
     if (result != null) {
@@ -303,7 +304,7 @@ class _DropdownField extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  value ?? 'Select',
+                  value ?? t.common.select,
                   style: Typographies.bodyMedium.copyWith(
                     color: value != null ? AppColors.black : AppColors.grey,
                   ),

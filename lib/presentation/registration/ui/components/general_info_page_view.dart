@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/inputs/bio_input_field.dart';
+import '../../../../utils/extansions/snackbar_x.dart';
 import 'choose_contact_detail.dart';
 import 'choose_date_of_birthday.dart';
 import 'choose_gender.dart';
@@ -97,11 +98,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             widget.onChanged(_fillInfluencerProfileParam);
           },
           failure: (_) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(content: Text('Image upload failed')),
-              );
+            context.showAppSnackBar(
+              'Image upload failed',
+              type: AppSnackBarType.error,
+            );
           },
           orElse: () {},
         );

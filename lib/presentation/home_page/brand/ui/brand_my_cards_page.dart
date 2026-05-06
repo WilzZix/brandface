@@ -5,6 +5,7 @@ import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cu
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,9 +21,10 @@ class BrandMyCardsPage extends StatelessWidget {
     return BlocListener<BillingCubit, BillingState>(
       listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
       listener: (context, state) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(state.failure!.message)));
+        context.showAppSnackBar(
+          state.failure!.message,
+          type: AppSnackBarType.error,
+        );
       },
       child: Scaffold(
         backgroundColor: AppColors.lightBg,

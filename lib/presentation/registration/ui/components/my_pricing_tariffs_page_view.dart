@@ -4,7 +4,6 @@ import 'package:brandface/uikit/components/inputs/from_to_input_field.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
-import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
 import 'choose_currency.dart';
 import 'choose_payment_type.dart';
@@ -143,49 +142,16 @@ class _MyPricingTariffsPageViewState extends State<MyPricingTariffsPageView>
           Text(t.registration.payment_types, style: Typographies.titleMedium),
           const SizedBox(height: 8),
           ChoosePaymentType(
-            onItemSelected: (LangItemModel p1) {
-              if (_selectedPaymentTypes.contains(p1.name)) return;
+            initialSelected: _selectedPaymentTypes,
+            onChanged: (selected) {
               setState(() {
-                _selectedPaymentTypes.add(p1.name);
+                _selectedPaymentTypes
+                  ..clear()
+                  ..addAll(selected);
               });
               _updateData();
             },
           ),
-          if (_selectedPaymentTypes.isNotEmpty)
-            ListView.builder(
-              itemCount: _selectedPaymentTypes.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _selectedPaymentTypes[index],
-                        style: Typographies.bodyMedium,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedPaymentTypes.removeAt(index);
-                          });
-                          _updateData();
-                        },
-                        child: Text(
-                          t.common.delete,
-                          style: Typographies.labelLarge.copyWith(
-                            color: AppColors.red,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
       ],
     );
   }

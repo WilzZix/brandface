@@ -6,6 +6,7 @@ import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -68,9 +69,10 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
 
         if (state.status == PortfolioItemStatus.failure &&
             state.failure != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.failure!.message)));
+          context.showAppSnackBar(
+            state.failure!.message,
+            type: AppSnackBarType.error,
+          );
         }
       },
       builder: (context, state) {
@@ -375,10 +377,8 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
   }
 
   void _showUploadUnavailableMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('File picker UI hali ulanmagan. Metadata save ishlaydi.'),
-      ),
+    context.showAppSnackBar(
+      'File picker UI hali ulanmagan. Metadata save ishlaydi.',
     );
   }
 }

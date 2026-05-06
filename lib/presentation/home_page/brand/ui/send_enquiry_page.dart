@@ -6,6 +6,7 @@ import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -81,8 +82,9 @@ class _SendEnquiryViewState extends State<_SendEnquiryView> {
         listener: (context, state) {
           state.maybeWhen(
             sent: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Enquiry sent')),
+              context.showAppSnackBar(
+                'Enquiry sent',
+                type: AppSnackBarType.success,
               );
               context.pop();
             },

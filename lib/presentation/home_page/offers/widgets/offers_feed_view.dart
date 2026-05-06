@@ -7,6 +7,7 @@ import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_state.d
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,10 +38,10 @@ class OffersFeedView extends StatelessWidget {
           current.failure != null &&
           current.offers.isNotEmpty,
       listener: (context, state) {
-        final messenger = ScaffoldMessenger.of(context);
-        messenger
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(state.failure!.message)));
+        context.showAppSnackBar(
+          state.failure!.message,
+          type: AppSnackBarType.error,
+        );
       },
       child: Scaffold(
         appBar: AppBar(

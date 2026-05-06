@@ -285,6 +285,7 @@ class _TranslationsChooseRu implements TranslationsChooseEn {
 	@override String get select_region => 'Выбрать регион';
 	@override String get select_city => 'Выбрать город';
 	@override String get select_sphere => 'Выбрать сферу';
+	@override String get select_payment_type => 'Выбрать тип оплаты';
 }
 
 // Path: contact
@@ -373,6 +374,9 @@ class _TranslationsBrandRu implements TranslationsBrandEn {
 	@override String get sort_by_experience => 'Сортировать по опыту';
 	@override String get sort_by_views => 'Сортировать по просмотрам';
 	@override String get sort_by_applications => 'Сортировать по заявкам';
+	@override String get filter => 'Фильтр';
+	@override String get rank_type => 'Тип ранга';
+	@override String get vip_label => 'VIP';
 	@override String ambassadors_found({required Object count}) => 'Найдено ${count} амбассадоров';
 	@override String get no_ambassadors_found => 'Амбассадоры не найдены';
 	@override String followers_count({required Object count}) => '${count} подписчиков';
@@ -708,6 +712,7 @@ extension on TranslationsRu {
 			'choose.select_region' => 'Выбрать регион',
 			'choose.select_city' => 'Выбрать город',
 			'choose.select_sphere' => 'Выбрать сферу',
+			'choose.select_payment_type' => 'Выбрать тип оплаты',
 			'contact.phone' => 'Телефон',
 			'contact.telegram' => 'Telegram',
 			'contact.instagram' => 'Instagram',
@@ -760,6 +765,9 @@ extension on TranslationsRu {
 			'brand.sort_by_experience' => 'Сортировать по опыту',
 			'brand.sort_by_views' => 'Сортировать по просмотрам',
 			'brand.sort_by_applications' => 'Сортировать по заявкам',
+			'brand.filter' => 'Фильтр',
+			'brand.rank_type' => 'Тип ранга',
+			'brand.vip_label' => 'VIP',
 			'brand.ambassadors_found' => ({required Object count}) => 'Найдено ${count} амбассадоров',
 			'brand.no_ambassadors_found' => 'Амбассадоры не найдены',
 			'brand.followers_count' => ({required Object count}) => '${count} подписчиков',

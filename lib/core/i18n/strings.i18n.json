@@ -172,7 +172,8 @@
     "spoken_language": "Spoken language",
     "select_region": "Select region",
     "select_city": "Select city",
-    "select_sphere": "Select sphere"
+    "select_sphere": "Select sphere",
+    "select_payment_type": "Select payment type"
   },
   "contact": {
     "phone": "Phone",
@@ -233,6 +234,9 @@
     "sort_by_experience": "Sort by experience",
     "sort_by_views": "Sort by views",
     "sort_by_applications": "Sort by applications",
+    "filter": "Filter",
+    "rank_type": "Rank type",
+    "vip_label": "VIP",
     "ambassadors_found": "$count ambassadors found",
     "no_ambassadors_found": "No ambassadors found",
     "followers_count": "$count followers",

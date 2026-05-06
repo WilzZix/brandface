@@ -10,6 +10,7 @@ import '../../../../uikit/components/buttons/buttons.dart';
 import '../../../../uikit/components/inputs/from_to_input_field.dart';
 import '../../../../uikit/tokens/colors.dart';
 import '../../../../uikit/typography/typography.dart';
+import '../../../../utils/extansions/snackbar_x.dart';
 import 'choose_geography.dart';
 import 'choose_social_media_platform.dart';
 import 'choose_spoken_language.dart';
@@ -170,13 +171,7 @@ class _AudienceAndFollowersPageViewState
   }
 
   void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.red,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    context.showAppSnackBar(message, type: AppSnackBarType.error);
   }
 
   @override

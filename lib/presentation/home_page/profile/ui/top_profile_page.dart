@@ -9,6 +9,7 @@ import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,10 +49,10 @@ class _TopProfilePageState extends State<TopProfilePage> {
       listener: (context, state) {
         final failure = state.failure;
         if (failure != null) {
-          final messenger = ScaffoldMessenger.of(context);
-          messenger
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(failure.message)));
+          context.showAppSnackBar(
+            failure.message,
+            type: AppSnackBarType.error,
+          );
           return;
         }
 
@@ -375,12 +376,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
     BillingDashboardEntity dashboard,
   ) async {
     if (dashboard.cards.isEmpty) {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(content: Text('Add a payment card first.')),
-        );
+      context.showAppSnackBar('Add a payment card first.');
       return;
     }
 
@@ -473,10 +469,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
   }
 
   void _showMessage(BuildContext context, String message) {
-    final messenger = ScaffoldMessenger.of(context);
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    context.showAppSnackBar(message);
   }
 
   static String _formatBoostPackage(BillingBoostPackageEntity item) {

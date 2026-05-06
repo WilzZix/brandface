@@ -8,6 +8,7 @@ import 'package:brandface/presentation/home_page/notifications/notification_deta
 import 'package:brandface/uikit/components/ui_components/app_empty_state.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,10 +25,10 @@ class NotificationsPage extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.failure != current.failure && current.failure != null,
       listener: (context, state) {
-        final messenger = ScaffoldMessenger.of(context);
-        messenger
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(state.failure!.message)));
+        context.showAppSnackBar(
+          state.failure!.message,
+          type: AppSnackBarType.error,
+        );
       },
       child: Scaffold(
         appBar: AppBar(

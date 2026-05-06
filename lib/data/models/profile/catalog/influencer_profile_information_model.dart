@@ -130,7 +130,17 @@ class InfluencerProfileInformationModel
       availableDates: json['available_dates'] != null
           ? List<String>.from(json['available_dates'])
           : [],
-      awards: json['awards'] != null ? List.from(json['awards']) : [],
+      awards: json['awards'] != null
+          ? (json['awards'] as List)
+                .map((a) {
+                  if (a is Map) {
+                    return a['title']?.toString() ?? '';
+                  }
+                  return a?.toString() ?? '';
+                })
+                .where((s) => s.isNotEmpty)
+                .toList()
+          : <String>[],
       reviews: json['reviews'] != null ? List.from(json['reviews']) : [],
 
       createdAt: json['created_at'] != null

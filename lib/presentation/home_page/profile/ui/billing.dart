@@ -9,6 +9,7 @@ import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/components/ui_components/title_description_widget.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -44,10 +45,10 @@ class _BillingState extends State<Billing> {
           return;
         }
 
-        final messenger = ScaffoldMessenger.of(context);
-        messenger
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(failure.message)));
+        context.showAppSnackBar(
+          failure.message,
+          type: AppSnackBarType.error,
+        );
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -541,12 +542,7 @@ class _BillingState extends State<Billing> {
   ) async {
     final defaultCard = dashboard.defaultCard;
     if (defaultCard == null) {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(content: Text(t.billing.add_payment_card_first)),
-        );
+      context.showAppSnackBar(t.billing.add_payment_card_first);
       return;
     }
 
@@ -909,12 +905,10 @@ class _AddCardPageState extends State<_AddCardPage> {
   }
 
   void _showValidationMessage() {
-    final messenger = ScaffoldMessenger.of(context);
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        const SnackBar(content: Text('Fill in valid card details.')),
-      );
+    context.showAppSnackBar(
+      'Fill in valid card details.',
+      type: AppSnackBarType.error,
+    );
   }
 
   static String _digitsOnly(String value) {

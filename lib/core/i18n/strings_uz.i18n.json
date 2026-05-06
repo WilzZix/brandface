@@ -172,7 +172,8 @@
     "spoken_language": "So'zlashuv tili",
     "select_region": "Viloyat tanlash",
     "select_city": "Shahar tanlash",
-    "select_sphere": "Soha tanlash"
+    "select_sphere": "Soha tanlash",
+    "select_payment_type": "To'lov turini tanlash"
   },
   "contact": {
     "phone": "Telefon",
@@ -233,6 +234,9 @@
     "sort_by_experience": "Tajribaga ko'ra saralash",
     "sort_by_views": "Ko'rishlar bo'yicha saralash",
     "sort_by_applications": "Arizalar bo'yicha saralash",
+    "filter": "Filtr",
+    "rank_type": "Daraja turi",
+    "vip_label": "VIP",
     "ambassadors_found": "$count ambassador topildi",
     "no_ambassadors_found": "Ambassador topilmadi",
     "followers_count": "$count ta obunachi",

@@ -6,6 +6,7 @@ import 'package:brandface/presentation/home_page/brand/ui/brand_home_page.dart';
 import 'package:brandface/presentation/home_page/home_page.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/ui/registration_page.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:brandface/utils/services/profile_service.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
@@ -99,8 +100,12 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
             _controller.text = otpEntity.code ?? '';
             _startOtpTimer();
           },
-          verifyingOtpFailure: (msg) {},
-          otpReceivingFailure: (_) {},
+          verifyingOtpFailure: (msg) {
+            context.showAppSnackBar(msg, type: AppSnackBarType.error);
+          },
+          otpReceivingFailure: (msg) {
+            context.showAppSnackBar(msg, type: AppSnackBarType.error);
+          },
           orElse: () {},
         );
       },

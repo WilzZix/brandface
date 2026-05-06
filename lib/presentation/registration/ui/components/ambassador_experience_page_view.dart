@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../../uikit/components/buttons/buttons.dart';
 import '../../../../uikit/typography/typography.dart';
+import '../../../../utils/extansions/snackbar_x.dart';
 import 'choose_partners.dart';
 import 'choose_spoken_language.dart';
 
@@ -164,12 +165,9 @@ class _AmbassadorExperiencePageViewState
             listener: (context, state) {
               state.maybeWhen(
                 failure: (awards, failure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(failure.localized),
-                      backgroundColor: AppColors.red,
-                      duration: const Duration(seconds: 2),
-                    ),
+                  context.showAppSnackBar(
+                    failure.localized,
+                    type: AppSnackBarType.error,
                   );
                 },
                 orElse: () {},
