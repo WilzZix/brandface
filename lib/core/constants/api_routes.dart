@@ -8,6 +8,8 @@ class ApiRoutes {
   static String refreshToken = 'accounts/v1/auth/refresh-token/';
   static String me = 'accounts/v1/auth/me/';
   static String deleteAccount = 'accounts/v1/auth/me/';
+  static String socialAuth = 'accounts/v1/auth/social/';
+  static String linkedinCode = 'accounts/v1/auth/linkedin-code/';
 
   ///Registration
   static String registration = 'accounts/v1/register/influencer/';

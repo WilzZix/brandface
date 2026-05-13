@@ -22,4 +22,26 @@ class LoginState with _$LoginState {
 
   const factory LoginState.verifyingOtpFailure({required String msg}) =
       _VerifyingOtpFailure;
+
+  ///Social auth
+  const factory LoginState.socialAuthInProgress({
+    required SocialProvider provider,
+  }) = _SocialAuthInProgress;
+
+  const factory LoginState.socialAuthSuccess({
+    required SocialAuthEntity entity,
+  }) = _SocialAuthSuccess;
+
+  const factory LoginState.socialAuthFailure({
+    required SocialProvider provider,
+    required String msg,
+  }) = _SocialAuthFailure;
+
+  const factory LoginState.socialAuthSoon({
+    required SocialProvider provider,
+  }) = _SocialAuthSoon;
+
+  const factory LoginState.socialAuthCancelled({
+    required SocialProvider provider,
+  }) = _SocialAuthCancelled;
 }

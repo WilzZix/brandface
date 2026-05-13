@@ -8,7 +8,17 @@ import 'package:brandface/data/data_source/network_data_source/offer/offer_data_
 import 'package:brandface/data/data_source/network_data_source/portfolio/portfolio_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/profile/profile_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/registration/registration_data_source.dart';
+import 'package:brandface/data/data_source/network_data_source/social_auth/social_auth_data_source.dart';
 import 'package:brandface/data/repositories/home_repository_impl.dart';
+import 'package:brandface/data/repositories/social_auth_repository_impl.dart';
+import 'package:brandface/domain/entities/social_provider.dart';
+import 'package:brandface/domain/repository/social_auth_repository.dart';
+import 'package:brandface/domain/usecase/login/social_auth_usecase.dart';
+import 'package:brandface/utils/services/social_auth/facebook_auth_service.dart';
+import 'package:brandface/utils/services/social_auth/google_auth_service.dart';
+import 'package:brandface/utils/services/social_auth/linkedin_auth_service.dart';
+import 'package:brandface/utils/services/social_auth/social_auth_service.dart';
+import 'package:brandface/utils/services/social_auth/telegram_auth_service.dart';
 import 'package:brandface/data/repositories/message_repository_impl.dart';
 import 'package:brandface/data/repositories/notification_repository_impl.dart';
 import 'package:brandface/data/repositories/notification_token_repository.dart';
@@ -203,6 +213,27 @@ class AppDi {
     sl.registerLazySingleton<UploadDataSource>(
       () => UploadDataSourceImpl(dioClient: sl()),
     );
+    sl.registerLazySingleton<SocialAuthDataSource>(
+      () => SocialAuthDataSourceImpl(sl()),
+    );
+
+    ///Social auth providers
+    sl.registerLazySingleton<GoogleAuthService>(() => GoogleAuthService());
+    sl.registerLazySingleton<FacebookAuthService>(() => FacebookAuthService());
+    sl.registerLazySingleton<LinkedInAuthService>(
+      () => const LinkedInAuthService(),
+    );
+    sl.registerLazySingleton<TelegramAuthService>(
+      () => const TelegramAuthService(),
+    );
+    sl.registerLazySingleton<Map<SocialProvider, SocialAuthService>>(
+      () => {
+        SocialProvider.google: sl<GoogleAuthService>(),
+        SocialProvider.facebook: sl<FacebookAuthService>(),
+        SocialProvider.linkedin: sl<LinkedInAuthService>(),
+        SocialProvider.telegram: sl<TelegramAuthService>(),
+      },
+    );
 
     ///Use case
     sl.registerLazySingleton(() => SendOtpUseCase(sl()));
@@ -284,6 +315,8 @@ class AppDi {
       () => GetAiMatchingResultsUseCase(repository: sl()),
     );
     sl.registerLazySingleton(() => RunAiMatchingUseCase(repository: sl()));
+    sl.registerLazySingleton(() => SocialAuthUseCase(repository: sl()));
+    sl.registerLazySingleton(() => LinkedInExchangeUseCase(repository: sl()));
 
     ///Repository
     sl.registerLazySingleton<ILoginRepository>(
@@ -326,6 +359,9 @@ class AppDi {
     sl.registerLazySingleton<IUploadRepository>(
       () => UploadRepositoryImpl(dataSource: sl()),
     );
+    sl.registerLazySingleton<ISocialAuthRepository>(
+      () => SocialAuthRepositoryImpl(dataSource: sl()),
+    );
     sl.registerLazySingleton(() => UploadFileUseCase(sl()));
 
     ///Bloc
@@ -343,6 +379,9 @@ class AppDi {
         localService: sl(),
         getMeUseCase: sl(),
         profileService: sl(),
+        socialAuthUseCase: sl(),
+        linkedInExchangeUseCase: sl(),
+        socialAuthServices: sl(),
       ),
     );
     sl.registerFactory(

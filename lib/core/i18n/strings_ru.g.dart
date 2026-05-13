@@ -91,6 +91,12 @@ class _TranslationsLoginRu implements TranslationsLoginEn {
 	@override String get sms_confirmation => 'SMS подтверждение';
 	@override String sms_sent_to({required Object phoneEnd}) => 'На ваш номер телефона **${phoneEnd} отправлен SMS код, пожалуйста введите его';
 	@override String get send_code_again => 'Отправить код снова';
+	@override String get soon_title => 'Скоро';
+	@override String soon_message({required Object provider}) => 'Вход через ${provider} скоро будет доступен.';
+	@override String get social_login_failed => 'Не удалось войти через соцсеть';
+	@override String get social_login_cancelled => 'Вход отменён';
+	@override String get linkedin_title => 'Вход через LinkedIn';
+	@override String get telegram_title => 'Вход через Telegram';
 }
 
 // Path: registration
@@ -563,6 +569,12 @@ extension on TranslationsRu {
 			'login.sms_confirmation' => 'SMS подтверждение',
 			'login.sms_sent_to' => ({required Object phoneEnd}) => 'На ваш номер телефона **${phoneEnd} отправлен SMS код, пожалуйста введите его',
 			'login.send_code_again' => 'Отправить код снова',
+			'login.soon_title' => 'Скоро',
+			'login.soon_message' => ({required Object provider}) => 'Вход через ${provider} скоро будет доступен.',
+			'login.social_login_failed' => 'Не удалось войти через соцсеть',
+			'login.social_login_cancelled' => 'Вход отменён',
+			'login.linkedin_title' => 'Вход через LinkedIn',
+			'login.telegram_title' => 'Вход через Telegram',
 			'registration.title' => 'Регистрация',
 			'registration.influencer' => 'Инфлюенсер',
 			'registration.ambassador' => 'Амбассадор',

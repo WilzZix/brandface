@@ -13,7 +13,13 @@
     "login_methods": "or login in with",
     "sms_confirmation": "SMS confirmation",
     "sms_sent_to": "We have sent SMS code to your phone number **$phoneEnd, please enter this code",
-    "send_code_again": "Send code again"
+    "send_code_again": "Send code again",
+    "soon_title": "Coming soon",
+    "soon_message": "Login with $provider will be available soon.",
+    "social_login_failed": "Social login failed",
+    "social_login_cancelled": "Sign-in was cancelled",
+    "linkedin_title": "Sign in with LinkedIn",
+    "telegram_title": "Sign in with Telegram"
   },
   "registration": {
     "title": "Registration",

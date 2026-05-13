@@ -13,7 +13,13 @@
     "login_methods": "yoki ... orqali kirish",
     "sms_confirmation": "SMS tasdiqlash",
     "sms_sent_to": "Telefon raqamingizga **$phoneEnd SMS kod yuborildi, iltimos kodni kiriting",
-    "send_code_again": "Kodni qayta yuborish"
+    "send_code_again": "Kodni qayta yuborish",
+    "soon_title": "Tez orada",
+    "soon_message": "$provider orqali kirish tez orada qo'shiladi.",
+    "social_login_failed": "Social orqali kirish amalga oshmadi",
+    "social_login_cancelled": "Kirish bekor qilindi",
+    "linkedin_title": "LinkedIn orqali kirish",
+    "telegram_title": "Telegram orqali kirish"
   },
   "registration": {
     "title": "Ro'yxatdan o'tish",

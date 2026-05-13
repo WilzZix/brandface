@@ -114,6 +114,24 @@ class TranslationsLoginEn {
 
 	/// en: 'Send code again'
 	String get send_code_again => 'Send code again';
+
+	/// en: 'Coming soon'
+	String get soon_title => 'Coming soon';
+
+	/// en: 'Login with $provider will be available soon.'
+	String soon_message({required Object provider}) => 'Login with ${provider} will be available soon.';
+
+	/// en: 'Social login failed'
+	String get social_login_failed => 'Social login failed';
+
+	/// en: 'Sign-in was cancelled'
+	String get social_login_cancelled => 'Sign-in was cancelled';
+
+	/// en: 'Sign in with LinkedIn'
+	String get linkedin_title => 'Sign in with LinkedIn';
+
+	/// en: 'Sign in with Telegram'
+	String get telegram_title => 'Sign in with Telegram';
 }
 
 // Path: registration
@@ -1219,6 +1237,12 @@ extension on Translations {
 			'login.sms_confirmation' => 'SMS confirmation',
 			'login.sms_sent_to' => ({required Object phoneEnd}) => 'We have sent SMS code to your phone number **${phoneEnd}, please enter this code',
 			'login.send_code_again' => 'Send code again',
+			'login.soon_title' => 'Coming soon',
+			'login.soon_message' => ({required Object provider}) => 'Login with ${provider} will be available soon.',
+			'login.social_login_failed' => 'Social login failed',
+			'login.social_login_cancelled' => 'Sign-in was cancelled',
+			'login.linkedin_title' => 'Sign in with LinkedIn',
+			'login.telegram_title' => 'Sign in with Telegram',
 			'registration.title' => 'Registration',
 			'registration.influencer' => 'Influencer',
 			'registration.ambassador' => 'Ambassador',

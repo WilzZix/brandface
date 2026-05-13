@@ -91,6 +91,12 @@ class _TranslationsLoginUz implements TranslationsLoginEn {
 	@override String get sms_confirmation => 'SMS tasdiqlash';
 	@override String sms_sent_to({required Object phoneEnd}) => 'Telefon raqamingizga **${phoneEnd} SMS kod yuborildi, iltimos kodni kiriting';
 	@override String get send_code_again => 'Kodni qayta yuborish';
+	@override String get soon_title => 'Tez orada';
+	@override String soon_message({required Object provider}) => '${provider} orqali kirish tez orada qo\'shiladi.';
+	@override String get social_login_failed => 'Social orqali kirish amalga oshmadi';
+	@override String get social_login_cancelled => 'Kirish bekor qilindi';
+	@override String get linkedin_title => 'LinkedIn orqali kirish';
+	@override String get telegram_title => 'Telegram orqali kirish';
 }
 
 // Path: registration
@@ -563,6 +569,12 @@ extension on TranslationsUz {
 			'login.sms_confirmation' => 'SMS tasdiqlash',
 			'login.sms_sent_to' => ({required Object phoneEnd}) => 'Telefon raqamingizga **${phoneEnd} SMS kod yuborildi, iltimos kodni kiriting',
 			'login.send_code_again' => 'Kodni qayta yuborish',
+			'login.soon_title' => 'Tez orada',
+			'login.soon_message' => ({required Object provider}) => '${provider} orqali kirish tez orada qo\'shiladi.',
+			'login.social_login_failed' => 'Social orqali kirish amalga oshmadi',
+			'login.social_login_cancelled' => 'Kirish bekor qilindi',
+			'login.linkedin_title' => 'LinkedIn orqali kirish',
+			'login.telegram_title' => 'Telegram orqali kirish',
 			'registration.title' => 'Ro\'yxatdan o\'tish',
 			'registration.influencer' => 'Influencer',
 			'registration.ambassador' => 'Ambassador',

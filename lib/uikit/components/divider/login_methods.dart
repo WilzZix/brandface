@@ -1,53 +1,104 @@
-import 'package:brandface/presentation/registration/ui/registration_page.dart';
+import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_assets.dart';
+import '../../../domain/entities/social_provider.dart';
 import '../../tokens/colors.dart';
 
-class LoginMethods extends StatefulWidget {
+class LoginMethods extends StatelessWidget {
   const LoginMethods({super.key});
 
-  @override
-  State<LoginMethods> createState() => _LoginMethodsState();
-}
+  static final List<({SocialProvider provider, String icon})> _methods = [
+    (provider: SocialProvider.google, icon: AppAssets.icGoogle),
+    (provider: SocialProvider.linkedin, icon: AppAssets.icLinkedin),
+    (provider: SocialProvider.apple, icon: AppAssets.icApple),
+    (provider: SocialProvider.instagram, icon: AppAssets.icInstagram),
+    (provider: SocialProvider.telegram, icon: AppAssets.icTelegram),
+    (provider: SocialProvider.facebook, icon: AppAssets.icFacebook),
+  ];
 
-class _LoginMethodsState extends State<LoginMethods> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        GestureDetector(
-          child: LoginMethodItem(iconPath: AppAssets.icGoogle),
-          onTap: () => context.pushNamed(RegistrationPage.tag),
-        ),
-        LoginMethodItem(iconPath: AppAssets.icLinkedin),
-        LoginMethodItem(iconPath: AppAssets.icApple),
-        LoginMethodItem(iconPath: AppAssets.icInstagram),
-        LoginMethodItem(iconPath: AppAssets.icTelegram),
-        LoginMethodItem(iconPath: AppAssets.icFacebook),
-      ],
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) {
+        final wasBusy = previous.maybeWhen(
+          socialAuthInProgress: (_) => true,
+          orElse: () => false,
+        );
+        final isBusy = current.maybeWhen(
+          socialAuthInProgress: (_) => true,
+          orElse: () => false,
+        );
+        return wasBusy != isBusy;
+      },
+      builder: (context, state) {
+        final inProgressProvider = state.maybeWhen(
+          socialAuthInProgress: (provider) => provider,
+          orElse: () => null,
+        );
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            for (final m in _methods)
+              LoginMethodItem(
+                iconPath: m.icon,
+                loading: inProgressProvider == m.provider,
+                disabled: inProgressProvider != null,
+                onTap: () => context.read<LoginBloc>().add(
+                      LoginEvent.socialLogin(
+                        provider: m.provider,
+                        context: context,
+                      ),
+                    ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
 
 class LoginMethodItem extends StatelessWidget {
-  const LoginMethodItem({super.key, required this.iconPath});
+  const LoginMethodItem({
+    super.key,
+    required this.iconPath,
+    required this.onTap,
+    this.loading = false,
+    this.disabled = false,
+  });
 
   final String iconPath;
+  final VoidCallback onTap;
+  final bool loading;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: BoxBorder.all(width: 1, color: AppColors.borderColor),
+    final content = loading
+        ? const SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
+        : SvgPicture.asset(iconPath);
+
+    return GestureDetector(
+      onTap: disabled ? null : onTap,
+      child: Opacity(
+        opacity: disabled && !loading ? 0.5 : 1,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(width: 1, color: AppColors.borderColor),
+          ),
+          child: content,
+        ),
       ),
-      child: SvgPicture.asset(iconPath),
     );
   }
 }

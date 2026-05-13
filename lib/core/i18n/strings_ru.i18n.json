@@ -13,7 +13,13 @@
     "login_methods": "или войти через",
     "sms_confirmation": "SMS подтверждение",
     "sms_sent_to": "На ваш номер телефона **$phoneEnd отправлен SMS код, пожалуйста введите его",
-    "send_code_again": "Отправить код снова"
+    "send_code_again": "Отправить код снова",
+    "soon_title": "Скоро",
+    "soon_message": "Вход через $provider скоро будет доступен.",
+    "social_login_failed": "Не удалось войти через соцсеть",
+    "social_login_cancelled": "Вход отменён",
+    "linkedin_title": "Вход через LinkedIn",
+    "telegram_title": "Вход через Telegram"
   },
   "registration": {
     "title": "Регистрация",

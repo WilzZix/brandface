@@ -1,6 +1,7 @@
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/login/ui/term_of_use_page.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
+import 'package:brandface/uikit/components/bottom_sheet/soon_bottom_sheet.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -8,10 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/di/app_di.dart';
 import '../../../core/i18n/strings.g.dart';
+import '../../../domain/entities/social_provider.dart';
 import '../../../uikit/components/divider/login_divider.dart';
 import '../../../uikit/components/divider/login_methods.dart';
 import '../../../uikit/components/inputs/phone_input_field.dart';
+import '../../../utils/services/profile_service.dart';
+import '../../home_page/brand/ui/brand_home_page.dart';
+import '../../home_page/home_page.dart';
+import '../../registration/ui/registration_page.dart';
 import 'arguments/sms_confirmation_page_arguments.dart';
 import 'sms_confirmation_page.dart';
 
@@ -26,6 +33,36 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controller = TextEditingController();
+
+  String _providerLabel(SocialProvider provider) {
+    switch (provider) {
+      case SocialProvider.google:
+        return 'Google';
+      case SocialProvider.telegram:
+        return 'Telegram';
+      case SocialProvider.facebook:
+        return 'Facebook';
+      case SocialProvider.linkedin:
+        return 'LinkedIn';
+      case SocialProvider.apple:
+        return 'Apple';
+      case SocialProvider.instagram:
+        return 'Instagram';
+    }
+  }
+
+  void _navigateAfterSocialSuccess(bool isNewUser) {
+    if (isNewUser) {
+      context.go(RegistrationPage.tag);
+      return;
+    }
+    final role = sl<ProfileService>().getRole();
+    if (role == 'brand') {
+      context.go(BrandHomePage.tag);
+    } else {
+      context.go(HomePage.tag);
+    }
+  }
 
   @override
   void initState() {
@@ -61,6 +98,21 @@ class _LoginPageState extends State<LoginPage> {
               context: context,
               message: msg,
             );
+          },
+          socialAuthSoon: (provider) {
+            SoonBottomSheet.open(
+              context: context,
+              providerName: _providerLabel(provider),
+            );
+          },
+          socialAuthFailure: (provider, msg) {
+            BrandfaceBottomSheet.openFailureBottomSheet(
+              context: context,
+              message: msg,
+            );
+          },
+          socialAuthSuccess: (entity) {
+            _navigateAfterSocialSuccess(entity.isNewUser ?? true);
           },
           orElse: () {},
         );

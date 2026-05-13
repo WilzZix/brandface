@@ -1,15 +1,20 @@
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/get_me_entity.dart';
 import 'package:brandface/domain/entities/otp_entity.dart';
+import 'package:brandface/domain/entities/social_auth_entity.dart';
+import 'package:brandface/domain/entities/social_provider.dart';
 import 'package:brandface/domain/entities/verify_otp_entity.dart';
 import 'package:brandface/domain/repository/login_repository.dart';
+import 'package:brandface/domain/repository/social_auth_repository.dart';
 import 'package:brandface/domain/usecase/login/get_me_use_case.dart';
 import 'package:brandface/domain/usecase/login/params/verify_otp_params.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
+import 'package:brandface/domain/usecase/login/social_auth_usecase.dart';
 import 'package:brandface/domain/usecase/login/verify_otp_usecase.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/utils/services/app_auth_local_service.dart';
 import 'package:brandface/utils/services/profile_service.dart';
+import 'package:brandface/utils/services/social_auth/social_auth_service.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,6 +62,23 @@ class _FakeLoginRepository implements ILoginRepository {
   Future<Either<Failure, void>> deleteAccount() async => const Right(null);
 }
 
+class _FakeSocialAuthRepository implements ISocialAuthRepository {
+  @override
+  Future<Either<Failure, SocialAuthEntity>> socialLogin({
+    required SocialProvider provider,
+    required String accessToken,
+    String? idToken,
+  }) async =>
+      const Left(ServerFailure('not used in these tests', statusCode: 500));
+
+  @override
+  Future<Either<Failure, SocialAuthEntity>> linkedInCodeExchange({
+    required String code,
+    required String redirectUri,
+  }) async =>
+      const Left(ServerFailure('not used in these tests', statusCode: 500));
+}
+
 class _FakeAuthLocalService implements IAuthLocalService {
   String? access;
   String? refresh;
@@ -100,12 +122,16 @@ LoginBloc _buildBloc({
   required _FakeAuthLocalService auth,
   required ProfileService profile,
 }) {
+  final socialRepo = _FakeSocialAuthRepository();
   return LoginBloc(
     loginUseCase: SendOtpUseCase(repo),
     verifyOtpUsecase: VerifyOtpUsecase(repository: repo),
     localService: auth,
     getMeUseCase: GetMeUseCase(iLoginRepository: repo),
     profileService: profile,
+    socialAuthUseCase: SocialAuthUseCase(repository: socialRepo),
+    linkedInExchangeUseCase: LinkedInExchangeUseCase(repository: socialRepo),
+    socialAuthServices: const <SocialProvider, SocialAuthService>{},
   );
 }
 

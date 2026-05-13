@@ -55,13 +55,14 @@ extension LoginEventPatterns on LoginEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SendOtp value)?  sendOtp,TResult Function( _VerifyOtp value)?  verifyOtp,TResult Function( _Reset value)?  reset,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SendOtp value)?  sendOtp,TResult Function( _VerifyOtp value)?  verifyOtp,TResult Function( _SocialLogin value)?  socialLogin,TResult Function( _Reset value)?  reset,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SendOtp() when sendOtp != null:
 return sendOtp(_that);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that);case _Reset() when reset != null:
+return verifyOtp(_that);case _SocialLogin() when socialLogin != null:
+return socialLogin(_that);case _Reset() when reset != null:
 return reset(_that);case _:
   return orElse();
 
@@ -80,13 +81,14 @@ return reset(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SendOtp value)  sendOtp,required TResult Function( _VerifyOtp value)  verifyOtp,required TResult Function( _Reset value)  reset,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SendOtp value)  sendOtp,required TResult Function( _VerifyOtp value)  verifyOtp,required TResult Function( _SocialLogin value)  socialLogin,required TResult Function( _Reset value)  reset,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _SendOtp():
 return sendOtp(_that);case _VerifyOtp():
-return verifyOtp(_that);case _Reset():
+return verifyOtp(_that);case _SocialLogin():
+return socialLogin(_that);case _Reset():
 return reset(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -104,13 +106,14 @@ return reset(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SendOtp value)?  sendOtp,TResult? Function( _VerifyOtp value)?  verifyOtp,TResult? Function( _Reset value)?  reset,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SendOtp value)?  sendOtp,TResult? Function( _VerifyOtp value)?  verifyOtp,TResult? Function( _SocialLogin value)?  socialLogin,TResult? Function( _Reset value)?  reset,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _SendOtp() when sendOtp != null:
 return sendOtp(_that);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that);case _Reset() when reset != null:
+return verifyOtp(_that);case _SocialLogin() when socialLogin != null:
+return socialLogin(_that);case _Reset() when reset != null:
 return reset(_that);case _:
   return null;
 
@@ -128,12 +131,13 @@ return reset(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String phone)?  sendOtp,TResult Function( VerifyOtpParams params)?  verifyOtp,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String phone)?  sendOtp,TResult Function( VerifyOtpParams params)?  verifyOtp,TResult Function( SocialProvider provider,  BuildContext context)?  socialLogin,TResult Function()?  reset,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that.params);case _Reset() when reset != null:
+return verifyOtp(_that.params);case _SocialLogin() when socialLogin != null:
+return socialLogin(_that.provider,_that.context);case _Reset() when reset != null:
 return reset();case _:
   return orElse();
 
@@ -152,12 +156,13 @@ return reset();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String phone)  sendOtp,required TResult Function( VerifyOtpParams params)  verifyOtp,required TResult Function()  reset,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String phone)  sendOtp,required TResult Function( VerifyOtpParams params)  verifyOtp,required TResult Function( SocialProvider provider,  BuildContext context)  socialLogin,required TResult Function()  reset,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _SendOtp():
 return sendOtp(_that.phone);case _VerifyOtp():
-return verifyOtp(_that.params);case _Reset():
+return verifyOtp(_that.params);case _SocialLogin():
+return socialLogin(_that.provider,_that.context);case _Reset():
 return reset();case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +180,13 @@ return reset();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String phone)?  sendOtp,TResult? Function( VerifyOtpParams params)?  verifyOtp,TResult? Function()?  reset,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String phone)?  sendOtp,TResult? Function( VerifyOtpParams params)?  verifyOtp,TResult? Function( SocialProvider provider,  BuildContext context)?  socialLogin,TResult? Function()?  reset,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _SendOtp() when sendOtp != null:
 return sendOtp(_that.phone);case _VerifyOtp() when verifyOtp != null:
-return verifyOtp(_that.params);case _Reset() when reset != null:
+return verifyOtp(_that.params);case _SocialLogin() when socialLogin != null:
+return socialLogin(_that.provider,_that.context);case _Reset() when reset != null:
 return reset();case _:
   return null;
 
@@ -356,6 +362,74 @@ as VerifyOtpParams,
 /// @nodoc
 
 
+class _SocialLogin implements LoginEvent {
+  const _SocialLogin({required this.provider, required this.context});
+  
+
+ final  SocialProvider provider;
+ final  BuildContext context;
+
+/// Create a copy of LoginEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SocialLoginCopyWith<_SocialLogin> get copyWith => __$SocialLoginCopyWithImpl<_SocialLogin>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SocialLogin&&(identical(other.provider, provider) || other.provider == provider)&&(identical(other.context, context) || other.context == context));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,provider,context);
+
+@override
+String toString() {
+  return 'LoginEvent.socialLogin(provider: $provider, context: $context)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SocialLoginCopyWith<$Res> implements $LoginEventCopyWith<$Res> {
+  factory _$SocialLoginCopyWith(_SocialLogin value, $Res Function(_SocialLogin) _then) = __$SocialLoginCopyWithImpl;
+@useResult
+$Res call({
+ SocialProvider provider, BuildContext context
+});
+
+
+
+
+}
+/// @nodoc
+class __$SocialLoginCopyWithImpl<$Res>
+    implements _$SocialLoginCopyWith<$Res> {
+  __$SocialLoginCopyWithImpl(this._self, this._then);
+
+  final _SocialLogin _self;
+  final $Res Function(_SocialLogin) _then;
+
+/// Create a copy of LoginEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? provider = null,Object? context = null,}) {
+  return _then(_SocialLogin(
+provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
+as SocialProvider,context: null == context ? _self.context : context // ignore: cast_nullable_to_non_nullable
+as BuildContext,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
 class _Reset implements LoginEvent {
   const _Reset();
   
@@ -429,7 +503,7 @@ extension LoginStatePatterns on LoginState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _OtpReceiving value)?  otpReceiving,TResult Function( _OtpReceived value)?  otpReceived,TResult Function( _OtpReceivingFailure value)?  otpReceivingFailure,TResult Function( _VerifyingOtp value)?  verifyingOtp,TResult Function( _OtpVeiried value)?  otpVerified,TResult Function( _VerifyingOtpFailure value)?  verifyingOtpFailure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _OtpReceiving value)?  otpReceiving,TResult Function( _OtpReceived value)?  otpReceived,TResult Function( _OtpReceivingFailure value)?  otpReceivingFailure,TResult Function( _VerifyingOtp value)?  verifyingOtp,TResult Function( _OtpVeiried value)?  otpVerified,TResult Function( _VerifyingOtpFailure value)?  verifyingOtpFailure,TResult Function( _SocialAuthInProgress value)?  socialAuthInProgress,TResult Function( _SocialAuthSuccess value)?  socialAuthSuccess,TResult Function( _SocialAuthFailure value)?  socialAuthFailure,TResult Function( _SocialAuthSoon value)?  socialAuthSoon,TResult Function( _SocialAuthCancelled value)?  socialAuthCancelled,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -439,7 +513,12 @@ return otpReceived(_that);case _OtpReceivingFailure() when otpReceivingFailure !
 return otpReceivingFailure(_that);case _VerifyingOtp() when verifyingOtp != null:
 return verifyingOtp(_that);case _OtpVeiried() when otpVerified != null:
 return otpVerified(_that);case _VerifyingOtpFailure() when verifyingOtpFailure != null:
-return verifyingOtpFailure(_that);case _:
+return verifyingOtpFailure(_that);case _SocialAuthInProgress() when socialAuthInProgress != null:
+return socialAuthInProgress(_that);case _SocialAuthSuccess() when socialAuthSuccess != null:
+return socialAuthSuccess(_that);case _SocialAuthFailure() when socialAuthFailure != null:
+return socialAuthFailure(_that);case _SocialAuthSoon() when socialAuthSoon != null:
+return socialAuthSoon(_that);case _SocialAuthCancelled() when socialAuthCancelled != null:
+return socialAuthCancelled(_that);case _:
   return orElse();
 
 }
@@ -457,7 +536,7 @@ return verifyingOtpFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _OtpReceiving value)  otpReceiving,required TResult Function( _OtpReceived value)  otpReceived,required TResult Function( _OtpReceivingFailure value)  otpReceivingFailure,required TResult Function( _VerifyingOtp value)  verifyingOtp,required TResult Function( _OtpVeiried value)  otpVerified,required TResult Function( _VerifyingOtpFailure value)  verifyingOtpFailure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _OtpReceiving value)  otpReceiving,required TResult Function( _OtpReceived value)  otpReceived,required TResult Function( _OtpReceivingFailure value)  otpReceivingFailure,required TResult Function( _VerifyingOtp value)  verifyingOtp,required TResult Function( _OtpVeiried value)  otpVerified,required TResult Function( _VerifyingOtpFailure value)  verifyingOtpFailure,required TResult Function( _SocialAuthInProgress value)  socialAuthInProgress,required TResult Function( _SocialAuthSuccess value)  socialAuthSuccess,required TResult Function( _SocialAuthFailure value)  socialAuthFailure,required TResult Function( _SocialAuthSoon value)  socialAuthSoon,required TResult Function( _SocialAuthCancelled value)  socialAuthCancelled,}){
 final _that = this;
 switch (_that) {
 case _Initial():
@@ -467,7 +546,12 @@ return otpReceived(_that);case _OtpReceivingFailure():
 return otpReceivingFailure(_that);case _VerifyingOtp():
 return verifyingOtp(_that);case _OtpVeiried():
 return otpVerified(_that);case _VerifyingOtpFailure():
-return verifyingOtpFailure(_that);case _:
+return verifyingOtpFailure(_that);case _SocialAuthInProgress():
+return socialAuthInProgress(_that);case _SocialAuthSuccess():
+return socialAuthSuccess(_that);case _SocialAuthFailure():
+return socialAuthFailure(_that);case _SocialAuthSoon():
+return socialAuthSoon(_that);case _SocialAuthCancelled():
+return socialAuthCancelled(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -484,7 +568,7 @@ return verifyingOtpFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _OtpReceiving value)?  otpReceiving,TResult? Function( _OtpReceived value)?  otpReceived,TResult? Function( _OtpReceivingFailure value)?  otpReceivingFailure,TResult? Function( _VerifyingOtp value)?  verifyingOtp,TResult? Function( _OtpVeiried value)?  otpVerified,TResult? Function( _VerifyingOtpFailure value)?  verifyingOtpFailure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _OtpReceiving value)?  otpReceiving,TResult? Function( _OtpReceived value)?  otpReceived,TResult? Function( _OtpReceivingFailure value)?  otpReceivingFailure,TResult? Function( _VerifyingOtp value)?  verifyingOtp,TResult? Function( _OtpVeiried value)?  otpVerified,TResult? Function( _VerifyingOtpFailure value)?  verifyingOtpFailure,TResult? Function( _SocialAuthInProgress value)?  socialAuthInProgress,TResult? Function( _SocialAuthSuccess value)?  socialAuthSuccess,TResult? Function( _SocialAuthFailure value)?  socialAuthFailure,TResult? Function( _SocialAuthSoon value)?  socialAuthSoon,TResult? Function( _SocialAuthCancelled value)?  socialAuthCancelled,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -494,7 +578,12 @@ return otpReceived(_that);case _OtpReceivingFailure() when otpReceivingFailure !
 return otpReceivingFailure(_that);case _VerifyingOtp() when verifyingOtp != null:
 return verifyingOtp(_that);case _OtpVeiried() when otpVerified != null:
 return otpVerified(_that);case _VerifyingOtpFailure() when verifyingOtpFailure != null:
-return verifyingOtpFailure(_that);case _:
+return verifyingOtpFailure(_that);case _SocialAuthInProgress() when socialAuthInProgress != null:
+return socialAuthInProgress(_that);case _SocialAuthSuccess() when socialAuthSuccess != null:
+return socialAuthSuccess(_that);case _SocialAuthFailure() when socialAuthFailure != null:
+return socialAuthFailure(_that);case _SocialAuthSoon() when socialAuthSoon != null:
+return socialAuthSoon(_that);case _SocialAuthCancelled() when socialAuthCancelled != null:
+return socialAuthCancelled(_that);case _:
   return null;
 
 }
@@ -511,7 +600,7 @@ return verifyingOtpFailure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  otpReceiving,TResult Function( OtpEntity otpEntity)?  otpReceived,TResult Function( String msg)?  otpReceivingFailure,TResult Function()?  verifyingOtp,TResult Function( VerifyOtpEntity otpEntity)?  otpVerified,TResult Function( String msg)?  verifyingOtpFailure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  otpReceiving,TResult Function( OtpEntity otpEntity)?  otpReceived,TResult Function( String msg)?  otpReceivingFailure,TResult Function()?  verifyingOtp,TResult Function( VerifyOtpEntity otpEntity)?  otpVerified,TResult Function( String msg)?  verifyingOtpFailure,TResult Function( SocialProvider provider)?  socialAuthInProgress,TResult Function( SocialAuthEntity entity)?  socialAuthSuccess,TResult Function( SocialProvider provider,  String msg)?  socialAuthFailure,TResult Function( SocialProvider provider)?  socialAuthSoon,TResult Function( SocialProvider provider)?  socialAuthCancelled,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _OtpReceiving() when otpReceiving != null:
@@ -520,7 +609,12 @@ return otpReceived(_that.otpEntity);case _OtpReceivingFailure() when otpReceivin
 return otpReceivingFailure(_that.msg);case _VerifyingOtp() when verifyingOtp != null:
 return verifyingOtp();case _OtpVeiried() when otpVerified != null:
 return otpVerified(_that.otpEntity);case _VerifyingOtpFailure() when verifyingOtpFailure != null:
-return verifyingOtpFailure(_that.msg);case _:
+return verifyingOtpFailure(_that.msg);case _SocialAuthInProgress() when socialAuthInProgress != null:
+return socialAuthInProgress(_that.provider);case _SocialAuthSuccess() when socialAuthSuccess != null:
+return socialAuthSuccess(_that.entity);case _SocialAuthFailure() when socialAuthFailure != null:
+return socialAuthFailure(_that.provider,_that.msg);case _SocialAuthSoon() when socialAuthSoon != null:
+return socialAuthSoon(_that.provider);case _SocialAuthCancelled() when socialAuthCancelled != null:
+return socialAuthCancelled(_that.provider);case _:
   return orElse();
 
 }
@@ -538,7 +632,7 @@ return verifyingOtpFailure(_that.msg);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  otpReceiving,required TResult Function( OtpEntity otpEntity)  otpReceived,required TResult Function( String msg)  otpReceivingFailure,required TResult Function()  verifyingOtp,required TResult Function( VerifyOtpEntity otpEntity)  otpVerified,required TResult Function( String msg)  verifyingOtpFailure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  otpReceiving,required TResult Function( OtpEntity otpEntity)  otpReceived,required TResult Function( String msg)  otpReceivingFailure,required TResult Function()  verifyingOtp,required TResult Function( VerifyOtpEntity otpEntity)  otpVerified,required TResult Function( String msg)  verifyingOtpFailure,required TResult Function( SocialProvider provider)  socialAuthInProgress,required TResult Function( SocialAuthEntity entity)  socialAuthSuccess,required TResult Function( SocialProvider provider,  String msg)  socialAuthFailure,required TResult Function( SocialProvider provider)  socialAuthSoon,required TResult Function( SocialProvider provider)  socialAuthCancelled,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _OtpReceiving():
@@ -547,7 +641,12 @@ return otpReceived(_that.otpEntity);case _OtpReceivingFailure():
 return otpReceivingFailure(_that.msg);case _VerifyingOtp():
 return verifyingOtp();case _OtpVeiried():
 return otpVerified(_that.otpEntity);case _VerifyingOtpFailure():
-return verifyingOtpFailure(_that.msg);case _:
+return verifyingOtpFailure(_that.msg);case _SocialAuthInProgress():
+return socialAuthInProgress(_that.provider);case _SocialAuthSuccess():
+return socialAuthSuccess(_that.entity);case _SocialAuthFailure():
+return socialAuthFailure(_that.provider,_that.msg);case _SocialAuthSoon():
+return socialAuthSoon(_that.provider);case _SocialAuthCancelled():
+return socialAuthCancelled(_that.provider);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -564,7 +663,7 @@ return verifyingOtpFailure(_that.msg);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  otpReceiving,TResult? Function( OtpEntity otpEntity)?  otpReceived,TResult? Function( String msg)?  otpReceivingFailure,TResult? Function()?  verifyingOtp,TResult? Function( VerifyOtpEntity otpEntity)?  otpVerified,TResult? Function( String msg)?  verifyingOtpFailure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  otpReceiving,TResult? Function( OtpEntity otpEntity)?  otpReceived,TResult? Function( String msg)?  otpReceivingFailure,TResult? Function()?  verifyingOtp,TResult? Function( VerifyOtpEntity otpEntity)?  otpVerified,TResult? Function( String msg)?  verifyingOtpFailure,TResult? Function( SocialProvider provider)?  socialAuthInProgress,TResult? Function( SocialAuthEntity entity)?  socialAuthSuccess,TResult? Function( SocialProvider provider,  String msg)?  socialAuthFailure,TResult? Function( SocialProvider provider)?  socialAuthSoon,TResult? Function( SocialProvider provider)?  socialAuthCancelled,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _OtpReceiving() when otpReceiving != null:
@@ -573,7 +672,12 @@ return otpReceived(_that.otpEntity);case _OtpReceivingFailure() when otpReceivin
 return otpReceivingFailure(_that.msg);case _VerifyingOtp() when verifyingOtp != null:
 return verifyingOtp();case _OtpVeiried() when otpVerified != null:
 return otpVerified(_that.otpEntity);case _VerifyingOtpFailure() when verifyingOtpFailure != null:
-return verifyingOtpFailure(_that.msg);case _:
+return verifyingOtpFailure(_that.msg);case _SocialAuthInProgress() when socialAuthInProgress != null:
+return socialAuthInProgress(_that.provider);case _SocialAuthSuccess() when socialAuthSuccess != null:
+return socialAuthSuccess(_that.entity);case _SocialAuthFailure() when socialAuthFailure != null:
+return socialAuthFailure(_that.provider,_that.msg);case _SocialAuthSoon() when socialAuthSoon != null:
+return socialAuthSoon(_that.provider);case _SocialAuthCancelled() when socialAuthCancelled != null:
+return socialAuthCancelled(_that.provider);case _:
   return null;
 
 }
@@ -935,6 +1039,338 @@ class __$VerifyingOtpFailureCopyWithImpl<$Res>
   return _then(_VerifyingOtpFailure(
 msg: null == msg ? _self.msg : msg // ignore: cast_nullable_to_non_nullable
 as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _SocialAuthInProgress implements LoginState {
+  const _SocialAuthInProgress({required this.provider});
+  
+
+ final  SocialProvider provider;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SocialAuthInProgressCopyWith<_SocialAuthInProgress> get copyWith => __$SocialAuthInProgressCopyWithImpl<_SocialAuthInProgress>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SocialAuthInProgress&&(identical(other.provider, provider) || other.provider == provider));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,provider);
+
+@override
+String toString() {
+  return 'LoginState.socialAuthInProgress(provider: $provider)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SocialAuthInProgressCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory _$SocialAuthInProgressCopyWith(_SocialAuthInProgress value, $Res Function(_SocialAuthInProgress) _then) = __$SocialAuthInProgressCopyWithImpl;
+@useResult
+$Res call({
+ SocialProvider provider
+});
+
+
+
+
+}
+/// @nodoc
+class __$SocialAuthInProgressCopyWithImpl<$Res>
+    implements _$SocialAuthInProgressCopyWith<$Res> {
+  __$SocialAuthInProgressCopyWithImpl(this._self, this._then);
+
+  final _SocialAuthInProgress _self;
+  final $Res Function(_SocialAuthInProgress) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? provider = null,}) {
+  return _then(_SocialAuthInProgress(
+provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
+as SocialProvider,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _SocialAuthSuccess implements LoginState {
+  const _SocialAuthSuccess({required this.entity});
+  
+
+ final  SocialAuthEntity entity;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SocialAuthSuccessCopyWith<_SocialAuthSuccess> get copyWith => __$SocialAuthSuccessCopyWithImpl<_SocialAuthSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SocialAuthSuccess&&(identical(other.entity, entity) || other.entity == entity));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,entity);
+
+@override
+String toString() {
+  return 'LoginState.socialAuthSuccess(entity: $entity)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SocialAuthSuccessCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory _$SocialAuthSuccessCopyWith(_SocialAuthSuccess value, $Res Function(_SocialAuthSuccess) _then) = __$SocialAuthSuccessCopyWithImpl;
+@useResult
+$Res call({
+ SocialAuthEntity entity
+});
+
+
+
+
+}
+/// @nodoc
+class __$SocialAuthSuccessCopyWithImpl<$Res>
+    implements _$SocialAuthSuccessCopyWith<$Res> {
+  __$SocialAuthSuccessCopyWithImpl(this._self, this._then);
+
+  final _SocialAuthSuccess _self;
+  final $Res Function(_SocialAuthSuccess) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? entity = null,}) {
+  return _then(_SocialAuthSuccess(
+entity: null == entity ? _self.entity : entity // ignore: cast_nullable_to_non_nullable
+as SocialAuthEntity,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _SocialAuthFailure implements LoginState {
+  const _SocialAuthFailure({required this.provider, required this.msg});
+  
+
+ final  SocialProvider provider;
+ final  String msg;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SocialAuthFailureCopyWith<_SocialAuthFailure> get copyWith => __$SocialAuthFailureCopyWithImpl<_SocialAuthFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SocialAuthFailure&&(identical(other.provider, provider) || other.provider == provider)&&(identical(other.msg, msg) || other.msg == msg));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,provider,msg);
+
+@override
+String toString() {
+  return 'LoginState.socialAuthFailure(provider: $provider, msg: $msg)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SocialAuthFailureCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory _$SocialAuthFailureCopyWith(_SocialAuthFailure value, $Res Function(_SocialAuthFailure) _then) = __$SocialAuthFailureCopyWithImpl;
+@useResult
+$Res call({
+ SocialProvider provider, String msg
+});
+
+
+
+
+}
+/// @nodoc
+class __$SocialAuthFailureCopyWithImpl<$Res>
+    implements _$SocialAuthFailureCopyWith<$Res> {
+  __$SocialAuthFailureCopyWithImpl(this._self, this._then);
+
+  final _SocialAuthFailure _self;
+  final $Res Function(_SocialAuthFailure) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? provider = null,Object? msg = null,}) {
+  return _then(_SocialAuthFailure(
+provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
+as SocialProvider,msg: null == msg ? _self.msg : msg // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _SocialAuthSoon implements LoginState {
+  const _SocialAuthSoon({required this.provider});
+  
+
+ final  SocialProvider provider;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SocialAuthSoonCopyWith<_SocialAuthSoon> get copyWith => __$SocialAuthSoonCopyWithImpl<_SocialAuthSoon>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SocialAuthSoon&&(identical(other.provider, provider) || other.provider == provider));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,provider);
+
+@override
+String toString() {
+  return 'LoginState.socialAuthSoon(provider: $provider)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SocialAuthSoonCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory _$SocialAuthSoonCopyWith(_SocialAuthSoon value, $Res Function(_SocialAuthSoon) _then) = __$SocialAuthSoonCopyWithImpl;
+@useResult
+$Res call({
+ SocialProvider provider
+});
+
+
+
+
+}
+/// @nodoc
+class __$SocialAuthSoonCopyWithImpl<$Res>
+    implements _$SocialAuthSoonCopyWith<$Res> {
+  __$SocialAuthSoonCopyWithImpl(this._self, this._then);
+
+  final _SocialAuthSoon _self;
+  final $Res Function(_SocialAuthSoon) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? provider = null,}) {
+  return _then(_SocialAuthSoon(
+provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
+as SocialProvider,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _SocialAuthCancelled implements LoginState {
+  const _SocialAuthCancelled({required this.provider});
+  
+
+ final  SocialProvider provider;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SocialAuthCancelledCopyWith<_SocialAuthCancelled> get copyWith => __$SocialAuthCancelledCopyWithImpl<_SocialAuthCancelled>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SocialAuthCancelled&&(identical(other.provider, provider) || other.provider == provider));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,provider);
+
+@override
+String toString() {
+  return 'LoginState.socialAuthCancelled(provider: $provider)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SocialAuthCancelledCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory _$SocialAuthCancelledCopyWith(_SocialAuthCancelled value, $Res Function(_SocialAuthCancelled) _then) = __$SocialAuthCancelledCopyWithImpl;
+@useResult
+$Res call({
+ SocialProvider provider
+});
+
+
+
+
+}
+/// @nodoc
+class __$SocialAuthCancelledCopyWithImpl<$Res>
+    implements _$SocialAuthCancelledCopyWith<$Res> {
+  __$SocialAuthCancelledCopyWithImpl(this._self, this._then);
+
+  final _SocialAuthCancelled _self;
+  final $Res Function(_SocialAuthCancelled) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? provider = null,}) {
+  return _then(_SocialAuthCancelled(
+provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
+as SocialProvider,
   ));
 }
 

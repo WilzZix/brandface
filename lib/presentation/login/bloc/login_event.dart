@@ -8,5 +8,10 @@ class LoginEvent with _$LoginEvent {
 
   const factory LoginEvent.verifyOtp({required VerifyOtpParams params}) = _VerifyOtp;
 
+  const factory LoginEvent.socialLogin({
+    required SocialProvider provider,
+    required BuildContext context,
+  }) = _SocialLogin;
+
   const factory LoginEvent.reset() = _Reset;
 }

@@ -70,7 +70,9 @@ import '../../presentation/home_page/profile/ui/stats_page.dart';
 import '../../presentation/home_page/profile/ui/top_profile_page.dart';
 import '../../presentation/home_page/recomendations/recomendations.dart';
 import '../../presentation/login/ui/arguments/sms_confirmation_page_arguments.dart';
+import '../../presentation/login/ui/linkedin_auth_page.dart';
 import '../../presentation/login/ui/login_page.dart';
+import '../../presentation/login/ui/telegram_auth_page.dart';
 import '../../presentation/login/ui/term_of_use_page.dart';
 import '../../presentation/onboarding/onboarding.dart';
 import '../../presentation/registration/ui/fill_profile_information_page.dart';
@@ -200,6 +202,16 @@ class AppRouter {
         builder: (_, state) => SmsConfirmationPage(
           arguments: state.extra as SmsConfirmationPageArguments,
         ),
+      ),
+      GoRoute(
+        path: LinkedInAuthPage.tag,
+        name: LinkedInAuthPage.tag,
+        builder: (_, _) => const LinkedInAuthPage(),
+      ),
+      GoRoute(
+        path: TelegramAuthPage.tag,
+        name: TelegramAuthPage.tag,
+        builder: (_, _) => const TelegramAuthPage(),
       ),
 
       GoRoute(
