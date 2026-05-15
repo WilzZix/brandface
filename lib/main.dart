@@ -18,14 +18,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'core/di/app_di.dart';
 import 'core/router/app_router.dart';
-import 'firebase_options.dart';
 import 'utils/services/app_language_service.dart';
 import 'utils/services/push_notification_background_handler.dart';
 import 'utils/services/push_notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   await AppDi().init();

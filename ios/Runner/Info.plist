@@ -67,8 +67,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Profile rasmini yuklash uchun ruxsat kerak</string>
+	<string>We need access to your photo library to upload a profile picture.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Kamera orqali profil rasmi olish uchun ruxsat kerak</string>
+	<string>We need access to your camera to take a profile picture.</string>
 </dict>
 </plist>
