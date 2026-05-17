@@ -7,6 +7,7 @@ import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_match
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_state.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_profile_menu_page.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/ui/ai_matching_results_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/favourites_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/ambassadors_page.dart';
@@ -64,17 +65,32 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       child: SizedBox(
                         height: 40,
                         width: 40,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/im_person_avatar_sample.png',
-                            fit: BoxFit.cover,
-                          ),
+                        child: BlocBuilder<ProfileInformationCubit,
+                            ProfileInformationState>(
+                          builder: (context, state) {
+                            final avatarUrl = state.maybeWhen(
+                              infoLoaded: (data) => data.avatarUrl,
+                              orElse: () => null,
+                            );
+                            return _BrandAvatar(avatarUrl: avatarUrl);
+                          },
                         ),
                       ),
                     ),
                   ),
-                  title: Text(t.brand.title, style: Typographies.titleMedium),
+                  title: BlocBuilder<ProfileInformationCubit,
+                      ProfileInformationState>(
+                    builder: (context, state) {
+                      final name = state.maybeWhen(
+                        infoLoaded: (data) =>
+                            data.displayName?.trim().isNotEmpty == true
+                                ? data.displayName!.trim()
+                                : t.brand.title,
+                        orElse: () => t.brand.title,
+                      );
+                      return Text(name, style: Typographies.titleMedium);
+                    },
+                  ),
                   actions: [
                     GestureDetector(
                       onTap: () => context.pushNamed(NotificationsPage.tag),
@@ -444,6 +460,38 @@ class _BrandHomePageState extends State<BrandHomePage> {
       ),
     );
   }
+}
+
+class _BrandAvatar extends StatelessWidget {
+  const _BrandAvatar({this.avatarUrl});
+
+  final String? avatarUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final url = avatarUrl?.trim();
+    if (url == null || url.isEmpty) {
+      return _placeholder();
+    }
+    final absoluteUrl =
+        url.startsWith('http') ? url : '${ApiRoutes.mediaBaseUrl}$url';
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Image.network(
+        absoluteUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => _placeholder(),
+      ),
+    );
+  }
+
+  Widget _placeholder() => ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.asset(
+          'assets/images/im_person_avatar_sample.png',
+          fit: BoxFit.cover,
+        ),
+      );
 }
 
 class _BrandStatCard extends StatelessWidget {

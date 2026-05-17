@@ -8,9 +8,14 @@ import 'choose_niche.dart';
 import 'choose_spoken_language.dart';
 
 class BrandCategoriesPageView extends StatefulWidget {
-  const BrandCategoriesPageView({super.key, required this.onChanged});
+  const BrandCategoriesPageView({
+    super.key,
+    required this.onChanged,
+    this.initialCategories,
+  });
 
   final Function(FillBrandProfileParam) onChanged;
+  final List<LangItemModel>? initialCategories;
 
   @override
   State<BrandCategoriesPageView> createState() =>
@@ -21,6 +26,19 @@ class _BrandCategoriesPageViewState extends State<BrandCategoriesPageView>
     with AutomaticKeepAliveClientMixin<BrandCategoriesPageView> {
   FillBrandProfileParam _param = FillBrandProfileParam();
   final List<LangItemModel> _selectedCategories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialCategories;
+    if (initial != null && initial.isNotEmpty) {
+      _selectedCategories.addAll(initial);
+      _param = _param.copyWith(
+        categoryIds: _selectedCategories.map((e) => e.id).toList(),
+      );
+      widget.onChanged(_param);
+    }
+  }
 
   void _updateData() {
     _param = _param.copyWith(

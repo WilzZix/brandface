@@ -84,7 +84,12 @@ class InfluencerProfileInformationEntity extends Equatable {
       avatarUrl: avatarUrl,
       bio: bio,
       regionId: region?.id,
+      regionName: region?.name,
       cityId: city?.id,
+      cityName: city?.name,
+      sphereId: sphere?.id,
+      sphereName: sphere?.name,
+      website: website,
       birthDate: birthDate,
       gender: gender,
       yearsOfExperience: yearsOfExperience,
@@ -94,6 +99,10 @@ class InfluencerProfileInformationEntity extends Equatable {
       partners: partners,
       contacts: contacts,
       categoryIds: categories?.map((c) => c.id).whereType<int>().toList(),
+      categoryNames: categories
+          ?.map((c) => c.name)
+          .whereType<String>()
+          .toList(),
       serviceIds: services?.map((s) => s.id).whereType<int>().toList(),
       languageIds: languageIds?.map((l) => l.id).whereType<int>().toList(),
       audience: audience,

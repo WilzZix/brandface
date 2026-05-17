@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../usecase/registration/params/fill_brand_profile_param.dart';
 import '../../usecase/registration/params/fill_influencer_profile_param.dart';
 
 class ProfileEntity extends Equatable {
@@ -8,7 +9,12 @@ class ProfileEntity extends Equatable {
   final String? avatarUrl;
   final String? bio;
   final int? regionId;
+  final String? regionName;
   final int? cityId;
+  final String? cityName;
+  final int? sphereId;
+  final String? sphereName;
+  final String? website;
   final DateTime? birthDate;
   final String? gender;
   final String? professionalCategory;
@@ -23,6 +29,7 @@ class ProfileEntity extends Equatable {
   final List<String>? partners;
   final List<ContactEntity>? contacts;
   final List<int>? categoryIds;
+  final List<String>? categoryNames;
   final List<int>? serviceIds;
   final List<int>? languageIds;
   final List<int>? activeBrandIds;
@@ -36,7 +43,12 @@ class ProfileEntity extends Equatable {
     this.avatarUrl,
     this.bio,
     this.regionId,
+    this.regionName,
     this.cityId,
+    this.cityName,
+    this.sphereId,
+    this.sphereName,
+    this.website,
     this.birthDate,
     this.gender,
     this.professionalCategory,
@@ -51,6 +63,7 @@ class ProfileEntity extends Equatable {
     this.partners,
     this.contacts,
     this.categoryIds,
+    this.categoryNames,
     this.serviceIds,
     this.languageIds,
     this.activeBrandIds,
@@ -58,6 +71,23 @@ class ProfileEntity extends Equatable {
     this.pricing,
     this.moderationStatus,
   });
+
+  FillBrandProfileParam toBrandParam() {
+    return FillBrandProfileParam(
+      logoId: avatarId,
+      logoUrl: avatarUrl,
+      regionId: regionId,
+      cityId: cityId,
+      sphereId: sphereId,
+      description: bio,
+      website: website,
+      contacts: contacts
+          ?.map((e) => Contact(type: e.type, value: e.value))
+          .toList(),
+      categoryIds: categoryIds,
+      languageIds: languageIds,
+    );
+  }
 
   FillInfluencerProfileParam toParam() {
     return FillInfluencerProfileParam(
@@ -135,7 +165,12 @@ class ProfileEntity extends Equatable {
     avatarUrl,
     bio,
     regionId,
+    regionName,
     cityId,
+    cityName,
+    sphereId,
+    sphereName,
+    website,
     birthDate,
     gender,
     professionalCategory,
@@ -150,6 +185,7 @@ class ProfileEntity extends Equatable {
     partners,
     contacts,
     categoryIds,
+    categoryNames,
     serviceIds,
     languageIds,
     activeBrandIds,

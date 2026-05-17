@@ -21,7 +21,6 @@ import 'package:brandface/utils/services/social_auth/social_auth_service.dart';
 import 'package:brandface/utils/services/social_auth/telegram_auth_service.dart';
 import 'package:brandface/data/repositories/message_repository_impl.dart';
 import 'package:brandface/data/repositories/notification_repository_impl.dart';
-import 'package:brandface/data/repositories/notification_token_repository.dart';
 import 'package:brandface/data/repositories/offer_repository_impl.dart';
 import 'package:brandface/data/repositories/billing_repository_impl.dart';
 import 'package:brandface/data/repositories/portfolio_repository_impl.dart';
@@ -118,8 +117,6 @@ import 'package:brandface/presentation/registration/bloc/get_profile/get_profile
 import 'package:brandface/presentation/registration/bloc/registration/registration_bloc.dart';
 import 'package:brandface/presentation/splash_screen/bloc/init_app_cubit.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -146,7 +143,6 @@ import '../../utils/services/app_auth_local_service.dart';
 import '../../utils/services/app_catalog_service.dart';
 import '../../utils/services/auth_logout_service.dart';
 import '../../utils/services/profile_service.dart';
-import '../../utils/services/push_notification_service.dart';
 
 final sl = GetIt.instance;
 
@@ -154,24 +150,6 @@ class AppDi {
   Future<void> init() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
-
-    // Push notifications
-    sl.registerLazySingleton<FirebaseMessaging>(
-      () => FirebaseMessaging.instance,
-    );
-    sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(
-      () => FlutterLocalNotificationsPlugin(),
-    );
-    sl.registerLazySingleton<NotificationTokenRepository>(
-      () => NotificationTokenRepository(prefs: sl()),
-    );
-    sl.registerLazySingleton<PushNotificationService>(
-      () => PushNotificationService(
-        messaging: sl(),
-        localNotifications: sl(),
-        tokenRepository: sl(),
-      ),
-    );
 
     sl.registerLazySingleton<IAuthLocalService>(() => AuthLocalService(sl()));
     sl.registerLazySingleton<IAppCatalogService>(() => AppCatalogService(sl()));
@@ -228,8 +206,9 @@ class AppDi {
     );
     sl.registerLazySingleton<Map<SocialProvider, SocialAuthService>>(
       () => {
-        SocialProvider.google: sl<GoogleAuthService>(),
-        SocialProvider.facebook: sl<FacebookAuthService>(),
+        // Google and Facebook intentionally omitted until native SDK
+        // configuration (FacebookAppID/ClientToken, GIDClientID) is added.
+        // BLoC will emit `socialAuthSoon` for missing providers.
         SocialProvider.linkedin: sl<LinkedInAuthService>(),
         SocialProvider.telegram: sl<TelegramAuthService>(),
       },

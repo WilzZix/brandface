@@ -38,6 +38,7 @@ import '../../../domain/usecase/registration/params/fill_brand_profile_param.dar
 import '../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import '../../../domain/usecase/registration/update_my_profile_section_usecase.dart';
 import 'components/audience_and_followers_page_view.dart';
+import 'components/choose_spoken_language.dart';
 import 'components/experience_page_view.dart';
 import 'components/general_info_page_view.dart';
 import 'components/my_pricing_tariffs_page_view.dart';
@@ -67,6 +68,10 @@ class _FillProfileInformationPageState
   FillInfluencerProfileParam _finalParam = FillInfluencerProfileParam();
   FillBrandProfileParam _brandParam = FillBrandProfileParam();
   String? _initialAvatarUrl;
+  String? _initialRegionName;
+  String? _initialCityName;
+  String? _initialSphereName;
+  List<LangItemModel>? _initialBrandCategories;
   String _moderationStatus = 'pending';
   int _currentPage = 0;
   bool _navigateOnSave = false;
@@ -191,6 +196,7 @@ class _FillProfileInformationPageState
             child: ExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
               initialParam: _finalParam,
+              awardsLocked: !_isApproved,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(
                   yearsOfExperience: p1.yearsOfExperience,
@@ -290,6 +296,7 @@ class _FillProfileInformationPageState
             ],
             child: AmbassadorExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
+              awardsLocked: !_isApproved,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(
                   yearsOfExperience: p1.yearsOfExperience,
@@ -386,6 +393,7 @@ class _FillProfileInformationPageState
             create: (context) => sl<AwardCubit>(),
             child: BrandfaceCameraExperiencePageView(
               key: const PageStorageKey<String>('pageFive'),
+              awardsLocked: !_isApproved,
               onChanged: (p1) {
                 _finalParam = _finalParam.copyWith(
                   yearsOfExperience: p1.yearsOfExperience,
@@ -414,6 +422,7 @@ class _FillProfileInformationPageState
 
       case 'brand':
         titles = ['General info', 'Categories'];
+        final initialCategoryItems = _initialBrandCategories;
         widgets = [
           MultiBlocProvider(
             providers: [
@@ -425,7 +434,11 @@ class _FillProfileInformationPageState
             ],
             child: BrandInfoPageView(
               initialLogoUrl: _initialAvatarUrl,
-              initialLogoId: _finalParam.avatarId,
+              initialLogoId: _brandParam.logoId,
+              initialParam: _brandParam,
+              initialRegionName: _initialRegionName,
+              initialCityName: _initialCityName,
+              initialSphereName: _initialSphereName,
               key: const PageStorageKey<String>('pageOne'),
               onChanged: (p1) {
                 _brandParam = _brandParam.copyWith(
@@ -434,6 +447,7 @@ class _FillProfileInformationPageState
                   sphereId: p1.sphereId,
                   logoId: p1.logoId,
                   description: p1.description,
+                  languageIds: p1.languageIds,
                 );
               },
             ),
@@ -442,6 +456,7 @@ class _FillProfileInformationPageState
             create: (context) => sl<CategoryCubit>(),
             child: BrandCategoriesPageView(
               key: const PageStorageKey<String>('pageTwo'),
+              initialCategories: initialCategoryItems,
               onChanged: (p1) {
                 _brandParam = _brandParam.copyWith(categoryIds: p1.categoryIds);
               },
@@ -603,6 +618,25 @@ class _FillProfileInformationPageState
             state.maybeWhen(
               profileLoaded: (data) {
                 _finalParam = data.toParam();
+                if (_isBrand) {
+                  _brandParam = data.toBrandParam();
+                  _initialRegionName = data.regionName;
+                  _initialCityName = data.cityName;
+                  _initialSphereName = data.sphereName;
+                  final ids = data.categoryIds ?? const <int>[];
+                  final names = data.categoryNames ?? const <String>[];
+                  if (ids.isNotEmpty) {
+                    _initialBrandCategories = [
+                      for (var i = 0; i < ids.length; i++)
+                        LangItemModel(
+                          id: ids[i],
+                          name: i < names.length ? names[i] : '',
+                        ),
+                    ];
+                  } else {
+                    _initialBrandCategories = null;
+                  }
+                }
                 _initialAvatarUrl = data.avatarUrl;
                 _moderationStatus = data.moderationStatus ?? 'pending';
                 _buildWidgetsAndTitles();
@@ -616,40 +650,41 @@ class _FillProfileInformationPageState
         ),
       ],
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         bottomNavigationBar: _isProfileLoading
             ? null
-            : Container(
-                padding: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  bottom: MediaQuery.of(context).padding.bottom,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppButtons.primary(
-                      title: t.onboarding.kContinue,
-                      onTap: () {
-                        final isLast = _currentPage >= _totalPages - 1;
-                        _navigateOnSave = isLast;
-                        _saveCurrentSection();
-                        if (!isLast) {
-                          pageController.nextPage(
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeInOut,
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: _saveAndContinueLater,
-                      child: Text(
-                        'Save and continue later',
-                        style: Typographies.labelLarge,
+            : SafeArea(
+                top: false,
+                minimum: const EdgeInsets.only(bottom: 8),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppButtons.primary(
+                        title: t.onboarding.kContinue,
+                        onTap: () {
+                          final isLast = _currentPage >= _totalPages - 1;
+                          _navigateOnSave = isLast;
+                          _saveCurrentSection();
+                          if (!isLast) {
+                            pageController.nextPage(
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: _saveAndContinueLater,
+                        child: Text(
+                          'Save and continue later',
+                          style: Typographies.labelLarge,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
         body: GestureDetector(

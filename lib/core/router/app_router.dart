@@ -145,6 +145,10 @@ class AppRouter {
             BlocProvider<AiMatchingCubit>(
               create: (context) => sl<AiMatchingCubit>()..init(),
             ),
+            BlocProvider<ProfileInformationCubit>(
+              create: (context) =>
+                  sl<ProfileInformationCubit>()..getInfluencerProfileInformation(),
+            ),
           ],
           child: BrandHomePage(),
         ),

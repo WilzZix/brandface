@@ -1,3 +1,4 @@
+import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,18 +17,24 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = imageUrl?.trim();
+    final raw = imageUrl?.trim();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: SizedBox(
         width: size,
         height: size,
-        child: url == null || url.isEmpty
+        child: raw == null || raw.isEmpty
             ? const _ProfileImageFallback()
-            : _NetworkProfileImage(imageUrl: url),
+            : _NetworkProfileImage(imageUrl: _absoluteUrl(raw)),
       ),
     );
+  }
+
+  static String _absoluteUrl(String url) {
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    if (url.startsWith('/')) return '${ApiRoutes.mediaBaseUrl}$url';
+    return '${ApiRoutes.mediaBaseUrl}/$url';
   }
 }
 

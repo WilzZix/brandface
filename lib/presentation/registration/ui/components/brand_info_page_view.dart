@@ -29,11 +29,19 @@ class BrandInfoPageView extends StatefulWidget {
     required this.onChanged,
     this.initialLogoUrl,
     this.initialLogoId,
+    this.initialParam,
+    this.initialRegionName,
+    this.initialCityName,
+    this.initialSphereName,
   });
 
   final Function(FillBrandProfileParam) onChanged;
   final String? initialLogoUrl;
   final int? initialLogoId;
+  final FillBrandProfileParam? initialParam;
+  final String? initialRegionName;
+  final String? initialCityName;
+  final String? initialSphereName;
 
   @override
   State<BrandInfoPageView> createState() => _BrandInfoPageViewState();
@@ -62,12 +70,31 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     context.read<RegionCubit>().getCategories();
     context.read<CityCubit>().getCities();
     context.read<SphereCubit>().getSpheres();
-    final logoId = widget.initialLogoId;
-    final logoUrl = widget.initialLogoUrl;
+    final initial = widget.initialParam;
+    if (initial != null) {
+      _param = initial;
+      _selectedRegionId = initial.regionId;
+      _selectedCityId = initial.cityId;
+      _selectedSphereId = initial.sphereId;
+      _selectedRegionName = widget.initialRegionName;
+      _selectedCityName = widget.initialCityName;
+      _selectedSphereName = widget.initialSphereName;
+      if (initial.languageIds != null) {
+        _selectedLanguageIds = List<int>.from(initial.languageIds!);
+      }
+      if (initial.description != null && initial.description!.isNotEmpty) {
+        _bioController.text = initial.description!;
+      }
+    }
+    final logoId = widget.initialLogoId ?? initial?.logoId;
+    final logoUrl = widget.initialLogoUrl ?? initial?.logoUrl;
     _currentLogoUrl = logoUrl;
     if (logoId != null && logoUrl != null && logoUrl.isNotEmpty) {
       _uploadedItems.add(UploadedAvatarItem(id: logoId, url: logoUrl));
       _param = _param.copyWith(logoId: logoId);
+    }
+    if (initial != null) {
+      widget.onChanged(_param);
     }
   }
 
