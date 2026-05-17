@@ -103,13 +103,9 @@ class _FillProfileInformationPageState
     context.read<FillProfileBloc>().setEditMode(
       widget.registrationEntity.isEditMode,
     );
-    if (widget.registrationEntity.isEditMode) {
-      context.read<GetProfileCubit>().getMyProfile();
-    } else {
-      context.read<GetProfileCubit>().getProfile(
-        profileId: widget.registrationEntity.profileId.toString(),
-      );
-    }
+    // Use getMyProfile in both flows so partial registrations
+    // saved via "Save and continue later" are reloaded correctly.
+    context.read<GetProfileCubit>().getMyProfile();
   }
 
   void _buildWidgetsAndTitles() {
