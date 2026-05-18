@@ -702,6 +702,28 @@ class _AddCardPageState extends State<_AddCardPage> {
   final TextEditingController _expiryController = TextEditingController();
   final TextEditingController _ccvController = TextEditingController();
 
+  // Uzbekistan local card BIN prefixes — CVV is NOT required.
+  // Add new prefixes here when confirmed.
+  static const _uzcardPrefixes = <String>[
+    '8600', // Uzcard (national)
+    '5614', // Uzcard co-badge Mastercard
+    '5440',
+    '5286',
+    '5106',
+  ];
+  static const _humoPrefixes = <String>[
+    '9860', // Humo (national)
+    '9869',
+  ];
+
+  bool _isLocalCard(String raw) {
+    final digits = raw.replaceAll(' ', '');
+    if (digits.length < 4) return false;
+    final prefix4 = digits.substring(0, 4);
+    return _uzcardPrefixes.contains(prefix4) ||
+        _humoPrefixes.contains(prefix4);
+  }
+
   @override
   void dispose() {
     _holderController.dispose();
@@ -754,34 +776,43 @@ class _AddCardPageState extends State<_AddCardPage> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _cardField(
-                          controller: _expiryController,
-                          label: 'Expire date',
-                          hintText: 'MM/YY',
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            _ExpiryDateInputFormatter(),
+                  // Uzcard / Humo and known Uzbek co-badge cards skip CCV.
+                  ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: _cardNumberController,
+                    builder: (context, value, _) {
+                      final isLocal = _isLocalCard(value.text);
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: _cardField(
+                              controller: _expiryController,
+                              label: 'Expire date',
+                              hintText: 'MM/YY',
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                _ExpiryDateInputFormatter(),
+                              ],
+                            ),
+                          ),
+                          if (!isLocal) ...[
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: _cardField(
+                                controller: _ccvController,
+                                label: 'CCV',
+                                hintText: 'CCV',
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(4),
+                                ],
+                              ),
+                            ),
                           ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _cardField(
-                          controller: _ccvController,
-                          label: 'CCV',
-                          hintText: 'CCV',
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(4),
-                          ],
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -874,11 +905,12 @@ class _AddCardPageState extends State<_AddCardPage> {
     final cardNumber = _digitsOnly(_cardNumberController.text);
     final expiry = _digitsOnly(_expiryController.text);
     final ccv = _digitsOnly(_ccvController.text);
+    final isLocal = _isLocalCard(cardNumber);
 
     if (holder.isEmpty ||
-        cardNumber.length < 13 ||
+        cardNumber.length != 16 ||
         expiry.length != 4 ||
-        ccv.length < 3) {
+        (!isLocal && ccv.length < 3)) {
       _showValidationMessage();
       return;
     }
@@ -931,7 +963,8 @@ class _CardNumberInputFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     final digits = _digitsOnlyText(newValue.text);
-    final limited = digits.length > 19 ? digits.substring(0, 19) : digits;
+    // Uzbekistan cards are exactly 16 digits — limit input accordingly.
+    final limited = digits.length > 16 ? digits.substring(0, 16) : digits;
     final buffer = StringBuffer();
 
     for (var i = 0; i < limited.length; i++) {

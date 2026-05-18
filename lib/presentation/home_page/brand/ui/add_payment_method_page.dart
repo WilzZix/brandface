@@ -29,6 +29,40 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
   final _ccvCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  // Uzbekistan local card BIN prefixes — CVV is NOT required for these.
+  // Includes pure national cards (Uzcard 8600, Humo 9860) and known
+  // co-badge BINs issued by Uzbekistan banks.
+  static const _uzcardPrefixes = <String>[
+    '8600', // Uzcard (national)
+    '5614', // Uzcard co-badge Mastercard
+    '5440', // some Uzbek bank Mastercard co-badge
+    '5286', // some Uzbek bank Mastercard co-badge
+    '5106', // some Uzbek bank Mastercard co-badge
+  ];
+  static const _humoPrefixes = <String>[
+    '9860', // Humo (national)
+    '9869', // Humo variant
+  ];
+
+  String _detectCardType(String raw) {
+    final digits = raw.replaceAll(' ', '');
+    if (digits.isEmpty) return 'unknown';
+    if (digits.length >= 4) {
+      final prefix4 = digits.substring(0, 4);
+      if (_uzcardPrefixes.contains(prefix4)) return 'uzcard';
+      if (_humoPrefixes.contains(prefix4)) return 'humo';
+    }
+    final first = digits[0];
+    if (first == '4') return 'visa';
+    if (first == '5') return 'mastercard';
+    if (first == '3') return 'amex';
+    if (first == '6') return 'discover';
+    return 'unknown';
+  }
+
+  bool _isLocal(String cardType) =>
+      cardType == 'uzcard' || cardType == 'humo';
+
   @override
   void dispose() {
     _holderCtrl.dispose();
@@ -53,15 +87,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
     final year = int.tryParse(expParts.length > 1 ? expParts[1] : '0') ?? 0;
     final fullYear = year < 100 ? 2000 + year : year;
 
-    // Detect card type from first digit
-    final first = _numberCtrl.text.replaceAll(' ', '').isNotEmpty
-        ? _numberCtrl.text.replaceAll(' ', '')[0]
-        : '';
-    final cardType = first == '4'
-        ? 'visa'
-        : first == '5'
-            ? 'mastercard'
-            : 'unknown';
+    final cardType = _detectCardType(_numberCtrl.text);
 
     final lastFour = _numberCtrl.text
         .replaceAll(' ', '')
@@ -135,64 +161,74 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                 ],
                 validator: (v) {
                   final digits = (v ?? '').replaceAll(' ', '');
-                  if (digits.length < 13) return 'Enter valid card number';
+                  if (digits.length != 16) return 'Enter valid card number';
                   return null;
                 },
               ),
               const SizedBox(height: 20),
 
               // ── Expire date + CCV ─────────────────────────────────────
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _FieldLabel('Expire date'),
-                        const SizedBox(height: 8),
-                        _InputField(
-                          controller: _expireCtrl,
-                          hint: 'MM/YY',
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            _ExpireDateFormatter(),
+              // Uzcard (8600...) / Humo (9860...) and known Uzbek co-badge
+              // BINs hide CCV — local cards don't require it.
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _numberCtrl,
+                builder: (context, value, _) {
+                  final isLocal = _isLocal(_detectCardType(value.text));
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _FieldLabel('Expire date'),
+                            const SizedBox(height: 8),
+                            _InputField(
+                              controller: _expireCtrl,
+                              hint: 'MM/YY',
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                _ExpireDateFormatter(),
+                              ],
+                              validator: (v) {
+                                if (v == null || v.length < 5) {
+                                  return 'MM/YY';
+                                }
+                                return null;
+                              },
+                            ),
                           ],
-                          validator: (v) {
-                            if (v == null || v.length < 5) {
-                              return 'MM/YY';
-                            }
-                            return null;
-                          },
+                        ),
+                      ),
+                      if (!isLocal) ...[
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _FieldLabel('CCV'),
+                              const SizedBox(height: 8),
+                              _InputField(
+                                controller: _ccvCtrl,
+                                hint: 'CCV',
+                                keyboardType: TextInputType.number,
+                                obscureText: true,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(4),
+                                ],
+                                validator: (v) {
+                                  if (v == null || v.length < 3) return 'Invalid';
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _FieldLabel('CCV'),
-                        const SizedBox(height: 8),
-                        _InputField(
-                          controller: _ccvCtrl,
-                          hint: 'CCV',
-                          keyboardType: TextInputType.number,
-                          obscureText: true,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(4),
-                          ],
-                          validator: (v) {
-                            if (v == null || v.length < 3) return 'Invalid';
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
 
               const SizedBox(height: 40),
