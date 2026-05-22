@@ -270,6 +270,8 @@ class _TranslationsValidationUz implements TranslationsValidationEn {
 	@override String get name_too_short => 'Ism juda qisqa';
 	@override String get fill_required_fields => 'Majburiy maydonlarni to\'ldiring';
 	@override String get account_already_added => 'Hisob allaqachon qo\'shilgan';
+	@override String get phone_required => 'Iltimos, telefon raqamingizni kiriting';
+	@override String get phone_invalid => 'Iltimos, to\'g\'ri telefon raqam kiriting';
 }
 
 // Path: choose
@@ -712,6 +714,8 @@ extension on TranslationsUz {
 			'validation.name_too_short' => 'Ism juda qisqa',
 			'validation.fill_required_fields' => 'Majburiy maydonlarni to\'ldiring',
 			'validation.account_already_added' => 'Hisob allaqachon qo\'shilgan',
+			'validation.phone_required' => 'Iltimos, telefon raqamingizni kiriting',
+			'validation.phone_invalid' => 'Iltimos, to\'g\'ri telefon raqam kiriting',
 			'choose.select_niche' => 'Niche tanlash',
 			'choose.select_gender' => 'Jins tanlash',
 			'choose.select_geography' => 'Geografiya tanlash',

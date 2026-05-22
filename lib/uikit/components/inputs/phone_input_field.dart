@@ -6,9 +6,16 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../../core/i18n/strings.g.dart';
 
 class PhoneInputField extends StatefulWidget {
-  const PhoneInputField({super.key, required this.controller});
+  const PhoneInputField({
+    super.key,
+    required this.controller,
+    this.errorText,
+    this.onChanged,
+  });
 
   final TextEditingController controller;
+  final String? errorText;
+  final ValueChanged<String>? onChanged;
 
   @override
   State<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -51,8 +58,10 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
       keyboardType: TextInputType.phone,
       onChanged: (value) {
         setState(() {});
+        widget.onChanged?.call(value);
       },
       decoration: InputDecoration(
+        errorText: widget.errorText,
         prefixIcon: showPrefix
             ? Container(
                 padding: const EdgeInsets.only(left: 24, top: 14, bottom: 14),

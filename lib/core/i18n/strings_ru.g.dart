@@ -270,6 +270,8 @@ class _TranslationsValidationRu implements TranslationsValidationEn {
 	@override String get name_too_short => 'Имя слишком короткое';
 	@override String get fill_required_fields => 'Заполните обязательные поля';
 	@override String get account_already_added => 'Аккаунт уже добавлен';
+	@override String get phone_required => 'Пожалуйста, введите номер телефона';
+	@override String get phone_invalid => 'Пожалуйста, введите корректный номер телефона';
 }
 
 // Path: choose
@@ -712,6 +714,8 @@ extension on TranslationsRu {
 			'validation.name_too_short' => 'Имя слишком короткое',
 			'validation.fill_required_fields' => 'Заполните обязательные поля',
 			'validation.account_already_added' => 'Аккаунт уже добавлен',
+			'validation.phone_required' => 'Пожалуйста, введите номер телефона',
+			'validation.phone_invalid' => 'Пожалуйста, введите корректный номер телефона',
 			'choose.select_niche' => 'Выбрать нишу',
 			'choose.select_gender' => 'Выбрать пол',
 			'choose.select_geography' => 'Выбрать географию',

@@ -164,7 +164,9 @@
     "name_letters_only": "Имя должно содержать только буквы",
     "name_too_short": "Имя слишком короткое",
     "fill_required_fields": "Заполните обязательные поля",
-    "account_already_added": "Аккаунт уже добавлен"
+    "account_already_added": "Аккаунт уже добавлен",
+    "phone_required": "Пожалуйста, введите номер телефона",
+    "phone_invalid": "Пожалуйста, введите корректный номер телефона"
   },
   "choose": {
     "select_niche": "Выбрать нишу",

@@ -164,7 +164,9 @@
     "name_letters_only": "Ismda faqat harflar bo'lishi kerak",
     "name_too_short": "Ism juda qisqa",
     "fill_required_fields": "Majburiy maydonlarni to'ldiring",
-    "account_already_added": "Hisob allaqachon qo'shilgan"
+    "account_already_added": "Hisob allaqachon qo'shilgan",
+    "phone_required": "Iltimos, telefon raqamingizni kiriting",
+    "phone_invalid": "Iltimos, to'g'ri telefon raqam kiriting"
   },
   "choose": {
     "select_niche": "Niche tanlash",

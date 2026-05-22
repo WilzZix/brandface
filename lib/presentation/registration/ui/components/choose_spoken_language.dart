@@ -95,24 +95,23 @@ class _ChooseSpokenLanguageState extends State<ChooseSpokenLanguage> {
                               ),
                             );
                           }
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: languages.map((item) {
-                                return ChooseLangItem(
-                                  title: item.name,
-                                  isSelected: tempIds.contains(item.id),
-                                  onTap: () {
-                                    bottomState(() {
-                                      if (tempIds.contains(item.id)) {
-                                        tempIds.remove(item.id);
-                                      } else {
-                                        tempIds.add(item.id);
-                                      }
-                                    });
-                                  },
-                                );
-                              }).toList(),
-                            ),
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: languages.map((item) {
+                              return ChooseLangItem(
+                                title: item.name,
+                                isSelected: tempIds.contains(item.id),
+                                onTap: () {
+                                  bottomState(() {
+                                    if (tempIds.contains(item.id)) {
+                                      tempIds.remove(item.id);
+                                    } else {
+                                      tempIds.add(item.id);
+                                    }
+                                  });
+                                },
+                              );
+                            }).toList(),
                           );
                         },
                       );

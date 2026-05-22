@@ -33,6 +33,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controller = TextEditingController();
+  String? _phoneError;
+
+  String? _validatePhone() {
+    final digits = _controller.text.replaceAll(RegExp(r'\D'), '');
+    if (digits.isEmpty) return t.validation.phone_required;
+    if (digits.length != 9) return t.validation.phone_invalid;
+    return null;
+  }
 
   String _providerLabel(SocialProvider provider) {
     switch (provider) {
@@ -127,7 +135,15 @@ class _LoginPageState extends State<LoginPage> {
               Spacer(),
               Text(t.login.welcome_msg, style: Typographies.headlineSmall),
               SizedBox(height: 24),
-              PhoneInputField(controller: _controller),
+              PhoneInputField(
+                controller: _controller,
+                errorText: _phoneError,
+                onChanged: (_) {
+                  if (_phoneError != null) {
+                    setState(() => _phoneError = null);
+                  }
+                },
+              ),
               SizedBox(height: 24),
               LoginDivider(),
               SizedBox(height: 24),
@@ -138,6 +154,12 @@ class _LoginPageState extends State<LoginPage> {
                   return AppButtons.primary(
                     title: t.onboarding.kContinue,
                     onTap: () {
+                      final error = _validatePhone();
+                      if (error != null) {
+                        setState(() => _phoneError = error);
+                        return;
+                      }
+                      setState(() => _phoneError = null);
                       context.read<LoginBloc>().add(
                         LoginEvent.sendOtp(phone: _controller.text),
                       );

@@ -164,7 +164,9 @@
     "name_letters_only": "Name must contain only letters",
     "name_too_short": "Name is too short",
     "fill_required_fields": "Fill required fields",
-    "account_already_added": "Account already added"
+    "account_already_added": "Account already added",
+    "phone_required": "Please enter your phone number",
+    "phone_invalid": "Please enter a valid phone number"
   },
   "choose": {
     "select_niche": "Select niche",

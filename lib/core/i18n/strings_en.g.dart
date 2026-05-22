@@ -579,6 +579,12 @@ class TranslationsValidationEn {
 
 	/// en: 'Account already added'
 	String get account_already_added => 'Account already added';
+
+	/// en: 'Please enter your phone number'
+	String get phone_required => 'Please enter your phone number';
+
+	/// en: 'Please enter a valid phone number'
+	String get phone_invalid => 'Please enter a valid phone number';
 }
 
 // Path: choose
@@ -1380,6 +1386,8 @@ extension on Translations {
 			'validation.name_too_short' => 'Name is too short',
 			'validation.fill_required_fields' => 'Fill required fields',
 			'validation.account_already_added' => 'Account already added',
+			'validation.phone_required' => 'Please enter your phone number',
+			'validation.phone_invalid' => 'Please enter a valid phone number',
 			'choose.select_niche' => 'Select niche',
 			'choose.select_gender' => 'Select gender',
 			'choose.select_geography' => 'Select geography',

@@ -26,6 +26,9 @@ class BrandfaceBottomSheet {
               filter: ImageFilter.blur(sigmaX: .5, sigmaY: .5),
               child: Container(
                 width: double.infinity,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(24),
@@ -57,7 +60,11 @@ class BrandfaceBottomSheet {
                       child: Text(header, style: Typographies.titleMedium),
                     ),
                     SizedBox(height: 16),
-                    builder(context, bottomState),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: builder(context, bottomState),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: AppButtons.primary(
