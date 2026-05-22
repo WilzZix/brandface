@@ -94,8 +94,8 @@ class TranslationsLoginEn {
 	/// en: 'Phone number'
 	String get phone_number => 'Phone number';
 
-	/// en: 'Welcome to Findbrandface'
-	String get welcome_msg => 'Welcome to Findbrandface';
+	/// en: 'Welcome to InflueraX'
+	String get welcome_msg => 'Welcome to InflueraX';
 
 	/// en: 'By pressing Login i agree to all '
 	String get term_of_use_first => 'By pressing Login i agree to all ';
@@ -1236,7 +1236,7 @@ extension on Translations {
 			'splash.app_version' => ({required Object version}) => 'App version ${version}',
 			'onboarding.kContinue' => 'Continue',
 			'login.phone_number' => 'Phone number',
-			'login.welcome_msg' => 'Welcome to Findbrandface',
+			'login.welcome_msg' => 'Welcome to InflueraX',
 			'login.term_of_use_first' => 'By pressing Login i agree to all ',
 			'login.term_of_use_second' => 'terms of use',
 			'login.login_methods' => 'or login in with',

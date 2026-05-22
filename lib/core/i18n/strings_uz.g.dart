@@ -84,7 +84,7 @@ class _TranslationsLoginUz implements TranslationsLoginEn {
 
 	// Translations
 	@override String get phone_number => 'Telefon raqam';
-	@override String get welcome_msg => 'Findbrandface-ga xush kelibsiz';
+	@override String get welcome_msg => 'InflueraX-ga xush kelibsiz';
 	@override String get term_of_use_first => 'Kirish tugmasini bosish orqali barcha ';
 	@override String get term_of_use_second => 'foydalanish shartlariga rozilik bildiraman';
 	@override String get login_methods => 'yoki ... orqali kirish';
@@ -564,7 +564,7 @@ extension on TranslationsUz {
 			'splash.app_version' => ({required Object version}) => 'Ilova versoyasi ${version}',
 			'onboarding.kContinue' => 'Davom etish',
 			'login.phone_number' => 'Telefon raqam',
-			'login.welcome_msg' => 'Findbrandface-ga xush kelibsiz',
+			'login.welcome_msg' => 'InflueraX-ga xush kelibsiz',
 			'login.term_of_use_first' => 'Kirish tugmasini bosish orqali barcha ',
 			'login.term_of_use_second' => 'foydalanish shartlariga rozilik bildiraman',
 			'login.login_methods' => 'yoki ... orqali kirish',

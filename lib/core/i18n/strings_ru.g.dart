@@ -84,7 +84,7 @@ class _TranslationsLoginRu implements TranslationsLoginEn {
 
 	// Translations
 	@override String get phone_number => 'Номер телефона';
-	@override String get welcome_msg => 'Добро пожаловать в Findbrandface';
+	@override String get welcome_msg => 'Добро пожаловать в InflueraX';
 	@override String get term_of_use_first => 'Нажимая «Войти», я принимаю все ';
 	@override String get term_of_use_second => 'условия использования';
 	@override String get login_methods => 'или войти через';
@@ -564,7 +564,7 @@ extension on TranslationsRu {
 			'splash.app_version' => ({required Object version}) => 'Версия приложения ${version}',
 			'onboarding.kContinue' => 'Продолжить',
 			'login.phone_number' => 'Номер телефона',
-			'login.welcome_msg' => 'Добро пожаловать в Findbrandface',
+			'login.welcome_msg' => 'Добро пожаловать в InflueraX',
 			'login.term_of_use_first' => 'Нажимая «Войти», я принимаю все ',
 			'login.term_of_use_second' => 'условия использования',
 			'login.login_methods' => 'или войти через',
