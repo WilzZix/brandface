@@ -38,20 +38,22 @@ class LoginMethods extends StatelessWidget {
 
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (final m in _methods)
+            for (var i = 0; i < _methods.length; i++) ...[
+              if (i > 0) const SizedBox(width: 16),
               LoginMethodItem(
-                iconPath: m.icon,
-                loading: inProgressProvider == m.provider,
+                iconPath: _methods[i].icon,
+                loading: inProgressProvider == _methods[i].provider,
                 disabled: inProgressProvider != null,
                 onTap: () => context.read<LoginBloc>().add(
                       LoginEvent.socialLogin(
-                        provider: m.provider,
+                        provider: _methods[i].provider,
                         context: context,
                       ),
                     ),
               ),
+            ],
           ],
         );
       },

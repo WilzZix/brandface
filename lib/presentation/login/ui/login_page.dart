@@ -177,6 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                   context.push(TermOfUsePage.tag);
                 },
                 child: RichText(
+                  textAlign: TextAlign.center,
                   text: TextSpan(
                     text: t.login.term_of_use_first,
                     style: Typographies.bodySmall,
