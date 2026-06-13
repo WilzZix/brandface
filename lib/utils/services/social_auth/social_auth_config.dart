@@ -19,10 +19,12 @@ class SocialAuthConfig {
   /// tekshiradi. Google Cloud Console → Credentials → OAuth 2.0 Client IDs
   /// → "Web application" turidagi clientni oling.
   /// Format: `<digits>-<hash>.apps.googleusercontent.com`.
-  static const String googleServerClientId = '<GOOGLE_WEB_CLIENT_ID>';
+  static const String googleServerClientId =
+      '275276598948-2ootbe54lk7ed101k4iju2cc55009hel.apps.googleusercontent.com';
 
   /// Google iOS Client ID — Google Cloud Console → Credentials → OAuth 2.0
   /// Client IDs → "iOS" turidagi clientni oling. Info.plist'da `GIDClientID`
   /// va `CFBundleURLTypes.CFBundleURLSchemes` ham shu IDga mos bo'lishi shart.
-  static const String googleIosClientId = '<GOOGLE_IOS_CLIENT_ID>';
+  static const String googleIosClientId =
+      '275276598948-4vvbt7hpsht5oj3umqcrm4h8gn2npo1h.apps.googleusercontent.com';
 }
