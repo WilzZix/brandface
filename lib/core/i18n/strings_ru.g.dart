@@ -87,7 +87,7 @@ class _TranslationsLoginRu implements TranslationsLoginEn {
 	@override String get welcome_msg => 'Добро пожаловать в InflueraX';
 	@override String get term_of_use_first => 'Нажимая «Войти», я принимаю все ';
 	@override String get term_of_use_second => 'условия использования';
-	@override String get login_methods => 'или войти через';
+	@override String get login_methods => 'или продолжить через';
 	@override String get sms_confirmation => 'SMS подтверждение';
 	@override String sms_sent_to({required Object phoneEnd}) => 'На ваш номер телефона **${phoneEnd} отправлен SMS код, пожалуйста введите его';
 	@override String get send_code_again => 'Отправить код снова';
@@ -253,6 +253,9 @@ class _TranslationsProfileRu implements TranslationsProfileEn {
 	@override String get delete_account_confirm => 'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.';
 	@override String age_range({required Object from, required Object to}) => 'Возраст ${from} - ${to}';
 	@override String get confirm_delete => 'Подтвердить удаление';
+	@override String delete_account_type_name({required Object name}) => 'Введите своё имя ${name} для подтверждения удаления аккаунта.';
+	@override String get delete_account_type_name_hint => 'Введите своё имя';
+	@override String get delete_account_name_mismatch => 'Имя не совпадает.';
 	@override String get total_followers => 'Всего подписчиков';
 	@override String get engagement_rate => 'Уровень вовлечённости';
 }
@@ -567,7 +570,7 @@ extension on TranslationsRu {
 			'login.welcome_msg' => 'Добро пожаловать в InflueraX',
 			'login.term_of_use_first' => 'Нажимая «Войти», я принимаю все ',
 			'login.term_of_use_second' => 'условия использования',
-			'login.login_methods' => 'или войти через',
+			'login.login_methods' => 'или продолжить через',
 			'login.sms_confirmation' => 'SMS подтверждение',
 			'login.sms_sent_to' => ({required Object phoneEnd}) => 'На ваш номер телефона **${phoneEnd} отправлен SMS код, пожалуйста введите его',
 			'login.send_code_again' => 'Отправить код снова',
@@ -706,6 +709,9 @@ extension on TranslationsRu {
 			'profile.delete_account_confirm' => 'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.',
 			'profile.age_range' => ({required Object from, required Object to}) => 'Возраст ${from} - ${to}',
 			'profile.confirm_delete' => 'Подтвердить удаление',
+			'profile.delete_account_type_name' => ({required Object name}) => 'Введите своё имя ${name} для подтверждения удаления аккаунта.',
+			'profile.delete_account_type_name_hint' => 'Введите своё имя',
+			'profile.delete_account_name_mismatch' => 'Имя не совпадает.',
 			'profile.total_followers' => 'Всего подписчиков',
 			'profile.engagement_rate' => 'Уровень вовлечённости',
 			'validation.name_required' => 'Пожалуйста, введите имя и фамилию',

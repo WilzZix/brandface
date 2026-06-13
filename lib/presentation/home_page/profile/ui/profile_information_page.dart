@@ -4,6 +4,7 @@ import 'package:brandface/domain/entities/registration/registration_entity.dart'
 import 'package:brandface/presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
 import 'package:brandface/presentation/registration/ui/fill_profile_information_page.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
+import 'package:brandface/uikit/components/bottom_sheet/delete_account_confirm_sheet.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:brandface/utils/services/auth_logout_service.dart';
@@ -35,22 +36,14 @@ class _ProfileInformationPageState extends State<ProfileInformationPage> {
   }
 
   void _showDeleteConfirmation(BuildContext context) {
-    BrandfaceBottomSheet.openBottomSheet<void>(
+    final name = context.read<ProfileInformationCubit>().state.maybeWhen(
+      infoLoaded: (data) => data.displayName ?? '',
+      orElse: () => '',
+    );
+    DeleteAccountConfirmSheet.open(
       context: context,
-      header: t.profile.delete_account,
-      onConfirm: () {
-        context.pop();
-        context.read<DeleteAccountCubit>().deleteAccount();
-      },
-      builder: (context, setState) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-          child: Text(
-            t.profile.confirm_delete,
-            style: Typographies.labelLarge,
-          ),
-        );
-      },
+      expectedName: name,
+      onConfirmed: () => context.read<DeleteAccountCubit>().deleteAccount(),
     );
   }
 

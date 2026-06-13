@@ -14,5 +14,6 @@ enum SocialProvider {
       this == SocialProvider.google ||
       this == SocialProvider.telegram ||
       this == SocialProvider.facebook ||
-      this == SocialProvider.linkedin;
+      this == SocialProvider.linkedin ||
+      this == SocialProvider.apple;
 }

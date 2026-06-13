@@ -84,10 +84,10 @@ class _TranslationsLoginUz implements TranslationsLoginEn {
 
 	// Translations
 	@override String get phone_number => 'Telefon raqam';
-	@override String get welcome_msg => 'InflueraX-ga xush kelibsiz';
+	@override String get welcome_msg => 'InflueraX ga xush kelibsiz';
 	@override String get term_of_use_first => 'Kirish tugmasini bosish orqali barcha ';
 	@override String get term_of_use_second => 'foydalanish shartlariga rozilik bildiraman';
-	@override String get login_methods => 'yoki ... orqali kirish';
+	@override String get login_methods => 'yoki quyidagilar orqali kirish';
 	@override String get sms_confirmation => 'SMS tasdiqlash';
 	@override String sms_sent_to({required Object phoneEnd}) => 'Telefon raqamingizga **${phoneEnd} SMS kod yuborildi, iltimos kodni kiriting';
 	@override String get send_code_again => 'Kodni qayta yuborish';
@@ -253,6 +253,9 @@ class _TranslationsProfileUz implements TranslationsProfileEn {
 	@override String get delete_account_confirm => 'Hisobingizni o\'chirishga ishonchingiz komilmi? Bu amalni qaytarib bo\'lmaydi.';
 	@override String age_range({required Object from, required Object to}) => 'Yosh ${from} - ${to}';
 	@override String get confirm_delete => 'O\'chirishni tasdiqlang';
+	@override String delete_account_type_name({required Object name}) => 'Hisobni o\'chirishni tasdiqlash uchun ismingizni kiriting: ${name}.';
+	@override String get delete_account_type_name_hint => 'Ismingizni kiriting';
+	@override String get delete_account_name_mismatch => 'Ism mos kelmadi.';
 	@override String get total_followers => 'Jami obunachilar';
 	@override String get engagement_rate => 'Faollik darajasi';
 }
@@ -564,10 +567,10 @@ extension on TranslationsUz {
 			'splash.app_version' => ({required Object version}) => 'Ilova versoyasi ${version}',
 			'onboarding.kContinue' => 'Davom etish',
 			'login.phone_number' => 'Telefon raqam',
-			'login.welcome_msg' => 'InflueraX-ga xush kelibsiz',
+			'login.welcome_msg' => 'InflueraX ga xush kelibsiz',
 			'login.term_of_use_first' => 'Kirish tugmasini bosish orqali barcha ',
 			'login.term_of_use_second' => 'foydalanish shartlariga rozilik bildiraman',
-			'login.login_methods' => 'yoki ... orqali kirish',
+			'login.login_methods' => 'yoki quyidagilar orqali kirish',
 			'login.sms_confirmation' => 'SMS tasdiqlash',
 			'login.sms_sent_to' => ({required Object phoneEnd}) => 'Telefon raqamingizga **${phoneEnd} SMS kod yuborildi, iltimos kodni kiriting',
 			'login.send_code_again' => 'Kodni qayta yuborish',
@@ -706,6 +709,9 @@ extension on TranslationsUz {
 			'profile.delete_account_confirm' => 'Hisobingizni o\'chirishga ishonchingiz komilmi? Bu amalni qaytarib bo\'lmaydi.',
 			'profile.age_range' => ({required Object from, required Object to}) => 'Yosh ${from} - ${to}',
 			'profile.confirm_delete' => 'O\'chirishni tasdiqlang',
+			'profile.delete_account_type_name' => ({required Object name}) => 'Hisobni o\'chirishni tasdiqlash uchun ismingizni kiriting: ${name}.',
+			'profile.delete_account_type_name_hint' => 'Ismingizni kiriting',
+			'profile.delete_account_name_mismatch' => 'Ism mos kelmadi.',
 			'profile.total_followers' => 'Jami obunachilar',
 			'profile.engagement_rate' => 'Faollik darajasi',
 			'validation.name_required' => 'Iltimos, ism va familiyangizni kiriting',

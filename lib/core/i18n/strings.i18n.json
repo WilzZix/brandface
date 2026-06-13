@@ -10,7 +10,7 @@
     "welcome_msg": "Welcome to InflueraX",
     "term_of_use_first": "By pressing Login i agree to all ",
     "term_of_use_second": "terms of use",
-    "login_methods": "or login in with",
+    "login_methods": "or continue with",
     "sms_confirmation": "SMS confirmation",
     "sms_sent_to": "We have sent SMS code to your phone number **$phoneEnd, please enter this code",
     "send_code_again": "Send code again",
@@ -155,6 +155,9 @@
     "delete_account_confirm": "Are you sure you want to delete your account? This action cannot be undone.",
     "age_range": "Age $from - $to",
     "confirm_delete": "Confirm delete",
+    "delete_account_type_name": "Type your name $name to confirm account deletion.",
+    "delete_account_type_name_hint": "Enter your name",
+    "delete_account_name_mismatch": "Name does not match.",
     "total_followers": "Total followers",
     "engagement_rate": "Engagement rate"
   },

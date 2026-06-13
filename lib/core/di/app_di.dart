@@ -14,6 +14,7 @@ import 'package:brandface/data/repositories/social_auth_repository_impl.dart';
 import 'package:brandface/domain/entities/social_provider.dart';
 import 'package:brandface/domain/repository/social_auth_repository.dart';
 import 'package:brandface/domain/usecase/login/social_auth_usecase.dart';
+import 'package:brandface/utils/services/social_auth/apple_auth_service.dart';
 import 'package:brandface/utils/services/social_auth/facebook_auth_service.dart';
 import 'package:brandface/utils/services/social_auth/google_auth_service.dart';
 import 'package:brandface/utils/services/social_auth/linkedin_auth_service.dart';
@@ -204,14 +205,17 @@ class AppDi {
     sl.registerLazySingleton<TelegramAuthService>(
       () => const TelegramAuthService(),
     );
+    sl.registerLazySingleton<AppleAuthService>(
+      () => const AppleAuthService(),
+    );
     sl.registerLazySingleton<Map<SocialProvider, SocialAuthService>>(
       () => {
         // Facebook native SDK config (FacebookAppID/ClientToken) hali yo'q —
-        // BLoC `socialAuthSoon` emit qiladi. Google'ni Info.plist'da
-        // GIDClientID + CFBundleURLSchemes sozlangach ishlatish mumkin.
+        // BLoC `socialAuthSoon` emit qiladi.
         SocialProvider.google: sl<GoogleAuthService>(),
         SocialProvider.linkedin: sl<LinkedInAuthService>(),
         SocialProvider.telegram: sl<TelegramAuthService>(),
+        SocialProvider.apple: sl<AppleAuthService>(),
       },
     );
 

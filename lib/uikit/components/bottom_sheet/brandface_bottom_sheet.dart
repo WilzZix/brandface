@@ -14,6 +14,7 @@ class BrandfaceBottomSheet {
     builder,
     required VoidCallback onConfirm,
     VoidCallback? onCancel,
+    bool showConfirmButton = true,
   }) async {
     return await showModalBottomSheet(
       context: context,
@@ -65,14 +66,16 @@ class BrandfaceBottomSheet {
                         child: builder(context, bottomState),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: AppButtons.primary(
-                        title: t.common.confirm,
-                        onTap: onConfirm,
+                    if (showConfirmButton) ...[
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: AppButtons.primary(
+                          title: t.common.confirm,
+                          onTap: onConfirm,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
+                      SizedBox(height: 8),
+                    ],
                     GestureDetector(
                       onTap: () {
                         if (onCancel != null) {

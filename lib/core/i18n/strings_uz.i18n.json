@@ -7,10 +7,10 @@
   },
   "login": {
     "phone_number": "Telefon raqam",
-    "welcome_msg": "InflueraX-ga xush kelibsiz",
+    "welcome_msg": "InflueraX ga xush kelibsiz",
     "term_of_use_first": "Kirish tugmasini bosish orqali barcha ",
     "term_of_use_second": "foydalanish shartlariga rozilik bildiraman",
-    "login_methods": "yoki ... orqali kirish",
+    "login_methods": "yoki quyidagilar orqali kirish",
     "sms_confirmation": "SMS tasdiqlash",
     "sms_sent_to": "Telefon raqamingizga **$phoneEnd SMS kod yuborildi, iltimos kodni kiriting",
     "send_code_again": "Kodni qayta yuborish",
@@ -155,6 +155,9 @@
     "delete_account_confirm": "Hisobingizni o'chirishga ishonchingiz komilmi? Bu amalni qaytarib bo'lmaydi.",
     "age_range": "Yosh $from - $to",
     "confirm_delete": "O'chirishni tasdiqlang",
+    "delete_account_type_name": "Hisobni o'chirishni tasdiqlash uchun ismingizni kiriting: $name.",
+    "delete_account_type_name_hint": "Ismingizni kiriting",
+    "delete_account_name_mismatch": "Ism mos kelmadi.",
     "total_followers": "Jami obunachilar",
     "engagement_rate": "Faollik darajasi"
   },

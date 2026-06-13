@@ -10,7 +10,7 @@
     "welcome_msg": "Добро пожаловать в InflueraX",
     "term_of_use_first": "Нажимая «Войти», я принимаю все ",
     "term_of_use_second": "условия использования",
-    "login_methods": "или войти через",
+    "login_methods": "или продолжить через",
     "sms_confirmation": "SMS подтверждение",
     "sms_sent_to": "На ваш номер телефона **$phoneEnd отправлен SMS код, пожалуйста введите его",
     "send_code_again": "Отправить код снова",
@@ -155,6 +155,9 @@
     "delete_account_confirm": "Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.",
     "age_range": "Возраст $from - $to",
     "confirm_delete": "Подтвердить удаление",
+    "delete_account_type_name": "Введите своё имя $name для подтверждения удаления аккаунта.",
+    "delete_account_type_name_hint": "Введите своё имя",
+    "delete_account_name_mismatch": "Имя не совпадает.",
     "total_followers": "Всего подписчиков",
     "engagement_rate": "Уровень вовлечённости"
   },

@@ -103,8 +103,8 @@ class TranslationsLoginEn {
 	/// en: 'terms of use'
 	String get term_of_use_second => 'terms of use';
 
-	/// en: 'or login in with'
-	String get login_methods => 'or login in with';
+	/// en: 'or continue with'
+	String get login_methods => 'or continue with';
 
 	/// en: 'SMS confirmation'
 	String get sms_confirmation => 'SMS confirmation';
@@ -546,6 +546,15 @@ class TranslationsProfileEn {
 
 	/// en: 'Confirm delete'
 	String get confirm_delete => 'Confirm delete';
+
+	/// en: 'Type your name $name to confirm account deletion.'
+	String delete_account_type_name({required Object name}) => 'Type your name ${name} to confirm account deletion.';
+
+	/// en: 'Enter your name'
+	String get delete_account_type_name_hint => 'Enter your name';
+
+	/// en: 'Name does not match.'
+	String get delete_account_name_mismatch => 'Name does not match.';
 
 	/// en: 'Total followers'
 	String get total_followers => 'Total followers';
@@ -1239,7 +1248,7 @@ extension on Translations {
 			'login.welcome_msg' => 'Welcome to InflueraX',
 			'login.term_of_use_first' => 'By pressing Login i agree to all ',
 			'login.term_of_use_second' => 'terms of use',
-			'login.login_methods' => 'or login in with',
+			'login.login_methods' => 'or continue with',
 			'login.sms_confirmation' => 'SMS confirmation',
 			'login.sms_sent_to' => ({required Object phoneEnd}) => 'We have sent SMS code to your phone number **${phoneEnd}, please enter this code',
 			'login.send_code_again' => 'Send code again',
@@ -1378,6 +1387,9 @@ extension on Translations {
 			'profile.delete_account_confirm' => 'Are you sure you want to delete your account? This action cannot be undone.',
 			'profile.age_range' => ({required Object from, required Object to}) => 'Age ${from} - ${to}',
 			'profile.confirm_delete' => 'Confirm delete',
+			'profile.delete_account_type_name' => ({required Object name}) => 'Type your name ${name} to confirm account deletion.',
+			'profile.delete_account_type_name_hint' => 'Enter your name',
+			'profile.delete_account_name_mismatch' => 'Name does not match.',
 			'profile.total_followers' => 'Total followers',
 			'profile.engagement_rate' => 'Engagement rate',
 			'validation.name_required' => 'Please enter your name and surname',
