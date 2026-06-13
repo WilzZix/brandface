@@ -4,7 +4,7 @@ import 'package:brandface/data/models/billing/billing_models.dart';
 
 class AddBillingCardRequest {
   final String cardType;
-  final String lastFour;
+  final String name;
   final int expiryMonth;
   final int expiryYear;
   final bool isDefault;
@@ -12,7 +12,7 @@ class AddBillingCardRequest {
 
   const AddBillingCardRequest({
     required this.cardType,
-    required this.lastFour,
+    required this.name,
     required this.expiryMonth,
     required this.expiryYear,
     required this.isDefault,
@@ -22,7 +22,7 @@ class AddBillingCardRequest {
   Map<String, dynamic> toJson() {
     return {
       'card_type': cardType,
-      'last_four': lastFour,
+      'name': name,
       'expiry_month': expiryMonth,
       'expiry_year': expiryYear,
       'is_default': isDefault,

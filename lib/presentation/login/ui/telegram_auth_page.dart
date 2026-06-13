@@ -34,6 +34,11 @@ class TelegramAuthPage extends StatefulWidget {
 
   static const String tag = '/telegram_auth_page';
 
+  /// Fake URL Telegram widget redirects to after a successful login.
+  /// We intercept this navigation in-app — no server endpoint required.
+  static const String _callbackUrl =
+      'https://www.influerax.com/telegram-callback';
+
   @override
   State<TelegramAuthPage> createState() => _TelegramAuthPageState();
 }
@@ -43,8 +48,8 @@ class _TelegramAuthPageState extends State<TelegramAuthPage> {
   bool _completed = false;
 
   String _buildHtml() {
-    // Telegram Login Widget. Bot domain must match SocialAuthConfig.telegramAuthOrigin
-    // and be registered with @BotFather via /setdomain.
+    // Telegram Login Widget configured with BOTH data-onauth (JS channel) and
+    // data-auth-url (navigation callback). Whichever fires first wins.
     return '''
 <!DOCTYPE html>
 <html>
@@ -60,11 +65,15 @@ class _TelegramAuthPageState extends State<TelegramAuthPage> {
       <script async src="https://telegram.org/js/telegram-widget.js?22"
         data-telegram-login="${SocialAuthConfig.telegramBotUsername}"
         data-size="large"
-        data-onauth="onTelegramAuth(user)"
-        data-request-access="write"></script>
+        data-userpic="true"
+        data-request-access="write"
+        data-auth-url="${TelegramAuthPage._callbackUrl}"
+        data-onauth="onTelegramAuth(user)"></script>
       <script>
         function onTelegramAuth(user) {
-          BFTelegram.postMessage(JSON.stringify(user));
+          try {
+            BFTelegram.postMessage(JSON.stringify(user));
+          } catch (e) {}
         }
       </script>
     </div>
@@ -73,7 +82,7 @@ class _TelegramAuthPageState extends State<TelegramAuthPage> {
 ''';
   }
 
-  void _handleAuth(String rawJson) {
+  void _resolveSuccess(String rawJson) {
     if (_completed) return;
     try {
       jsonDecode(rawJson);
@@ -86,6 +95,63 @@ class _TelegramAuthPageState extends State<TelegramAuthPage> {
     context.pop(TelegramAuthResult.success(rawJson));
   }
 
+  /// Parses any URL that may carry Telegram auth data and resolves the page
+  /// if a valid payload is found. Returns true when a payload was extracted.
+  bool _tryHandleCallback(String url) {
+    if (_completed) return true;
+    final uri = Uri.tryParse(url);
+    if (uri == null) return false;
+
+    // Telegram OAuth sometimes returns the base64-encoded payload in the
+    // URL fragment as `#tgAuthResult=...` (popup mode) or as query params
+    // (data-auth-url mode).
+    final fragment = uri.fragment;
+    if (fragment.contains('tgAuthResult=')) {
+      final marker = 'tgAuthResult=';
+      final start = fragment.indexOf(marker) + marker.length;
+      var encoded = fragment.substring(start);
+      final amp = encoded.indexOf('&');
+      if (amp != -1) encoded = encoded.substring(0, amp);
+      try {
+        final padded = encoded.padRight(
+          encoded.length + (4 - encoded.length % 4) % 4,
+          '=',
+        );
+        final decoded = utf8.decode(base64Url.decode(padded));
+        _resolveSuccess(decoded);
+        return true;
+      } catch (_) {
+        // fall through and try query params
+      }
+    }
+
+    final params = uri.queryParameters;
+    if (params['id'] != null && params['hash'] != null) {
+      final payload = <String, dynamic>{
+        'id': int.tryParse(params['id']!) ?? params['id'],
+        if (params['first_name'] != null) 'first_name': params['first_name'],
+        if (params['last_name'] != null) 'last_name': params['last_name'],
+        if (params['username'] != null) 'username': params['username'],
+        if (params['photo_url'] != null) 'photo_url': params['photo_url'],
+        if (params['auth_date'] != null)
+          'auth_date':
+              int.tryParse(params['auth_date']!) ?? params['auth_date'],
+        'hash': params['hash'],
+      };
+      _resolveSuccess(jsonEncode(payload));
+      return true;
+    }
+
+    return false;
+  }
+
+  NavigationDecision _onNavigation(NavigationRequest req) {
+    if (_tryHandleCallback(req.url)) {
+      return NavigationDecision.prevent;
+    }
+    return NavigationDecision.navigate;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -93,7 +159,17 @@ class _TelegramAuthPageState extends State<TelegramAuthPage> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
         'BFTelegram',
-        onMessageReceived: (message) => _handleAuth(message.message),
+        onMessageReceived: (message) => _resolveSuccess(message.message),
+      )
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: _onNavigation,
+          onPageStarted: (url) => _tryHandleCallback(url),
+          onUrlChange: (change) {
+            final url = change.url;
+            if (url != null) _tryHandleCallback(url);
+          },
+        ),
       )
       ..loadHtmlString(
         _buildHtml(),

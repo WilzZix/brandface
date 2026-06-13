@@ -53,7 +53,25 @@ class InitAppCubit extends Cubit<InitAppState> {
         ApiRoutes.me,
         options: Options(extra: const {'skipUnauthorizedDialog': true}),
       );
-      return response.statusCode != null && response.statusCode! < 400;
+      final ok = response.statusCode != null && response.statusCode! < 400;
+      if (ok) {
+        // Backend role'ni lokal cache bilan sinxronlash — user appdan tashqarida
+        // role'ni o'rnatgan bo'lishi mumkin (yoki avvalgi sessiyada cache 'guest'
+        // bilan qolib ketgan).
+        final data = response.data;
+        final payload = data is Map && data['data'] is Map
+            ? Map<String, dynamic>.from(data['data'] as Map)
+            : (data is Map ? Map<String, dynamic>.from(data) : null);
+        final role = payload?['role'];
+        if (role is String && role.isNotEmpty) {
+          await _profileService.setRole(role);
+        }
+        final id = payload?['id'];
+        if (id is int) {
+          await _profileService.setProfileId(id);
+        }
+      }
+      return ok;
     } on DioException {
       return false;
     } catch (_) {

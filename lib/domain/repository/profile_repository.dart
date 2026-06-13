@@ -1,6 +1,7 @@
 import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
+import 'package:brandface/domain/entities/profile/catalog/brand_short_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
@@ -36,6 +37,8 @@ abstract class IProfileRepository {
 
   Future<Either<Failure, List<LanguageEntity>>> getLanguages();
 
+  Future<Either<Failure, List<BrandShortEntity>>> getBrands();
+
   Future<Either<Failure, SocialMediaAccountStatsEntity>>
   getSocialMediaAccountStats({
     required String platform,
@@ -52,13 +55,30 @@ abstract class IProfileRepository {
 
   Future<Either<Failure, void>> deleteAward({required int awardId});
 
+  Future<Either<Failure, AvailableDateItem>> addAvailableDate({
+    required String dateFrom,
+    required String dateTo,
+    String? note,
+  });
+
+  Future<Either<Failure, void>> deleteAvailableDate({required int dateId});
+
   Future<Either<Failure, List<AmbassadorEntity>>> getAmbassadors({
     String? ordering,
     int? categoryId,
     int? regionId,
+    int? languageId,
     String? gender,
+    int? ageFrom,
+    int? ageTo,
     bool? isTop,
     bool? isVip,
+    int? followersFrom,
+    int? followersTo,
+    String? availableDate,
+    String? currency,
+    int? pricePerHourFrom,
+    int? pricePerHourTo,
     String? role,
   });
 

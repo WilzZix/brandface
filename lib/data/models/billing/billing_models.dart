@@ -69,7 +69,7 @@ class BillingCardModel extends BillingCardEntity {
   const BillingCardModel({
     required super.id,
     required super.cardType,
-    required super.lastFour,
+    required super.name,
     required super.expiryMonth,
     required super.expiryYear,
     super.isDefault,
@@ -79,7 +79,7 @@ class BillingCardModel extends BillingCardEntity {
     return BillingCardModel(
       id: _toInt(json['id']),
       cardType: json['card_type']?.toString() ?? 'visa',
-      lastFour: json['last_four']?.toString() ?? '0000',
+      name: json['name']?.toString() ?? '',
       expiryMonth: _toInt(json['expiry_month']),
       expiryYear: _toInt(json['expiry_year']),
       isDefault: json['is_default'] == true,

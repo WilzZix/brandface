@@ -3,6 +3,7 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/brand/ui/sms_otp_page.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
+import 'package:brandface/uikit/components/card_brand_logo.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
     return 'unknown';
   }
 
-  bool _isLocal(String cardType) =>
-      cardType == 'uzcard' || cardType == 'humo';
+  bool _isLocal(String cardType) => cardType == 'uzcard' || cardType == 'humo';
 
   @override
   void dispose() {
@@ -76,9 +76,10 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     // Navigate to SMS confirmation; on success submit to API
-    context.pushNamed(SmsOtpPage.tag, extra: SmsOtpArgs(
-      onSuccess: _submitCard,
-    ));
+    context.pushNamed(
+      SmsOtpPage.tag,
+      extra: SmsOtpArgs(onSuccess: _submitCard),
+    );
   }
 
   void _submitCard() {
@@ -87,24 +88,16 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
     final year = int.tryParse(expParts.length > 1 ? expParts[1] : '0') ?? 0;
     final fullYear = year < 100 ? 2000 + year : year;
 
-    final cardType = _detectCardType(_numberCtrl.text);
-
-    final lastFour = _numberCtrl.text
-        .replaceAll(' ', '')
-        .padLeft(4, '0')
-        .substring((_numberCtrl.text.replaceAll(' ', '').length - 4)
-            .clamp(0, _numberCtrl.text.replaceAll(' ', '').length));
-
     context.read<BillingCubit>().addCard(
-          AddBillingCardParams(
-            cardType: cardType,
-            lastFour: lastFour,
-            expiryMonth: month,
-            expiryYear: fullYear,
-            isDefault: true,
-            gatewayToken: _generateToken(),
-          ),
-        );
+      AddBillingCardParams(
+        cardType: AddBillingCardParams.cardTypeFromNumber(_numberCtrl.text),
+        name: _holderCtrl.text.trim(),
+        expiryMonth: month,
+        expiryYear: fullYear,
+        isDefault: true,
+        gatewayToken: _generateToken(),
+      ),
+    );
     // Go back to My Cards after submit
     if (context.canPop()) context.pop();
   }
@@ -123,6 +116,9 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
       },
       child: Scaffold(
         backgroundColor: AppColors.lightBg,
+        // Scaffold automatically lifts bottomNavigationBar above the
+        // keyboard and shrinks body height accordingly.
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           backgroundColor: AppColors.lightBg,
           scrolledUnderElevation: 0,
@@ -132,143 +128,218 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
           ),
           centerTitle: false,
         ),
-        body: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-            children: [
-              // ── Card holder ───────────────────────────────────────────
-              _FieldLabel('Card holder'),
-              const SizedBox(height: 8),
-              _InputField(
-                controller: _holderCtrl,
-                hint: 'Write card holder name',
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Required' : null,
-              ),
-              const SizedBox(height: 20),
+        // Tap outside any input to dismiss the keyboard.
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SafeArea(
+            top: false,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // ── Card holder ────────────────────────────
+                          _FieldLabel('Card holder'),
+                          const SizedBox(height: 8),
+                          _InputField(
+                            controller: _holderCtrl,
+                            hint: 'Write card holder name',
+                            textInputAction: TextInputAction.next,
+                            validator: (v) => (v == null || v.trim().isEmpty)
+                                ? 'Required'
+                                : null,
+                          ),
+                          const SizedBox(height: 20),
 
-              // ── Card number ───────────────────────────────────────────
-              _FieldLabel('Card number'),
-              const SizedBox(height: 8),
-              _InputField(
-                controller: _numberCtrl,
-                hint: 'Write card number',
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _CardNumberFormatter(),
-                ],
-                validator: (v) {
-                  final digits = (v ?? '').replaceAll(' ', '');
-                  if (digits.length != 16) return 'Enter valid card number';
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-
-              // ── Expire date + CCV ─────────────────────────────────────
-              // Uzcard (8600...) / Humo (9860...) and known Uzbek co-badge
-              // BINs hide CCV — local cards don't require it.
-              ValueListenableBuilder<TextEditingValue>(
-                valueListenable: _numberCtrl,
-                builder: (context, value, _) {
-                  final isLocal = _isLocal(_detectCardType(value.text));
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _FieldLabel('Expire date'),
-                            const SizedBox(height: 8),
-                            _InputField(
-                              controller: _expireCtrl,
-                              hint: 'MM/YY',
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                _ExpireDateFormatter(),
-                              ],
-                              validator: (v) {
-                                if (v == null || v.length < 5) {
-                                  return 'MM/YY';
-                                }
-                                return null;
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (!isLocal) ...[
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          // ── Card number ────────────────────────────
+                          Row(
                             children: [
-                              _FieldLabel('CCV'),
-                              const SizedBox(height: 8),
-                              _InputField(
-                                controller: _ccvCtrl,
-                                hint: 'CCV',
-                                keyboardType: TextInputType.number,
-                                obscureText: true,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(4),
-                                ],
-                                validator: (v) {
-                                  if (v == null || v.length < 3) return 'Invalid';
-                                  return null;
+                              _FieldLabel('Card number'),
+                              const Spacer(),
+                              ValueListenableBuilder<TextEditingValue>(
+                                valueListenable: _numberCtrl,
+                                builder: (context, value, _) {
+                                  final brand = _detectCardType(value.text);
+                                  if (brand == 'unknown') {
+                                    return const SizedBox.shrink();
+                                  }
+                                  return CardBrandLogo(
+                                    brand: brand,
+                                    height: 22,
+                                  );
                                 },
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ],
-                  );
-                },
-              ),
+                          const SizedBox(height: 8),
+                          _InputField(
+                            controller: _numberCtrl,
+                            hint: 'Write card number',
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              _CardNumberFormatter(),
+                            ],
+                            validator: (v) {
+                              final digits = (v ?? '').replaceAll(' ', '');
+                              if (digits.length != 16) {
+                                return 'Enter valid card number';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
 
-              const SizedBox(height: 40),
-
-              // ── Buttons ───────────────────────────────────────────────
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => context.pop(),
-                      child: Container(
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: AppColors.lightBg3,
-                          borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: AppColors.borderColor),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text('Cancel', style: Typographies.labelLarge),
+                          // ── Expire date + CCV ──────────────────────
+                          // Uzcard (8600...) / Humo (9860...) and known
+                          // Uzbek co-badge BINs hide CCV — local cards
+                          // don't require it.
+                          ValueListenableBuilder<TextEditingValue>(
+                            valueListenable: _numberCtrl,
+                            builder: (context, value, _) {
+                              final isLocal = _isLocal(
+                                _detectCardType(value.text),
+                              );
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _FieldLabel('Expire date'),
+                                        const SizedBox(height: 8),
+                                        _InputField(
+                                          controller: _expireCtrl,
+                                          hint: 'MM/YY',
+                                          keyboardType: TextInputType.number,
+                                          textInputAction: isLocal
+                                              ? TextInputAction.done
+                                              : TextInputAction.next,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly,
+                                            _ExpireDateFormatter(),
+                                          ],
+                                          validator: (v) {
+                                            if (v == null || v.length < 5) {
+                                              return 'MM/YY';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (!isLocal) ...[
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          _FieldLabel('CCV'),
+                                          const SizedBox(height: 8),
+                                          _InputField(
+                                            controller: _ccvCtrl,
+                                            hint: 'CCV',
+                                            keyboardType: TextInputType.number,
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            obscureText: true,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly,
+                                              LengthLimitingTextInputFormatter(
+                                                4,
+                                              ),
+                                            ],
+                                            validator: (v) {
+                                              if (v == null || v.length < 3) {
+                                                return 'Invalid';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: _onConfirm,
-                      child: Container(
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(999),
+                  // ── Bottom action bar (sits above the keyboard) ──────
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 12,
+                      bottom: MediaQuery.viewInsetsOf(context).bottom > 0
+                          ? 12
+                          : MediaQuery.paddingOf(context).bottom + 12,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => context.pop(),
+                            child: Container(
+                              height: 52,
+                              decoration: BoxDecoration(
+                                color: AppColors.lightBg3,
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: AppColors.borderColor,
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Cancel',
+                                style: Typographies.labelLarge,
+                              ),
+                            ),
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        child: Text('Confirm', style: Typographies.labelLarge),
-                      ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: _onConfirm,
+                            child: Container(
+                              height: 52,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Confirm',
+                                style: Typographies.labelLarge,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -294,6 +365,7 @@ class _InputField extends StatelessWidget {
     required this.controller,
     required this.hint,
     this.keyboardType,
+    this.textInputAction,
     this.obscureText = false,
     this.inputFormatters,
     this.validator,
@@ -301,6 +373,7 @@ class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
   final bool obscureText;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
@@ -310,6 +383,7 @@ class _InputField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
       obscureText: obscureText,
       inputFormatters: inputFormatters,
       validator: validator,
@@ -317,8 +391,10 @@ class _InputField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: Typographies.bodyMedium.copyWith(color: AppColors.grey),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         filled: true,
         fillColor: AppColors.white,
         border: OutlineInputBorder(
@@ -349,7 +425,9 @@ class _InputField extends StatelessWidget {
 class _CardNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final digits = newValue.text.replaceAll(' ', '');
     if (digits.length > 16) return oldValue;
     final buffer = StringBuffer();
@@ -368,7 +446,9 @@ class _CardNumberFormatter extends TextInputFormatter {
 class _ExpireDateFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final digits = newValue.text.replaceAll('/', '');
     if (digits.length > 4) return oldValue;
     String formatted = digits;
@@ -381,4 +461,3 @@ class _ExpireDateFormatter extends TextInputFormatter {
     );
   }
 }
-

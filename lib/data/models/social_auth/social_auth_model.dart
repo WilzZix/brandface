@@ -34,11 +34,14 @@ class SocialAuthData {
   SocialAuthData({this.access, this.refresh, this.isNewUser, this.role});
 
   factory SocialAuthData.fromJson(Map<String, dynamic> json) {
+    final user = json['user'];
+    final userMap = user is Map<String, dynamic> ? user : null;
     return SocialAuthData(
-      access: json['access'] as String?,
-      refresh: json['refresh'] as String?,
-      isNewUser: json['is_new_user'] as bool?,
-      role: json['role'] as String?,
+      access: (json['access_token'] ?? json['access']) as String?,
+      refresh: (json['refresh_token'] ?? json['refresh']) as String?,
+      isNewUser:
+          (json['is_new_user'] ?? userMap?['is_new_user']) as bool?,
+      role: (json['role'] ?? userMap?['role']) as String?,
     );
   }
 }

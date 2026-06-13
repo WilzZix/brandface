@@ -493,7 +493,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
   }
 
   static String _cardDisplayLabel(BillingCardEntity card) {
-    return '${_capitalize(card.cardType)} •••• ${card.lastFour}';
+    return '${_capitalize(card.cardType)} • ${card.name}';
   }
 
   static String _formatExpirationDate(DateTime? value) {

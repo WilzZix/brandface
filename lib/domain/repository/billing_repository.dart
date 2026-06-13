@@ -4,7 +4,7 @@ import 'package:dart_either/dart_either.dart';
 
 class AddBillingCardParams {
   final String cardType;
-  final String lastFour;
+  final String name;
   final int expiryMonth;
   final int expiryYear;
   final bool isDefault;
@@ -12,12 +12,28 @@ class AddBillingCardParams {
 
   const AddBillingCardParams({
     required this.cardType,
-    required this.lastFour,
+    required this.name,
     required this.expiryMonth,
     required this.expiryYear,
     required this.isDefault,
     required this.gatewayToken,
   });
+
+  /// Backend `card_type` accepts only `visa`, `mastercard`, `click`.
+  /// Uzbek local and co-badge cards settle through Click, so they map
+  /// to `click`; everything else falls back to its international network.
+  static String cardTypeFromNumber(String cardNumber) {
+    final digits = cardNumber.replaceAll(RegExp(r'\D'), '');
+    const localPrefixes = {
+      '8600', '9860', '9869', '5614', '5440', '5286', '5106',
+    };
+    if (digits.length >= 4 && localPrefixes.contains(digits.substring(0, 4))) {
+      return 'click';
+    }
+    if (digits.startsWith('4')) return 'visa';
+    if (digits.startsWith('5')) return 'mastercard';
+    return 'click';
+  }
 }
 
 class BoostProfileParams {

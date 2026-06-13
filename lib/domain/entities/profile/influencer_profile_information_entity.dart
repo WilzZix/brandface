@@ -1,6 +1,7 @@
 import 'package:brandface/data/models/profile/catalog/category_model.dart';
 import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
+import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:equatable/equatable.dart';
 
@@ -37,7 +38,7 @@ class InfluencerProfileInformationEntity extends Equatable {
   final String moderationStatus;
   final AudienceEntity? audience;
   final PricingEntity? pricing;
-  final List<dynamic>? availableDates;
+  final List<AvailableDateItem>? availableDates;
   final List<String>? awards;
   final List<dynamic>? reviews;
   final DateTime createdAt;

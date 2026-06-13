@@ -5,6 +5,7 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
+import 'package:brandface/uikit/components/card_brand_logo.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/components/ui_components/title_description_widget.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -29,6 +30,9 @@ class Billing extends StatefulWidget {
 class _BillingState extends State<Billing> {
   late int _selectedIndex;
 
+  /// Guards against double-tap pushing two _AddCardPage instances.
+  bool _isOpeningAddCard = false;
+
   @override
   void initState() {
     super.initState();
@@ -45,10 +49,7 @@ class _BillingState extends State<Billing> {
           return;
         }
 
-        context.showAppSnackBar(
-          failure.message,
-          type: AppSnackBarType.error,
-        );
+        context.showAppSnackBar(failure.message, type: AppSnackBarType.error);
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -150,7 +151,15 @@ class _BillingState extends State<Billing> {
                 ? null
                 : Border.all(color: AppColors.borderColor),
           ),
-          child: Text(text, style: Typographies.labelMedium),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              text,
+              style: Typographies.labelMedium,
+              maxLines: 1,
+              softWrap: false,
+            ),
+          ),
         ),
       ),
     );
@@ -197,7 +206,10 @@ class _BillingState extends State<Billing> {
               const SizedBox(height: 20),
               _payAsYouGoBanner(),
               const SizedBox(height: 16),
-              _priceRow(t.billing.contact_unlock, _formatUsd(plan?.contactPriceUsd)),
+              _priceRow(
+                t.billing.contact_unlock,
+                _formatUsd(plan?.contactPriceUsd),
+              ),
               _priceRow(
                 t.billing.profile_offer_boost,
                 boostPackage == null
@@ -209,7 +221,9 @@ class _BillingState extends State<Billing> {
                 SizedBox(
                   width: double.infinity,
                   child: AppButtons.primary(
-                    title: state.isMutating ? t.billing.processing : t.billing.boost_profile,
+                    title: state.isMutating
+                        ? t.billing.processing
+                        : t.billing.boost_profile,
                     onTap: state.isMutating
                         ? null
                         : () => _showBoostPackages(context, dashboard),
@@ -259,7 +273,10 @@ class _BillingState extends State<Billing> {
                   children: [
                     SvgPicture.asset(AppAssets.icAdd),
                     const SizedBox(width: 8),
-                    Text(t.billing.add_new_card, style: Typographies.labelLarge),
+                    Text(
+                      t.billing.add_new_card,
+                      style: Typographies.labelLarge,
+                    ),
                   ],
                 ),
               ),
@@ -278,19 +295,22 @@ class _BillingState extends State<Billing> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        t.billing.card_ending_in(cardType: _cardLabel(card.cardType), lastFour: card.lastFour),
+                        '${_cardLabel(card.cardType)} • ${card.name}',
                         style: Typographies.titleMedium,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        t.billing.card_expiry(month: card.expiryMonth.toString().padLeft(2, '0'), year: card.expiryYear),
+                        t.billing.card_expiry(
+                          month: card.expiryMonth.toString().padLeft(2, '0'),
+                          year: card.expiryYear,
+                        ),
                         style: Typographies.titleSmall.copyWith(
                           color: AppColors.mutedBlack,
                         ),
                       ),
                     ],
                   ),
-                  SvgPicture.asset(AppAssets.icVisa),
+                  CardBrandLogo(brand: card.cardType, height: 26),
                 ],
               ),
               const SizedBox(height: 12),
@@ -318,7 +338,9 @@ class _BillingState extends State<Billing> {
                             card.id,
                           ),
                     child: Text(
-                      card.isDefault ? t.billing.default_card : t.billing.set_default_card,
+                      card.isDefault
+                          ? t.billing.default_card
+                          : t.billing.set_default_card,
                       style: Typographies.titleSmall.copyWith(
                         color: card.isDefault
                             ? AppColors.primaryDark
@@ -464,10 +486,7 @@ class _BillingState extends State<Billing> {
         color: AppColors.primary.withAlpha(200),
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(
-        t.billing.pay_as_you_go,
-        style: Typographies.titleSmall,
-      ),
+      child: Text(t.billing.pay_as_you_go, style: Typographies.titleSmall),
     );
   }
 
@@ -525,15 +544,27 @@ class _BillingState extends State<Billing> {
   }
 
   Future<void> _openAddCardPage(BuildContext context) async {
-    final result = await Navigator.of(context).push<AddBillingCardParams>(
-      MaterialPageRoute(builder: (_) => const _AddCardPage()),
-    );
+    // Re-entry guard: prevents a fast double-tap from pushing the page twice.
+    if (_isOpeningAddCard) return;
+    _isOpeningAddCard = true;
+    try {
+      final result = await Navigator.of(context).push<AddBillingCardParams>(
+        MaterialPageRoute(
+          // Named so RouteLoggerObserver prints "/billing/add-card"
+          // instead of MaterialPageRoute<AddBillingCardParams>.
+          settings: const RouteSettings(name: '/billing/add-card'),
+          builder: (_) => const _AddCardPage(),
+        ),
+      );
 
-    if (!context.mounted || result == null) {
-      return;
+      if (!context.mounted || result == null) {
+        return;
+      }
+
+      await context.read<BillingCubit>().addCard(result);
+    } finally {
+      if (mounted) _isOpeningAddCard = false;
     }
-
-    await context.read<BillingCubit>().addCard(result);
   }
 
   Future<void> _showBoostPackages(
@@ -680,7 +711,10 @@ class _BillingErrorState extends StatelessWidget {
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: t.common.try_again, onTap: onRetry),
+              child: AppButtons.primary(
+                title: t.common.try_again,
+                onTap: onRetry,
+              ),
             ),
           ],
         ),
@@ -701,6 +735,8 @@ class _AddCardPageState extends State<_AddCardPage> {
   final TextEditingController _cardNumberController = TextEditingController();
   final TextEditingController _expiryController = TextEditingController();
   final TextEditingController _ccvController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   // Uzbekistan local card BIN prefixes — CVV is NOT required.
   // Add new prefixes here when confirmed.
@@ -720,8 +756,20 @@ class _AddCardPageState extends State<_AddCardPage> {
     final digits = raw.replaceAll(' ', '');
     if (digits.length < 4) return false;
     final prefix4 = digits.substring(0, 4);
-    return _uzcardPrefixes.contains(prefix4) ||
-        _humoPrefixes.contains(prefix4);
+    return _uzcardPrefixes.contains(prefix4) || _humoPrefixes.contains(prefix4);
+  }
+
+  String _detectBrand(String raw) {
+    final digits = raw.replaceAll(' ', '');
+    if (digits.isEmpty) return 'unknown';
+    if (digits.length >= 4) {
+      final prefix4 = digits.substring(0, 4);
+      if (_uzcardPrefixes.contains(prefix4)) return 'uzcard';
+      if (_humoPrefixes.contains(prefix4)) return 'humo';
+    }
+    if (digits.startsWith('4')) return 'visa';
+    if (digits.startsWith('5')) return 'mastercard';
+    return 'unknown';
   }
 
   @override
@@ -737,6 +785,9 @@ class _AddCardPageState extends State<_AddCardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBg,
+      // Resize the body for the keyboard so the in-body action row stays
+      // pinned just above it.
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: AppColors.lightBg,
         elevation: 0,
@@ -749,105 +800,186 @@ class _AddCardPageState extends State<_AddCardPage> {
         titleSpacing: 0,
         title: Text('Add new payment method', style: Typographies.titleLarge),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                children: [
-                  _cardField(
-                    controller: _holderController,
-                    label: 'Card holder',
-                    hintText: 'Write card holder name',
-                    textCapitalization: TextCapitalization.words,
-                  ),
-                  const SizedBox(height: 24),
-                  _cardField(
-                    controller: _cardNumberController,
-                    label: 'Card number',
-                    hintText: 'Write card number',
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      _CardNumberInputFormatter(),
+      // Tap outside any input to dismiss the keyboard.
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          top: false,
+          child: Form(
+            key: _formKey,
+            autovalidateMode: _autovalidateMode,
+            child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _cardField(
+                        controller: _holderController,
+                        label: 'Card holder',
+                        hintText: 'Write card holder name',
+                        textCapitalization: TextCapitalization.words,
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if ((value ?? '').trim().isEmpty) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      _cardField(
+                        controller: _cardNumberController,
+                        label: 'Card number',
+                        hintText: 'Write card number',
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          _CardNumberInputFormatter(),
+                        ],
+                        validator: (value) {
+                          final digits = _digitsOnlyText(value ?? '');
+                          if (digits.isEmpty) {
+                            return 'Required';
+                          }
+                          if (digits.length != 16) {
+                            return 'Enter a valid 16-digit card number';
+                          }
+                          return null;
+                        },
+                        trailing: ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: _cardNumberController,
+                          builder: (context, value, _) {
+                            final brand = _detectBrand(value.text);
+                            if (brand == 'unknown') {
+                              return const SizedBox.shrink();
+                            }
+                            return CardBrandLogo(brand: brand, height: 22);
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      // Uzcard / Humo and known Uzbek co-badge cards skip CCV.
+                      ValueListenableBuilder<TextEditingValue>(
+                        valueListenable: _cardNumberController,
+                        builder: (context, value, _) {
+                          final isLocal = _isLocalCard(value.text);
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _cardField(
+                                  controller: _expiryController,
+                                  label: 'Expire date',
+                                  hintText: 'MM/YY',
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: isLocal
+                                      ? TextInputAction.done
+                                      : TextInputAction.next,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    _ExpiryDateInputFormatter(),
+                                  ],
+                                  validator: (value) {
+                                    final digits = _digitsOnlyText(value ?? '');
+                                    if (digits.isEmpty) {
+                                      return 'Required';
+                                    }
+                                    if (digits.length != 4) {
+                                      return 'MM/YY';
+                                    }
+                                    final month = int.tryParse(
+                                      digits.substring(0, 2),
+                                    );
+                                    if (month == null ||
+                                        month < 1 ||
+                                        month > 12) {
+                                      return 'Invalid month';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              if (!isLocal) ...[
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: _cardField(
+                                    controller: _ccvController,
+                                    label: 'CCV',
+                                    hintText: 'CCV',
+                                    keyboardType: TextInputType.number,
+                                    textInputAction: TextInputAction.done,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(4),
+                                    ],
+                                    validator: (value) {
+                                      final digits = _digitsOnlyText(
+                                        value ?? '',
+                                      );
+                                      if (digits.isEmpty) {
+                                        return 'Required';
+                                      }
+                                      if (digits.length < 3) {
+                                        return 'Invalid';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ],
+                          );
+                        },
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 24),
-                  // Uzcard / Humo and known Uzbek co-badge cards skip CCV.
-                  ValueListenableBuilder<TextEditingValue>(
-                    valueListenable: _cardNumberController,
-                    builder: (context, value, _) {
-                      final isLocal = _isLocalCard(value.text);
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: _cardField(
-                              controller: _expiryController,
-                              label: 'Expire date',
-                              hintText: 'MM/YY',
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                _ExpiryDateInputFormatter(),
-                              ],
-                            ),
+                ),
+              ),
+              // Bottom actions sit just above the keyboard: the body is
+              // resized to avoid the bottom inset, so the row hugs the
+              // keyboard top. SafeArea adds the home-indicator gap when the
+              // keyboard is hidden.
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 56,
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).maybePop(),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.black,
+                            shape: const StadiumBorder(),
                           ),
-                          if (!isLocal) ...[
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _cardField(
-                                controller: _ccvController,
-                                label: 'CCV',
-                                hintText: 'CCV',
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(4),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            AnimatedPadding(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                bottom: 16 + MediaQuery.viewInsetsOf(context).bottom,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 56,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).maybePop(),
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.black,
-                          shape: const StadiumBorder(),
+                          child: Text('Cancel', style: Typographies.labelLarge),
                         ),
-                        child: Text('Cancel', style: Typographies.labelLarge),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: AppButtons.primary(title: 'Confirm', onTap: _submit),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: SizedBox(
+                        height: 56,
+                        child: AppButtons.primary(
+                          title: 'Confirm',
+                          onTap: _submit,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+          ),
         ),
       ),
     );
@@ -858,42 +990,61 @@ class _AddCardPageState extends State<_AddCardPage> {
     required String label,
     required String hintText,
     TextInputType? keyboardType,
+    TextInputAction? textInputAction,
     TextCapitalization textCapitalization = TextCapitalization.none,
     List<TextInputFormatter>? inputFormatters,
+    Widget? trailing,
+    String? Function(String?)? validator,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Typographies.titleSmall.copyWith(color: AppColors.black),
+        Row(
+          children: [
+            Text(
+              label,
+              style: Typographies.titleSmall.copyWith(color: AppColors.black),
+            ),
+            if (trailing != null) ...[const Spacer(), trailing],
+          ],
         ),
         const SizedBox(height: 8),
-        SizedBox(
-          height: 56,
-          child: TextField(
-            controller: controller,
-            keyboardType: keyboardType,
-            textCapitalization: textCapitalization,
-            inputFormatters: inputFormatters,
-            style: Typographies.bodyLarge.copyWith(color: AppColors.black),
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: Typographies.bodyLarge.copyWith(
-                color: AppColors.mutedBlack,
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-              filled: true,
-              fillColor: AppColors.lightBg,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide(color: AppColors.borderColor),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide(color: AppColors.black),
-              ),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          textCapitalization: textCapitalization,
+          inputFormatters: inputFormatters,
+          validator: validator,
+          style: Typographies.bodyLarge.copyWith(color: AppColors.black),
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: Typographies.bodyLarge.copyWith(
+              color: AppColors.mutedBlack,
             ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 18,
+            ),
+            filled: true,
+            fillColor: AppColors.lightBg,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(999),
+              borderSide: BorderSide(color: AppColors.borderColor),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(999),
+              borderSide: BorderSide(color: AppColors.black),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(999),
+              borderSide: BorderSide(color: AppColors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(999),
+              borderSide: BorderSide(color: AppColors.red),
+            ),
+            errorStyle: Typographies.bodySmall.copyWith(color: AppColors.red),
           ),
         ),
       ],
@@ -901,32 +1052,26 @@ class _AddCardPageState extends State<_AddCardPage> {
   }
 
   void _submit() {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      if (_autovalidateMode == AutovalidateMode.disabled) {
+        setState(() {
+          _autovalidateMode = AutovalidateMode.onUserInteraction;
+        });
+      }
+      return;
+    }
+
     final holder = _holderController.text.trim();
-    final cardNumber = _digitsOnly(_cardNumberController.text);
-    final expiry = _digitsOnly(_expiryController.text);
-    final ccv = _digitsOnly(_ccvController.text);
-    final isLocal = _isLocalCard(cardNumber);
-
-    if (holder.isEmpty ||
-        cardNumber.length != 16 ||
-        expiry.length != 4 ||
-        (!isLocal && ccv.length < 3)) {
-      _showValidationMessage();
-      return;
-    }
-
-    final month = int.tryParse(expiry.substring(0, 2));
-    final year = int.tryParse(expiry.substring(2, 4));
-    if (month == null || year == null || month < 1 || month > 12) {
-      _showValidationMessage();
-      return;
-    }
+    final cardNumber = _digitsOnlyText(_cardNumberController.text);
+    final expiry = _digitsOnlyText(_expiryController.text);
+    final month = int.parse(expiry.substring(0, 2));
+    final year = int.parse(expiry.substring(2, 4));
 
     final lastFour = cardNumber.substring(cardNumber.length - 4);
     Navigator.of(context).pop(
       AddBillingCardParams(
-        cardType: _detectCardType(cardNumber),
-        lastFour: lastFour,
+        cardType: AddBillingCardParams.cardTypeFromNumber(cardNumber),
+        name: holder,
         expiryMonth: month,
         expiryYear: 2000 + year,
         isDefault: true,
@@ -934,25 +1079,6 @@ class _AddCardPageState extends State<_AddCardPage> {
             'manual-$lastFour-${DateTime.now().millisecondsSinceEpoch}',
       ),
     );
-  }
-
-  void _showValidationMessage() {
-    context.showAppSnackBar(
-      'Fill in valid card details.',
-      type: AppSnackBarType.error,
-    );
-  }
-
-  static String _digitsOnly(String value) {
-    return _digitsOnlyText(value);
-  }
-
-  static String _detectCardType(String cardNumber) {
-    if (cardNumber.startsWith('5')) {
-      return 'mastercard';
-    }
-
-    return 'visa';
   }
 }
 

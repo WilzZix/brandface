@@ -430,7 +430,7 @@ class _CardRowState extends State<_CardRow> {
               const SizedBox(height: 2),
               Text(
                 card != null
-                    ? '${_cardLabel(card.cardType)} ending in ${card.lastFour}'
+                    ? '${_cardLabel(card.cardType)} • ${card.name}'
                     : 'No card added',
                 style: Typographies.bodyMedium,
               ),
@@ -540,7 +540,7 @@ class _ActivateRow extends StatelessWidget {
       const _PayMethod('uzcard', 'UzCard', _PayMethodType.uzcard),
     ];
     for (final card in cards) {
-      final label = '${_cardLabel(card.cardType)} •••• ${card.lastFour}';
+      final label = '${_cardLabel(card.cardType)} • ${card.name}';
       final type = card.cardType.trim().toLowerCase().contains('visa')
           ? _PayMethodType.visa
           : card.cardType.trim().toLowerCase().contains('master')

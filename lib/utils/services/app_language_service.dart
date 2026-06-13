@@ -11,17 +11,16 @@ class AppLanguageService {
   }
 
   Future<AppLocale> getAppLocale() async {
-    final String appLocal = _prefs.getString('app_locale') ?? 'en';
+    final String appLocal = _prefs.getString('app_locale') ?? 'uz';
 
     switch (appLocal) {
       case 'ru':
         return AppLocale.ru;
-      case 'uz':
-        return AppLocale.uz;
       case 'en':
         return AppLocale.en;
+      case 'uz':
       default:
-        return AppLocale.en;
+        return AppLocale.uz;
     }
   }
 }

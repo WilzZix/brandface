@@ -19,6 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
+import '../../../../utils/services/image_crop_service.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../utils/extansions/snackbar_x.dart';
 import 'choose_spoken_language.dart';
@@ -117,10 +118,10 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
     if (!mounted || result == null || result.files.isEmpty) return;
     final path = result.files.single.path;
     if (path == null || path.isEmpty) return;
-    final file = File(path);
-    setState(() => _pickedImage = file);
-    if (!mounted) return;
-    context.read<UploadCubit>().uploadFile(file);
+    final cropped = await cropImage(source: File(path));
+    if (!mounted || cropped == null) return;
+    setState(() => _pickedImage = cropped);
+    context.read<UploadCubit>().uploadFile(cropped);
   }
 
   @override

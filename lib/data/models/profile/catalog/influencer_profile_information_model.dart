@@ -4,6 +4,7 @@ import 'package:brandface/data/models/profile/catalog/language_model.dart';
 import 'package:brandface/data/models/profile/catalog/region_model.dart';
 import 'package:brandface/data/models/profile/catalog/service_type_model.dart';
 import 'package:brandface/data/models/profile/catalog/sphere_model.dart';
+import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 
 import '../../../../domain/entities/profile/influencer_profile_information_entity.dart';
 import '../../../../domain/entities/profile/profile_entity.dart';
@@ -128,8 +129,20 @@ class InfluencerProfileInformationModel
           : null,
 
       availableDates: json['available_dates'] != null
-          ? List<String>.from(json['available_dates'])
-          : [],
+          ? (json['available_dates'] as List)
+                .whereType<Map>()
+                .map(
+                  (item) => AvailableDateItem(
+                    id: (item['id'] as num?)?.toInt() ?? 0,
+                    dateFrom: item['date_from']?.toString() ?? '',
+                    dateTo: item['date_to']?.toString() ?? '',
+                    note: item['note']?.toString(),
+                  ),
+                )
+                .where((item) =>
+                    item.dateFrom.isNotEmpty && item.dateTo.isNotEmpty)
+                .toList()
+          : <AvailableDateItem>[],
       awards: json['awards'] != null
           ? (json['awards'] as List)
                 .map((a) {

@@ -2,6 +2,7 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 import 'package:brandface/domain/entities/profile/award_entity.dart';
+import 'package:brandface/domain/entities/profile/catalog/brand_short_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/category_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
 import 'package:brandface/domain/entities/profile/catalog/language_entity.dart';
@@ -235,6 +236,23 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
+  Future<Either<Failure, List<BrandShortEntity>>> getBrands() async {
+    try {
+      final brands = await _dataSource.getBrands();
+      return Right(brands.map((m) => m.toEntity()).toList());
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          statusCode: e.response?.statusCode,
+          e.message ?? 'Serverda kutilmagan xatolik',
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    }
+  }
+
+  @override
   Future<Either<Failure, SocialMediaAccountStatsEntity>>
   getSocialMediaAccountStats({
     required String platform,
@@ -347,13 +365,72 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
+  Future<Either<Failure, AvailableDateItem>> addAvailableDate({
+    required String dateFrom,
+    required String dateTo,
+    String? note,
+  }) async {
+    try {
+      final created = await _dataSource.addAvailableDate(
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+        note: note,
+      );
+      return Right(created);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['detail'] ??
+              e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAvailableDate({
+    required int dateId,
+  }) async {
+    try {
+      await _dataSource.deleteAvailableDate(dateId: dateId);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          e.response?.data?['detail'] ??
+              e.response?.data?['message'] ??
+              e.message ??
+              'Serverda xatolik yuz berdi',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<AmbassadorEntity>>> getAmbassadors({
     String? ordering,
     int? categoryId,
     int? regionId,
+    int? languageId,
     String? gender,
+    int? ageFrom,
+    int? ageTo,
     bool? isTop,
     bool? isVip,
+    int? followersFrom,
+    int? followersTo,
+    String? availableDate,
+    String? currency,
+    int? pricePerHourFrom,
+    int? pricePerHourTo,
     String? role,
   }) async {
     try {
@@ -361,9 +438,18 @@ class ProfileRepositoryImpl implements IProfileRepository {
         ordering: ordering,
         categoryId: categoryId,
         regionId: regionId,
+        languageId: languageId,
         gender: gender,
+        ageFrom: ageFrom,
+        ageTo: ageTo,
         isTop: isTop,
         isVip: isVip,
+        followersFrom: followersFrom,
+        followersTo: followersTo,
+        availableDate: availableDate,
+        currency: currency,
+        pricePerHourFrom: pricePerHourFrom,
+        pricePerHourTo: pricePerHourTo,
         role: role,
       );
       return Right(data);

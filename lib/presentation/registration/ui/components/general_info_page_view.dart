@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../utils/services/image_crop_service.dart';
 import '../../../../uikit/components/inputs/bio_input_field.dart';
 import '../../../../utils/extansions/snackbar_x.dart';
 import 'choose_contact_detail.dart';
@@ -73,10 +74,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
     if (!mounted || result == null || result.files.isEmpty) return;
     final path = result.files.single.path;
     if (path == null || path.isEmpty) return;
-    final file = File(path);
-    setState(() => _pickedImage = file);
-    if (!mounted) return;
-    context.read<UploadCubit>().uploadFile(file);
+    final cropped = await cropImage(source: File(path));
+    if (!mounted || cropped == null) return;
+    setState(() => _pickedImage = cropped);
+    context.read<UploadCubit>().uploadFile(cropped);
   }
 
   @override

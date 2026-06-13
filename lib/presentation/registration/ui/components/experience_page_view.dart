@@ -50,7 +50,7 @@ class _ExperiencePageViewState extends State<ExperiencePageView>
 
   void _updatePartners() {
     _param = _param.copyWith(
-      partners: _selectedPartners.map((e) => e.id.toString()).toList(),
+      activeBrandIds: _selectedPartners.map((e) => e.id).toList(),
     );
     widget.onChanged(_param);
   }

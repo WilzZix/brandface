@@ -55,7 +55,7 @@ class _AmbassadorExperiencePageViewState
   void _updateData() {
     _param = _param.copyWith(
       yearsOfExperience: int.tryParse(_promoExperienceController.text),
-      partners: _selectedNichesItems.map((e) => e.id.toString()).toList(),
+      activeBrandIds: _selectedNichesItems.map((e) => e.id).toList(),
     );
     widget.onChanged(_param);
   }

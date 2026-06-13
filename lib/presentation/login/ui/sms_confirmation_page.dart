@@ -67,7 +67,6 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
 
   @override
   void initState() {
-    _controller.text = widget.arguments.otpCode;
     super.initState();
     _startOtpTimer();
   }
@@ -97,7 +96,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
             }
           },
           otpReceived: (otpEntity) {
-            _controller.text = otpEntity.code ?? '';
+            _controller.clear();
             _startOtpTimer();
           },
           verifyingOtpFailure: (msg) {
@@ -130,6 +129,8 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                 child: Pinput(
                   controller: _controller,
                   length: 6,
+                  autofocus: true,
+                  keyboardType: TextInputType.number,
                   defaultPinTheme: PinTheme(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -140,6 +141,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                     ),
                     width: 64,
                     height: 64,
+                    textStyle: Typographies.titleMedium,
                   ),
                   focusedPinTheme: PinTheme(
                     decoration: BoxDecoration(
@@ -151,6 +153,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                     ),
                     width: 64,
                     height: 64,
+                    textStyle: Typographies.titleMedium,
                   ),
                   errorPinTheme: PinTheme(
                     decoration: BoxDecoration(
@@ -159,6 +162,7 @@ class _SmsConfirmationPageState extends State<SmsConfirmationPage> {
                     ),
                     width: 64,
                     height: 64,
+                    textStyle: Typographies.titleMedium,
                   ),
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:brandface/data/models/profile/favourite_model.dart';
 
 abstract class FavouritesDataSource {
   Future<List<FavouriteModel>> getFavourites();
+  Future<void> addFavourite({required int influencerId});
   Future<void> removeFavourite({required int influencerId});
 }
 
@@ -27,6 +28,15 @@ class FavouritesDataSourceImpl implements FavouritesDataSource {
         .whereType<Map<String, dynamic>>()
         .map(FavouriteModel.fromJson)
         .toList();
+  }
+
+  @override
+  Future<void> addFavourite({required int influencerId}) async {
+    // NOTE: assumed payload `{"influencer": <id>}` — adjust if backend differs.
+    await _dioClient.post(
+      ApiRoutes.favourites,
+      data: {'influencer': influencerId},
+    );
   }
 
   @override

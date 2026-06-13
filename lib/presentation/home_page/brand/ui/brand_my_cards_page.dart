@@ -3,6 +3,7 @@ import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/presentation/home_page/brand/ui/add_payment_method_page.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
+import 'package:brandface/uikit/components/card_brand_logo.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:brandface/utils/extansions/snackbar_x.dart';
@@ -38,15 +39,23 @@ class BrandMyCardsPage extends StatelessWidget {
               onTap: () => context.pushNamed(AddPaymentMethodPage.tag),
               child: Padding(
                 padding: const EdgeInsets.only(right: 16),
-                child: SvgPicture.asset(AppAssets.icAdd,
-                    width: 22, height: 22, colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn)),
+                child: SvgPicture.asset(
+                  AppAssets.icAdd,
+                  width: 22,
+                  height: 22,
+                  colorFilter: ColorFilter.mode(
+                    AppColors.primary,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ],
         ),
         body: BlocBuilder<BillingCubit, BillingState>(
           builder: (context, state) {
-            if (state.status == BillingStatus.loading && state.dashboard == null) {
+            if (state.status == BillingStatus.loading &&
+                state.dashboard == null) {
               return const Center(child: CircularProgressIndicator());
             }
             final cards = state.dashboard?.cards ?? [];
@@ -55,24 +64,34 @@ class BrandMyCardsPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.credit_card_off_outlined,
-                        size: 56, color: AppColors.grey),
+                    Icon(
+                      Icons.credit_card_off_outlined,
+                      size: 56,
+                      color: AppColors.grey,
+                    ),
                     const SizedBox(height: 16),
-                    Text('No cards added yet',
-                        style: Typographies.bodyMedium
-                            .copyWith(color: AppColors.mutedBlack)),
+                    Text(
+                      'No cards added yet',
+                      style: Typographies.bodyMedium.copyWith(
+                        color: AppColors.mutedBlack,
+                      ),
+                    ),
                     const SizedBox(height: 16),
                     GestureDetector(
                       onTap: () => context.pushNamed(AddPaymentMethodPage.tag),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(999),
                         ),
-                        child: Text('Add new card',
-                            style: Typographies.labelLarge),
+                        child: Text(
+                          'Add new card',
+                          style: Typographies.labelLarge,
+                        ),
                       ),
                     ),
                   ],
@@ -117,18 +136,6 @@ class _CardTile extends StatelessWidget {
     return n[0].toUpperCase() + n.substring(1);
   }
 
-  Widget _cardLogo(String type) {
-    final n = type.trim().toLowerCase();
-    if (n.contains('visa')) {
-      return SvgPicture.asset(AppAssets.icVisa, height: 20);
-    }
-    if (n.contains('master')) {
-      return _MastercardLogo();
-    }
-    return Icon(Icons.credit_card_rounded,
-        size: 28, color: AppColors.mutedBlack);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -148,19 +155,20 @@ class _CardTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${_cardLabel(card.cardType)} ending in ${card.lastFour}',
+                      '${_cardLabel(card.cardType)} • ${card.name}',
                       style: Typographies.titleSmall,
                     ),
                     const SizedBox(height: 2),
                     Text(
                       'Expiry ${card.expiryMonth.toString().padLeft(2, '0')}/${card.expiryYear}',
-                      style: Typographies.bodySmall
-                          .copyWith(color: AppColors.mutedBlack),
+                      style: Typographies.bodySmall.copyWith(
+                        color: AppColors.mutedBlack,
+                      ),
                     ),
                   ],
                 ),
               ),
-              _cardLogo(card.cardType),
+              CardBrandLogo(brand: card.cardType, height: 24),
             ],
           ),
           const SizedBox(height: 14),
@@ -174,59 +182,23 @@ class _CardTile extends StatelessWidget {
                     : () => context.read<BillingCubit>().deleteCard(card.id),
                 child: Text(
                   'Delete',
-                  style: Typographies.labelMedium
-                      .copyWith(color: AppColors.red),
+                  style: Typographies.labelMedium.copyWith(
+                    color: AppColors.red,
+                  ),
                 ),
               ),
               const SizedBox(width: 20),
               GestureDetector(
-                onTap: () => context.pushNamed(
-                  AddPaymentMethodPage.tag,
-                  extra: card,
-                ),
+                onTap: () =>
+                    context.pushNamed(AddPaymentMethodPage.tag, extra: card),
                 child: Text(
                   'Edit',
-                  style: Typographies.labelMedium
-                      .copyWith(color: AppColors.mutedBlack),
+                  style: Typographies.labelMedium.copyWith(
+                    color: AppColors.mutedBlack,
+                  ),
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _MastercardLogo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40,
-      height: 26,
-      child: Stack(
-        children: [
-          Positioned(
-            left: 0,
-            child: Container(
-              width: 26,
-              height: 26,
-              decoration: const BoxDecoration(
-                color: Color(0xFFEB001B),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-          Positioned(
-            right: 0,
-            child: Container(
-              width: 26,
-              height: 26,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF79E1B).withValues(alpha: 0.9),
-                shape: BoxShape.circle,
-              ),
-            ),
           ),
         ],
       ),

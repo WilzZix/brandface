@@ -47,7 +47,7 @@ class BillingRepositoryImpl implements IBillingRepository {
       final card = await _dataSource.addCard(
         AddBillingCardRequest(
           cardType: params.cardType,
-          lastFour: params.lastFour,
+          name: params.name,
           expiryMonth: params.expiryMonth,
           expiryYear: params.expiryYear,
           isDefault: params.isDefault,

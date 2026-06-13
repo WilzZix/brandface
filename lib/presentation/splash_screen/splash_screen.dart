@@ -12,6 +12,7 @@ import '../home_page/brand/ui/brand_home_page.dart';
 import '../home_page/home_page.dart';
 import '../login/ui/login_page.dart';
 import '../onboarding/onboarding.dart';
+import '../registration/ui/registration_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,7 +32,12 @@ class _SplashScreenState extends State<SplashScreen> {
           state.maybeWhen(
             appInitialized: (isLoggedIn, role, hasSeenOnboarding) {
               if (isLoggedIn) {
-                if (role == 'brand') {
+                final hasRole = role != null &&
+                    role.isNotEmpty &&
+                    role.toLowerCase() != 'guest';
+                if (!hasRole) {
+                  context.go(RegistrationPage.tag);
+                } else if (role == 'brand') {
                   context.go(BrandHomePage.tag);
                 } else {
                   context.go(HomePage.tag);

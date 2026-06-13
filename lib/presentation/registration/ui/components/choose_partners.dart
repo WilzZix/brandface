@@ -1,4 +1,7 @@
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/domain/entities/profile/catalog/brand_short_entity.dart';
+import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -22,12 +25,29 @@ class _ChoosePartnersState extends State<ChoosePartners> {
   String? _selectedText;
   int? _selectedId;
 
-  final List<LangItemModel> nicheItems = [
-    LangItemModel(name: "Akfa", id: 0),
-    LangItemModel(name: 'Open', id: 1),
-    LangItemModel(name: 'Alif', id: 2),
-    LangItemModel(name: 'Humo', id: 3),
-  ];
+  List<LangItemModel> _brandItems = const [];
+  bool _loading = false;
+  bool _loaded = false;
+
+  Future<void> _ensureBrandsLoaded() async {
+    if (_loaded || _loading) return;
+    _loading = true;
+    final result = await sl<IProfileRepository>().getBrands();
+    result.fold(
+      ifLeft: (_) {
+        _brandItems = const [];
+      },
+      ifRight: (brands) {
+        _brandItems = brands
+            .map((BrandShortEntity b) =>
+                LangItemModel(name: b.brandName, id: b.id))
+            .toList();
+      },
+    );
+    _loading = false;
+    _loaded = true;
+    if (mounted) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +56,15 @@ class _ChoosePartnersState extends State<ChoosePartners> {
       children: [
         GestureDetector(
           onTap: () async {
+            await _ensureBrandsLoaded();
+            if (!context.mounted) return;
             await BrandfaceBottomSheet.openBottomSheet<String>(
               context: context,
               header: t.choose.select_partners,
               onConfirm: () {
                 if (_selectedId != null) {
-                  final selectedItem = nicheItems.firstWhere(
-                        (item) => item.id == _selectedId,
+                  final selectedItem = _brandItems.firstWhere(
+                    (item) => item.id == _selectedId,
                   );
                   widget.onItemSelected(selectedItem);
                   setState(() {
@@ -52,9 +74,15 @@ class _ChoosePartnersState extends State<ChoosePartners> {
                 context.pop();
               },
               builder: (context, bottomState) {
+                if (_brandItems.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
                 return Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: nicheItems.map((item) {
+                  children: _brandItems.map((item) {
                     return ChooseLangItem(
                       title: item.name,
                       isSelected: item.id == _selectedId,

@@ -1,7 +1,9 @@
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/entities/profile/review_entity.dart';
+import 'package:brandface/domain/repository/favourites_repository.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_state.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_portfolio/ambassador_portfolio_cubit.dart';
@@ -64,23 +66,77 @@ class _DetailsScaffold extends StatelessWidget {
           scrolledUnderElevation: 0,
           title: Text('Ambassador details', style: Typographies.titleMedium),
           centerTitle: false,
-          bottom: TabBar(
-            labelStyle: Typographies.labelLarge,
-            unselectedLabelStyle: Typographies.bodyMedium,
-            indicatorColor: AppColors.primaryDark,
-            labelColor: AppColors.black,
-            unselectedLabelColor: AppColors.grey,
-            tabs: const [
-              Tab(text: 'Information'),
-              Tab(text: 'For Brands'),
-            ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(80),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _NameRow(detail: detail),
+                  const SizedBox(height: 12),
+                  _TabPills(),
+                ],
+              ),
+            ),
           ),
         ),
         body: TabBarView(
           children: [
             _InformationTab(detail: detail),
-            _ForBrandsTab(detail: detail),
+            _PortfolioTab(),
           ],
+        ),
+        bottomNavigationBar: _BottomButtons(ambassadorId: detail.id),
+      ),
+    );
+  }
+}
+
+class _TabPills extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final controller = DefaultTabController.of(context);
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (_, _) {
+        final selected = controller.index;
+        return Row(
+          children: [
+            Expanded(child: _PillTab(label: 'Information', isActive: selected == 0, onTap: () => controller.animateTo(0))),
+            const SizedBox(width: 8),
+            Expanded(child: _PillTab(label: 'Portfolio', isActive: selected == 1, onTap: () => controller.animateTo(1))),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PillTab extends StatelessWidget {
+  const _PillTab({required this.label, required this.isActive, required this.onTap});
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isActive ? AppColors.primary : AppColors.lightBg,
+          border: Border.all(color: isActive ? AppColors.primary : AppColors.borderColor),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          label,
+          style: Typographies.labelLarge.copyWith(
+            color: isActive ? AppColors.black : AppColors.mutedBlack,
+          ),
         ),
       ),
     );
@@ -97,44 +153,47 @@ class _InformationTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(16, 16, 16, MediaQuery.of(context).padding.bottom + 24),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _HeroAvatar(avatarUrl: detail.avatarUrl),
-          const SizedBox(height: 16),
-          _NameRow(detail: detail),
-          const SizedBox(height: 6),
-          _RatingRow(detail: detail),
-          if (detail.contacts.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            _SectionTitle('Contact details'),
-            const SizedBox(height: 8),
-            AppContainer(child: _ContactList(contacts: detail.contacts)),
-          ],
-          if (detail.bio != null && detail.bio!.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            _SectionTitle('General information'),
-            const SizedBox(height: 8),
-            AppContainer(
-              child: Text(detail.bio!, style: Typographies.bodyMedium),
+          _SectionTitle('General Info'),
+          const SizedBox(height: 8),
+          AppContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (detail.contacts.isNotEmpty) ...[
+                  Text('Contact details',
+                      style: Typographies.titleSmall.copyWith(color: AppColors.mutedBlack)),
+                  const SizedBox(height: 8),
+                  _ContactList(contacts: detail.contacts),
+                  const SizedBox(height: 12),
+                ],
+                if (detail.bio != null && detail.bio!.trim().isNotEmpty) ...[
+                  Text('Profile information',
+                      style: Typographies.titleSmall.copyWith(color: AppColors.mutedBlack)),
+                  const SizedBox(height: 4),
+                  Text(detail.bio!, style: Typographies.bodyMedium),
+                ],
+                if (detail.contacts.isEmpty &&
+                    (detail.bio == null || detail.bio!.trim().isEmpty))
+                  Text('No information provided.',
+                      style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack)),
+              ],
             ),
-          ],
-          if (detail.categories.isNotEmpty || detail.services.isNotEmpty) ...[
+          ),
+          if (detail.categories.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _SectionTitle('Work'),
+            _SectionTitle('Niche'),
             const SizedBox(height: 8),
-            if (detail.categories.isNotEmpty) ...[
-              Text('Categories', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-              const SizedBox(height: 6),
-              _ChipWrap(items: detail.categories),
-              const SizedBox(height: 10),
-            ],
-            if (detail.services.isNotEmpty) ...[
-              Text('Services', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-              const SizedBox(height: 6),
-              _ChipWrap(items: detail.services),
-            ],
+            AppContainer(child: _ChipWrap(items: detail.categories)),
+          ],
+          if (detail.services.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            _SectionTitle('Services'),
+            const SizedBox(height: 8),
+            AppContainer(child: _ChipWrap(items: detail.services)),
           ],
           if (detail.audience != null) ...[
             const SizedBox(height: 16),
@@ -160,7 +219,7 @@ class _InformationTab extends StatelessWidget {
                   onPressed: () {},
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: Text(
-                    'See all',
+                    'Read all',
                     style: Typographies.bodySmall.copyWith(color: AppColors.primaryDark),
                   ),
                 ),
@@ -169,10 +228,15 @@ class _InformationTab extends StatelessWidget {
             const SizedBox(height: 8),
             _ReviewsRow(reviews: detail.reviews),
           ],
-          if (detail.audience?.socialMediaAccounts != null &&
-              detail.audience!.socialMediaAccounts!.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          _SectionTitle('Pricing / Tariffs'),
+          const SizedBox(height: 8),
+          _PricingSection(pricing: detail.pricing),
+          if (detail.availableDates.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _PortfolioTabSection(),
+            _SectionTitle('Available dates'),
+            const SizedBox(height: 8),
+            _AvailableDatesSection(dates: detail.availableDates),
           ],
         ],
       ),
@@ -189,16 +253,18 @@ class _NameRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (detail.isVerified) ...[
+          Icon(Icons.check_circle, color: AppColors.primaryDark, size: 22),
+          const SizedBox(width: 6),
+        ],
         Expanded(
           child: Text(
             detail.displayName ?? '—',
             style: Typographies.titleLarge,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        if (detail.isVerified) ...[
-          const SizedBox(width: 6),
-          Icon(Icons.check_circle, color: AppColors.primaryDark, size: 22),
-        ],
         if (detail.isTop) ...[
           const SizedBox(width: 6),
           Container(
@@ -221,35 +287,16 @@ class _NameRow extends StatelessWidget {
             child: Text('VIP', style: Typographies.labelSmall.copyWith(color: Colors.white)),
           ),
         ],
-      ],
-    );
-  }
-}
-
-class _RatingRow extends StatelessWidget {
-  const _RatingRow({required this.detail});
-  final AmbassadorDetailEntity detail;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
+        const SizedBox(width: 8),
         Icon(
           Icons.star_rounded,
           color: detail.averageRating != null ? AppColors.orange : AppColors.grey,
-          size: 16,
+          size: 18,
         ),
         const SizedBox(width: 4),
         Text(
-          detail.averageRating != null
-              ? detail.averageRating!.toStringAsFixed(2)
-              : '—',
+          detail.averageRating != null ? detail.averageRating!.toStringAsFixed(2) : '—',
           style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '${detail.totalReviews} reviews',
-          style: Typographies.bodySmall.copyWith(color: AppColors.grey),
         ),
       ],
     );
@@ -279,17 +326,38 @@ class _ContactList extends StatelessWidget {
     }
   }
 
+  String _labelFor(String? type) {
+    switch (type?.toLowerCase()) {
+      case 'phone':
+        return 'Phone';
+      case 'instagram':
+        return 'Instagram';
+      case 'telegram':
+        return 'Telegram';
+      case 'linkedin':
+        return 'LinkedIn';
+      case 'youtube':
+        return 'YouTube';
+      case 'tiktok':
+        return 'TikTok';
+      default:
+        return type ?? '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: contacts.map((c) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 6),
           child: Row(
             children: [
-              Icon(_iconFor(c.type), color: AppColors.grey, size: 18),
-              const SizedBox(width: 10),
+              Icon(_iconFor(c.type), color: AppColors.grey, size: 16),
+              const SizedBox(width: 8),
+              Text('${_labelFor(c.type)}: ',
+                  style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
               Expanded(
                 child: Text(
                   c.value ?? '—',
@@ -323,6 +391,8 @@ class _AudienceSection extends StatelessWidget {
         audience.womenAgeFrom != null;
     final hasGeo = audience.geography != null && audience.geography!.isNotEmpty;
     final hasFollowers = audience.totalFollowers != null;
+    final hasEngagement = audience.engagementRate != null &&
+        audience.engagementRate!.isNotEmpty;
     final hasAccounts = audience.socialMediaAccounts != null &&
         audience.socialMediaAccounts!.isNotEmpty;
 
@@ -331,55 +401,54 @@ class _AudienceSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (hasDemographics) ...[
-            Text('Demographics', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                if (audience.malePercent != null)
-                  _DemoChip(
-                    label: '${audience.malePercent}% male'
-                        '${audience.menAgeFrom != null && audience.menAgeTo != null ? ', age ${audience.menAgeFrom}–${audience.menAgeTo}' : ''}',
-                    icon: Icons.male,
-                  ),
-                if (audience.femalePercent != null)
-                  _DemoChip(
-                    label: '${audience.femalePercent}% female'
-                        '${audience.womenAgeFrom != null && audience.womenAgeTo != null ? ', age ${audience.womenAgeFrom}–${audience.womenAgeTo}' : ''}',
-                    icon: Icons.female,
-                  ),
-              ],
-            ),
-            const SizedBox(height: 12),
+            if (audience.malePercent != null)
+              _DemoRow(
+                label: 'Male',
+                value: '${audience.malePercent}%'
+                    '${audience.menAgeFrom != null && audience.menAgeTo != null ? ', age ${audience.menAgeFrom} – ${audience.menAgeTo}' : ''}',
+              ),
+            if (audience.femalePercent != null) ...[
+              const SizedBox(height: 6),
+              _DemoRow(
+                label: 'Female',
+                value: '${audience.femalePercent}%'
+                    '${audience.womenAgeFrom != null && audience.womenAgeTo != null ? ', age ${audience.womenAgeFrom} – ${audience.womenAgeTo}' : ''}',
+              ),
+            ],
+            const SizedBox(height: 10),
           ],
           if (hasGeo) ...[
-            Text('Geography', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-            const SizedBox(height: 6),
+            Text('Geography',
+                style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+            const SizedBox(height: 4),
             Text(audience.geography!.join(', '), style: Typographies.bodyMedium),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
+          ],
+          if (hasEngagement) ...[
+            Text('Engagement level',
+                style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+            const SizedBox(height: 4),
+            Text(audience.engagementRate!, style: Typographies.bodyMedium),
+            const SizedBox(height: 10),
           ],
           if (hasFollowers) ...[
-            Text('Total number of followers', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+            Text('Total number of followers',
+                style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
             const SizedBox(height: 4),
-            Text(
-              _formatFollowers(audience.totalFollowers!),
-              style: Typographies.titleSmall,
-            ),
-            const SizedBox(height: 12),
+            Text(_formatFollowers(audience.totalFollowers!),
+                style: Typographies.titleSmall),
+            const SizedBox(height: 10),
           ],
           if (hasAccounts) ...[
-            Text('Accounts', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-            const SizedBox(height: 8),
             ...audience.socialMediaAccounts!.map((a) => Padding(
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Row(
                     children: [
-                      Icon(Icons.alternate_email, size: 14, color: AppColors.grey),
-                      const SizedBox(width: 4),
-                      Text(a.username, style: Typographies.bodyMedium),
-                      const Spacer(),
-                      Text(a.platform, style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+                      Text('${a.platform}: ',
+                          style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+                      Expanded(
+                        child: Text(a.username, style: Typographies.bodyMedium),
+                      ),
                     ],
                   ),
                 )),
@@ -390,27 +459,19 @@ class _AudienceSection extends StatelessWidget {
   }
 }
 
-class _DemoChip extends StatelessWidget {
-  const _DemoChip({required this.label, required this.icon});
+class _DemoRow extends StatelessWidget {
+  const _DemoRow({required this.label, required this.value});
   final String label;
-  final IconData icon;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.borderColor),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: AppColors.mutedBlack),
-          const SizedBox(width: 4),
-          Text(label, style: Typographies.bodySmall),
-        ],
-      ),
+    return Row(
+      children: [
+        Text('$label: ',
+            style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+        Expanded(child: Text(value, style: Typographies.bodyMedium)),
+      ],
     );
   }
 }
@@ -426,42 +487,32 @@ class _ExperienceSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (detail.yearsOfExperience != null) ...[
-            _InfoRow(
-              label: 'Years of experience',
-              value: '${detail.yearsOfExperience} years',
-            ),
+            Text('Years of experience',
+                style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+            const SizedBox(height: 4),
+            Text('${detail.yearsOfExperience} years', style: Typographies.bodyMedium),
             const SizedBox(height: 12),
           ],
           if (detail.partners.isNotEmpty) ...[
-            Text('List of partners', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-            const SizedBox(height: 6),
+            Text('List of partners',
+                style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+            const SizedBox(height: 4),
             ...detail.partners.map((p) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 5,
-                        height: 5,
-                        margin: const EdgeInsets.only(right: 8, top: 1),
-                        decoration: BoxDecoration(
-                          color: AppColors.mutedBlack,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      Text(p, style: Typographies.bodyMedium),
-                    ],
-                  ),
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: Text(p, style: Typographies.bodyMedium),
                 )),
             const SizedBox(height: 12),
           ],
           if (detail.awards.isNotEmpty) ...[
-            Text('Projects', style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-            const SizedBox(height: 6),
+            Text('Awards',
+                style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
+            const SizedBox(height: 4),
             ...detail.awards.map((a) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
+                  padding: const EdgeInsets.only(bottom: 2),
                   child: Row(
                     children: [
-                      Icon(Icons.emoji_events_outlined, size: 16, color: AppColors.orange),
+                      Icon(Icons.emoji_events_outlined,
+                          size: 16, color: AppColors.orange),
                       const SizedBox(width: 6),
                       Expanded(child: Text(a.title, style: Typographies.bodyMedium)),
                     ],
@@ -470,23 +521,6 @@ class _ExperienceSection extends StatelessWidget {
           ],
         ],
       ),
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.label, required this.value});
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
-        Text(value, style: Typographies.bodyMedium),
-      ],
     );
   }
 }
@@ -559,33 +593,37 @@ class _ReviewCard extends StatelessWidget {
   }
 }
 
-class _PortfolioTabSection extends StatelessWidget {
-  const _PortfolioTabSection();
+// ─── TAB 2: PORTFOLIO ────────────────────────────────────────────────────────
 
+class _PortfolioTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AmbassadorPortfolioCubit, AmbassadorPortfolioState>(
       builder: (context, state) {
-        if (state is AmbassadorPortfolioLoaded && state.items.isNotEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _SectionTitle('Portfolio'),
-              const SizedBox(height: 8),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.items.length > 3 ? 3 : state.items.length,
-                separatorBuilder: (c, i) => const SizedBox(height: 12),
-                itemBuilder: (context, index) => _PortfolioCard(
-                  item: state.items[index],
-                  onTap: () => context.pushNamed(
-                    AmbassadorPortfolioDetailsPage.tag,
-                    extra: state.items[index],
-                  ),
-                ),
+        if (state is AmbassadorPortfolioLoading ||
+            state is AmbassadorPortfolioInitial) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is AmbassadorPortfolioLoaded) {
+          if (state.items.isEmpty) {
+            return Center(
+              child: Text(
+                'No portfolio items.',
+                style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
               ),
-            ],
+            );
+          }
+          return ListView.separated(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+            itemCount: state.items.length,
+            separatorBuilder: (c, i) => const SizedBox(height: 12),
+            itemBuilder: (context, index) => _PortfolioCard(
+              item: state.items[index],
+              onTap: () => context.pushNamed(
+                AmbassadorPortfolioDetailsPage.tag,
+                extra: state.items[index],
+              ),
+            ),
           );
         }
         return const SizedBox.shrink();
@@ -594,46 +632,7 @@ class _PortfolioTabSection extends StatelessWidget {
   }
 }
 
-// ─── TAB 2: FOR BRANDS ───────────────────────────────────────────────────────
-
-class _ForBrandsTab extends StatelessWidget {
-  const _ForBrandsTab({required this.detail});
-
-  final AmbassadorDetailEntity detail;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _SectionTitle('Pricing / Tariffs'),
-                const SizedBox(height: 8),
-                _PricingSection(pricing: detail.pricing),
-                if (detail.availableDates.isNotEmpty) ...[
-                  const SizedBox(height: 16),
-                  _SectionTitle('Available dates'),
-                  const SizedBox(height: 8),
-                  _AvailableDatesSection(dates: detail.availableDates),
-                ],
-                // Portfolio tab in For Brands if not in information
-                const SizedBox(height: 16),
-                _SectionTitle('Portfolio'),
-                const SizedBox(height: 8),
-                _PortfolioForBrandsSection(),
-              ],
-            ),
-          ),
-        ),
-        _BottomButtons(ambassadorId: detail.id),
-      ],
-    );
-  }
-}
+// ─── PRICING / DATES ─────────────────────────────────────────────────────────
 
 class _PricingSection extends StatelessWidget {
   const _PricingSection({required this.pricing});
@@ -656,7 +655,7 @@ class _PricingSection extends StatelessWidget {
     void addRow(String label, String? value) {
       if (value == null || value.isEmpty || value == 'null') return;
       rows.add(Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -667,40 +666,25 @@ class _PricingSection extends StatelessWidget {
       ));
     }
 
-    void addBoolRow(String label, bool? value) {
-      if (value == null) return;
-      addRow(label, value ? 'Yes' : 'No');
-    }
-
     if (p.hourlyRateMinUzs != null || p.hourlyRateMaxUzs != null) {
       final min = p.hourlyRateMinUzs ?? '—';
       final max = p.hourlyRateMaxUzs ?? '—';
-      addRow('Hourly rate (UZS)', '$min – $max');
+      addRow('Hourly (UZS)', '$min – $max');
     }
     if (p.hourlyRateMinUsd != null || p.hourlyRateMaxUsd != null) {
       final min = p.hourlyRateMinUsd ?? '—';
       final max = p.hourlyRateMaxUsd ?? '—';
-      addRow('Hourly rate (USD)', '\$$min – \$$max');
-    }
-    if (p.dailyRateMinUzs != null || p.dailyRateMaxUzs != null) {
-      final min = p.dailyRateMinUzs ?? '—';
-      final max = p.dailyRateMaxUzs ?? '—';
-      addRow('Daily rate (UZS)', '$min – $max');
+      addRow('Hourly (USD)', '\$$min – \$$max');
     }
     if (p.campaignFee != null) {
       final currency = p.campaignFeeCurrency ?? '';
-      addRow('Campaign fee', '${p.campaignFee} $currency'.trim());
+      addRow('Project by', '${p.campaignFee} $currency'.trim());
     }
     addRow('Event appearance fee', p.eventAppearanceFee);
     addRow('Monthly exclusivity fee', p.monthlyExclusivityFee);
     if (p.monthlyContentCapacity != null) {
       addRow('Monthly content capacity', '${p.monthlyContentCapacity} posts');
     }
-    addBoolRow('Accepts barter', p.acceptsBarter);
-    addBoolRow('Available for long term', p.availableForLongTerm);
-    addBoolRow('Available for offline events', p.availableForOfflineEvents);
-    addBoolRow('KPI-based model', p.kpiBasedModel);
-    addBoolRow('Exclusivity available', p.exclusivityAvailable);
 
     if (rows.isEmpty) {
       return AppContainer(
@@ -711,7 +695,9 @@ class _PricingSection extends StatelessWidget {
       );
     }
 
-    return AppContainer(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: rows));
+    return AppContainer(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: rows),
+    );
   }
 }
 
@@ -725,15 +711,12 @@ class _AvailableDatesSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: dates.map((d) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 6),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_today_outlined, size: 16, color: AppColors.grey),
+                  Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.grey),
                   const SizedBox(width: 8),
-                  Text(
-                    '${d.dateFrom}  –  ${d.dateTo}',
-                    style: Typographies.bodyMedium,
-                  ),
+                  Text('${d.dateFrom} – ${d.dateTo}', style: Typographies.bodyMedium),
                   if (d.note != null && d.note!.isNotEmpty) ...[
                     const SizedBox(width: 8),
                     Expanded(
@@ -752,53 +735,40 @@ class _AvailableDatesSection extends StatelessWidget {
   }
 }
 
-class _PortfolioForBrandsSection extends StatelessWidget {
-  const _PortfolioForBrandsSection();
+// ─── BOTTOM BUTTONS ──────────────────────────────────────────────────────────
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AmbassadorPortfolioCubit, AmbassadorPortfolioState>(
-      builder: (context, state) {
-        if (state is AmbassadorPortfolioLoading || state is AmbassadorPortfolioInitial) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is AmbassadorPortfolioLoaded) {
-          if (state.items.isEmpty) {
-            return AppContainer(
-              child: Text(
-                'No portfolio items.',
-                style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
-              ),
-            );
-          }
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: state.items.length,
-            separatorBuilder: (c, i) => const SizedBox(height: 12),
-            itemBuilder: (context, index) => _PortfolioCard(
-              item: state.items[index],
-              onTap: () => context.pushNamed(
-                AmbassadorPortfolioDetailsPage.tag,
-                extra: state.items[index],
-              ),
-            ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
-    );
-  }
-}
-
-class _BottomButtons extends StatelessWidget {
+class _BottomButtons extends StatefulWidget {
   const _BottomButtons({required this.ambassadorId});
   final int ambassadorId;
 
   @override
+  State<_BottomButtons> createState() => _BottomButtonsState();
+}
+
+class _BottomButtonsState extends State<_BottomButtons> {
+  bool _addingFavourite = false;
+
+  Future<void> _onAddToFavourites() async {
+    if (_addingFavourite) return;
+    setState(() => _addingFavourite = true);
+    final result = await sl<IFavouritesRepository>()
+        .addFavourite(influencerId: widget.ambassadorId);
+    if (!mounted) return;
+    setState(() => _addingFavourite = false);
+    result.fold(
+      ifLeft: (f) => context.showAppSnackBar(
+        f.message,
+        type: AppSnackBarType.error,
+      ),
+      ifRight: (_) => context.showAppSnackBar('Added to favourites'),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16, 12, 16, MediaQuery.of(context).padding.bottom + 12),
+      padding: EdgeInsets.fromLTRB(
+          16, 12, 16, MediaQuery.of(context).padding.bottom + 12),
       decoration: BoxDecoration(
         color: AppColors.lightBg,
         border: Border(top: BorderSide(color: AppColors.borderColor)),
@@ -806,33 +776,42 @@ class _BottomButtons extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: OutlinedButton(
-              onPressed: () {
-                context.showAppSnackBar('Coming soon');
-              },
+            child: OutlinedButton.icon(
+              onPressed: _addingFavourite ? null : _onAddToFavourites,
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: AppColors.borderColor),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: Text('Add to Contact Base', style: Typographies.labelLarge),
+              icon: _addingFavourite
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Icon(Icons.favorite_border, size: 18, color: AppColors.mutedBlack),
+              label: Text('Add to favourites', style: Typographies.labelLarge),
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: ElevatedButton(
+            child: ElevatedButton.icon(
               onPressed: () => context.pushNamed(
                 SendEnquiryPage.tag,
-                extra: SendEnquiryArguments(otherUserId: ambassadorId),
+                extra: SendEnquiryArguments(otherUserId: widget.ambassadorId),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: Text(
-                'Send Enquiry',
+              icon: Icon(Icons.chat_bubble_outline,
+                  size: 18, color: AppColors.black),
+              label: Text(
+                'Send enquiry',
                 style: Typographies.labelLarge.copyWith(color: AppColors.black),
               ),
             ),
@@ -913,43 +892,6 @@ class _PortfolioCard extends StatelessWidget {
               child: Text(item.name, style: Typographies.titleSmall),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _HeroAvatar extends StatelessWidget {
-  const _HeroAvatar({required this.avatarUrl});
-
-  final String? avatarUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    if (avatarUrl == null || avatarUrl!.isEmpty) {
-      return Container(
-        width: double.infinity,
-        height: 200,
-        decoration: BoxDecoration(
-          color: AppColors.borderColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        alignment: Alignment.center,
-        child: Icon(Icons.person, color: AppColors.grey, size: 64),
-      );
-    }
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Image.network(
-        avatarUrl!,
-        width: double.infinity,
-        height: 200,
-        fit: BoxFit.cover,
-        errorBuilder: (ctx, err, st) => Container(
-          height: 200,
-          color: AppColors.borderColor,
-          alignment: Alignment.center,
-          child: Icon(Icons.person, color: AppColors.grey, size: 64),
         ),
       ),
     );

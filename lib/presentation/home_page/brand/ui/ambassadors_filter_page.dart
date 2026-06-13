@@ -1,10 +1,12 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
+import 'package:brandface/presentation/registration/bloc/catalog/language/language_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/region/region_cubit.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AmbassadorsFilterPage extends StatefulWidget {
@@ -23,8 +25,20 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
   String? _categoryName;
   int? _regionId;
   String? _regionName;
+  int? _languageId;
+  String? _languageName;
   String? _gender;
   String? _rankType;
+  int? _ageFrom;
+  int? _ageTo;
+  String? _ageLabel;
+  int? _followersFrom;
+  int? _followersTo;
+  String? _followersLabel;
+  DateTime? _availableDate;
+  String? _currency;
+  final TextEditingController _priceFromCtrl = TextEditingController();
+  final TextEditingController _priceToCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -33,19 +47,58 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     if (p != null) {
       _categoryId = p.categoryId;
       _regionId = p.regionId;
+      _languageId = p.languageId;
       _gender = p.gender;
       if (p.isTop == true) _rankType = 'top';
       if (p.isVip == true) _rankType = 'vip';
+      _ageFrom = p.ageFrom;
+      _ageTo = p.ageTo;
+      _ageLabel = _formatAgeLabel(p.ageFrom, p.ageTo);
+      _followersFrom = p.followersFrom;
+      _followersTo = p.followersTo;
+      _followersLabel = _formatFollowersLabel(p.followersFrom, p.followersTo);
+      if (p.availableDate != null) {
+        _availableDate = DateTime.tryParse(p.availableDate!);
+      }
+      _currency = p.currency;
+      if (p.pricePerHourFrom != null) {
+        _priceFromCtrl.text = p.pricePerHourFrom.toString();
+      }
+      if (p.pricePerHourTo != null) {
+        _priceToCtrl.text = p.pricePerHourTo.toString();
+      }
     }
   }
 
+  @override
+  void dispose() {
+    _priceFromCtrl.dispose();
+    _priceToCtrl.dispose();
+    super.dispose();
+  }
+
   AmbassadorsFilterParams _buildParams() {
+    final priceFrom = int.tryParse(_priceFromCtrl.text.trim());
+    final priceTo = int.tryParse(_priceToCtrl.text.trim());
     return AmbassadorsFilterParams(
       categoryId: _categoryId,
       regionId: _regionId,
+      languageId: _languageId,
       gender: _gender,
+      ageFrom: _ageFrom,
+      ageTo: _ageTo,
       isTop: _rankType == 'top' ? true : null,
       isVip: _rankType == 'vip' ? true : null,
+      followersFrom: _followersFrom,
+      followersTo: _followersTo,
+      availableDate: _availableDate != null
+          ? '${_availableDate!.year.toString().padLeft(4, '0')}-'
+              '${_availableDate!.month.toString().padLeft(2, '0')}-'
+              '${_availableDate!.day.toString().padLeft(2, '0')}'
+          : null,
+      currency: _currency,
+      pricePerHourFrom: priceFrom,
+      pricePerHourTo: priceTo,
     );
   }
 
@@ -55,8 +108,20 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
       _categoryName = null;
       _regionId = null;
       _regionName = null;
+      _languageId = null;
+      _languageName = null;
       _gender = null;
       _rankType = null;
+      _ageFrom = null;
+      _ageTo = null;
+      _ageLabel = null;
+      _followersFrom = null;
+      _followersTo = null;
+      _followersLabel = null;
+      _availableDate = null;
+      _currency = null;
+      _priceFromCtrl.clear();
+      _priceToCtrl.clear();
     });
   }
 
@@ -91,9 +156,21 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
+                    label: 'Language',
+                    value: _languageName,
+                    onTap: () => _pickLanguage(context),
+                  ),
+                  const SizedBox(height: 12),
+                  _DropdownField(
                     label: t.registration.gender,
                     value: _genderLabel(_gender),
                     onTap: () => _pickGender(context),
+                  ),
+                  const SizedBox(height: 12),
+                  _DropdownField(
+                    label: 'Age',
+                    value: _ageLabel,
+                    onTap: _pickAge,
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
@@ -101,13 +178,59 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                     value: _rankLabel(_rankType),
                     onTap: () => _pickRank(context),
                   ),
+                  const SizedBox(height: 12),
+                  _DropdownField(
+                    label: 'Auditory',
+                    value: _followersLabel,
+                    onTap: _pickFollowers,
+                  ),
+                  const SizedBox(height: 12),
+                  _DateField(
+                    label: 'Available date',
+                    value: _availableDate,
+                    onTap: _pickDate,
+                  ),
+                  const SizedBox(height: 12),
+                  _DropdownField(
+                    label: 'Currency',
+                    value: _currency,
+                    onTap: _pickCurrency,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Price range (per hour)',
+                    style: Typographies.bodySmall.copyWith(
+                      color: AppColors.mutedBlack,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _NumericInput(
+                          controller: _priceFromCtrl,
+                          hint: 'From',
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _NumericInput(
+                          controller: _priceToCtrl,
+                          hint: 'To',
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(
-              16, 8, 16, MediaQuery.of(context).padding.bottom + 16,
+              16,
+              8,
+              16,
+              MediaQuery.of(context).padding.bottom + 16,
             ),
             child: Row(
               children: [
@@ -130,8 +253,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () =>
-                        Navigator.of(context).pop(_buildParams()),
+                    onPressed: () => Navigator.of(context).pop(_buildParams()),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       elevation: 0,
@@ -178,6 +300,26 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     }
   }
 
+  String? _formatAgeLabel(int? from, int? to) {
+    if (from == null && to == null) return null;
+    if (from != null && to != null) return '$from – $to';
+    if (from != null) return '$from+';
+    return '≤ $to';
+  }
+
+  String? _formatFollowersLabel(int? from, int? to) {
+    String fmt(int v) {
+      if (v >= 1000000) return '${(v / 1000000).toStringAsFixed(0)}M';
+      if (v >= 1000) return '${(v / 1000).toStringAsFixed(0)}K';
+      return v.toString();
+    }
+
+    if (from == null && to == null) return null;
+    if (from != null && to != null) return '${fmt(from)} – ${fmt(to)}';
+    if (from != null) return '${fmt(from)}+';
+    return '≤ ${fmt(to!)}';
+  }
+
   Future<void> _pickCategory(BuildContext context) async {
     final state = context.read<CategoryCubit>().state;
     final items = state.maybeWhen(
@@ -218,6 +360,26 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     }
   }
 
+  Future<void> _pickLanguage(BuildContext context) async {
+    final state = context.read<LanguageCubit>().state;
+    final items = state.maybeWhen(
+      loaded: (data) => data,
+      orElse: () => [],
+    );
+    if (items.isEmpty) return;
+    final result = await _showPicker(
+      context: context,
+      title: 'Language',
+      items: items.map((e) => _PickerItem(id: e.id, name: e.name)).toList(),
+    );
+    if (result != null) {
+      setState(() {
+        _languageId = result.id;
+        _languageName = result.name;
+      });
+    }
+  }
+
   Future<void> _pickGender(BuildContext context) async {
     final result = await _showPicker(
       context: context,
@@ -243,6 +405,86 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     );
     if (result != null) {
       setState(() => _rankType = result.value ?? result.name.toLowerCase());
+    }
+  }
+
+  Future<void> _pickAge() async {
+    const ranges = [
+      (label: '13 – 17', from: 13, to: 17),
+      (label: '18 – 24', from: 18, to: 24),
+      (label: '25 – 34', from: 25, to: 34),
+      (label: '35 – 44', from: 35, to: 44),
+      (label: '45 – 54', from: 45, to: 54),
+      (label: '55+', from: 55, to: null),
+    ];
+    final result = await _showPicker(
+      context: context,
+      title: 'Age',
+      items: [
+        for (var i = 0; i < ranges.length; i++)
+          _PickerItem(id: i, name: ranges[i].label),
+      ],
+    );
+    if (result != null) {
+      final r = ranges[result.id];
+      setState(() {
+        _ageFrom = r.from;
+        _ageTo = r.to;
+        _ageLabel = r.label;
+      });
+    }
+  }
+
+  Future<void> _pickFollowers() async {
+    const ranges = [
+      (label: '< 1K', from: null as int?, to: 999 as int?),
+      (label: '1K – 10K', from: 1000 as int?, to: 9999 as int?),
+      (label: '10K – 100K', from: 10000 as int?, to: 99999 as int?),
+      (label: '100K – 1M', from: 100000 as int?, to: 999999 as int?),
+      (label: '1M+', from: 1000000 as int?, to: null as int?),
+    ];
+    final result = await _showPicker(
+      context: context,
+      title: 'Auditory',
+      items: [
+        for (var i = 0; i < ranges.length; i++)
+          _PickerItem(id: i, name: ranges[i].label),
+      ],
+    );
+    if (result != null) {
+      final r = ranges[result.id];
+      setState(() {
+        _followersFrom = r.from;
+        _followersTo = r.to;
+        _followersLabel = r.label;
+      });
+    }
+  }
+
+  Future<void> _pickCurrency() async {
+    final result = await _showPicker(
+      context: context,
+      title: 'Currency',
+      items: const [
+        _PickerItem(id: 0, name: 'UZS'),
+        _PickerItem(id: 1, name: 'USD'),
+      ],
+    );
+    if (result != null) {
+      setState(() => _currency = result.name);
+    }
+  }
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _availableDate ?? now,
+      firstDate: DateTime(now.year - 1),
+      lastDate: DateTime(now.year + 5),
+    );
+    if (picked != null) {
+      setState(() => _availableDate = picked);
     }
   }
 
@@ -319,6 +561,101 @@ class _DropdownField extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _DateField extends StatelessWidget {
+  const _DateField({
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+
+  final String label;
+  final DateTime? value;
+  final VoidCallback onTap;
+
+  String _format(DateTime d) =>
+      '${d.day.toString().padLeft(2, '0')}.'
+      '${d.month.toString().padLeft(2, '0')}.'
+      '${d.year}';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
+        ),
+        const SizedBox(height: 6),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.lightBg3,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  value != null ? _format(value!) : 'DD.MM.YYYY',
+                  style: Typographies.bodyMedium.copyWith(
+                    color: value != null ? AppColors.black : AppColors.grey,
+                  ),
+                ),
+                Icon(
+                  Icons.calendar_month_outlined,
+                  color: AppColors.grey,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NumericInput extends StatelessWidget {
+  const _NumericInput({required this.controller, required this.hint});
+
+  final TextEditingController controller;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      style: Typographies.bodyMedium,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: Typographies.bodyMedium.copyWith(color: AppColors.grey),
+        filled: true,
+        fillColor: AppColors.lightBg3,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(999),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(999),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(999),
+          borderSide: BorderSide(color: AppColors.borderColor),
+        ),
+      ),
     );
   }
 }

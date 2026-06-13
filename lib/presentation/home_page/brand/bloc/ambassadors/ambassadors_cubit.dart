@@ -6,24 +6,51 @@ import 'ambassadors_state.dart';
 class AmbassadorsFilterParams {
   final int? categoryId;
   final int? regionId;
+  final int? languageId;
   final String? gender;
+  final int? ageFrom;
+  final int? ageTo;
   final bool? isTop;
   final bool? isVip;
+  final int? followersFrom;
+  final int? followersTo;
+  final String? availableDate; // YYYY-MM-DD
+  final String? currency; // 'UZS' | 'USD'
+  final int? pricePerHourFrom;
+  final int? pricePerHourTo;
 
   const AmbassadorsFilterParams({
     this.categoryId,
     this.regionId,
+    this.languageId,
     this.gender,
+    this.ageFrom,
+    this.ageTo,
     this.isTop,
     this.isVip,
+    this.followersFrom,
+    this.followersTo,
+    this.availableDate,
+    this.currency,
+    this.pricePerHourFrom,
+    this.pricePerHourTo,
   });
 
   bool get isEmpty =>
       categoryId == null &&
       regionId == null &&
+      languageId == null &&
       (gender == null || gender == 'any') &&
+      ageFrom == null &&
+      ageTo == null &&
       isTop != true &&
-      isVip != true;
+      isVip != true &&
+      followersFrom == null &&
+      followersTo == null &&
+      availableDate == null &&
+      currency == null &&
+      pricePerHourFrom == null &&
+      pricePerHourTo == null;
 }
 
 class AmbassadorsCubit extends Cubit<AmbassadorsState> {
@@ -48,9 +75,18 @@ class AmbassadorsCubit extends Cubit<AmbassadorsState> {
       params: ordering,
       categoryId: filter?.categoryId,
       regionId: filter?.regionId,
+      languageId: filter?.languageId,
       gender: filter?.gender,
+      ageFrom: filter?.ageFrom,
+      ageTo: filter?.ageTo,
       isTop: filter?.isTop,
       isVip: filter?.isVip,
+      followersFrom: filter?.followersFrom,
+      followersTo: filter?.followersTo,
+      availableDate: filter?.availableDate,
+      currency: filter?.currency,
+      pricePerHourFrom: filter?.pricePerHourFrom,
+      pricePerHourTo: filter?.pricePerHourTo,
       role: _role,
     );
     result.fold(

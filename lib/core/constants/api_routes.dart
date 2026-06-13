@@ -44,6 +44,10 @@ class ApiRoutes {
   static String myAwards = 'profiles/v1/my/awards/';
   static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
 
+  static String myAvailableDates = 'profiles/v1/my/available-dates/';
+  static String myAvailableDate(int dateId) =>
+      'profiles/v1/my/available-dates/$dateId/';
+
   static String brandOffers = 'offers/v1/';
   static String myApplications = 'offers/v1/my-applications/';
   static String recommendedOffers = 'offers/v1/recommended/';
@@ -77,6 +81,7 @@ class ApiRoutes {
       'portfolio/v1/influencers/$influencerId/';
   static String uploadFile = 'uploads/v1/upload/file/';
   static String ambassadors = 'profiles/v1/influencers/';
+  static String brands = 'profiles/v1/brands/';
 
   static String aiMatchRun(int offerId) => 'ai/v1/offers/$offerId/match/';
   static String aiMatchResults(int offerId) => 'ai/v1/offers/$offerId/results/';

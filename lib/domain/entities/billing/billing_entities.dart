@@ -91,7 +91,7 @@ class BillingSubscriptionEntity extends Equatable {
 class BillingCardEntity extends Equatable {
   final int id;
   final String cardType;
-  final String lastFour;
+  final String name;
   final int expiryMonth;
   final int expiryYear;
   final bool isDefault;
@@ -99,7 +99,7 @@ class BillingCardEntity extends Equatable {
   const BillingCardEntity({
     required this.id,
     required this.cardType,
-    required this.lastFour,
+    required this.name,
     required this.expiryMonth,
     required this.expiryYear,
     this.isDefault = false,
@@ -109,7 +109,7 @@ class BillingCardEntity extends Equatable {
   List<Object?> get props => [
     id,
     cardType,
-    lastFour,
+    name,
     expiryMonth,
     expiryYear,
     isDefault,

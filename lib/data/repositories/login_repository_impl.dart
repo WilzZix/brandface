@@ -10,6 +10,43 @@ import 'package:dio/dio.dart';
 import '../../core/error/failures.dart';
 import '../../domain/entities/verify_otp_entity.dart';
 
+String _extractErrorMessage(DioException e) {
+  final data = e.response?.data;
+  if (data is Map) {
+    for (final key in const ['message', 'detail', 'error', 'msg']) {
+      final value = data[key];
+      if (value is String && value.trim().isNotEmpty) {
+        return value;
+      }
+    }
+    final errors = data['errors'];
+    if (errors is Map && errors.isNotEmpty) {
+      final first = errors.values.first;
+      if (first is String && first.trim().isNotEmpty) return first;
+      if (first is List && first.isNotEmpty) {
+        final entry = first.first;
+        if (entry is String && entry.trim().isNotEmpty) return entry;
+      }
+    }
+  }
+  switch (e.response?.statusCode) {
+    case 400:
+      return 'Invalid request. Please check the code and try again.';
+    case 401:
+      return 'Session expired. Please log in again.';
+    case 404:
+      return 'Not found.';
+    case 408:
+    case 504:
+      return 'Request timed out. Please try again.';
+    case 500:
+    case 502:
+    case 503:
+      return 'Server is unavailable. Please try again later.';
+  }
+  return 'Network error. Please check your connection.';
+}
+
 class LoginRepositoryImpl implements ILoginRepository {
   final LoginRemoteDataSource remoteDataSource;
 
@@ -24,11 +61,11 @@ class LoginRepositoryImpl implements ILoginRepository {
       return Left(
         ServerFailure(
           statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
+          _extractErrorMessage(e),
         ),
       );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    } catch (_) {
+      return Left(const ServerFailure('Something went wrong. Please try again.'));
     }
   }
 
@@ -43,11 +80,11 @@ class LoginRepositoryImpl implements ILoginRepository {
       return Left(
         ServerFailure(
           statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
+          _extractErrorMessage(e),
         ),
       );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    } catch (_) {
+      return Left(const ServerFailure('Something went wrong. Please try again.'));
     }
   }
 
@@ -60,11 +97,11 @@ class LoginRepositoryImpl implements ILoginRepository {
       return Left(
         ServerFailure(
           statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
+          _extractErrorMessage(e),
         ),
       );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    } catch (_) {
+      return Left(const ServerFailure('Something went wrong. Please try again.'));
     }
   }
 
@@ -77,11 +114,11 @@ class LoginRepositoryImpl implements ILoginRepository {
       return Left(
         ServerFailure(
           statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
+          _extractErrorMessage(e),
         ),
       );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
+    } catch (_) {
+      return Left(const ServerFailure('Something went wrong. Please try again.'));
     }
   }
 }

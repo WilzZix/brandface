@@ -1,4 +1,5 @@
 import 'package:brandface/core/navigation/app_navigator_key.dart';
+import 'package:brandface/core/router/route_logger.dart';
 import 'package:brandface/presentation/login/ui/sms_confirmation_page.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/category/category_cubit.dart';
 import 'package:brandface/presentation/registration/bloc/catalog/city/city_cubit.dart';
@@ -83,6 +84,10 @@ class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: appNavigatorKey,
     initialLocation: SplashScreen.tag,
+    // Logs every navigation event to console AND updates the on-screen
+    // path overlay (see RoutePathOverlay in main.dart).
+    debugLogDiagnostics: true,
+    observers: [RouteLoggerObserver()],
     // redirect: (context, state) {
     //   final authService = sl<IAuthLocalService>();
     //   final loggedIn = authService.isLoggedIn();
@@ -417,6 +422,9 @@ class AppRouter {
             ),
             BlocProvider(
               create: (_) => sl<RegionCubit>()..getCategories(),
+            ),
+            BlocProvider(
+              create: (_) => sl<LanguageCubit>()..getLanguages(),
             ),
           ],
           child: AmbassadorsFilterPage(

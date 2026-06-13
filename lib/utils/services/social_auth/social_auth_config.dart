@@ -11,7 +11,7 @@ class SocialAuthConfig {
       'https://api.influerax.com/api/accounts/v1/auth/linkedin-code/callback';
   static const List<String> linkedInScopes = ['openid', 'profile', 'email'];
 
-  static const String telegramBotUsername = '<TELEGRAM_BOT_USERNAME>';
+  static const String telegramBotUsername = 'influeraxbot';
   // Domain registered with @BotFather via /setdomain.
-  static const String telegramAuthOrigin = 'https://api.influerax.com';
+  static const String telegramAuthOrigin = 'https://www.influerax.com';
 }

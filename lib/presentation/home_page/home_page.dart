@@ -130,12 +130,16 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 18),
                       Divider(color: AppColors.borderColor),
                       const SizedBox(height: 18),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(t.common.messages, style: Typographies.titleMedium),
-                          SvgPicture.asset(AppAssets.icChevronRight),
-                        ],
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(MessagesPage.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(t.common.messages, style: Typographies.titleMedium),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
                       ),
                     ],
                   ),

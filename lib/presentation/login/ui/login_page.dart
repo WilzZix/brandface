@@ -60,11 +60,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _navigateAfterSocialSuccess(bool isNewUser) {
-    if (isNewUser) {
+    final role = sl<ProfileService>().getRole();
+    // is_new_user=false bo'lsa-da, role yo'q (yoki 'guest') user —
+    // registratsiyasi tugamagan, register flow'ga yo'naltiramiz.
+    final hasRole =
+        role != null && role.isNotEmpty && role.toLowerCase() != 'guest';
+    if (isNewUser || !hasRole) {
       context.go(RegistrationPage.tag);
       return;
     }
-    final role = sl<ProfileService>().getRole();
     if (role == 'brand') {
       context.go(BrandHomePage.tag);
     } else {

@@ -30,7 +30,9 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final List<AppLocale> _langItems = [AppLocale.en, AppLocale.uz, AppLocale.ru];
   AppLocale _selectedLangId = AppLocale.en;
-  final AppLanguageService _appLanguageService = AppLanguageService(prefs: sl());
+  final AppLanguageService _appLanguageService = AppLanguageService(
+    prefs: sl(),
+  );
 
   @override
   void initState() {
@@ -41,10 +43,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   String _localeName(AppLocale locale) => switch (locale) {
-        AppLocale.uz => "O'zbek",
-        AppLocale.ru => 'Русский',
-        AppLocale.en => 'English',
-      };
+    AppLocale.uz => "O'zbek",
+    AppLocale.ru => 'Русский',
+    AppLocale.en => 'English',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -58,210 +60,251 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 24),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => context.pushNamed(ProfileInformationPage.tag),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    t.registration.profile_information,
-                    style: Typographies.titleMedium,
-                  ),
-                  Spacer(),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            SizedBox(height: 16),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => context.pushNamed(StatsPage.tag),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(t.profile.stats, style: Typographies.titleMedium),
-                  Spacer(),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => context.pushNamed(Reviews.tag),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(t.profile.reviews, style: Typographies.titleMedium),
-                  Spacer(),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            SizedBox(height: 16),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => context.pushNamed(CalendarPage.tag),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(t.profile.calendar, style: Typographies.titleMedium),
-                  Spacer(),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            SizedBox(height: 16),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => context.pushNamed(PortfolioPage.tag),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(t.profile.portfolio, style: Typographies.titleMedium),
-                  Spacer(),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            SizedBox(height: 16),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => context.pushNamed(Billing.tag),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(t.profile.billing, style: Typographies.titleMedium),
-                  Spacer(),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            SizedBox(height: 16),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => context.pushNamed(TopProfilePage.tag),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    t.profile.make_profile_top,
-                    style: Typographies.titleMedium,
-                  ),
-                  Spacer(),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            SizedBox(height: 16),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () async {
-                final tempLocale = _selectedLangId;
-                AppLocale pickedLocale = tempLocale;
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 24),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () =>
+                            context.pushNamed(ProfileInformationPage.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.registration.profile_information,
+                              style: Typographies.titleMedium,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 16),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(StatsPage.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.profile.stats,
+                              style: Typographies.titleMedium,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(Reviews.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.profile.reviews,
+                              style: Typographies.titleMedium,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 16),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(CalendarPage.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.profile.calendar,
+                              style: Typographies.titleMedium,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 16),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(PortfolioPage.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.profile.portfolio,
+                              style: Typographies.titleMedium,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 16),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(Billing.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.profile.billing,
+                              style: Typographies.titleMedium,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 16),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => context.pushNamed(TopProfilePage.tag),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.profile.make_profile_top,
+                              style: Typographies.titleMedium,
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 16),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () async {
+                          final tempLocale = _selectedLangId;
+                          AppLocale pickedLocale = tempLocale;
 
-                await BrandfaceBottomSheet.openBottomSheet<String>(
-                  context: context,
-                  header: t.profile.app_language,
-                  onConfirm: () {
-                    setState(() => _selectedLangId = pickedLocale);
-                    _appLanguageService.setAppLocal(pickedLocale);
-                    LocaleSettings.setLocale(pickedLocale);
-                    Navigator.of(context).pop();
-                  },
-                  builder: (bsContext, bottomState) {
-                    return Column(
-                      children: _langItems.map((item) {
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            bottomState(() => pickedLocale = item);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 14,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    _localeName(item),
-                                    style: Typographies.labelLarge,
-                                  ),
-                                  if (item == pickedLocale)
-                                    SvgPicture.asset(AppAssets.icCheck),
-                                ],
+                          await BrandfaceBottomSheet.openBottomSheet<String>(
+                            context: context,
+                            header: t.profile.app_language,
+                            onConfirm: () {
+                              setState(() => _selectedLangId = pickedLocale);
+                              _appLanguageService.setAppLocal(pickedLocale);
+                              LocaleSettings.setLocale(pickedLocale);
+                              Navigator.of(context).pop();
+                            },
+                            builder: (bsContext, bottomState) {
+                              return Column(
+                                children: _langItems.map((item) {
+                                  return GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      bottomState(() => pickedLocale = item);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0,
+                                      ),
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 14,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              _localeName(item),
+                                              style: Typographies.labelLarge,
+                                            ),
+                                            if (item == pickedLocale)
+                                              SvgPicture.asset(
+                                                AppAssets.icCheck,
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.profile.app_language,
+                              style: Typographies.titleMedium,
+                            ),
+                            const Spacer(),
+                            Text(
+                              _localeName(_selectedLangId),
+                              style: Typographies.bodyMedium.copyWith(
+                                color: AppColors.mutedBlack,
                               ),
                             ),
+                            const SizedBox(width: 8),
+                            SvgPicture.asset(AppAssets.icChevronRight),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Divider(color: AppColors.borderColor),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            t.profile.terms_and_conditions,
+                            style: Typographies.titleMedium,
                           ),
-                        );
-                      }).toList(),
-                    );
-                  },
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(t.profile.app_language, style: Typographies.titleMedium),
-                  const Spacer(),
-                  Text(
-                    _localeName(_selectedLangId),
-                    style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
+                          Spacer(),
+                          SvgPicture.asset(AppAssets.icChevronRight),
+                        ],
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () async {
+                          await sl<AuthLogoutService>().logout(context);
+                        },
+                        child: Text(
+                          t.profile.log_out,
+                          style: Typographies.titleMedium.copyWith(
+                            color: AppColors.red,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24 + MediaQuery.of(context).padding.bottom,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  SvgPicture.asset(AppAssets.icChevronRight),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Divider(color: AppColors.borderColor),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  t.profile.terms_and_conditions,
-                  style: Typographies.titleMedium,
                 ),
-                Spacer(),
-                SvgPicture.asset(AppAssets.icChevronRight),
-              ],
-            ),
-            Spacer(),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () async {
-                await sl<AuthLogoutService>().logout(context);
-              },
-              child: Text(
-                t.profile.log_out,
-                style: Typographies.titleMedium.copyWith(color: AppColors.red),
               ),
-            ),
-            SizedBox(height: MediaQuery.of(context).padding.bottom),
-          ],
+            );
+          },
         ),
       ),
     );

@@ -12,11 +12,8 @@ class LoginMethods extends StatelessWidget {
 
   static final List<({SocialProvider provider, String icon})> _methods = [
     (provider: SocialProvider.google, icon: AppAssets.icGoogle),
-    (provider: SocialProvider.linkedin, icon: AppAssets.icLinkedin),
     (provider: SocialProvider.apple, icon: AppAssets.icApple),
-    (provider: SocialProvider.instagram, icon: AppAssets.icInstagram),
     (provider: SocialProvider.telegram, icon: AppAssets.icTelegram),
-    (provider: SocialProvider.facebook, icon: AppAssets.icFacebook),
   ];
 
   @override

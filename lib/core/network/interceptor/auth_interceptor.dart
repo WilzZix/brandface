@@ -41,9 +41,19 @@ class AuthInterceptor extends Interceptor {
     final skipDialog =
         err.requestOptions.extra['skipUnauthorizedDialog'] == true;
 
-    // Refresh token request o'zi 401 bersa — cheksiz loop oldini olish
-    if (err.requestOptions.path.contains('refresh-token')) {
-      if (!skipDialog) await _showUnauthorizedAndLogout();
+    // Public auth endpointlari (login/register) — foydalanuvchi hali tizimga
+    // kirmagan, 401 bu yerda "session expired" emas, balki noto'g'ri credential
+    // (masalan, Telegram hash mos kelmasa). Refresh ham, dialog ham kerak emas
+    // — xatoni shunchaki yuqoriga uzatamiz.
+    const publicAuthPaths = [
+      'auth/send-otp',
+      'auth/verify-otp',
+      'auth/refresh-token',
+      'auth/social',
+      'auth/linkedin-code',
+    ];
+    final path = err.requestOptions.path;
+    if (publicAuthPaths.any(path.contains)) {
       return handler.next(err);
     }
 
