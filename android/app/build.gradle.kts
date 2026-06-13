@@ -6,6 +6,8 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 val keystoreProperties = Properties()
@@ -30,8 +32,9 @@ android {
     }
 
     defaultConfig {
-        // Note: capital "I" required to match Google Play Console registration.
-        // This is permanent — never change after first Play upload.
+        // Capital "I" — Google Play Console registratsiyasiga aniq mos. Bu
+        // doimiy va o'zgartirilmaydi. Firebase'da ham SHU package name bilan
+        // Android app yaratilgan bo'lishi kerak.
         applicationId = "com.digitalx.Influerax"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion

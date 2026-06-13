@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/registration/bloc/brand_registration/brand_registration_bloc.dart';
@@ -14,12 +16,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'core/di/app_di.dart';
 import 'core/router/app_router.dart';
 import 'utils/services/app_language_service.dart';
+import 'utils/services/firebase/fcm_service.dart';
+import 'utils/services/firebase/firebase_bootstrap.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseBootstrap.initialize();
   await AppDi().init();
   final savedLocale = await AppLanguageService(prefs: sl()).getAppLocale();
   LocaleSettings.setLocale(savedLocale);
+  // FCM background'da ham yoqilsin — login'siz ham push qabul qilish uchun.
+  // Token backendga keyinroq (auth bo'lganda) registratsiya qilinadi.
+  unawaited(FcmService.instance.start());
   runApp(TranslationProvider(child: const MyApp()));
 }
 

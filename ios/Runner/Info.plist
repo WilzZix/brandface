@@ -70,6 +70,22 @@
 	<string>We need access to your photo library to upload a profile picture.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to take a profile picture.</string>
+	<!-- Google Sign-In: real iOS credentials sozlangach quyidagilarni qo'shing.
+	     GIDClientID == iOS OAuth 2.0 client ID (xxx-yyy.apps.googleusercontent.com).
+	     CFBundleURLSchemes ostidagi qiymat == REVERSED_CLIENT_ID (Cloud Console
+	     iOS client detallarida "iOS URL scheme" deb ko'rsatilgan).
+	     Misol:
+	       <key>GIDClientID</key>
+	       <string>123-abc.apps.googleusercontent.com</string>
+	       <key>CFBundleURLTypes</key>
+	       <array>
+	         <dict>
+	           <key>CFBundleTypeRole</key><string>Editor</string>
+	           <key>CFBundleURLSchemes</key>
+	           <array><string>com.googleusercontent.apps.123-abc</string></array>
+	         </dict>
+	       </array>
+	-->
 	<key>FacebookAutoInitEnabled</key>
 	<false/>
 	<key>FacebookAutoLogAppEventsEnabled</key>

@@ -206,9 +206,10 @@ class AppDi {
     );
     sl.registerLazySingleton<Map<SocialProvider, SocialAuthService>>(
       () => {
-        // Google and Facebook intentionally omitted until native SDK
-        // configuration (FacebookAppID/ClientToken, GIDClientID) is added.
-        // BLoC will emit `socialAuthSoon` for missing providers.
+        // Facebook native SDK config (FacebookAppID/ClientToken) hali yo'q —
+        // BLoC `socialAuthSoon` emit qiladi. Google'ni Info.plist'da
+        // GIDClientID + CFBundleURLSchemes sozlangach ishlatish mumkin.
+        SocialProvider.google: sl<GoogleAuthService>(),
         SocialProvider.linkedin: sl<LinkedInAuthService>(),
         SocialProvider.telegram: sl<TelegramAuthService>(),
       },

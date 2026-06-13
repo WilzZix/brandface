@@ -2,17 +2,25 @@ import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../domain/entities/social_provider.dart';
+import 'social_auth_config.dart';
 import 'social_auth_service.dart';
+
+bool _isPlaceholder(String value) =>
+    value.isEmpty || value.startsWith('<') || !value.contains('.');
 
 class GoogleAuthService implements SocialAuthService {
   GoogleAuthService({GoogleSignIn? client})
-      : _client = client ??
-            GoogleSignIn(
-              scopes: const ['email', 'profile', 'openid'],
-              // TODO: Set the Web client ID from Google Cloud Console here
-              // so that the issued id_token.aud matches the backend audience.
-              // serverClientId: '<WEB_CLIENT_ID>.apps.googleusercontent.com',
-            );
+    : _client =
+          client ??
+          GoogleSignIn(
+            scopes: const ['email', 'profile', 'openid'],
+            serverClientId: _isPlaceholder(SocialAuthConfig.googleServerClientId)
+                ? null
+                : SocialAuthConfig.googleServerClientId,
+            clientId: _isPlaceholder(SocialAuthConfig.googleIosClientId)
+                ? null
+                : SocialAuthConfig.googleIosClientId,
+          );
 
   final GoogleSignIn _client;
 
@@ -21,6 +29,17 @@ class GoogleAuthService implements SocialAuthService {
 
   @override
   Future<SocialSignInResult> signIn(BuildContext context) async {
+    // Config tekshirish — placeholder bo'lsa, Google SDK crash bo'lishidan
+    // oldin friendly xatoga aylantiramiz.
+    if (_isPlaceholder(SocialAuthConfig.googleServerClientId) ||
+        _isPlaceholder(SocialAuthConfig.googleIosClientId)) {
+      throw const SocialAuthFailedException(
+        SocialProvider.google,
+        'Google Sign-In not configured. Add real client IDs in '
+        'SocialAuthConfig + Info.plist.',
+      );
+    }
+
     try {
       final account = await _client.signIn();
       if (account == null) {

@@ -14,4 +14,15 @@ class SocialAuthConfig {
   static const String telegramBotUsername = 'influeraxbot';
   // Domain registered with @BotFather via /setdomain.
   static const String telegramAuthOrigin = 'https://www.influerax.com';
+
+  /// Google Web Client ID — backend `id_token.aud` shu qiymat bilan
+  /// tekshiradi. Google Cloud Console → Credentials → OAuth 2.0 Client IDs
+  /// → "Web application" turidagi clientni oling.
+  /// Format: `<digits>-<hash>.apps.googleusercontent.com`.
+  static const String googleServerClientId = '<GOOGLE_WEB_CLIENT_ID>';
+
+  /// Google iOS Client ID — Google Cloud Console → Credentials → OAuth 2.0
+  /// Client IDs → "iOS" turidagi clientni oling. Info.plist'da `GIDClientID`
+  /// va `CFBundleURLTypes.CFBundleURLSchemes` ham shu IDga mos bo'lishi shart.
+  static const String googleIosClientId = '<GOOGLE_IOS_CLIENT_ID>';
 }
