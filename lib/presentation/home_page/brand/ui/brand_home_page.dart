@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/uikit/components/avatar/avatar_placeholder.dart';
 import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
@@ -485,13 +486,8 @@ class _BrandAvatar extends StatelessWidget {
     );
   }
 
-  Widget _placeholder() => ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.asset(
-          'assets/images/im_person_avatar_sample.png',
-          fit: BoxFit.cover,
-        ),
-      );
+  Widget _placeholder() =>
+      const AvatarPlaceholder(size: 56, borderRadius: 8);
 }
 
 class _BrandStatCard extends StatelessWidget {
@@ -804,12 +800,8 @@ class _AiMatchItem extends StatelessWidget {
     );
   }
 
-  Widget _defaultAvatar() {
-    return Image.asset(
-      'assets/images/im_person_avatar_sample.png',
-      fit: BoxFit.cover,
-    );
-  }
+  Widget _defaultAvatar() =>
+      const AvatarPlaceholder(size: 80, borderRadius: 12);
 }
 
 class _ScoreBadge extends StatelessWidget {

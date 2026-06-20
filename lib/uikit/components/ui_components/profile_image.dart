@@ -67,9 +67,32 @@ class _ProfileImageFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.lightBg2,
-      child: Icon(Icons.person_rounded, color: AppColors.grey, size: 28),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final dimension = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : constraints.maxHeight;
+        final iconSize = dimension.isFinite ? dimension * 0.55 : 28.0;
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primary.withValues(alpha: 0.28),
+                AppColors.lightBg2,
+              ],
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              Icons.person_rounded,
+              size: iconSize,
+              color: AppColors.black.withValues(alpha: 0.55),
+            ),
+          ),
+        );
+      },
     );
   }
 }

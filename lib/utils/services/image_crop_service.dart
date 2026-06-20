@@ -18,8 +18,12 @@ Future<File?> cropImage({
       AndroidUiSettings(
         toolbarTitle: 'Crop',
         toolbarColor: AppColors.black,
+        // Status bar matn rangi och — qora toolbar bilan o'qiladigan; system
+        // statusbar uchun fon avtomatik toolbar rangi bilan moslashadi.
+        statusBarLight: false,
         toolbarWidgetColor: AppColors.white,
         activeControlsWidgetColor: AppColors.primary,
+        backgroundColor: AppColors.black,
         initAspectRatio: CropAspectRatioPreset.square,
         lockAspectRatio: square,
         hideBottomControls: square,
@@ -28,6 +32,9 @@ Future<File?> cropImage({
         title: 'Crop',
         aspectRatioLockEnabled: square,
         resetAspectRatioEnabled: !square,
+        // Navigation bar va status barni ko'rinadigan qilib qoldiramiz, shuning
+        // uchun toolbar dynamic island / notch tagiga tushmaydi.
+        hidesNavigationBar: false,
       ),
     ],
   );

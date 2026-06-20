@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/uikit/components/avatar/avatar_placeholder.dart';
 import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/catalog/social_media_account_stats_entity.dart';
@@ -7,7 +8,6 @@ import 'package:brandface/domain/usecase/profile/params/social_medi_params.dart'
 import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/partners.dart';
 import 'package:brandface/presentation/home_page/profile/ui/components/services_item.dart';
-import 'package:brandface/uikit/components/ui_components/profile_image.dart';
 import 'package:brandface/utils/extansions/app_exts.dart';
 import 'package:flutter/material.dart';
 
@@ -269,14 +269,7 @@ class _AvatarWidget extends StatelessWidget {
     return _placeholder();
   }
 
-  Widget _placeholder() => ClipOval(
-        child: Image.asset(
-          'assets/images/im_person_avatar_sample.png',
-          width: 56,
-          height: 56,
-          fit: BoxFit.cover,
-        ),
-      );
+  Widget _placeholder() => const AvatarPlaceholder(size: 56);
 }
 
 String _formatFollowers(int? count) {

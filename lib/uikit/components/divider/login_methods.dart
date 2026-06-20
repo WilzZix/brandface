@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,11 +13,17 @@ import '../../tokens/colors.dart';
 class LoginMethods extends StatelessWidget {
   const LoginMethods({super.key});
 
-  static final List<({SocialProvider provider, String icon})> _methods = [
-    (provider: SocialProvider.google, icon: AppAssets.icGoogle),
-    (provider: SocialProvider.apple, icon: AppAssets.icApple),
-    (provider: SocialProvider.telegram, icon: AppAssets.icTelegram),
-  ];
+  // Apple Sign-In Android'da native qo'llab-quvvatlanmaydi (Services ID +
+  // return URL flow talab qiladi). Hozircha faqat iOS/macOS'da ko'rsatamiz.
+  static bool get _appleAvailable =>
+      !kIsWeb && (Platform.isIOS || Platform.isMacOS);
+
+  static List<({SocialProvider provider, String icon})> get _methods => [
+        (provider: SocialProvider.google, icon: AppAssets.icGoogle),
+        if (_appleAvailable)
+          (provider: SocialProvider.apple, icon: AppAssets.icApple),
+        (provider: SocialProvider.telegram, icon: AppAssets.icTelegram),
+      ];
 
   @override
   Widget build(BuildContext context) {

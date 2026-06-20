@@ -74,6 +74,7 @@ class _TranslationsOnboardingUz implements TranslationsOnboardingEn {
 
 	// Translations
 	@override String get kContinue => 'Davom etish';
+	@override String get description => 'InflueraX — brendlar, influencerlar va ambassadorlarni bir platformada bog\'lovchi zamonaviy influencer marketing platformasi.';
 }
 
 // Path: login
@@ -566,6 +567,7 @@ extension on TranslationsUz {
 		return switch (path) {
 			'splash.app_version' => ({required Object version}) => 'Ilova versoyasi ${version}',
 			'onboarding.kContinue' => 'Davom etish',
+			'onboarding.description' => 'InflueraX — brendlar, influencerlar va ambassadorlarni bir platformada bog\'lovchi zamonaviy influencer marketing platformasi.',
 			'login.phone_number' => 'Telefon raqam',
 			'login.welcome_msg' => 'InflueraX ga xush kelibsiz',
 			'login.term_of_use_first' => 'Kirish tugmasini bosish orqali barcha ',

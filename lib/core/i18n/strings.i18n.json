@@ -3,7 +3,8 @@
     "app_version": "App version $version"
   },
   "onboarding": {
-    "continue": "Continue"
+    "continue": "Continue",
+    "description": "InflueraX — the modern influencer marketing platform connecting brands, influencers and ambassadors in one place."
   },
   "login": {
     "phone_number": "Phone number",

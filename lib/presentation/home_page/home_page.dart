@@ -306,6 +306,7 @@ class _HomePageState extends State<HomePage> {
               child: HomePageContainer(
                 title: dashboard.activeOffersCount.toString(),
                 description: t.common.active_offers,
+                onTap: () => context.pushNamed(OffersFromBrandsPage.tag),
               ),
             ),
             const SizedBox(width: 8),

@@ -20,6 +20,35 @@ class FirebaseBootstrap {
 
   static bool get isInitialized => _initialized;
 
+  /// Foydalanuvchini Crashlytics/Analytics dashboard'larida ID bo'yicha
+  /// kuzatish uchun login muvaffaqiyatdan keyin chaqiriladi.
+  static Future<void> setUser({required int id, String? role}) async {
+    if (!_initialized) return;
+    try {
+      final idString = id.toString();
+      await FirebaseCrashlytics.instance.setUserIdentifier(idString);
+      await FirebaseAnalytics.instance.setUserId(id: idString);
+      if (role != null && role.isNotEmpty) {
+        await FirebaseCrashlytics.instance.setCustomKey('role', role);
+        await FirebaseAnalytics.instance.setUserProperty(
+          name: 'role',
+          value: role,
+        );
+      }
+    } catch (e) {
+      debugPrint('[Firebase] setUser failed: $e');
+    }
+  }
+
+  /// Logout/account-delete'dan keyin user'ni Firebase'da tozalash.
+  static Future<void> clearUser() async {
+    if (!_initialized) return;
+    try {
+      await FirebaseCrashlytics.instance.setUserIdentifier('');
+      await FirebaseAnalytics.instance.setUserId(id: null);
+    } catch (_) {}
+  }
+
   /// Returns true if Firebase initialized successfully.
   static Future<bool> initialize() async {
     if (_initialized) return true;
@@ -27,11 +56,10 @@ class FirebaseBootstrap {
       await Firebase.initializeApp();
       _initialized = true;
 
-      // Crashlytics — debug rejimida o'chiriladi (false pozitivlardan saqlash
-      // uchun), release/profile rejimda yoqiladi.
-      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
-        !kDebugMode,
-      );
+      // Crashlytics — har doim yoqilgan. Debug rejimida sinab ko'rish uchun
+      // ham xatolar Firebase Console DebugView'ga keladi. Release'da haqiqiy
+      // crash'lar avtomatik yuboriladi.
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
       // Flutter framework xatolari va Dart asyncxron xatolari Crashlytics'ga
       // yo'naltiriladi.

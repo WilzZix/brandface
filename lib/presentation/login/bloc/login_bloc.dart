@@ -13,6 +13,7 @@ import '../../../domain/usecase/login/get_me_use_case.dart';
 import '../../../domain/usecase/login/params/verify_otp_params.dart';
 import '../../../domain/usecase/login/send_otp_usecase.dart';
 import '../../../utils/services/app_auth_local_service.dart';
+import '../../../utils/services/firebase/firebase_bootstrap.dart';
 import '../../../utils/services/profile_service.dart';
 import '../../../utils/services/social_auth/social_auth_service.dart';
 
@@ -182,6 +183,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           ifRight: (userEntity) async {
             await _profileService.setProfileId(userEntity.id);
             await _profileService.setRole(userEntity.role);
+            await FirebaseBootstrap.setUser(
+              id: userEntity.id,
+              role: userEntity.role,
+            );
             emit(LoginState.socialAuthSuccess(entity: entity));
           },
         );

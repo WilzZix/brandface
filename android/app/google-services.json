@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "275276598948-ptevd1ms6e75obk3k3g6uoal61vb2lt5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digitalx.Influerax",
+            "certificate_hash": "c8de57304bbeffa640ab08e6fbe9b7abfd9e4dc6"
+          }
+        },
+        {
           "client_id": "275276598948-2ootbe54lk7ed101k4iju2cc55009hel.apps.googleusercontent.com",
           "client_type": 3
         }

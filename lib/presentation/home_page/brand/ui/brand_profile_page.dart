@@ -10,6 +10,7 @@ import 'package:brandface/domain/entities/registration/registration_entity.dart'
 import 'package:brandface/presentation/home_page/profile/bloc/delete_account/delete_account_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import 'package:brandface/presentation/registration/ui/fill_profile_information_page.dart';
+import 'package:brandface/uikit/components/avatar/avatar_placeholder.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/bottom_sheet/delete_account_confirm_sheet.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
@@ -281,15 +282,8 @@ class _AvatarWidget extends StatelessWidget {
     return _placeholder();
   }
 
-  Widget _placeholder() => ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.asset(
-          'assets/images/im_person_avatar_sample.png',
-          width: 72,
-          height: 72,
-          fit: BoxFit.cover,
-        ),
-      );
+  Widget _placeholder() =>
+      const AvatarPlaceholder(size: 72, borderRadius: 12);
 }
 
 class _ContactDetailsWidget extends StatelessWidget {

@@ -1,3 +1,4 @@
+import 'package:brandface/uikit/components/avatar/avatar_placeholder.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -128,15 +129,8 @@ class InfluencerAvatar extends StatelessWidget {
     );
   }
 
-  Widget _placeholder() => Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(
-          color: AppColors.borderColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(Icons.person, color: AppColors.grey, size: 36),
-      );
+  Widget _placeholder() =>
+      const AvatarPlaceholder(size: 80, borderRadius: 12);
 }
 
 /// Small outline chip for categories

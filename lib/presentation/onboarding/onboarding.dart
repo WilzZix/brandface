@@ -45,7 +45,7 @@ class _OnboardingState extends State<Onboarding> {
                   decoration: BoxDecoration(color: AppColors.lightBg2, borderRadius: BorderRadius.circular(128)),
                   child: Text(
                     textAlign: TextAlign.center,
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt quam at facilisis ornare. Donec lacinia dui tempor, luctus sem nec, lobortis nibh.',
+                    t.onboarding.description,
                     style: Typographies.bodyMedium,
                   ),
                 ),

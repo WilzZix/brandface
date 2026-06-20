@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../domain/usecase/registration/params/fill_influencer_profile_param.dart';
+import '../../../../uikit/components/avatar/avatar_placeholder.dart';
 import '../../../../utils/services/image_crop_service.dart';
 import '../../../../uikit/components/inputs/bio_input_field.dart';
 import '../../../../utils/extansions/snackbar_x.dart';
@@ -130,15 +131,10 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
                         ? Image.network(
                             _currentAvatarUrl!,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => Image.asset(
-                              'assets/images/im_person_avatar_sample.png',
-                              fit: BoxFit.cover,
-                            ),
+                            errorBuilder: (_, _, _) =>
+                                const AvatarPlaceholder(size: 96),
                           )
-                        : Image.asset(
-                            'assets/images/im_person_avatar_sample.png',
-                            fit: BoxFit.cover,
-                          ),
+                        : const AvatarPlaceholder(size: 96),
                   ),
                 ),
                 SizedBox(width: 16),

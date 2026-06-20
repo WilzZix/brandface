@@ -19,6 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../domain/usecase/registration/params/fill_brand_profile_param.dart';
+import '../../../../uikit/components/avatar/avatar_placeholder.dart';
 import '../../../../utils/services/image_crop_service.dart';
 import '../../../../uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import '../../../../utils/extansions/snackbar_x.dart';
@@ -169,15 +170,10 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
                         ? Image.network(
                             _currentLogoUrl!,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => Image.asset(
-                              'assets/images/im_person_avatar_sample.png',
-                              fit: BoxFit.cover,
-                            ),
+                            errorBuilder: (_, _, _) =>
+                                const AvatarPlaceholder(size: 96),
                           )
-                        : Image.asset(
-                            'assets/images/im_person_avatar_sample.png',
-                            fit: BoxFit.cover,
-                          ),
+                        : const AvatarPlaceholder(size: 96),
                   ),
                 ),
                 const SizedBox(width: 16),

@@ -3,7 +3,8 @@
     "app_version": "Ilova versoyasi $version"
   },
   "onboarding": {
-    "continue": "Davom etish"
+    "continue": "Davom etish",
+    "description": "InflueraX — brendlar, influencerlar va ambassadorlarni bir platformada bog'lovchi zamonaviy influencer marketing platformasi."
   },
   "login": {
     "phone_number": "Telefon raqam",

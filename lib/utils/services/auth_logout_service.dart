@@ -1,5 +1,6 @@
 import 'package:brandface/presentation/login/bloc/login_bloc.dart';
 import 'package:brandface/presentation/login/ui/login_page.dart';
+import 'package:brandface/utils/services/firebase/firebase_bootstrap.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,7 @@ class AuthLogoutService {
 
   Future<void> logout(BuildContext context) async {
     await _clearSessionPrefs();
+    await FirebaseBootstrap.clearUser();
     if (!context.mounted) return;
     context.read<LoginBloc>().add(const LoginEvent.reset());
     context.go(LoginPage.tag);

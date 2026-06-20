@@ -74,6 +74,7 @@ class _TranslationsOnboardingRu implements TranslationsOnboardingEn {
 
 	// Translations
 	@override String get kContinue => 'Продолжить';
+	@override String get description => 'InflueraX — современная платформа influencer-маркетинга, объединяющая бренды, инфлюенсеры и амбассадоры на одной платформе.';
 }
 
 // Path: login
@@ -566,6 +567,7 @@ extension on TranslationsRu {
 		return switch (path) {
 			'splash.app_version' => ({required Object version}) => 'Версия приложения ${version}',
 			'onboarding.kContinue' => 'Продолжить',
+			'onboarding.description' => 'InflueraX — современная платформа influencer-маркетинга, объединяющая бренды, инфлюенсеры и амбассадоры на одной платформе.',
 			'login.phone_number' => 'Номер телефона',
 			'login.welcome_msg' => 'Добро пожаловать в InflueraX',
 			'login.term_of_use_first' => 'Нажимая «Войти», я принимаю все ',

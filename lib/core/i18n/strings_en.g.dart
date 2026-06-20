@@ -81,6 +81,9 @@ class TranslationsOnboardingEn {
 
 	/// en: 'Continue'
 	String get kContinue => 'Continue';
+
+	/// en: 'InflueraX — the modern influencer marketing platform connecting brands, influencers and ambassadors in one place.'
+	String get description => 'InflueraX — the modern influencer marketing platform connecting brands, influencers and ambassadors in one place.';
 }
 
 // Path: login
@@ -1244,6 +1247,7 @@ extension on Translations {
 		return switch (path) {
 			'splash.app_version' => ({required Object version}) => 'App version ${version}',
 			'onboarding.kContinue' => 'Continue',
+			'onboarding.description' => 'InflueraX — the modern influencer marketing platform connecting brands, influencers and ambassadors in one place.',
 			'login.phone_number' => 'Phone number',
 			'login.welcome_msg' => 'Welcome to InflueraX',
 			'login.term_of_use_first' => 'By pressing Login i agree to all ',

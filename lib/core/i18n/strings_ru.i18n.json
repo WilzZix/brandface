@@ -3,7 +3,8 @@
     "app_version": "Версия приложения $version"
   },
   "onboarding": {
-    "continue": "Продолжить"
+    "continue": "Продолжить",
+    "description": "InflueraX — современная платформа influencer-маркетинга, объединяющая бренды, инфлюенсеры и амбассадоры на одной платформе."
   },
   "login": {
     "phone_number": "Номер телефона",
