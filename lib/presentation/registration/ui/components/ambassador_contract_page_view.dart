@@ -76,9 +76,9 @@ class _AmbassadorContractPageViewState
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      keyboardDismissBehavior: .onDrag,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           Text(
             t.registration.available_for_long_term_contract,
