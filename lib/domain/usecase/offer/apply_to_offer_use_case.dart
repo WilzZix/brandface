@@ -3,14 +3,14 @@ import 'package:brandface/domain/repository/offer_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/dart_either.dart';
 
-class ApplyToOfferParams {
+final class ApplyToOfferParams {
   final int id;
   final String? coverLetter;
 
   const ApplyToOfferParams({required this.id, this.coverLetter});
 }
 
-class ApplyToOfferUseCase implements UseCase<void, ApplyToOfferParams> {
+final class ApplyToOfferUseCase implements UseCase<void, ApplyToOfferParams> {
   final IOfferRepository repository;
 
   ApplyToOfferUseCase({required this.repository});

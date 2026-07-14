@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../repository/profile_repository.dart';
 
-class GetInfluencerProfileUseCase
+final class GetInfluencerProfileUseCase
     implements UseCase<InfluencerProfileInformationEntity, void> {
   final IProfileRepository repository;
 

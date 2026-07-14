@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/message/conversation_entity.dart';
 
-class ConversationParticipantModel extends ConversationParticipantEntity {
+final class ConversationParticipantModel extends ConversationParticipantEntity {
   const ConversationParticipantModel({
     required super.id,
     required super.phoneNumber,
@@ -16,7 +16,7 @@ class ConversationParticipantModel extends ConversationParticipantEntity {
   }
 }
 
-class ConversationModel extends ConversationEntity {
+final class ConversationModel extends ConversationEntity {
   const ConversationModel({
     required super.id,
     required super.participants,

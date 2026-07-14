@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../../repository/profile_repository.dart';
 
-class CityUseCase implements UseCase<List<CityEntity>, void> {
+final class CityUseCase implements UseCase<List<CityEntity>, void> {
   final IProfileRepository repository;
 
   CityUseCase({required this.repository});

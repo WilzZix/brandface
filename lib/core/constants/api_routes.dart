@@ -1,4 +1,4 @@
-class ApiRoutes {
+abstract final class ApiRoutes {
   static String baseUrl = 'https://api.influerax.com/api/';
   static String mediaBaseUrl = 'https://api.influerax.com';
 
@@ -38,13 +38,16 @@ class ApiRoutes {
   static String myProfileGeneral = 'profiles/v1/my/general/';
   static String myProfileAudience = 'profiles/v1/my/audience/';
   static String myProfilePricing = 'profiles/v1/my/pricing/';
+
   static String influencerReviews(int influencerId) =>
       'profiles/v1/influencers/$influencerId/reviews/';
 
   static String myAwards = 'profiles/v1/my/awards/';
+
   static String deleteAward(int awardId) => 'profiles/v1/my/awards/$awardId/';
 
   static String myAvailableDates = 'profiles/v1/my/available-dates/';
+
   static String myAvailableDate(int dateId) =>
       'profiles/v1/my/available-dates/$dateId/';
 
@@ -52,13 +55,17 @@ class ApiRoutes {
   static String myApplications = 'offers/v1/my-applications/';
   static String recommendedOffers = 'offers/v1/recommended/';
   static String availableOffers = 'offers/v1/available/';
+
   static String availableOfferDetail(int id) => 'offers/v1/available/$id/';
+
   static String applyToOffer(int id) => 'offers/v1/$id/apply/';
   static String conversations = 'messaging/v1/conversations/';
+
   static String sendMessage(int conversationId) =>
       'messaging/v1/conversations/$conversationId/messages/send/';
   static String influencerAnalytics = 'analytics/v1/influencer/';
   static String notifications = 'notifications/v1/';
+
   static String markNotificationAsRead(int id) => 'notifications/v1/$id/read/';
   static String readAllNotifications = 'notifications/v1/read-all/';
   static String unreadNotificationsCount = 'notifications/v1/unread-count/';
@@ -67,16 +74,21 @@ class ApiRoutes {
   static String boostPackages = 'billing/v1/boost-packages/';
   static String cancelSubscription = 'billing/v1/cancel/';
   static String billingCards = 'billing/v1/cards/';
+
   static String billingCard(int cardId) => 'billing/v1/cards/$cardId/';
   static String mySubscription = 'billing/v1/my-subscription/';
   static String billingPlans = 'billing/v1/plans/';
   static String subscribeToPlan = 'billing/v1/subscribe/';
   static String billingTransactions = 'billing/v1/transactions/';
   static String portfolio = 'portfolio/v1/';
+
   static String portfolioDetail(int id) => 'portfolio/v1/$id/';
+
   static String addPortfolioImage(int id) => 'portfolio/v1/$id/images/';
+
   static String removePortfolioImage(int id, int imageId) =>
       'portfolio/v1/$id/images/$imageId/';
+
   static String publicPortfolio(int influencerId) =>
       'portfolio/v1/influencers/$influencerId/';
   static String uploadFile = 'uploads/v1/upload/file/';
@@ -84,8 +96,11 @@ class ApiRoutes {
   static String brands = 'profiles/v1/brands/';
 
   static String aiMatchRun(int offerId) => 'ai/v1/offers/$offerId/match/';
+
   static String aiMatchResults(int offerId) => 'ai/v1/offers/$offerId/results/';
   static String favourites = 'favourites/v1/';
-  static String favouriteItem(int influencerId) => 'favourites/v1/$influencerId/';
+
+  static String favouriteItem(int influencerId) =>
+      'favourites/v1/$influencerId/';
   static String brandAnalytics = 'analytics/v1/brand/';
 }

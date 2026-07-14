@@ -6,7 +6,7 @@ abstract class BrandAnalyticsDataSource {
   Future<BrandAnalyticsModel> getBrandAnalytics();
 }
 
-class BrandAnalyticsDataSourceImpl implements BrandAnalyticsDataSource {
+final class BrandAnalyticsDataSourceImpl implements BrandAnalyticsDataSource {
   final DioClient _dioClient;
 
   BrandAnalyticsDataSourceImpl(this._dioClient);

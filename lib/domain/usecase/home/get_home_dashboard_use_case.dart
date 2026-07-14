@@ -4,7 +4,8 @@ import 'package:brandface/domain/repository/home_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/dart_either.dart';
 
-class GetHomeDashboardUseCase implements UseCase<HomeDashboardEntity, void> {
+final class GetHomeDashboardUseCase
+    implements UseCase<HomeDashboardEntity, void> {
   final IHomeRepository repository;
 
   GetHomeDashboardUseCase({required this.repository});

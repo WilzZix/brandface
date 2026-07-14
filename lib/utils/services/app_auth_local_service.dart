@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class IAuthLocalService {
+abstract interface class IAuthLocalService {
   Future<void> saveTokens({required String accessToken, required String refreshToken});
 
   String? getAccessToken();
@@ -16,7 +16,7 @@ abstract class IAuthLocalService {
   Future<void> markOnboardingSeen();
 }
 
-class AuthLocalService implements IAuthLocalService {
+final class AuthLocalService implements IAuthLocalService {
   final SharedPreferences _prefs;
 
   static const _accessTokenKey = 'access_token';

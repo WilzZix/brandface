@@ -1,4 +1,4 @@
-class SocialAuthEntity {
+base class SocialAuthEntity {
   final String? access;
   final String? refresh;
   final bool? isNewUser;

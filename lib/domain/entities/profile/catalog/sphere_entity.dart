@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class SphereEntity extends Equatable {
+base class SphereEntity extends Equatable {
   final int id;
   final String name;
 

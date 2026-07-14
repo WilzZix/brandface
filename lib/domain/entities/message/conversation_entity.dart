@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class ConversationParticipantEntity extends Equatable {
+base class ConversationParticipantEntity extends Equatable {
   const ConversationParticipantEntity({
     required this.id,
     required this.phoneNumber,
@@ -15,7 +15,7 @@ class ConversationParticipantEntity extends Equatable {
   List<Object?> get props => [id, phoneNumber, role];
 }
 
-class ConversationEntity extends Equatable {
+base class ConversationEntity extends Equatable {
   const ConversationEntity({
     required this.id,
     required this.participants,

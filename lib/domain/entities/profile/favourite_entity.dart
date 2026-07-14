@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class FavouriteEntity extends Equatable {
+base class FavouriteEntity extends Equatable {
   final int favouriteId;
   final int id;
   final String? displayName;

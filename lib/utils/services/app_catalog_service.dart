@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/profile/catalog/language_model.dart';
 
-abstract class IAppCatalogService {
+abstract interface class IAppCatalogService {
   Future<void> saveSpokenLanguages(List<LanguageData> languages);
 
   List<LanguageData> getSpokenLanguages();
@@ -15,7 +15,7 @@ abstract class IAppCatalogService {
   List<CategoryData> getCategories();
 }
 
-class AppCatalogService implements IAppCatalogService {
+final class AppCatalogService implements IAppCatalogService {
   final SharedPreferences _prefs;
   static const _languagesKey = 'cached_spoken_languages';
   static const _categoriesKey = 'cached_categories';

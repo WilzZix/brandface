@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../../repository/profile_repository.dart';
 
-class GetLanguagesUseCase implements UseCase<List<LanguageEntity>, void> {
+final class GetLanguagesUseCase implements UseCase<List<LanguageEntity>, void> {
   final IProfileRepository repository;
 
   GetLanguagesUseCase({required this.repository});

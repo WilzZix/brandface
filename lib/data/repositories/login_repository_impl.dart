@@ -47,7 +47,7 @@ String _extractErrorMessage(DioException e) {
   return 'Network error. Please check your connection.';
 }
 
-class LoginRepositoryImpl implements ILoginRepository {
+final class LoginRepositoryImpl implements ILoginRepository {
   final LoginRemoteDataSource remoteDataSource;
 
   LoginRepositoryImpl({required this.remoteDataSource});

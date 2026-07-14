@@ -1,6 +1,6 @@
 import '../../../domain/entities/ai_matching/ai_match_result_entity.dart';
 
-class AiMatchResultModel {
+final class AiMatchResultModel {
   final int influencerId;
   final String displayName;
   final String avatarUrl;
@@ -50,18 +50,18 @@ class AiMatchResultModel {
   }
 
   AiMatchResultEntity toEntity() => AiMatchResultEntity(
-        influencerId: influencerId,
-        displayName: displayName,
-        avatarUrl: avatarUrl,
-        averageRating: averageRating,
-        totalReviews: totalReviews,
-        totalFollowers: totalFollowers,
-        engagementRate: engagementRate,
-        region: region,
-        city: city,
-        categories: categories,
-        isVerified: isVerified,
-        isTop: isTop,
-        score: score,
-      );
+    influencerId: influencerId,
+    displayName: displayName,
+    avatarUrl: avatarUrl,
+    averageRating: averageRating,
+    totalReviews: totalReviews,
+    totalFollowers: totalFollowers,
+    engagementRate: engagementRate,
+    region: region,
+    city: city,
+    categories: categories,
+    isVerified: isVerified,
+    isTop: isTop,
+    score: score,
+  );
 }

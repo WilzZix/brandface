@@ -5,7 +5,8 @@ import 'package:dart_either/dart_either.dart';
 
 import '../../repository/profile_repository.dart';
 
-class GetInfluencerReviewsUseCase implements UseCase<List<ReviewEntity>, int> {
+final class GetInfluencerReviewsUseCase
+    implements UseCase<List<ReviewEntity>, int> {
   final IProfileRepository repository;
 
   GetInfluencerReviewsUseCase({required this.repository});

@@ -1,4 +1,4 @@
-class CreateOfferParams {
+base class CreateOfferParams {
   final String title;
   final List<int> categoryIds;
   final String? description;

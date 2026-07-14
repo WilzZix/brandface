@@ -17,7 +17,7 @@ import 'package:dart_either/dart_either.dart';
 import '../../core/error/failures.dart';
 import '../entities/profile/profile_entity.dart';
 
-abstract class IProfileRepository {
+abstract interface class IProfileRepository {
   Future<Either<Failure, ProfileEntity>> getProfile({
     required String profileId,
   });

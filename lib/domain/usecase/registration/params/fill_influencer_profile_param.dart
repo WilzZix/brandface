@@ -1,4 +1,4 @@
-class FillInfluencerProfileParam {
+final class FillInfluencerProfileParam {
   final String? displayName;
   final int? avatarId;
   final String? avatarUrl;
@@ -94,9 +94,11 @@ class FillInfluencerProfileParam {
     pressMentions: pressMentions ?? this.pressMentions,
     agencyRepresentation: agencyRepresentation ?? this.agencyRepresentation,
     referralExperience: referralExperience ?? this.referralExperience,
-    previousBrandCollaborations: previousBrandCollaborations ?? this.previousBrandCollaborations,
+    previousBrandCollaborations:
+        previousBrandCollaborations ?? this.previousBrandCollaborations,
     caseStudyAvailable: caseStudyAvailable ?? this.caseStudyAvailable,
-    conversionMetricsAvailable: conversionMetricsAvailable ?? this.conversionMetricsAvailable,
+    conversionMetricsAvailable:
+        conversionMetricsAvailable ?? this.conversionMetricsAvailable,
     partners: partners ?? this.partners,
     contacts: contacts ?? this.contacts,
     categoryIds: categoryIds ?? this.categoryIds,
@@ -164,7 +166,7 @@ class FillInfluencerProfileParam {
   }
 }
 
-class Audience {
+final class Audience {
   final String? brandSegment;
   final int? totalFollowers;
   final String? malePercent;
@@ -239,7 +241,7 @@ class Audience {
   }
 }
 
-class Contact {
+final class Contact {
   final String? type;
   final String? value;
 
@@ -253,7 +255,7 @@ class Contact {
   }
 }
 
-class Pricing {
+final class Pricing {
   final bool? availableForLongTerm;
   final bool? worksOnNetModel;
   final bool? openToSimilarOffers;
@@ -334,8 +336,10 @@ class Pricing {
     monthlyExclusivityFee: monthlyExclusivityFee ?? this.monthlyExclusivityFee,
     eventAppearanceFee: eventAppearanceFee ?? this.eventAppearanceFee,
     kpiBasedModel: kpiBasedModel ?? this.kpiBasedModel,
-    availableForOfflineEvents: availableForOfflineEvents ?? this.availableForOfflineEvents,
-    monthlyContentCapacity: monthlyContentCapacity ?? this.monthlyContentCapacity,
+    availableForOfflineEvents:
+        availableForOfflineEvents ?? this.availableForOfflineEvents,
+    monthlyContentCapacity:
+        monthlyContentCapacity ?? this.monthlyContentCapacity,
   );
 
   Map<String, dynamic> toJson() {
@@ -369,7 +373,7 @@ class Pricing {
   }
 }
 
-class SocialMediaAccount {
+final class SocialMediaAccount {
   final String platform;
   final String username;
 

@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/profile/influencer_analytics_entity.dart';
 
-class InfluencerAnalyticsModel extends InfluencerAnalyticsEntity {
+final class InfluencerAnalyticsModel extends InfluencerAnalyticsEntity {
   const InfluencerAnalyticsModel({
     required super.totalProfileViews,
     required super.last30DaysProfileViews,

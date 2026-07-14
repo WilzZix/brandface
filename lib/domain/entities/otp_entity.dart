@@ -1,4 +1,4 @@
-class OtpEntity {
+base class OtpEntity {
   final String? detail;
   final String? code;
 

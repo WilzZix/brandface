@@ -1,4 +1,4 @@
-class BrandShortEntity {
+base class BrandShortEntity {
   final int id;
   final String brandName;
 

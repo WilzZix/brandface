@@ -2,7 +2,7 @@ import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/models/notification/notification_model.dart';
 
-abstract class NotificationDataSource {
+abstract interface class NotificationDataSource {
   Future<List<NotificationModel>> getNotifications({bool? isRead});
 
   Future<NotificationModel> markAsRead({required int id});
@@ -10,7 +10,7 @@ abstract class NotificationDataSource {
   Future<int> markAllAsRead();
 }
 
-class NotificationDataSourceImpl implements NotificationDataSource {
+final class NotificationDataSourceImpl implements NotificationDataSource {
   final DioClient _dioClient;
 
   NotificationDataSourceImpl(this._dioClient);

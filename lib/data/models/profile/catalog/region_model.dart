@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/profile/catalog/region_entity.dart';
 
-class RegionModel extends RegionEntity {
+final class RegionModel extends RegionEntity {
   const RegionModel({
     required super.id,
     required super.name,

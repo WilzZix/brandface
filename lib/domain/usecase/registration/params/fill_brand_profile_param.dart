@@ -1,6 +1,6 @@
 import 'package:brandface/domain/usecase/registration/params/fill_influencer_profile_param.dart';
 
-class FillBrandProfileParam {
+final class FillBrandProfileParam {
   final int? logoId;
   final String? logoUrl;
   final int? regionId;
@@ -66,7 +66,7 @@ class FillBrandProfileParam {
   Map<String, dynamic> toGeneralPatchJson() => toJson();
 }
 
-class FillBrandProfileRequestParams {
+final class FillBrandProfileRequestParams {
   final String profileId;
   final FillBrandProfileParam profileData;
 

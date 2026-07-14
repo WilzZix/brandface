@@ -5,14 +5,14 @@ import 'package:dart_either/dart_either.dart';
 
 import '../../repository/portfolio_repository.dart';
 
-class UpdatePortfolioParams {
+final class UpdatePortfolioParams {
   final int id;
   final Map<String, dynamic> data;
 
   const UpdatePortfolioParams({required this.id, required this.data});
 }
 
-class UpdatePortfolioUseCase
+final class UpdatePortfolioUseCase
     implements UseCase<PortfolioItemEntity, UpdatePortfolioParams> {
   final IPortfolioRepository repository;
 

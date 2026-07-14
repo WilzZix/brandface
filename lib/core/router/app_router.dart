@@ -80,7 +80,7 @@ import '../../presentation/registration/ui/fill_profile_information_page.dart';
 import '../../presentation/registration/ui/registration_page.dart';
 import '../di/app_di.dart';
 
-class AppRouter {
+final class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: appNavigatorKey,
     initialLocation: SplashScreen.tag,
@@ -152,7 +152,8 @@ class AppRouter {
             ),
             BlocProvider<ProfileInformationCubit>(
               create: (context) =>
-                  sl<ProfileInformationCubit>()..getInfluencerProfileInformation(),
+                  sl<ProfileInformationCubit>()
+                    ..getInfluencerProfileInformation(),
             ),
           ],
           child: BrandHomePage(),
@@ -173,7 +174,8 @@ class AppRouter {
             ),
             BlocProvider<ProfileInformationCubit>(
               create: (context) =>
-                  sl<ProfileInformationCubit>()..getInfluencerProfileInformation(),
+                  sl<ProfileInformationCubit>()
+                    ..getInfluencerProfileInformation(),
             ),
             BlocProvider<FillBrandProfileBloc>(
               create: (context) => sl<FillBrandProfileBloc>(),
@@ -406,8 +408,7 @@ class AppRouter {
         builder: (_, state) {
           final args = state.extra as AmbassadorsPageArguments?;
           return BlocProvider<AmbassadorsCubit>(
-            create: (context) =>
-                sl<AmbassadorsCubit>()..load(role: args?.role),
+            create: (context) => sl<AmbassadorsCubit>()..load(role: args?.role),
             child: AmbassadorsPage(title: args?.title),
           );
         },
@@ -417,15 +418,9 @@ class AppRouter {
         name: AmbassadorsFilterPage.tag,
         builder: (_, state) => MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (_) => sl<CategoryCubit>()..getCategory(),
-            ),
-            BlocProvider(
-              create: (_) => sl<RegionCubit>()..getCategories(),
-            ),
-            BlocProvider(
-              create: (_) => sl<LanguageCubit>()..getLanguages(),
-            ),
+            BlocProvider(create: (_) => sl<CategoryCubit>()..getCategory()),
+            BlocProvider(create: (_) => sl<RegionCubit>()..getCategories()),
+            BlocProvider(create: (_) => sl<LanguageCubit>()..getLanguages()),
           ],
           child: AmbassadorsFilterPage(
             initial: state.extra as AmbassadorsFilterParams?,
@@ -440,8 +435,7 @@ class AppRouter {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) =>
-                    sl<AmbassadorDetailCubit>()..load(ambassadorId),
+                create: (_) => sl<AmbassadorDetailCubit>()..load(ambassadorId),
               ),
               BlocProvider(
                 create: (_) =>
@@ -462,9 +456,8 @@ class AppRouter {
       GoRoute(
         path: SendEnquiryPage.tag,
         name: SendEnquiryPage.tag,
-        builder: (_, state) => SendEnquiryPage(
-          arguments: state.extra as SendEnquiryArguments,
-        ),
+        builder: (_, state) =>
+            SendEnquiryPage(arguments: state.extra as SendEnquiryArguments),
       ),
       GoRoute(
         path: AiMatchingResultsPage.tag,
@@ -521,9 +514,7 @@ class AppRouter {
       GoRoute(
         path: SmsOtpPage.tag,
         name: SmsOtpPage.tag,
-        builder: (_, state) => SmsOtpPage(
-          args: state.extra as SmsOtpArgs,
-        ),
+        builder: (_, state) => SmsOtpPage(args: state.extra as SmsOtpArgs),
       ),
       GoRoute(
         path: CreateOfferPage.tag,

@@ -13,7 +13,7 @@ import 'package:dio/dio.dart';
 
 import '../../domain/repository/registration_repository.dart';
 
-class RegistrationRepositoryImpl implements IRegistrationRepository {
+final class RegistrationRepositoryImpl implements IRegistrationRepository {
   final RegistrationDataSource _dataSource;
 
   RegistrationRepositoryImpl({required RegistrationDataSource dataSource})

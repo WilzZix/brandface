@@ -5,7 +5,7 @@ import 'package:brandface/data/models/offer/offer_detail_model.dart';
 import 'package:brandface/data/models/offer/offer_summary_model.dart';
 import 'package:brandface/domain/entities/offer/create_offer_params.dart';
 
-abstract class OfferDataSource {
+abstract interface class OfferDataSource {
   Future<List<OfferSummaryModel>> getBrandOffers({String? status});
 
   Future<List<OfferSummaryModel>> getAvailableOffers({int? categoryId});
@@ -23,7 +23,7 @@ abstract class OfferDataSource {
   Future<List<AiMatchResultModel>> getAiMatchingResults({required int offerId});
 }
 
-class OfferDataSourceImpl implements OfferDataSource {
+final class OfferDataSourceImpl implements OfferDataSource {
   final DioClient _dioClient;
 
   OfferDataSourceImpl(this._dioClient);

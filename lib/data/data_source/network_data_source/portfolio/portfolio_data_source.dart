@@ -3,7 +3,7 @@ import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/models/profile/portfolio_model.dart';
 import 'package:dio/dio.dart';
 
-abstract class PortfolioDataSource {
+abstract interface class PortfolioDataSource {
   Future<List<PortfolioModel>> getMyPortfolios();
   Future<PortfolioModel> getPortfolioDetail({required int id});
   Future<PortfolioModel> updatePortfolio({
@@ -24,7 +24,7 @@ abstract class PortfolioDataSource {
   Future<List<PortfolioModel>> getPublicPortfolio({required int influencerId});
 }
 
-class PortfolioDataSourceImpl implements PortfolioDataSource {
+final class PortfolioDataSourceImpl implements PortfolioDataSource {
   final DioClient _dioClient;
 
   PortfolioDataSourceImpl(this._dioClient);

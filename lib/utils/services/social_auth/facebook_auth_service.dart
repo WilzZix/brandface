@@ -4,7 +4,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../../domain/entities/social_provider.dart';
 import 'social_auth_service.dart';
 
-class FacebookAuthService implements SocialAuthService {
+final class FacebookAuthService implements SocialAuthService {
   FacebookAuthService({FacebookAuth? client})
       : _client = client ?? FacebookAuth.instance;
 

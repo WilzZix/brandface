@@ -6,7 +6,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../repository/profile_repository.dart';
 
-class GetSocialMediaAccountStatsUseCase
+final class GetSocialMediaAccountStatsUseCase
     implements UseCase<SocialMediaAccountStatsEntity, SocialMediaParams> {
   final IProfileRepository repository;
 

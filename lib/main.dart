@@ -22,7 +22,7 @@ import 'utils/services/firebase/firebase_bootstrap.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseBootstrap.initialize();
-  await AppDi().init();
+  await AppDi.init();
   final savedLocale = await AppLanguageService(prefs: sl()).getAppLocale();
   LocaleSettings.setLocale(savedLocale);
   // FCM background'da ham yoqilsin — login'siz ham push qabul qilish uchun.

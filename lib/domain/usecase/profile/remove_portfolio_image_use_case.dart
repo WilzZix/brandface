@@ -4,7 +4,7 @@ import 'package:dart_either/dart_either.dart';
 
 import '../../repository/portfolio_repository.dart';
 
-class RemovePortfolioImageParams {
+final class RemovePortfolioImageParams {
   final int portfolioId;
   final int imageId;
 
@@ -14,7 +14,7 @@ class RemovePortfolioImageParams {
   });
 }
 
-class RemovePortfolioImageUseCase
+final class RemovePortfolioImageUseCase
     implements UseCase<void, RemovePortfolioImageParams> {
   final IPortfolioRepository repository;
 

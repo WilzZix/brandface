@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/home/home_dashboard_entity.dart';
 
-class HomeDashboardModel extends HomeDashboardEntity {
+final class HomeDashboardModel extends HomeDashboardEntity {
   const HomeDashboardModel({
     required super.profile,
     required super.unreadNotificationsCount,
@@ -10,7 +10,7 @@ class HomeDashboardModel extends HomeDashboardEntity {
   });
 }
 
-class RecommendedHomeOfferModel extends RecommendedHomeOfferEntity {
+final class RecommendedHomeOfferModel extends RecommendedHomeOfferEntity {
   const RecommendedHomeOfferModel({
     required super.id,
     required super.title,

@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../../repository/profile_repository.dart';
 
-class RegionUseCase implements UseCase<List<RegionEntity>, void> {
+final class RegionUseCase implements UseCase<List<RegionEntity>, void> {
   final IProfileRepository repository;
 
   RegionUseCase({required this.repository});

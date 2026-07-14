@@ -9,7 +9,7 @@ import 'catalog/city_entity.dart';
 import 'catalog/region_entity.dart';
 import 'catalog/sphere_entity.dart';
 
-class InfluencerProfileInformationEntity extends Equatable {
+base class InfluencerProfileInformationEntity extends Equatable {
   final int id;
   final String? displayName;
   final String? avatarUrl;

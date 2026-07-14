@@ -1,6 +1,6 @@
 import '../../../entities/social_provider.dart';
 
-class SocialAuthParams {
+final class SocialAuthParams {
   final SocialProvider provider;
   final String accessToken;
   final String? idToken;
@@ -12,12 +12,9 @@ class SocialAuthParams {
   });
 }
 
-class LinkedInExchangeParams {
+final class LinkedInExchangeParams {
   final String code;
   final String redirectUri;
 
-  const LinkedInExchangeParams({
-    required this.code,
-    required this.redirectUri,
-  });
+  const LinkedInExchangeParams({required this.code, required this.redirectUri});
 }

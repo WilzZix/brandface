@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 import '../../repository/registration_repository.dart';
 import '../login/send_otp_usecase.dart';
 
-class FillBrandProfileUsecase
+final class FillBrandProfileUsecase
     implements UseCase<void, FillBrandProfileRequestParams> {
   final IRegistrationRepository repository;
 

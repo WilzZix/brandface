@@ -4,7 +4,7 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/dart_either.dart';
 
-class GetBillingDashboardUseCase
+final class GetBillingDashboardUseCase
     implements UseCase<BillingDashboardEntity, Object?> {
   final IBillingRepository repository;
 

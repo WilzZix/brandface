@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class PortfolioImageEntity extends Equatable {
+base class PortfolioImageEntity extends Equatable {
   final int id;
   final int imageId;
   final String imageUrl;
@@ -19,7 +19,7 @@ class PortfolioImageEntity extends Equatable {
   List<Object?> get props => [id, imageId, imageUrl, order];
 }
 
-class PortfolioItemEntity extends Equatable {
+base class PortfolioItemEntity extends Equatable {
   final int id;
   final String name;
   final String description;
@@ -121,7 +121,7 @@ class PortfolioItemEntity extends Equatable {
   ];
 }
 
-class UploadedFileEntity extends Equatable {
+base class UploadedFileEntity extends Equatable {
   final int id;
   final String fileUrl;
 

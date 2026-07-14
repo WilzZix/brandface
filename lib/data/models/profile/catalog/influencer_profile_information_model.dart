@@ -9,7 +9,7 @@ import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart'
 import '../../../../domain/entities/profile/influencer_profile_information_entity.dart';
 import '../../../../domain/entities/profile/profile_entity.dart';
 
-class InfluencerProfileInformationModel
+final class InfluencerProfileInformationModel
     extends InfluencerProfileInformationEntity {
   const InfluencerProfileInformationModel({
     required super.id,

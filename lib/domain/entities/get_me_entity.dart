@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class UserEntity extends Equatable {
+base class UserEntity extends Equatable {
   final int id;
   final String username;
   final String? firstName;

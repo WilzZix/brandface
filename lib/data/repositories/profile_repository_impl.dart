@@ -24,7 +24,7 @@ import '../data_source/network_data_source/profile/profile_data_source.dart';
 import '../models/profile/catalog/category_model.dart';
 import '../models/profile/catalog/language_model.dart';
 
-class ProfileRepositoryImpl implements IProfileRepository {
+final class ProfileRepositoryImpl implements IProfileRepository {
   final ProfileDataSource _dataSource;
   final ProfileService _profileService;
   final IAppCatalogService _catalogLocalService;
@@ -117,7 +117,9 @@ class ProfileRepositoryImpl implements IProfileRepository {
   Future<Either<Failure, List<CityEntity>>> getCities() async {
     try {
       final data = await _dataSource.getCities();
-      final List<CityEntity> entities = data.map((model) => model.toEntity()).toList();
+      final List<CityEntity> entities = data
+          .map((model) => model.toEntity())
+          .toList();
       return Right(entities);
     } on DioException catch (e) {
       return Left(
@@ -135,7 +137,9 @@ class ProfileRepositoryImpl implements IProfileRepository {
   Future<Either<Failure, List<SphereEntity>>> getSpheres() async {
     try {
       final data = await _dataSource.getSpheres();
-      final List<SphereEntity> entities = data.map((model) => model.toEntity()).toList();
+      final List<SphereEntity> entities = data
+          .map((model) => model.toEntity())
+          .toList();
       return Right(entities);
     } on DioException catch (e) {
       return Left(

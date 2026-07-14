@@ -1,4 +1,4 @@
-class SocialMediaParams {
+final class SocialMediaParams {
   final String platform;
   final String username;
 

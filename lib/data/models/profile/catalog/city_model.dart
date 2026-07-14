@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/profile/catalog/city_entity.dart';
 
-class CityModel extends CityEntity {
+final class CityModel extends CityEntity {
   const CityModel({required super.id, required super.name});
 
   factory CityModel.fromJson(Map<String, dynamic> json) {

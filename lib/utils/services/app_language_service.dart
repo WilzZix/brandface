@@ -1,7 +1,7 @@
 import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppLanguageService {
+final class AppLanguageService {
   final SharedPreferences _prefs;
 
   const AppLanguageService({required SharedPreferences prefs}) : _prefs = prefs;

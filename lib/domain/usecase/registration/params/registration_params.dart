@@ -1,4 +1,4 @@
-class RegistrationParams {
+final class RegistrationParams {
   final String role;
   final String? firstName;
   final String? lastName;

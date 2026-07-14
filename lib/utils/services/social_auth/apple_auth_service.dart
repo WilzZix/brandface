@@ -4,7 +4,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../../domain/entities/social_provider.dart';
 import 'social_auth_service.dart';
 
-class AppleAuthService implements SocialAuthService {
+final class AppleAuthService implements SocialAuthService {
   const AppleAuthService();
 
   @override

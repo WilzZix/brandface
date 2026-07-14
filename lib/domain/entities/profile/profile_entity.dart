@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../../usecase/registration/params/fill_brand_profile_param.dart';
 import '../../usecase/registration/params/fill_influencer_profile_param.dart';
 
-class ProfileEntity extends Equatable {
+base class ProfileEntity extends Equatable {
   final String? displayName;
   final int? avatarId;
   final String? avatarUrl;
@@ -195,7 +195,7 @@ class ProfileEntity extends Equatable {
   ];
 }
 
-class AudienceEntity extends Equatable {
+base class AudienceEntity extends Equatable {
   final String? brandSegment;
   final int? totalFollowers;
   final String? malePercent;
@@ -287,7 +287,7 @@ class AudienceEntity extends Equatable {
   ];
 }
 
-class ContactEntity extends Equatable {
+base class ContactEntity extends Equatable {
   final String? type;
   final String? value;
 
@@ -297,7 +297,7 @@ class ContactEntity extends Equatable {
   List<Object?> get props => [type, value];
 }
 
-class PricingEntity extends Equatable {
+base class PricingEntity extends Equatable {
   final bool? availableForLongTerm;
   final bool? worksOnNetModel;
   final bool? openToSimilarOffers;

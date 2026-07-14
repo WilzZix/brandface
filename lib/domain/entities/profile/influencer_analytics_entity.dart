@@ -1,4 +1,4 @@
-class InfluencerAnalyticsEntity {
+base class InfluencerAnalyticsEntity {
   final int totalProfileViews;
   final int last30DaysProfileViews;
   final double averageRating;

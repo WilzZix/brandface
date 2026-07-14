@@ -5,7 +5,7 @@ import 'package:dart_either/dart_either.dart';
 
 import '../../repository/portfolio_repository.dart';
 
-class UploadPortfolioFileUseCase
+final class UploadPortfolioFileUseCase
     implements UseCase<UploadedFileEntity, String> {
   final IPortfolioRepository repository;
 

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class NotificationEntity extends Equatable {
+base class NotificationEntity extends Equatable {
   final int id;
   final String notificationType;
   final String title;

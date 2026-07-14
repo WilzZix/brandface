@@ -147,8 +147,10 @@ import '../../utils/services/profile_service.dart';
 
 final sl = GetIt.instance;
 
-class AppDi {
-  Future<void> init() async {
+abstract final class AppDi {
+  const AppDi._();
+
+  static Future<void> init() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
 
@@ -205,9 +207,7 @@ class AppDi {
     sl.registerLazySingleton<TelegramAuthService>(
       () => const TelegramAuthService(),
     );
-    sl.registerLazySingleton<AppleAuthService>(
-      () => const AppleAuthService(),
-    );
+    sl.registerLazySingleton<AppleAuthService>(() => const AppleAuthService());
     sl.registerLazySingleton<Map<SocialProvider, SocialAuthService>>(
       () => {
         // Facebook native SDK config (FacebookAppID/ClientToken) hali yo'q —
@@ -394,9 +394,7 @@ class AppDi {
     sl.registerFactory(() => HomeCubit(getHomeDashboardUseCase: sl()));
     sl.registerFactory(() => BrandStatsCubit(offerRepository: sl()));
     sl.registerFactory(() => CollaborationOffersCubit(offerRepository: sl()));
-    sl.registerFactory(
-      () => CreateOfferCubit(createOfferUseCase: sl()),
-    );
+    sl.registerFactory(() => CreateOfferCubit(createOfferUseCase: sl()));
     sl.registerFactory(
       () => BillingCubit(
         getBillingDashboardUseCase: sl(),
@@ -448,10 +446,9 @@ class AppDi {
     );
     sl.registerFactory(() => LanguageCubit(getLanguagesUseCase: sl()));
     sl.registerFactory(() => AudienceCubit(accountStatsUseCase: sl()));
-    sl.registerFactory(() => AwardCubit(
-          createAwardUseCase: sl(),
-          deleteAwardUseCase: sl(),
-        ));
+    sl.registerFactory(
+      () => AwardCubit(createAwardUseCase: sl(), deleteAwardUseCase: sl()),
+    );
     sl.registerFactory(() => UploadCubit(uploadFileUseCase: sl()));
     sl.registerFactory(
       () => ProfileInformationCubit(
@@ -466,18 +463,12 @@ class AppDi {
       ),
     );
     sl.registerFactory(() => DeleteAccountCubit(deleteAccountUseCase: sl()));
-    sl.registerFactory(
-      () => AmbassadorsCubit(getAmbassadorsUseCase: sl()),
-    );
-    sl.registerFactory(
-      () => AmbassadorDetailCubit(useCase: sl()),
-    );
+    sl.registerFactory(() => AmbassadorsCubit(getAmbassadorsUseCase: sl()));
+    sl.registerFactory(() => AmbassadorDetailCubit(useCase: sl()));
     sl.registerFactory(
       () => AmbassadorPortfolioCubit(portfolioRepository: sl()),
     );
-    sl.registerFactory(
-      () => FavouritesCubit(repository: sl()),
-    );
+    sl.registerFactory(() => FavouritesCubit(repository: sl()));
     sl.registerFactory(
       () => AiMatchingCubit(
         offerRepository: sl(),
@@ -485,8 +476,6 @@ class AppDi {
         runMatchingUseCase: sl(),
       ),
     );
-    sl.registerFactory(
-      () => BrandAnalyticsCubit(repository: sl()),
-    );
+    sl.registerFactory(() => BrandAnalyticsCubit(repository: sl()));
   }
 }

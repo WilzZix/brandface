@@ -5,7 +5,7 @@ import 'package:brandface/domain/repository/portfolio_repository.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
-class PortfolioRepositoryImpl implements IPortfolioRepository {
+final class PortfolioRepositoryImpl implements IPortfolioRepository {
   final PortfolioDataSource _dataSource;
 
   PortfolioRepositoryImpl({required PortfolioDataSource dataSource})

@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../utils/services/app_auth_local_service.dart';
 import '../constants/api_routes.dart';
 
-class DioClient {
+final class DioClient {
   final Dio _dio;
   final IAuthLocalService _sharedPrefService;
 

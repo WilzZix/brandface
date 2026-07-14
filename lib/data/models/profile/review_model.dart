@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/profile/review_entity.dart';
 
-class ReviewModel extends ReviewEntity {
+final class ReviewModel extends ReviewEntity {
   const ReviewModel({
     required super.id,
     required super.reviewerName,

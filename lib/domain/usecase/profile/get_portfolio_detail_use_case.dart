@@ -5,7 +5,8 @@ import 'package:dart_either/dart_either.dart';
 
 import '../../repository/portfolio_repository.dart';
 
-class GetPortfolioDetailUseCase implements UseCase<PortfolioItemEntity, int> {
+final class GetPortfolioDetailUseCase
+    implements UseCase<PortfolioItemEntity, int> {
   final IPortfolioRepository repository;
 
   GetPortfolioDetailUseCase({required this.repository});

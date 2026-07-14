@@ -26,7 +26,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  UserRole _selectedUserRole = UserRole.influencer;
+  UserRole _selectedUserRole = .influencer;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _brandNameController = TextEditingController();
@@ -68,10 +68,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             listener: (context, state) {
               state.maybeWhen(
                 registered: (entity) {
-                  context.push(
-                    FillProfileInformationPage.tag,
-                    extra: entity,
-                  );
+                  context.push(FillProfileInformationPage.tag, extra: entity);
                 },
                 failure: (failure) {
                   BrandfaceBottomSheet.openFailureBottomSheet(
@@ -103,7 +100,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   },
                 ),
                 SizedBox(height: 24),
-                if (_selectedUserRole == UserRole.brand) ...[
+                if (_selectedUserRole == .brand) ...[
                   CredInputField(
                     controller: _brandNameController,
                     label: t.registration.brand_name,
@@ -142,7 +139,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   title: t.onboarding.kContinue,
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      if (_selectedUserRole == UserRole.brand) {
+                      if (_selectedUserRole == .brand) {
                         context.read<BrandRegistrationBloc>().add(
                           BrandRegistrationEvent.register(
                             params: BrandRegistrationParams(
@@ -176,13 +173,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   UserRole _roleFromString(String role) {
     switch (role.toLowerCase()) {
       case 'ambassador':
-        return UserRole.ambassador;
+        return .ambassador;
       case 'brandface':
-        return UserRole.brandface;
+        return .brandface;
       case 'brand':
-        return UserRole.brand;
+        return .brand;
       default:
-        return UserRole.influencer;
+        return .influencer;
     }
   }
 }

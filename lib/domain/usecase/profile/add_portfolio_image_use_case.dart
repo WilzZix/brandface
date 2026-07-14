@@ -5,7 +5,7 @@ import 'package:dart_either/dart_either.dart';
 
 import '../../repository/portfolio_repository.dart';
 
-class AddPortfolioImageParams {
+final class AddPortfolioImageParams {
   final int portfolioId;
   final int imageId;
 
@@ -15,7 +15,7 @@ class AddPortfolioImageParams {
   });
 }
 
-class AddPortfolioImageUseCase
+final class AddPortfolioImageUseCase
     implements UseCase<PortfolioImageEntity, AddPortfolioImageParams> {
   final IPortfolioRepository repository;
 

@@ -5,7 +5,7 @@ import '../../../domain/entities/social_provider.dart';
 import '../../../presentation/login/ui/telegram_auth_page.dart';
 import 'social_auth_service.dart';
 
-class TelegramAuthService implements SocialAuthService {
+final class TelegramAuthService implements SocialAuthService {
   const TelegramAuthService();
 
   @override

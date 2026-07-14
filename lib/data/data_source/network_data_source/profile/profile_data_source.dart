@@ -18,7 +18,7 @@ import '../../../models/profile/catalog/social_media_account_stats_model.dart';
 import '../../../models/profile/influencer_analytics_model.dart';
 import '../../../models/profile/profile_model.dart';
 
-abstract class ProfileDataSource {
+abstract interface class ProfileDataSource {
   Future<ProfileModel> getProfile({required String profileId});
 
   Future<InfluencerProfileInformationModel> getInfluencerProfile();
@@ -80,7 +80,7 @@ abstract class ProfileDataSource {
   Future<AmbassadorDetailModel> getAmbassadorDetail({required int ambassadorId});
 }
 
-class ProfileDataSourceImpl implements ProfileDataSource {
+final class ProfileDataSourceImpl implements ProfileDataSource {
   final DioClient _dioClient;
 
   ProfileDataSourceImpl(this._dioClient);

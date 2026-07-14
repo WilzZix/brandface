@@ -1,4 +1,4 @@
-class BrandRegistrationParams {
+final class BrandRegistrationParams {
   final String brandName;
 
   BrandRegistrationParams({required this.brandName});

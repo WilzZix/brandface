@@ -19,7 +19,7 @@ import 'package:dart_either/dart_either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class _FakeLoginRepository implements ILoginRepository {
+final class _FakeLoginRepository implements ILoginRepository {
   Either<Failure, OtpEntity>? sendOtpResult;
   Either<Failure, VerifyOtpEntity>? verifyOtpResult;
   Either<Failure, UserEntity>? getMeResult;
@@ -30,8 +30,7 @@ class _FakeLoginRepository implements ILoginRepository {
   @override
   Future<Either<Failure, OtpEntity>> sendOtp({required String phone}) async {
     lastSentPhone = phone;
-    return sendOtpResult ??
-        Right(OtpEntity(detail: 'sent', code: '123456'));
+    return sendOtpResult ?? Right(OtpEntity(detail: 'sent', code: '123456'));
   }
 
   @override
@@ -53,16 +52,14 @@ class _FakeLoginRepository implements ILoginRepository {
   @override
   Future<Either<Failure, UserEntity>> getMe() async {
     return getMeResult ??
-        const Right(
-          UserEntity(id: 1, username: 'u', role: 'influencer'),
-        );
+        const Right(UserEntity(id: 1, username: 'u', role: 'influencer'));
   }
 
   @override
   Future<Either<Failure, void>> deleteAccount() async => const Right(null);
 }
 
-class _FakeSocialAuthRepository implements ISocialAuthRepository {
+final class _FakeSocialAuthRepository implements ISocialAuthRepository {
   @override
   Future<Either<Failure, SocialAuthEntity>> socialLogin({
     required SocialProvider provider,
@@ -152,9 +149,7 @@ void main() {
 
   group('LoginBloc - sendOtp', () {
     test('emits [otpReceiving, otpReceived] on success', () async {
-      repo.sendOtpResult = Right(
-        OtpEntity(detail: 'sent', code: '654321'),
-      );
+      repo.sendOtpResult = Right(OtpEntity(detail: 'sent', code: '654321'));
       final bloc = _buildBloc(repo: repo, auth: auth, profile: profile);
 
       final future = expectLater(
@@ -166,10 +161,7 @@ void main() {
             true,
           ),
           isA<LoginState>().having(
-            (s) => s.maybeWhen(
-              otpReceived: (e) => e.code,
-              orElse: () => null,
-            ),
+            (s) => s.maybeWhen(otpReceived: (e) => e.code, orElse: () => null),
             'otpReceived.code',
             '654321',
           ),
@@ -236,10 +228,7 @@ void main() {
             true,
           ),
           isA<LoginState>().having(
-            (s) => s.maybeWhen(
-              otpVerified: (e) => e.role,
-              orElse: () => null,
-            ),
+            (s) => s.maybeWhen(otpVerified: (e) => e.role, orElse: () => null),
             'otpVerified.role',
             role,
           ),
@@ -307,51 +296,54 @@ void main() {
       await bloc.close();
     });
 
-    test('getMe returns Left after verify success → verifyingOtpFailure', () async {
-      repo.verifyOtpResult = Right(
-        VerifyOtpEntity(
-          access: 'a',
-          refresh: 'r',
-          isNewUser: false,
-          role: 'brand',
-        ),
-      );
-      repo.getMeResult = const Left(
-        ServerFailure('me_failed', statusCode: 401),
-      );
-
-      final bloc = _buildBloc(repo: repo, auth: auth, profile: profile);
-
-      final future = expectLater(
-        bloc.stream,
-        emitsInOrder([
-          isA<LoginState>().having(
-            (s) => s.maybeWhen(verifyingOtp: () => true, orElse: () => false),
-            'verifyingOtp',
-            true,
+    test(
+      'getMe returns Left after verify success → verifyingOtpFailure',
+      () async {
+        repo.verifyOtpResult = Right(
+          VerifyOtpEntity(
+            access: 'a',
+            refresh: 'r',
+            isNewUser: false,
+            role: 'brand',
           ),
-          isA<LoginState>().having(
-            (s) => s.maybeWhen(
-              verifyingOtpFailure: (msg) => msg,
-              orElse: () => null,
+        );
+        repo.getMeResult = const Left(
+          ServerFailure('me_failed', statusCode: 401),
+        );
+
+        final bloc = _buildBloc(repo: repo, auth: auth, profile: profile);
+
+        final future = expectLater(
+          bloc.stream,
+          emitsInOrder([
+            isA<LoginState>().having(
+              (s) => s.maybeWhen(verifyingOtp: () => true, orElse: () => false),
+              'verifyingOtp',
+              true,
             ),
-            'failure msg',
-            'me_failed',
-          ),
-        ]),
-      );
+            isA<LoginState>().having(
+              (s) => s.maybeWhen(
+                verifyingOtpFailure: (msg) => msg,
+                orElse: () => null,
+              ),
+              'failure msg',
+              'me_failed',
+            ),
+          ]),
+        );
 
-      bloc.add(
-        LoginEvent.verifyOtp(
-          params: VerifyOtpParams(phone: '941234567', code: '123456'),
-        ),
-      );
-      await future;
-      // Tokens were saved before getMe; role was not.
-      expect(auth.access, 'a');
-      expect(profile.getRole(), isNull);
-      await bloc.close();
-    });
+        bloc.add(
+          LoginEvent.verifyOtp(
+            params: VerifyOtpParams(phone: '941234567', code: '123456'),
+          ),
+        );
+        await future;
+        // Tokens were saved before getMe; role was not.
+        expect(auth.access, 'a');
+        expect(profile.getRole(), isNull);
+        await bloc.close();
+      },
+    );
   });
 
   group('LoginBloc - reset', () {

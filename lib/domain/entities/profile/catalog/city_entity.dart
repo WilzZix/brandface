@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class CityEntity extends Equatable {
+base class CityEntity extends Equatable {
   final int id;
   final String name;
 

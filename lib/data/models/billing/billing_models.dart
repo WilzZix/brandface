@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 
-class BillingPlanModel extends BillingPlanEntity {
+final class BillingPlanModel extends BillingPlanEntity {
   const BillingPlanModel({
     required super.id,
     required super.name,
@@ -36,7 +36,7 @@ class BillingPlanModel extends BillingPlanEntity {
   }
 }
 
-class BillingSubscriptionModel extends BillingSubscriptionEntity {
+final class BillingSubscriptionModel extends BillingSubscriptionEntity {
   const BillingSubscriptionModel({
     required super.id,
     super.plan,
@@ -87,7 +87,7 @@ class BillingCardModel extends BillingCardEntity {
   }
 }
 
-class BillingTransactionModel extends BillingTransactionEntity {
+final class BillingTransactionModel extends BillingTransactionEntity {
   const BillingTransactionModel({
     required super.id,
     super.planName,
@@ -117,7 +117,7 @@ class BillingTransactionModel extends BillingTransactionEntity {
   }
 }
 
-class BillingBoostPackageModel extends BillingBoostPackageEntity {
+final class BillingBoostPackageModel extends BillingBoostPackageEntity {
   const BillingBoostPackageModel({
     required super.id,
     required super.days,
@@ -139,7 +139,7 @@ class BillingBoostPackageModel extends BillingBoostPackageEntity {
   }
 }
 
-class BillingDashboardModel extends BillingDashboardEntity {
+final class BillingDashboardModel extends BillingDashboardEntity {
   const BillingDashboardModel({
     super.subscription,
     super.plans,

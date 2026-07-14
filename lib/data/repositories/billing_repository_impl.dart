@@ -6,7 +6,7 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
-class BillingRepositoryImpl implements IBillingRepository {
+final class BillingRepositoryImpl implements IBillingRepository {
   final BillingDataSource _dataSource;
 
   BillingRepositoryImpl({required BillingDataSource dataSource})

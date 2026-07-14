@@ -2,7 +2,7 @@ import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/models/message/conversation_model.dart';
 
-abstract class MessageDataSource {
+abstract interface class MessageDataSource {
   Future<List<ConversationModel>> getConversations();
 
   Future<int> startConversation({required int otherUserId});
@@ -13,7 +13,7 @@ abstract class MessageDataSource {
   });
 }
 
-class MessageDataSourceImpl implements MessageDataSource {
+final class MessageDataSourceImpl implements MessageDataSource {
   MessageDataSourceImpl(this._dioClient);
 
   final DioClient _dioClient;

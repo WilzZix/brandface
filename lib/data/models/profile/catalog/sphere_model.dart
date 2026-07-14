@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/profile/catalog/sphere_entity.dart';
 
-class SphereModel extends SphereEntity {
+final class SphereModel extends SphereEntity {
   const SphereModel({required super.id, required super.name});
 
   factory SphereModel.fromJson(Map<String, dynamic> json) =>

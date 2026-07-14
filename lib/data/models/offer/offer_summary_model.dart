@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/offer/offer_summary_entity.dart';
 
-class OfferSummaryModel extends OfferSummaryEntity {
+final class OfferSummaryModel extends OfferSummaryEntity {
   const OfferSummaryModel({
     required super.id,
     required super.title,

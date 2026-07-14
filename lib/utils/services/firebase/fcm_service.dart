@@ -12,7 +12,7 @@ import 'firebase_bootstrap.dart';
 /// splash/login muvaffaqiyat oqimida).
 ///
 /// Token backendga yuborilishi uchun [registerToken] callback ulanadi.
-class FcmService {
+final class FcmService {
   FcmService._();
   static final FcmService instance = FcmService._();
 

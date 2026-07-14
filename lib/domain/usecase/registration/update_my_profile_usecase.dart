@@ -5,7 +5,8 @@ import 'package:dart_either/src/dart_either.dart';
 import '../../repository/registration_repository.dart';
 import '../login/send_otp_usecase.dart';
 
-class UpdateMyProfileUsecase implements UseCase<void, FillInfluencerProfileParam> {
+final class UpdateMyProfileUsecase
+    implements UseCase<void, FillInfluencerProfileParam> {
   final IRegistrationRepository repository;
 
   UpdateMyProfileUsecase(this.repository);
