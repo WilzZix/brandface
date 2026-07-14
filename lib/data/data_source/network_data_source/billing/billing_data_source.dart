@@ -2,31 +2,59 @@ import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/models/billing/billing_models.dart';
 
-final class AddBillingCardRequest {
-  final String cardType;
-  final String name;
+/// Step 1 of card registration (`POST /cards/`): card details are sent to
+/// Paylov and an OTP is delivered to the card's phone. The card is not saved.
+final class InitCardRequest {
+  final String cardNumber;
   final int expiryMonth;
   final int expiryYear;
-  final bool isDefault;
-  final String gatewayToken;
+  final String cardName;
+  final String? phoneNumber;
 
-  const AddBillingCardRequest({
-    required this.cardType,
-    required this.name,
+  const InitCardRequest({
+    required this.cardNumber,
     required this.expiryMonth,
     required this.expiryYear,
-    required this.isDefault,
-    required this.gatewayToken,
+    required this.cardName,
+    this.phoneNumber,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'card_type': cardType,
-      'name': name,
+      'card_number': cardNumber,
       'expiry_month': expiryMonth,
       'expiry_year': expiryYear,
+      // Backend stores the holder name on the pending card (field key
+      // `cardName`) and re-validates it on confirm.
+      'cardName': cardName,
+      if (phoneNumber != null && phoneNumber!.trim().isNotEmpty)
+        'phone_number': phoneNumber!.trim(),
+    };
+  }
+}
+
+/// Step 2 of card registration (`POST /cards/confirm/`): confirm the OTP and
+/// persist the card token.
+final class ConfirmCardRequest {
+  final String cardId;
+  final String otp;
+  final String cardName;
+  final bool isDefault;
+
+  const ConfirmCardRequest({
+    required this.cardId,
+    required this.otp,
+    required this.cardName,
+    this.isDefault = false,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'card_id': cardId,
+      'otp': otp,
+      // Backend requires the card holder name (field key `cardName`).
+      'cardName': cardName,
       'is_default': isDefault,
-      'gateway_token': gatewayToken,
     };
   }
 }
@@ -40,7 +68,9 @@ abstract interface class BillingDataSource {
 
   Future<List<BillingCardModel>> getCards();
 
-  Future<BillingCardModel> addCard(AddBillingCardRequest request);
+  Future<CardOtpInitModel> initCard(InitCardRequest request);
+
+  Future<BillingCardModel> confirmCard(ConfirmCardRequest request);
 
   Future<BillingCardModel> setDefaultCard(int cardId);
 
@@ -53,12 +83,20 @@ abstract interface class BillingDataSource {
   Future<BillingTransactionModel> boostProfile({
     required int packageId,
     required String paymentMethod,
+    String? returnUrl,
+    int? cardId,
   });
 
   Future<BillingSubscriptionModel> subscribeToPlan({
     required int planId,
     required String paymentMethod,
+    String? returnUrl,
     int? cardId,
+  });
+
+  Future<PaylovCheckoutModel> getPaylovCheckout({
+    required int transactionId,
+    String? returnUrl,
   });
 }
 
@@ -103,9 +141,18 @@ final class BillingDataSourceImpl implements BillingDataSource {
   }
 
   @override
-  Future<BillingCardModel> addCard(AddBillingCardRequest request) async {
+  Future<CardOtpInitModel> initCard(InitCardRequest request) async {
     final response = await _dioClient.post(
       ApiRoutes.billingCards,
+      data: request.toJson(),
+    );
+    return CardOtpInitModel.fromJson(_extractMap(response.data));
+  }
+
+  @override
+  Future<BillingCardModel> confirmCard(ConfirmCardRequest request) async {
+    final response = await _dioClient.post(
+      ApiRoutes.billingCardsConfirm,
       data: request.toJson(),
     );
     return BillingCardModel.fromJson(_extractMap(response.data));
@@ -140,10 +187,18 @@ final class BillingDataSourceImpl implements BillingDataSource {
   Future<BillingTransactionModel> boostProfile({
     required int packageId,
     required String paymentMethod,
+    String? returnUrl,
+    int? cardId,
   }) async {
     final response = await _dioClient.post(
       ApiRoutes.boostProfile,
-      data: {'package_id': packageId, 'payment_method': paymentMethod},
+      data: {
+        'package_id': packageId,
+        'payment_method': paymentMethod,
+        if (cardId != null) 'card_id': cardId,
+        if (cardId == null && returnUrl != null && returnUrl.isNotEmpty)
+          'return_url': returnUrl,
+      },
     );
     return BillingTransactionModel.fromJson(_extractMap(response.data));
   }
@@ -152,6 +207,7 @@ final class BillingDataSourceImpl implements BillingDataSource {
   Future<BillingSubscriptionModel> subscribeToPlan({
     required int planId,
     required String paymentMethod,
+    String? returnUrl,
     int? cardId,
   }) async {
     final response = await _dioClient.post(
@@ -159,10 +215,27 @@ final class BillingDataSourceImpl implements BillingDataSource {
       data: {
         'plan_id': planId,
         'payment_method': paymentMethod,
-        ...?cardId == null ? null : {'card_id': cardId},
+        if (cardId != null) 'card_id': cardId,
+        if (cardId == null && returnUrl != null && returnUrl.isNotEmpty)
+          'return_url': returnUrl,
       },
     );
     return BillingSubscriptionModel.fromJson(_extractMap(response.data));
+  }
+
+  @override
+  Future<PaylovCheckoutModel> getPaylovCheckout({
+    required int transactionId,
+    String? returnUrl,
+  }) async {
+    final response = await _dioClient.post(
+      ApiRoutes.paylovCheckout,
+      data: {
+        'transaction_id': transactionId,
+        if (returnUrl != null && returnUrl.isNotEmpty) 'return_url': returnUrl,
+      },
+    );
+    return PaylovCheckoutModel.fromJson(_extractMap(response.data));
   }
 
   Map<String, dynamic> _extractMap(dynamic payload) {

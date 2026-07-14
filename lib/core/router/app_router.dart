@@ -55,6 +55,7 @@ import '../../presentation/home_page/brand/ui/brand_my_cards_page.dart';
 import '../../presentation/home_page/brand/ui/add_payment_method_page.dart';
 import '../../presentation/home_page/brand/ui/sms_otp_page.dart';
 import '../../presentation/home_page/profile/bloc/billing/billing_cubit.dart';
+import '../../presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import '../../presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
 import '../../presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
 import '../../presentation/home_page/profile/bloc/reviews/reviews_cubit.dart';
@@ -366,16 +367,22 @@ final class AppRouter {
       GoRoute(
         path: TopProfilePage.tag,
         name: TopProfilePage.tag,
-        builder: (_, _) => BlocProvider<BillingCubit>(
-          create: (context) => sl<BillingCubit>()..loadBilling(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<BillingCubit>()..loadBilling()),
+            BlocProvider(create: (_) => sl<CardsCubit>()..loadCards()),
+          ],
           child: const TopProfilePage(),
         ),
       ),
       GoRoute(
         path: Billing.tag,
         name: Billing.tag,
-        builder: (_, _) => BlocProvider<BillingCubit>(
-          create: (context) => sl<BillingCubit>()..loadBilling(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<BillingCubit>()..loadBilling()),
+            BlocProvider(create: (_) => sl<CardsCubit>()..loadCards()),
+          ],
           child: Billing(),
         ),
       ),
@@ -478,8 +485,11 @@ final class AppRouter {
       GoRoute(
         path: BrandPlanPage.tag,
         name: BrandPlanPage.tag,
-        builder: (_, _) => BlocProvider<BillingCubit>(
-          create: (context) => sl<BillingCubit>()..loadBilling(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<BillingCubit>()..loadBilling()),
+            BlocProvider(create: (_) => sl<CardsCubit>()..loadCards()),
+          ],
           child: const BrandPlanPage(),
         ),
       ),
@@ -494,16 +504,19 @@ final class AppRouter {
       GoRoute(
         path: BrandMyCardsPage.tag,
         name: BrandMyCardsPage.tag,
-        builder: (_, _) => BlocProvider<BillingCubit>(
-          create: (context) => sl<BillingCubit>()..loadBilling(),
+        builder: (_, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<BillingCubit>()..loadBilling()),
+            BlocProvider(create: (_) => sl<CardsCubit>()..loadCards()),
+          ],
           child: const BrandMyCardsPage(),
         ),
       ),
       GoRoute(
         path: AddPaymentMethodPage.tag,
         name: AddPaymentMethodPage.tag,
-        builder: (_, state) => BlocProvider<BillingCubit>(
-          create: (context) => sl<BillingCubit>()..loadBilling(),
+        builder: (_, state) => BlocProvider<CardsCubit>(
+          create: (context) => sl<CardsCubit>(),
           child: AddPaymentMethodPage(
             editCard: state.extra is BillingCardEntity
                 ? state.extra as BillingCardEntity

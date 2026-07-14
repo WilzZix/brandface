@@ -3,6 +3,7 @@ import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:brandface/utils/extansions/snackbar_x.dart';
@@ -64,11 +65,18 @@ class BrandPlanPage extends StatelessWidget {
                 state.dashboard ?? const BillingDashboardEntity();
             return RefreshIndicator(
               color: AppColors.black,
-              onRefresh: () =>
-                  context.read<BillingCubit>().loadBilling(force: true),
-              child: _PlanContent(
-                dashboard: dashboard,
-                isMutating: state.isMutating,
+              onRefresh: () async {
+                await context.read<BillingCubit>().loadBilling(force: true);
+                if (context.mounted) {
+                  await context.read<CardsCubit>().loadCards(force: true);
+                }
+              },
+              child: BlocBuilder<CardsCubit, CardsState>(
+                builder: (context, cardsState) => _PlanContent(
+                  dashboard: dashboard,
+                  cards: cardsState.cards,
+                  isMutating: state.isMutating,
+                ),
               ),
             );
           },
@@ -83,8 +91,13 @@ class BrandPlanPage extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _PlanContent extends StatefulWidget {
-  const _PlanContent({required this.dashboard, required this.isMutating});
+  const _PlanContent({
+    required this.dashboard,
+    required this.cards,
+    required this.isMutating,
+  });
   final BillingDashboardEntity dashboard;
+  final List<BillingCardEntity> cards;
   final bool isMutating;
 
   @override
@@ -94,6 +107,13 @@ class _PlanContent extends StatefulWidget {
 class _PlanContentState extends State<_PlanContent> {
   final _couponController = TextEditingController();
   String _selectedPaymentMethod = 'payme';
+
+  BillingCardEntity? get _defaultCard {
+    for (final card in widget.cards) {
+      if (card.isDefault) return card;
+    }
+    return widget.cards.isEmpty ? null : widget.cards.first;
+  }
 
   @override
   void dispose() {
@@ -165,7 +185,7 @@ class _PlanContentState extends State<_PlanContent> {
             const SizedBox(height: 16),
             const Divider(height: 1),
             const SizedBox(height: 16),
-            _CardRow(card: widget.dashboard.defaultCard),
+            _CardRow(card: _defaultCard),
           ],
 
           // ── Inactive: coupon + payment + activate ───────────────────
@@ -175,7 +195,7 @@ class _PlanContentState extends State<_PlanContent> {
             const SizedBox(height: 12),
             _ActivateRow(
               paymentMethod: _selectedPaymentMethod,
-              cards: widget.dashboard.cards,
+              cards: widget.cards,
               isMutating: widget.isMutating,
               onMethodChanged: (v) =>
                   setState(() => _selectedPaymentMethod = v),
@@ -239,7 +259,7 @@ class _PlanContentState extends State<_PlanContent> {
     );
     if (premiumPlan.id == 0) return;
 
-    final cardId = widget.dashboard.defaultCard?.id;
+    final cardId = _defaultCard?.id;
     context.read<BillingCubit>().subscribeToPlan(
           SubscribeBillingPlanParams(
             planId: premiumPlan.id,

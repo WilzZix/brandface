@@ -1,8 +1,7 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/presentation/home_page/brand/ui/add_payment_method_page.dart';
-import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
-import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import 'package:brandface/uikit/components/card_brand_logo.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -17,9 +16,16 @@ class BrandMyCardsPage extends StatelessWidget {
 
   static const String tag = '/brand-my-cards';
 
+  Future<void> _openAddCard(BuildContext context) async {
+    final cubit = context.read<CardsCubit>();
+    await context.pushNamed(AddPaymentMethodPage.tag);
+    // The add flow owns its own CardsCubit instance, so refresh ours on return.
+    await cubit.loadCards(force: true);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BillingCubit, BillingState>(
+    return BlocListener<CardsCubit, CardsState>(
       listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
       listener: (context, state) {
         context.showAppSnackBar(
@@ -36,7 +42,7 @@ class BrandMyCardsPage extends StatelessWidget {
           centerTitle: false,
           actions: [
             GestureDetector(
-              onTap: () => context.pushNamed(AddPaymentMethodPage.tag),
+              onTap: () => _openAddCard(context),
               child: Padding(
                 padding: const EdgeInsets.only(right: 16),
                 child: SvgPicture.asset(
@@ -52,13 +58,12 @@ class BrandMyCardsPage extends StatelessWidget {
             ),
           ],
         ),
-        body: BlocBuilder<BillingCubit, BillingState>(
+        body: BlocBuilder<CardsCubit, CardsState>(
           builder: (context, state) {
-            if (state.status == BillingStatus.loading &&
-                state.dashboard == null) {
+            if (state.status == CardsStatus.loading && !state.hasCards) {
               return const Center(child: CircularProgressIndicator());
             }
-            final cards = state.dashboard?.cards ?? [];
+            final cards = state.cards;
             if (cards.isEmpty) {
               return Center(
                 child: Column(
@@ -78,7 +83,7 @@ class BrandMyCardsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     GestureDetector(
-                      onTap: () => context.pushNamed(AddPaymentMethodPage.tag),
+                      onTap: () => _openAddCard(context),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
@@ -101,7 +106,7 @@ class BrandMyCardsPage extends StatelessWidget {
             return RefreshIndicator(
               color: AppColors.black,
               onRefresh: () =>
-                  context.read<BillingCubit>().loadBilling(force: true),
+                  context.read<CardsCubit>().loadCards(force: true),
               child: ListView.separated(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
                 itemCount: cards.length,
@@ -179,7 +184,7 @@ class _CardTile extends StatelessWidget {
               GestureDetector(
                 onTap: isMutating
                     ? null
-                    : () => context.read<BillingCubit>().deleteCard(card.id),
+                    : () => context.read<CardsCubit>().deleteCard(card.id),
                 child: Text(
                   'Delete',
                   style: Typographies.labelMedium.copyWith(
@@ -189,12 +194,15 @@ class _CardTile extends StatelessWidget {
               ),
               const SizedBox(width: 20),
               GestureDetector(
-                onTap: () =>
-                    context.pushNamed(AddPaymentMethodPage.tag, extra: card),
+                onTap: isMutating || card.isDefault
+                    ? null
+                    : () => context.read<CardsCubit>().setDefaultCard(card.id),
                 child: Text(
-                  'Edit',
+                  card.isDefault ? 'Default' : 'Set default',
                   style: Typographies.labelMedium.copyWith(
-                    color: AppColors.mutedBlack,
+                    color: card.isDefault
+                        ? AppColors.primaryDark
+                        : AppColors.mutedBlack,
                   ),
                 ),
               ),

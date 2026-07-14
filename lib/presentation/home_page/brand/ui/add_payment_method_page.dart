@@ -1,15 +1,14 @@
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
-import 'package:brandface/presentation/home_page/brand/ui/sms_otp_page.dart';
-import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
-import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/ui/card_otp_page.dart';
 import 'package:brandface/uikit/components/card_brand_logo.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class AddPaymentMethodPage extends StatefulWidget {
   const AddPaymentMethodPage({super.key, this.editCard});
@@ -72,49 +71,55 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
     super.dispose();
   }
 
-  void _onConfirm() {
+  Future<void> _onConfirm() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    // Navigate to SMS confirmation; on success submit to API
-    context.pushNamed(
-      SmsOtpPage.tag,
-      extra: SmsOtpArgs(onSuccess: _submitCard),
-    );
-  }
-
-  void _submitCard() {
     final expParts = _expireCtrl.text.split('/');
     final month = int.tryParse(expParts.isNotEmpty ? expParts[0] : '0') ?? 0;
     final year = int.tryParse(expParts.length > 1 ? expParts[1] : '0') ?? 0;
-    final fullYear = year < 100 ? 2000 + year : year;
 
-    context.read<BillingCubit>().addCard(
-      AddBillingCardParams(
-        cardType: AddBillingCardParams.cardTypeFromNumber(_numberCtrl.text),
-        name: _holderCtrl.text.trim(),
-        expiryMonth: month,
-        expiryYear: fullYear,
-        isDefault: true,
-        gatewayToken: _generateToken(),
+    final params = InitBillingCardParams(
+      cardNumber: _numberCtrl.text,
+      expiryMonth: month,
+      expiryYear: year,
+      cardName: _holderCtrl.text.trim(),
+    );
+
+    final cubit = context.read<CardsCubit>();
+    final isDefault = cubit.state.cards.isEmpty;
+
+    final sent = await cubit.startAddCard(params);
+    if (!mounted) return;
+    if (!sent) {
+      context.showAppSnackBar(
+        cubit.state.addFailure?.message ?? 'Could not send the SMS code',
+        type: AppSnackBarType.error,
+      );
+      return;
+    }
+
+    final added = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        settings: const RouteSettings(name: '/add-payment-method/otp'),
+        builder: (_) => BlocProvider.value(
+          value: cubit,
+          child: CardOtpPage(
+            args: CardOtpArgs(params: params, isDefault: isDefault),
+          ),
+        ),
       ),
     );
-    // Go back to My Cards after submit
-    if (context.canPop()) context.pop();
-  }
 
-  String _generateToken() =>
-      'tok_${DateTime.now().millisecondsSinceEpoch}_${_numberCtrl.text.replaceAll(' ', '').hashCode.abs()}';
+    // Card saved — return to the caller (My Cards) with a success result so it
+    // can refresh its own list.
+    if (added == true && mounted) {
+      Navigator.of(context).pop(true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BillingCubit, BillingState>(
-      listenWhen: (p, c) => p.isMutating && !c.isMutating,
-      listener: (context, state) {
-        if (state.failure == null && context.canPop()) {
-          context.pop();
-        }
-      },
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: AppColors.lightBg,
         // Scaffold automatically lifts bottomNavigationBar above the
         // keyboard and shrinks body height accordingly.
@@ -298,7 +303,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: () => context.pop(),
+                            onTap: () => Navigator.of(context).maybePop(),
                             child: Container(
                               height: 52,
                               decoration: BoxDecoration(
@@ -342,7 +347,6 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
             ),
           ),
         ),
-      ),
     );
   }
 }
@@ -353,6 +357,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
 
 class _FieldLabel extends StatelessWidget {
   const _FieldLabel(this.text);
+
   final String text;
 
   @override
@@ -370,6 +375,7 @@ class _InputField extends StatelessWidget {
     this.inputFormatters,
     this.validator,
   });
+
   final TextEditingController controller;
   final String hint;
   final TextInputType? keyboardType;

@@ -5,6 +5,7 @@ import 'package:brandface/presentation/home_page/brand/ui/brand_profile_page.dar
 import 'package:brandface/presentation/home_page/brand/ui/brand_plan_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_my_cards_page.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/ui/billing.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -143,8 +144,11 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
   void _openBilling(BuildContext context, {required int initialTab}) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => BlocProvider<BillingCubit>(
-          create: (_) => sl<BillingCubit>()..loadBilling(),
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<BillingCubit>()..loadBilling()),
+            BlocProvider(create: (_) => sl<CardsCubit>()..loadCards()),
+          ],
           child: Billing(initialTab: initialTab),
         ),
       ),

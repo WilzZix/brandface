@@ -4,6 +4,9 @@ import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/ui/card_otp_page.dart';
+import 'package:brandface/presentation/home_page/profile/ui/paylov_webview_page.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/card_brand_logo.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
@@ -41,16 +44,30 @@ class _BillingState extends State<Billing> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BillingCubit, BillingState>(
-      listenWhen: (previous, current) => previous.failure != current.failure,
-      listener: (context, state) {
-        final failure = state.failure;
-        if (failure == null) {
-          return;
-        }
-
-        context.showAppSnackBar(failure.message, type: AppSnackBarType.error);
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<BillingCubit, BillingState>(
+          listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
+          listener: (context, state) => context.showAppSnackBar(
+            state.failure!.message,
+            type: AppSnackBarType.error,
+          ),
+        ),
+        BlocListener<BillingCubit, BillingState>(
+          listenWhen: (p, c) =>
+              p.paymentRedirect != c.paymentRedirect &&
+              c.paymentRedirect != null,
+          listener: (context, state) =>
+              _handlePaymentRedirect(context, state.paymentRedirect!),
+        ),
+        BlocListener<CardsCubit, CardsState>(
+          listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
+          listener: (context, state) => context.showAppSnackBar(
+            state.failure!.message,
+            type: AppSnackBarType.error,
+          ),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(title: Text(t.profile.billing), centerTitle: false),
@@ -257,7 +274,18 @@ class _BillingState extends State<Billing> {
     required BillingDashboardEntity dashboard,
     required BillingState state,
   }) {
-    final cards = dashboard.cards;
+    return BlocBuilder<CardsCubit, CardsState>(
+      builder: (context, cardsState) {
+        if (cardsState.status == CardsStatus.loading && !cardsState.hasCards) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return _cardsList(context, cardsState);
+      },
+    );
+  }
+
+  Widget _cardsList(BuildContext context, CardsState state) {
+    final cards = state.cards;
 
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -321,8 +349,7 @@ class _BillingState extends State<Billing> {
                   GestureDetector(
                     onTap: state.isMutating
                         ? null
-                        : () =>
-                              context.read<BillingCubit>().deleteCard(card.id),
+                        : () => context.read<CardsCubit>().deleteCard(card.id),
                     child: Text(
                       t.billing.delete_card,
                       style: Typographies.titleSmall.copyWith(
@@ -334,9 +361,8 @@ class _BillingState extends State<Billing> {
                   GestureDetector(
                     onTap: state.isMutating || card.isDefault
                         ? null
-                        : () => context.read<BillingCubit>().setDefaultCard(
-                            card.id,
-                          ),
+                        : () =>
+                              context.read<CardsCubit>().setDefaultCard(card.id),
                     child: Text(
                       card.isDefault
                           ? t.billing.default_card
@@ -547,23 +573,46 @@ class _BillingState extends State<Billing> {
     // Re-entry guard: prevents a fast double-tap from pushing the page twice.
     if (_isOpeningAddCard) return;
     _isOpeningAddCard = true;
+    final cardsCubit = context.read<CardsCubit>();
     try {
-      final result = await Navigator.of(context).push<AddBillingCardParams>(
+      await Navigator.of(context).push(
         MaterialPageRoute(
           // Named so RouteLoggerObserver prints "/billing/add-card"
           // instead of MaterialPageRoute<AddBillingCardParams>.
           settings: const RouteSettings(name: '/billing/add-card'),
-          builder: (_) => const _AddCardPage(),
+          // Reuse the list's CardsCubit so the OTP flow and the reloaded list
+          // land on the same instance.
+          builder: (_) => BlocProvider.value(
+            value: cardsCubit,
+            child: const _AddCardPage(),
+          ),
         ),
       );
-
-      if (!context.mounted || result == null) {
-        return;
-      }
-
-      await context.read<BillingCubit>().addCard(result);
     } finally {
       if (mounted) _isOpeningAddCard = false;
+    }
+  }
+
+  /// Opens the Paylov checkout in a WebView, then polls the transaction so the
+  /// UI reflects the payment once the webhook lands.
+  Future<void> _handlePaymentRedirect(
+    BuildContext context,
+    PaymentRedirect redirect,
+  ) async {
+    final billingCubit = context.read<BillingCubit>();
+    final reached = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        settings: const RouteSettings(name: '/billing/paylov'),
+        builder: (_) => PaylovWebViewPage(
+          paymentUrl: redirect.paymentUrl,
+          returnUrl: kPaylovReturnUrl,
+        ),
+      ),
+    );
+    if (reached == true) {
+      await billingCubit.pollPaymentStatus(redirect.transactionId);
+    } else {
+      await billingCubit.loadBilling(force: true);
     }
   }
 
@@ -571,11 +620,7 @@ class _BillingState extends State<Billing> {
     BuildContext context,
     BillingDashboardEntity dashboard,
   ) async {
-    final defaultCard = dashboard.defaultCard;
-    if (defaultCard == null) {
-      context.showAppSnackBar(t.billing.add_payment_card_first);
-      return;
-    }
+    final defaultCard = context.read<CardsCubit>().state.defaultCard;
 
     final package = await showModalBottomSheet<BillingBoostPackageEntity>(
       context: context,
@@ -604,10 +649,14 @@ class _BillingState extends State<Billing> {
       return;
     }
 
+    // With a saved card Paylov charges immediately; otherwise a checkout link
+    // is returned and opened in the WebView (handled via paymentRedirect).
     await context.read<BillingCubit>().boostProfile(
       BoostProfileParams(
         packageId: package.id,
-        paymentMethod: defaultCard.cardType,
+        paymentMethod: 'paylov',
+        cardId: defaultCard?.id,
+        returnUrl: kPaylovReturnUrl,
       ),
     );
   }
@@ -624,6 +673,12 @@ class _BillingState extends State<Billing> {
   static String _buildMonthlySubtitle(BillingPlanEntity? plan) {
     if (plan == null) {
       return t.billing.no_active_subscription;
+    }
+
+    // Paylov charges in UZS, so surface the UZS price when the plan has one.
+    final uzs = plan.priceMonthlyUzs?.trim();
+    if (uzs != null && uzs.isNotEmpty) {
+      return '$uzs UZS ${t.billing.per_month}';
     }
 
     return '${_formatUsd(plan.priceMonthlyUsd)} ${t.billing.per_month}';
@@ -802,186 +857,192 @@ class _AddCardPageState extends State<_AddCardPage> {
       ),
       // Tap outside any input to dismiss the keyboard.
       body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SafeArea(
-          top: false,
-          child: Form(
-            key: _formKey,
-            autovalidateMode: _autovalidateMode,
-            child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _cardField(
-                        controller: _holderController,
-                        label: 'Card holder',
-                        hintText: 'Write card holder name',
-                        textCapitalization: TextCapitalization.words,
-                        textInputAction: TextInputAction.next,
-                        validator: (value) {
-                          if ((value ?? '').trim().isEmpty) {
-                            return 'Required';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 24),
-                      _cardField(
-                        controller: _cardNumberController,
-                        label: 'Card number',
-                        hintText: 'Write card number',
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          _CardNumberInputFormatter(),
-                        ],
-                        validator: (value) {
-                          final digits = _digitsOnlyText(value ?? '');
-                          if (digits.isEmpty) {
-                            return 'Required';
-                          }
-                          if (digits.length != 16) {
-                            return 'Enter a valid 16-digit card number';
-                          }
-                          return null;
-                        },
-                        trailing: ValueListenableBuilder<TextEditingValue>(
-                          valueListenable: _cardNumberController,
-                          builder: (context, value, _) {
-                            final brand = _detectBrand(value.text);
-                            if (brand == 'unknown') {
-                              return const SizedBox.shrink();
-                            }
-                            return CardBrandLogo(brand: brand, height: 22);
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      // Uzcard / Humo and known Uzbek co-badge cards skip CCV.
-                      ValueListenableBuilder<TextEditingValue>(
-                        valueListenable: _cardNumberController,
-                        builder: (context, value, _) {
-                          final isLocal = _isLocalCard(value.text);
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: _cardField(
-                                  controller: _expiryController,
-                                  label: 'Expire date',
-                                  hintText: 'MM/YY',
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: isLocal
-                                      ? TextInputAction.done
-                                      : TextInputAction.next,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    _ExpiryDateInputFormatter(),
-                                  ],
-                                  validator: (value) {
-                                    final digits = _digitsOnlyText(value ?? '');
-                                    if (digits.isEmpty) {
-                                      return 'Required';
-                                    }
-                                    if (digits.length != 4) {
-                                      return 'MM/YY';
-                                    }
-                                    final month = int.tryParse(
-                                      digits.substring(0, 2),
-                                    );
-                                    if (month == null ||
-                                        month < 1 ||
-                                        month > 12) {
-                                      return 'Invalid month';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              if (!isLocal) ...[
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: _cardField(
-                                    controller: _ccvController,
-                                    label: 'CCV',
-                                    hintText: 'CCV',
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.done,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                      LengthLimitingTextInputFormatter(4),
-                                    ],
-                                    validator: (value) {
-                                      final digits = _digitsOnlyText(
-                                        value ?? '',
-                                      );
-                                      if (digits.isEmpty) {
-                                        return 'Required';
-                                      }
-                                      if (digits.length < 3) {
-                                        return 'Invalid';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // Bottom actions sit just above the keyboard: the body is
-              // resized to avoid the bottom inset, so the row hugs the
-              // keyboard top. SafeArea adds the home-indicator gap when the
-              // keyboard is hidden.
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 56,
-                        child: TextButton(
-                          onPressed: () => Navigator.of(context).maybePop(),
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppColors.black,
-                            shape: const StadiumBorder(),
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SafeArea(
+            top: false,
+            child: Form(
+              key: _formKey,
+              autovalidateMode: _autovalidateMode,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _cardField(
+                            controller: _holderController,
+                            label: 'Card holder',
+                            hintText: 'Write card holder name',
+                            textCapitalization: TextCapitalization.words,
+                            textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if ((value ?? '').trim().isEmpty) {
+                                return 'Required';
+                              }
+                              return null;
+                            },
                           ),
-                          child: Text('Cancel', style: Typographies.labelLarge),
-                        ),
+                          const SizedBox(height: 24),
+                          _cardField(
+                            controller: _cardNumberController,
+                            label: 'Card number',
+                            hintText: 'Write card number',
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              _CardNumberInputFormatter(),
+                            ],
+                            validator: (value) {
+                              final digits = _digitsOnlyText(value ?? '');
+                              if (digits.isEmpty) {
+                                return 'Required';
+                              }
+                              if (digits.length != 16) {
+                                return 'Enter a valid 16-digit card number';
+                              }
+                              return null;
+                            },
+                            trailing: ValueListenableBuilder<TextEditingValue>(
+                              valueListenable: _cardNumberController,
+                              builder: (context, value, _) {
+                                final brand = _detectBrand(value.text);
+                                if (brand == 'unknown') {
+                                  return const SizedBox.shrink();
+                                }
+                                return CardBrandLogo(brand: brand, height: 22);
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          // Uzcard / Humo and known Uzbek co-badge cards skip CCV.
+                          ValueListenableBuilder<TextEditingValue>(
+                            valueListenable: _cardNumberController,
+                            builder: (context, value, _) {
+                              final isLocal = _isLocalCard(value.text);
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: _cardField(
+                                      controller: _expiryController,
+                                      label: 'Expire date',
+                                      hintText: 'MM/YY',
+                                      keyboardType: TextInputType.number,
+                                      textInputAction: isLocal
+                                          ? TextInputAction.done
+                                          : TextInputAction.next,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        _ExpiryDateInputFormatter(),
+                                      ],
+                                      validator: (value) {
+                                        final digits = _digitsOnlyText(
+                                          value ?? '',
+                                        );
+                                        if (digits.isEmpty) {
+                                          return 'Required';
+                                        }
+                                        if (digits.length != 4) {
+                                          return 'MM/YY';
+                                        }
+                                        final month = int.tryParse(
+                                          digits.substring(0, 2),
+                                        );
+                                        if (month == null ||
+                                            month < 1 ||
+                                            month > 12) {
+                                          return 'Invalid month';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  if (!isLocal) ...[
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: _cardField(
+                                        controller: _ccvController,
+                                        label: 'CCV',
+                                        hintText: 'CCV',
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.done,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          LengthLimitingTextInputFormatter(4),
+                                        ],
+                                        validator: (value) {
+                                          final digits = _digitsOnlyText(
+                                            value ?? '',
+                                          );
+                                          if (digits.isEmpty) {
+                                            return 'Required';
+                                          }
+                                          if (digits.length < 3) {
+                                            return 'Invalid';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: SizedBox(
-                        height: 56,
-                        child: AppButtons.primary(
-                          title: 'Confirm',
-                          onTap: _submit,
+                  ),
+                  // Bottom actions sit just above the keyboard: the body is
+                  // resized to avoid the bottom inset, so the row hugs the
+                  // keyboard top. SafeArea adds the home-indicator gap when the
+                  // keyboard is hidden.
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 56,
+                            child: TextButton(
+                              onPressed: () => Navigator.of(context).maybePop(),
+                              style: TextButton.styleFrom(
+                                foregroundColor: AppColors.black,
+                                shape: const StadiumBorder(),
+                              ),
+                              child: Text(
+                                'Cancel',
+                                style: Typographies.labelLarge,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: SizedBox(
+                            height: 56,
+                            child: AppButtons.primary(
+                              title: 'Confirm',
+                              onTap: _submit,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
           ),
         ),
-      ),
     );
   }
 
@@ -1051,7 +1112,7 @@ class _AddCardPageState extends State<_AddCardPage> {
     );
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
       if (_autovalidateMode == AutovalidateMode.disabled) {
         setState(() {
@@ -1061,24 +1122,46 @@ class _AddCardPageState extends State<_AddCardPage> {
       return;
     }
 
-    final holder = _holderController.text.trim();
-    final cardNumber = _digitsOnlyText(_cardNumberController.text);
+    final cardNumber = _cardNumberController.text;
     final expiry = _digitsOnlyText(_expiryController.text);
     final month = int.parse(expiry.substring(0, 2));
     final year = int.parse(expiry.substring(2, 4));
+    final params = InitBillingCardParams(
+      cardNumber: cardNumber,
+      expiryMonth: month,
+      expiryYear: year,
+      cardName: _holderController.text.trim(),
+    );
 
-    final lastFour = cardNumber.substring(cardNumber.length - 4);
-    Navigator.of(context).pop(
-      AddBillingCardParams(
-        cardType: AddBillingCardParams.cardTypeFromNumber(cardNumber),
-        name: holder,
-        expiryMonth: month,
-        expiryYear: 2000 + year,
-        isDefault: true,
-        gatewayToken:
-            'manual-$lastFour-${DateTime.now().millisecondsSinceEpoch}',
+    final cubit = context.read<CardsCubit>();
+    // Make the very first card the default one.
+    final isDefault = cubit.state.cards.isEmpty;
+
+    final sent = await cubit.startAddCard(params);
+    if (!mounted) return;
+    if (!sent) {
+      context.showAppSnackBar(
+        cubit.state.addFailure?.message ?? 'Could not send the SMS code',
+        type: AppSnackBarType.error,
+      );
+      return;
+    }
+
+    final added = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        settings: const RouteSettings(name: '/billing/add-card/otp'),
+        builder: (_) => BlocProvider.value(
+          value: cubit,
+          child: CardOtpPage(
+            args: CardOtpArgs(params: params, isDefault: isDefault),
+          ),
+        ),
       ),
     );
+
+    if (added == true && mounted) {
+      Navigator.of(context).pop(); // back to My Cards
+    }
   }
 }
 

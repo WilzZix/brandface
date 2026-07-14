@@ -41,11 +41,14 @@ import 'package:brandface/domain/usecase/catalog/category/get_languages_use_case
 import 'package:brandface/domain/usecase/catalog/category/region_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/service_type_use_case.dart';
 import 'package:brandface/domain/usecase/catalog/category/sphere_use_case.dart';
-import 'package:brandface/domain/usecase/billing/add_billing_card_use_case.dart';
 import 'package:brandface/domain/usecase/billing/boost_profile_use_case.dart';
 import 'package:brandface/domain/usecase/billing/cancel_subscription_use_case.dart';
+import 'package:brandface/domain/usecase/billing/confirm_billing_card_use_case.dart';
 import 'package:brandface/domain/usecase/billing/delete_billing_card_use_case.dart';
+import 'package:brandface/domain/usecase/billing/get_billing_cards_use_case.dart';
 import 'package:brandface/domain/usecase/billing/get_billing_dashboard_use_case.dart';
+import 'package:brandface/domain/usecase/billing/get_paylov_checkout_use_case.dart';
+import 'package:brandface/domain/usecase/billing/init_billing_card_use_case.dart';
 import 'package:brandface/domain/usecase/billing/set_default_billing_card_use_case.dart';
 import 'package:brandface/domain/usecase/billing/subscribe_billing_plan_use_case.dart';
 import 'package:brandface/domain/usecase/home/get_home_dashboard_use_case.dart';
@@ -101,6 +104,7 @@ import 'package:brandface/presentation/home_page/notifications/bloc/notification
 import 'package:brandface/presentation/home_page/offers/bloc/offer_detail_cubit.dart';
 import 'package:brandface/presentation/home_page/offers/bloc/offers_feed_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/stats/stats_cubit.dart';
@@ -238,7 +242,9 @@ abstract final class AppDi {
     sl.registerLazySingleton(
       () => GetBillingDashboardUseCase(repository: sl()),
     );
-    sl.registerLazySingleton(() => AddBillingCardUseCase(repository: sl()));
+    sl.registerLazySingleton(() => GetBillingCardsUseCase(repository: sl()));
+    sl.registerLazySingleton(() => InitBillingCardUseCase(repository: sl()));
+    sl.registerLazySingleton(() => ConfirmBillingCardUseCase(repository: sl()));
     sl.registerLazySingleton(
       () => SetDefaultBillingCardUseCase(repository: sl()),
     );
@@ -248,6 +254,7 @@ abstract final class AppDi {
     sl.registerLazySingleton(
       () => SubscribeBillingPlanUseCase(repository: sl()),
     );
+    sl.registerLazySingleton(() => GetPaylovCheckoutUseCase(repository: sl()));
     sl.registerLazySingleton(
       () => GetInfluencerProfileUseCase(repository: sl()),
     );
@@ -398,12 +405,19 @@ abstract final class AppDi {
     sl.registerFactory(
       () => BillingCubit(
         getBillingDashboardUseCase: sl(),
-        addBillingCardUseCase: sl(),
-        setDefaultBillingCardUseCase: sl(),
-        deleteBillingCardUseCase: sl(),
         cancelSubscriptionUseCase: sl(),
         boostProfileUseCase: sl(),
         subscribeBillingPlanUseCase: sl(),
+        getPaylovCheckoutUseCase: sl(),
+      ),
+    );
+    sl.registerFactory(
+      () => CardsCubit(
+        getBillingCardsUseCase: sl(),
+        initBillingCardUseCase: sl(),
+        confirmBillingCardUseCase: sl(),
+        setDefaultBillingCardUseCase: sl(),
+        deleteBillingCardUseCase: sl(),
       ),
     );
     sl.registerFactory(() => StatsCubit(getInfluencerAnalyticsUseCase: sl()));

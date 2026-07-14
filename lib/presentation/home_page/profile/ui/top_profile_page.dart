@@ -5,6 +5,7 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
+import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -88,7 +89,8 @@ class _TopProfilePageState extends State<TopProfilePage> {
             }
 
             final safeDashboard = dashboard ?? const BillingDashboardEntity();
-            _primeDefaults(safeDashboard);
+            final cards = context.watch<CardsCubit>().state.cards;
+            _primeDefaults(safeDashboard, cards);
 
             return RefreshIndicator(
               color: AppColors.black,
@@ -159,8 +161,18 @@ class _TopProfilePageState extends State<TopProfilePage> {
     );
   }
 
-  void _primeDefaults(BillingDashboardEntity dashboard) {
-    _selectedCard ??= dashboard.defaultCard;
+  BillingCardEntity? _defaultOf(List<BillingCardEntity> cards) {
+    for (final card in cards) {
+      if (card.isDefault) return card;
+    }
+    return cards.isEmpty ? null : cards.first;
+  }
+
+  void _primeDefaults(
+    BillingDashboardEntity dashboard,
+    List<BillingCardEntity> cards,
+  ) {
+    _selectedCard ??= _defaultOf(cards);
     _selectedBoostPackageId ??= dashboard.boostPackages.isNotEmpty
         ? dashboard.boostPackages.first.id
         : null;
@@ -375,7 +387,8 @@ class _TopProfilePageState extends State<TopProfilePage> {
     BuildContext context,
     BillingDashboardEntity dashboard,
   ) async {
-    if (dashboard.cards.isEmpty) {
+    final cards = context.read<CardsCubit>().state.cards;
+    if (cards.isEmpty) {
       context.showAppSnackBar('Add a payment card first.');
       return;
     }
@@ -388,7 +401,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
         return SafeArea(
           child: ListView(
             shrinkWrap: true,
-            children: dashboard.cards
+            children: cards
                 .map(
                   (card) => ListTile(
                     title: Text(_cardDisplayLabel(card)),
@@ -430,7 +443,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
       return;
     }
 
-    final card = _selectedCard ?? dashboard.defaultCard;
+    final card = _selectedCard ?? context.read<CardsCubit>().state.defaultCard;
     if (card == null) {
       _showMessage(context, 'Select a payment method first.');
       return;
@@ -439,7 +452,9 @@ class _TopProfilePageState extends State<TopProfilePage> {
     await context.read<BillingCubit>().boostProfile(
       BoostProfileParams(
         packageId: _selectedBoostPackageId!,
-        paymentMethod: card.cardType,
+        paymentMethod: 'paylov',
+        cardId: card.id,
+        returnUrl: kPaylovReturnUrl,
       ),
     );
   }
@@ -453,7 +468,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
       return;
     }
 
-    final card = _selectedCard ?? dashboard.defaultCard;
+    final card = _selectedCard ?? context.read<CardsCubit>().state.defaultCard;
     if (card == null) {
       _showMessage(context, 'Select a payment method first.');
       return;
@@ -462,7 +477,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
     await context.read<BillingCubit>().subscribeToPlan(
       SubscribeBillingPlanParams(
         planId: _selectedVipPlanId!,
-        paymentMethod: card.cardType,
+        paymentMethod: 'paylov',
         cardId: card.id,
       ),
     );

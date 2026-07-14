@@ -75,11 +75,14 @@ abstract final class ApiRoutes {
   static String cancelSubscription = 'billing/v1/cancel/';
   static String billingCards = 'billing/v1/cards/';
 
+  static String billingCardsConfirm = 'billing/v1/cards/confirm/';
+
   static String billingCard(int cardId) => 'billing/v1/cards/$cardId/';
   static String mySubscription = 'billing/v1/my-subscription/';
   static String billingPlans = 'billing/v1/plans/';
   static String subscribeToPlan = 'billing/v1/subscribe/';
   static String billingTransactions = 'billing/v1/transactions/';
+  static String paylovCheckout = 'billing/v1/paylov/checkout/';
   static String portfolio = 'portfolio/v1/';
 
   static String portfolioDetail(int id) => 'portfolio/v1/$id/';

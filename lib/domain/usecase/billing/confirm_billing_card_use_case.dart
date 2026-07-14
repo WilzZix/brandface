@@ -4,16 +4,17 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/dart_either.dart';
 
-final class AddBillingCardUseCase
-    implements UseCase<BillingCardEntity, AddBillingCardParams> {
+/// Card registration step 2: confirm the OTP and persist the card.
+final class ConfirmBillingCardUseCase
+    implements UseCase<BillingCardEntity, ConfirmBillingCardParams> {
   final IBillingRepository repository;
 
-  AddBillingCardUseCase({required this.repository});
+  ConfirmBillingCardUseCase({required this.repository});
 
   @override
   Future<Either<Failure, BillingCardEntity>> call({
-    required AddBillingCardParams params,
+    required ConfirmBillingCardParams params,
   }) {
-    return repository.addCard(params);
+    return repository.confirmCard(params);
   }
 }

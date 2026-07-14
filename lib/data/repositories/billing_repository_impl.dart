@@ -19,7 +19,6 @@ final class BillingRepositoryImpl implements IBillingRepository {
         _dataSource.getMySubscription(),
         _dataSource.getPlans(),
         _dataSource.getBoostPackages(),
-        _dataSource.getCards(),
         _dataSource.getTransactions(),
       ]);
 
@@ -28,8 +27,7 @@ final class BillingRepositoryImpl implements IBillingRepository {
           subscription: results[0] as BillingSubscriptionEntity?,
           plans: results[1] as List<BillingPlanEntity>,
           boostPackages: results[2] as List<BillingBoostPackageEntity>,
-          cards: results[3] as List<BillingCardEntity>,
-          transactions: results[4] as List<BillingTransactionEntity>,
+          transactions: results[3] as List<BillingTransactionEntity>,
         ),
       );
     } on DioException catch (e) {
@@ -40,18 +38,50 @@ final class BillingRepositoryImpl implements IBillingRepository {
   }
 
   @override
-  Future<Either<Failure, BillingCardEntity>> addCard(
-    AddBillingCardParams params,
+  Future<Either<Failure, List<BillingCardEntity>>> getCards() async {
+    try {
+      final cards = await _dataSource.getCards();
+      return Right(cards);
+    } on DioException catch (e) {
+      return Left(_mapFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CardOtpInitEntity>> initCard(
+    InitBillingCardParams params,
   ) async {
     try {
-      final card = await _dataSource.addCard(
-        AddBillingCardRequest(
-          cardType: params.cardType,
-          name: params.name,
+      final result = await _dataSource.initCard(
+        InitCardRequest(
+          cardNumber: params.cardNumber,
           expiryMonth: params.expiryMonth,
           expiryYear: params.expiryYear,
+          cardName: params.cardName,
+          phoneNumber: params.phoneNumber,
+        ),
+      );
+      return Right(result);
+    } on DioException catch (e) {
+      return Left(_mapFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BillingCardEntity>> confirmCard(
+    ConfirmBillingCardParams params,
+  ) async {
+    try {
+      final card = await _dataSource.confirmCard(
+        ConfirmCardRequest(
+          cardId: params.cardId,
+          otp: params.otp,
+          cardName: params.cardName,
           isDefault: params.isDefault,
-          gatewayToken: params.gatewayToken,
         ),
       );
       return Right(card);
@@ -107,6 +137,8 @@ final class BillingRepositoryImpl implements IBillingRepository {
       final transaction = await _dataSource.boostProfile(
         packageId: params.packageId,
         paymentMethod: params.paymentMethod,
+        returnUrl: params.returnUrl,
+        cardId: params.cardId,
       );
       return Right(transaction);
     } on DioException catch (e) {
@@ -124,9 +156,27 @@ final class BillingRepositoryImpl implements IBillingRepository {
       final subscription = await _dataSource.subscribeToPlan(
         planId: params.planId,
         paymentMethod: params.paymentMethod,
+        returnUrl: params.returnUrl,
         cardId: params.cardId,
       );
       return Right(subscription);
+    } on DioException catch (e) {
+      return Left(_mapFailure(e));
+    } catch (e) {
+      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PaylovCheckoutEntity>> getPaylovCheckout(
+    PaylovCheckoutParams params,
+  ) async {
+    try {
+      final checkout = await _dataSource.getPaylovCheckout(
+        transactionId: params.transactionId,
+        returnUrl: params.returnUrl,
+      );
+      return Right(checkout);
     } on DioException catch (e) {
       return Left(_mapFailure(e));
     } catch (e) {

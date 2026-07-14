@@ -5,6 +5,7 @@ final class BillingPlanModel extends BillingPlanEntity {
     required super.id,
     required super.name,
     super.priceMonthlyUsd,
+    super.priceMonthlyUzs,
     super.maxOffersPerMonth,
     super.maxFindsPerMonth,
     super.aiMatchesCount,
@@ -14,6 +15,7 @@ final class BillingPlanModel extends BillingPlanEntity {
     super.hasPrioritySupport,
     super.contactPriceUsd,
     super.boostPriceUsd,
+    super.boostPriceUzs,
     super.features,
   });
 
@@ -22,6 +24,7 @@ final class BillingPlanModel extends BillingPlanEntity {
       id: _toInt(json['id']),
       name: json['name']?.toString() ?? 'Plan',
       priceMonthlyUsd: _nullableString(json['price_monthly_usd']),
+      priceMonthlyUzs: _nullableString(json['price_monthly_uzs']),
       maxOffersPerMonth: _toInt(json['max_offers_per_month']),
       maxFindsPerMonth: _toInt(json['max_finds_per_month']),
       aiMatchesCount: _toInt(json['ai_matches_count']),
@@ -31,6 +34,7 @@ final class BillingPlanModel extends BillingPlanEntity {
       hasPrioritySupport: json['has_priority_support'] == true,
       contactPriceUsd: _nullableString(json['contact_price_usd']),
       boostPriceUsd: _nullableString(json['boost_price_usd']),
+      boostPriceUzs: _nullableString(json['boost_price_uzs']),
       features: _nullableString(json['features']),
     );
   }
@@ -47,6 +51,8 @@ final class BillingSubscriptionModel extends BillingSubscriptionEntity {
     super.offersUsedThisMonth,
     super.findsUsedThisMonth,
     super.resetDate,
+    super.transactionId,
+    super.paymentUrl,
   });
 
   factory BillingSubscriptionModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +67,10 @@ final class BillingSubscriptionModel extends BillingSubscriptionEntity {
       offersUsedThisMonth: _toInt(json['offers_used_this_month']),
       findsUsedThisMonth: _toInt(json['finds_used_this_month']),
       resetDate: _toDateTime(json['reset_date']),
+      transactionId: json['transaction_id'] == null
+          ? null
+          : _toInt(json['transaction_id']),
+      paymentUrl: _nullableString(json['payment_url']),
     );
   }
 }
@@ -97,6 +107,7 @@ final class BillingTransactionModel extends BillingTransactionEntity {
     super.transactionType,
     super.status,
     super.description,
+    super.paymentUrl,
     super.paidAt,
     super.createdAt,
   });
@@ -111,6 +122,7 @@ final class BillingTransactionModel extends BillingTransactionEntity {
       transactionType: _nullableString(json['transaction_type']),
       status: _nullableString(json['status']),
       description: _nullableString(json['description']),
+      paymentUrl: _nullableString(json['payment_url']),
       paidAt: _toDateTime(json['paid_at']),
       createdAt: _toDateTime(json['created_at']),
     );
@@ -144,9 +156,33 @@ final class BillingDashboardModel extends BillingDashboardEntity {
     super.subscription,
     super.plans,
     super.boostPackages,
-    super.cards,
     super.transactions,
   });
+}
+
+final class CardOtpInitModel extends CardOtpInitEntity {
+  const CardOtpInitModel({required super.cardId, super.otpSentPhone});
+
+  factory CardOtpInitModel.fromJson(Map<String, dynamic> json) {
+    return CardOtpInitModel(
+      cardId: json['card_id']?.toString() ?? '',
+      otpSentPhone: _nullableString(json['otp_sent_phone']),
+    );
+  }
+}
+
+final class PaylovCheckoutModel extends PaylovCheckoutEntity {
+  const PaylovCheckoutModel({
+    required super.transactionId,
+    required super.paymentUrl,
+  });
+
+  factory PaylovCheckoutModel.fromJson(Map<String, dynamic> json) {
+    return PaylovCheckoutModel(
+      transactionId: _toInt(json['transaction_id']),
+      paymentUrl: json['payment_url']?.toString() ?? '',
+    );
+  }
 }
 
 Map<String, dynamic> _readMap(dynamic value) {
