@@ -6,14 +6,14 @@ import '../../repository/registration_repository.dart';
 
 enum MyProfileSection { general, audience, pricing }
 
-class UpdateMyProfileSectionParam {
+final class UpdateMyProfileSectionParam {
   final MyProfileSection section;
   final Map<String, dynamic> payload;
 
   UpdateMyProfileSectionParam({required this.section, required this.payload});
 }
 
-class UpdateMyProfileSectionUseCase {
+final class UpdateMyProfileSectionUseCase {
   final IRegistrationRepository repository;
 
   UpdateMyProfileSectionUseCase(this.repository);
@@ -22,9 +22,9 @@ class UpdateMyProfileSectionUseCase {
     required UpdateMyProfileSectionParam params,
   }) async {
     final url = switch (params.section) {
-      MyProfileSection.general => ApiRoutes.myProfileGeneral,
-      MyProfileSection.audience => ApiRoutes.myProfileAudience,
-      MyProfileSection.pricing => ApiRoutes.myProfilePricing,
+      .general => ApiRoutes.myProfileGeneral,
+      .audience => ApiRoutes.myProfileAudience,
+      .pricing => ApiRoutes.myProfilePricing,
     };
     return await repository.updateMyProfileSection(
       url: url,

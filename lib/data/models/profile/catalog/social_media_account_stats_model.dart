@@ -1,6 +1,6 @@
 import '../../../../domain/entities/profile/catalog/social_media_account_stats_entity.dart';
 
-class SocialMediaAccountStatsModel extends SocialMediaAccountStatsEntity {
+final class SocialMediaAccountStatsModel extends SocialMediaAccountStatsEntity {
   const SocialMediaAccountStatsModel({
     required super.platform,
     required super.username,

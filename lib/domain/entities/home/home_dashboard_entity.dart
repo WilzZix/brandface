@@ -1,7 +1,7 @@
 import 'package:brandface/domain/entities/profile/influencer_profile_information_entity.dart';
 import 'package:equatable/equatable.dart';
 
-class HomeDashboardEntity extends Equatable {
+base class HomeDashboardEntity extends Equatable {
   final InfluencerProfileInformationEntity profile;
   final int unreadNotificationsCount;
   final int activeOffersCount;
@@ -26,7 +26,7 @@ class HomeDashboardEntity extends Equatable {
   ];
 }
 
-class RecommendedHomeOfferEntity extends Equatable {
+base class RecommendedHomeOfferEntity extends Equatable {
   final int id;
   final String title;
   final String? description;

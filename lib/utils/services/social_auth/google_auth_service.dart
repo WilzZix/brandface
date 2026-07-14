@@ -8,7 +8,7 @@ import 'social_auth_service.dart';
 bool _isPlaceholder(String value) =>
     value.isEmpty || value.startsWith('<') || !value.contains('.');
 
-class GoogleAuthService implements SocialAuthService {
+final class GoogleAuthService implements SocialAuthService {
   GoogleAuthService({GoogleSignIn? client})
     : _client =
           client ??

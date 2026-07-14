@@ -11,9 +11,9 @@ enum SocialProvider {
   const SocialProvider(this.apiValue);
 
   bool get isSupportedByBackend =>
-      this == SocialProvider.google ||
-      this == SocialProvider.telegram ||
-      this == SocialProvider.facebook ||
-      this == SocialProvider.linkedin ||
-      this == SocialProvider.apple;
+      this == .google ||
+      this == .telegram ||
+      this == .facebook ||
+      this == .linkedin ||
+      this == .apple;
 }

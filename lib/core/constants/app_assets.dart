@@ -1,4 +1,4 @@
-class AppAssets {
+abstract final class AppAssets {
   static String icSplashBg = 'assets/icons/ic_splash_bg.svg';
   static String icLogo = 'assets/icons/ic_logo.svg';
   static String icOnBoarding = 'assets/icons/ic_onboarding.svg';

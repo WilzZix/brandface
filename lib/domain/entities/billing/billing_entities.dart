@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class BillingPlanEntity extends Equatable {
+base class BillingPlanEntity extends Equatable {
   final int id;
   final String name;
   final String? priceMonthlyUsd;
@@ -49,7 +49,7 @@ class BillingPlanEntity extends Equatable {
   ];
 }
 
-class BillingSubscriptionEntity extends Equatable {
+base class BillingSubscriptionEntity extends Equatable {
   final int id;
   final BillingPlanEntity? plan;
   final String status;
@@ -116,7 +116,7 @@ class BillingCardEntity extends Equatable {
   ];
 }
 
-class BillingTransactionEntity extends Equatable {
+base class BillingTransactionEntity extends Equatable {
   final int id;
   final String? planName;
   final String? amount;
@@ -156,7 +156,7 @@ class BillingTransactionEntity extends Equatable {
   ];
 }
 
-class BillingBoostPackageEntity extends Equatable {
+base class BillingBoostPackageEntity extends Equatable {
   final int id;
   final int days;
   final String label;
@@ -177,7 +177,7 @@ class BillingBoostPackageEntity extends Equatable {
   List<Object?> get props => [id, days, label, priceUzs, priceUsd, sortOrder];
 }
 
-class BillingDashboardEntity extends Equatable {
+base class BillingDashboardEntity extends Equatable {
   final BillingSubscriptionEntity? subscription;
   final List<BillingPlanEntity> plans;
   final List<BillingBoostPackageEntity> boostPackages;

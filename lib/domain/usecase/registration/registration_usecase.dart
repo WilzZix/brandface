@@ -5,7 +5,7 @@ import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
 import 'package:dart_either/src/dart_either.dart';
 
-class RegistrationUsecase implements UseCase<RegistrationEntity, RegistrationParams> {
+final class RegistrationUsecase implements UseCase<RegistrationEntity, RegistrationParams> {
   final IRegistrationRepository repository;
 
   RegistrationUsecase(this.repository);

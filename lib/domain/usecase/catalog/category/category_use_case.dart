@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../../repository/profile_repository.dart';
 
-class CategoryUseCase implements UseCase<List<CategoryItemEntity>, void> {
+final class CategoryUseCase implements UseCase<List<CategoryItemEntity>, void> {
   final IProfileRepository repository;
 
   CategoryUseCase({required this.repository});

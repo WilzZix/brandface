@@ -2,7 +2,7 @@ import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/models/billing/billing_models.dart';
 
-class AddBillingCardRequest {
+final class AddBillingCardRequest {
   final String cardType;
   final String name;
   final int expiryMonth;
@@ -31,7 +31,7 @@ class AddBillingCardRequest {
   }
 }
 
-abstract class BillingDataSource {
+abstract interface class BillingDataSource {
   Future<BillingSubscriptionModel?> getMySubscription();
 
   Future<List<BillingPlanModel>> getPlans();
@@ -62,7 +62,7 @@ abstract class BillingDataSource {
   });
 }
 
-class BillingDataSourceImpl implements BillingDataSource {
+final class BillingDataSourceImpl implements BillingDataSource {
   final DioClient _dioClient;
 
   BillingDataSourceImpl(this._dioClient);

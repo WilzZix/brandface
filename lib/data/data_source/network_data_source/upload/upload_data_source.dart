@@ -5,11 +5,11 @@ import 'package:dio/dio.dart';
 import '../../../../core/constants/api_routes.dart';
 import '../../../../core/network/dio_client.dart';
 
-abstract class UploadDataSource {
+abstract interface class UploadDataSource {
   Future<Map<String, dynamic>> uploadFile({required File file});
 }
 
-class UploadDataSourceImpl implements UploadDataSource {
+final class UploadDataSourceImpl implements UploadDataSource {
   final DioClient _dioClient;
 
   UploadDataSourceImpl({required DioClient dioClient}) : _dioClient = dioClient;

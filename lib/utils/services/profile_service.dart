@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileService {
+final class ProfileService {
   final SharedPreferences _prefs;
 
   ProfileService(this._prefs);

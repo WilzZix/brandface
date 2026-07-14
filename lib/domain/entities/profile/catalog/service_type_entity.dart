@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class ServiceTypeEntity extends Equatable {
+base class ServiceTypeEntity extends Equatable {
   final int id;
   final String name;
   final String? code;

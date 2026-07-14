@@ -1,6 +1,6 @@
 import '../../../domain/entities/get_me_entity.dart';
 
-class UserModel extends UserEntity {
+final class UserModel extends UserEntity {
   const UserModel({
     required super.id,
     required super.username,

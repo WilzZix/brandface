@@ -2,7 +2,7 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/repository/message_repository.dart';
 import 'package:dart_either/dart_either.dart';
 
-class SendEnquiryParams {
+final class SendEnquiryParams {
   final int otherUserId;
   final String contactName;
   final String companyName;
@@ -29,7 +29,7 @@ class SendEnquiryParams {
   }
 }
 
-class SendEnquiryUseCase {
+final class SendEnquiryUseCase {
   final IMessageRepository repository;
 
   SendEnquiryUseCase(this.repository);

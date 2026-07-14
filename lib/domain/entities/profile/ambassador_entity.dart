@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class AmbassadorEntity extends Equatable {
+base class AmbassadorEntity extends Equatable {
   final int id;
   final String? displayName;
   final String? avatarUrl;

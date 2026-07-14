@@ -1,6 +1,6 @@
 import 'fill_influencer_profile_param.dart';
 
-class FillProfileParams {
+final class FillProfileParams {
   final String profileId;
   final FillInfluencerProfileParam profileData;
 

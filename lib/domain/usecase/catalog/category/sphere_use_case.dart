@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../../repository/profile_repository.dart';
 
-class SphereUseCase implements UseCase<List<SphereEntity>, void> {
+final class SphereUseCase implements UseCase<List<SphereEntity>, void> {
   final IProfileRepository repository;
 
   SphereUseCase({required this.repository});

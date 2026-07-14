@@ -1,4 +1,4 @@
-class VerifyOtpParams {
+final class VerifyOtpParams {
   final String phone;
   final String code;
 

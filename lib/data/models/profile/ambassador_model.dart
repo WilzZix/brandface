@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
 
-class AmbassadorModel extends AmbassadorEntity {
+final class AmbassadorModel extends AmbassadorEntity {
   const AmbassadorModel({
     required super.id,
     super.displayName,

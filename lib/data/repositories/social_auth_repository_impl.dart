@@ -7,7 +7,7 @@ import '../../domain/entities/social_provider.dart';
 import '../../domain/repository/social_auth_repository.dart';
 import '../data_source/network_data_source/social_auth/social_auth_data_source.dart';
 
-class SocialAuthRepositoryImpl implements ISocialAuthRepository {
+final class SocialAuthRepositoryImpl implements ISocialAuthRepository {
   final SocialAuthDataSource dataSource;
 
   SocialAuthRepositoryImpl({required this.dataSource});

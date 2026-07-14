@@ -6,7 +6,7 @@ import '../../../presentation/login/ui/linkedin_auth_page.dart';
 import 'social_auth_config.dart';
 import 'social_auth_service.dart';
 
-class LinkedInAuthService implements SocialAuthService {
+final class LinkedInAuthService implements SocialAuthService {
   const LinkedInAuthService();
 
   @override

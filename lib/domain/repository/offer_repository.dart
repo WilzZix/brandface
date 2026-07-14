@@ -5,7 +5,7 @@ import 'package:brandface/domain/entities/offer/offer_detail_entity.dart';
 import 'package:brandface/domain/entities/offer/offer_summary_entity.dart';
 import 'package:dart_either/dart_either.dart';
 
-abstract class IOfferRepository {
+abstract interface class IOfferRepository {
   Future<Either<Failure, List<OfferSummaryEntity>>> getBrandOffers({
     String? status,
   });

@@ -2,7 +2,7 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/notification/notification_entity.dart';
 import 'package:dart_either/dart_either.dart';
 
-abstract class INotificationRepository {
+abstract interface class INotificationRepository {
   Future<Either<Failure, List<NotificationEntity>>> getNotifications({
     bool? isRead,
   });

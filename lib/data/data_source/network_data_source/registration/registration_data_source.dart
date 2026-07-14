@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../models/registration/registration_model.dart';
 
-abstract class RegistrationDataSource {
+abstract interface class RegistrationDataSource {
   Future<RegistrationModel> registration({required RegistrationParams params});
 
   Future<RegistrationModel> brandRegistration({
@@ -36,7 +36,7 @@ abstract class RegistrationDataSource {
   });
 }
 
-class RegistrationDataSourceImpl implements RegistrationDataSource {
+final class RegistrationDataSourceImpl implements RegistrationDataSource {
   final DioClient _dioClient;
 
   RegistrationDataSourceImpl({required DioClient dioClient})

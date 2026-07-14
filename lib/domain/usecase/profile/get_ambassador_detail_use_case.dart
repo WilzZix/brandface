@@ -3,7 +3,7 @@ import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart'
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:dart_either/dart_either.dart';
 
-class GetAmbassadorDetailUseCase {
+final class GetAmbassadorDetailUseCase {
   final IProfileRepository repository;
 
   GetAmbassadorDetailUseCase({required this.repository});

@@ -39,7 +39,7 @@ class SocialAuthFailedException implements Exception {
   String toString() => 'SocialAuthFailedException(${provider.apiValue}): $message';
 }
 
-abstract class SocialAuthService {
+abstract interface class SocialAuthService {
   SocialProvider get provider;
 
   Future<SocialSignInResult> signIn(BuildContext context);

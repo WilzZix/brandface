@@ -1,4 +1,4 @@
-class RegistrationEntity {
+base class RegistrationEntity {
   final String role;
   final int profileId;
   final bool isEditMode;

@@ -5,7 +5,7 @@ import 'package:brandface/domain/repository/notification_repository.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
-class NotificationRepositoryImpl implements INotificationRepository {
+final class NotificationRepositoryImpl implements INotificationRepository {
   final NotificationDataSource _dataSource;
 
   NotificationRepositoryImpl({required NotificationDataSource dataSource})

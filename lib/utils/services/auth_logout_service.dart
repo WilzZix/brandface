@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthLogoutService {
+final class AuthLogoutService {
   final SharedPreferences _prefs;
 
   AuthLogoutService(this._prefs);

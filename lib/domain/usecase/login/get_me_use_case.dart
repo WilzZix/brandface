@@ -4,7 +4,7 @@ import 'package:brandface/domain/repository/login_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/src/dart_either.dart';
 
-class GetMeUseCase implements UseCase<UserEntity, void> {
+final class GetMeUseCase implements UseCase<UserEntity, void> {
   final ILoginRepository _iLoginRepository;
 
   GetMeUseCase({required ILoginRepository iLoginRepository})

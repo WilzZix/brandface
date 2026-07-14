@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class ReviewEntity extends Equatable {
+base class ReviewEntity extends Equatable {
   final int id;
   final String reviewerName;
   final int rating;

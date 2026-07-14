@@ -3,7 +3,7 @@ import 'package:brandface/domain/entities/profile/award_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/entities/profile/review_entity.dart';
 
-class AmbassadorDetailModel extends AmbassadorDetailEntity {
+final class AmbassadorDetailModel extends AmbassadorDetailEntity {
   const AmbassadorDetailModel({
     required super.id,
     super.displayName,

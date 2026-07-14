@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class AiMatchResultEntity extends Equatable {
+base class AiMatchResultEntity extends Equatable {
   final int influencerId;
   final String displayName;
   final String avatarUrl;

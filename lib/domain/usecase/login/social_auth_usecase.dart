@@ -6,7 +6,7 @@ import '../../repository/social_auth_repository.dart';
 import 'params/social_auth_params.dart';
 import 'send_otp_usecase.dart';
 
-class SocialAuthUseCase
+final class SocialAuthUseCase
     implements UseCase<SocialAuthEntity, SocialAuthParams> {
   final ISocialAuthRepository repository;
 

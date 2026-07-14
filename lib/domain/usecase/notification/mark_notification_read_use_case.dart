@@ -4,7 +4,8 @@ import 'package:brandface/domain/repository/notification_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/dart_either.dart';
 
-class MarkNotificationReadUseCase implements UseCase<NotificationEntity, int> {
+final class MarkNotificationReadUseCase
+    implements UseCase<NotificationEntity, int> {
   final INotificationRepository repository;
 
   MarkNotificationReadUseCase({required this.repository});

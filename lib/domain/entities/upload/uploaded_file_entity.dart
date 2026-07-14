@@ -1,4 +1,4 @@
-class UploadedFileEntity {
+base class UploadedFileEntity {
   final int id;
   final String fileUrl;
 

@@ -5,7 +5,7 @@ import 'package:brandface/domain/repository/brand_analytics_repository.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
-class BrandAnalyticsRepositoryImpl implements IBrandAnalyticsRepository {
+final class BrandAnalyticsRepositoryImpl implements IBrandAnalyticsRepository {
   final BrandAnalyticsDataSource _dataSource;
 
   BrandAnalyticsRepositoryImpl({required BrandAnalyticsDataSource dataSource})

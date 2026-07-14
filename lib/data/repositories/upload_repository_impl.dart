@@ -8,7 +8,7 @@ import '../../domain/entities/upload/uploaded_file_entity.dart';
 import '../../domain/repository/upload_repository.dart';
 import '../data_source/network_data_source/upload/upload_data_source.dart';
 
-class UploadRepositoryImpl implements IUploadRepository {
+final class UploadRepositoryImpl implements IUploadRepository {
   final UploadDataSource _dataSource;
 
   UploadRepositoryImpl({required UploadDataSource dataSource})

@@ -6,7 +6,8 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../repository/login_repository.dart';
 
-class VerifyOtpUsecase implements UseCase<VerifyOtpEntity, VerifyOtpParams> {
+final class VerifyOtpUsecase
+    implements UseCase<VerifyOtpEntity, VerifyOtpParams> {
   final ILoginRepository repository;
 
   VerifyOtpUsecase({required this.repository});

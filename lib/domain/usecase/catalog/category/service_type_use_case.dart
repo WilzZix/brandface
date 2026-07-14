@@ -5,7 +5,7 @@ import 'package:dart_either/src/dart_either.dart';
 
 import '../../../repository/profile_repository.dart';
 
-class ServiceTypeUseCase implements UseCase<List<ServiceTypeEntity>, void> {
+final class ServiceTypeUseCase implements UseCase<List<ServiceTypeEntity>, void> {
   final IProfileRepository repository;
 
   ServiceTypeUseCase({required this.repository});

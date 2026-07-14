@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class RegionEntity extends Equatable {
+base class RegionEntity extends Equatable {
   final int id;
   final String name;
   final String code;

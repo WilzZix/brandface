@@ -5,7 +5,7 @@ import 'package:brandface/domain/repository/message_repository.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
-class MessageRepositoryImpl implements IMessageRepository {
+final class MessageRepositoryImpl implements IMessageRepository {
   MessageRepositoryImpl({required MessageDataSource dataSource})
     : _dataSource = dataSource;
 

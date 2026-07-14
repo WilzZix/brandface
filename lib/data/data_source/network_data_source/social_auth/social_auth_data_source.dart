@@ -5,7 +5,7 @@ import '../../../../core/network/dio_client.dart';
 import '../../../../domain/entities/social_provider.dart';
 import '../../../models/social_auth/social_auth_model.dart';
 
-abstract class SocialAuthDataSource {
+abstract interface class SocialAuthDataSource {
   Future<SocialAuthModel> socialLogin({
     required SocialProvider provider,
     required String accessToken,
@@ -18,7 +18,7 @@ abstract class SocialAuthDataSource {
   });
 }
 
-class SocialAuthDataSourceImpl implements SocialAuthDataSource {
+final class SocialAuthDataSourceImpl implements SocialAuthDataSource {
   final DioClient _dioClient;
 
   SocialAuthDataSourceImpl(this._dioClient);

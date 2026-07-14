@@ -6,7 +6,7 @@ import 'package:brandface/domain/repository/home_repository.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
-class HomeRepositoryImpl implements IHomeRepository {
+final class HomeRepositoryImpl implements IHomeRepository {
   final HomeDataSource _dataSource;
 
   HomeRepositoryImpl({required HomeDataSource dataSource})

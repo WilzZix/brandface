@@ -4,7 +4,7 @@ import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/src/dart_either.dart';
 
-class GetProfileUseCase implements UseCase<ProfileEntity, String> {
+final class GetProfileUseCase implements UseCase<ProfileEntity, String> {
   final IProfileRepository repository;
 
   GetProfileUseCase({required this.repository});

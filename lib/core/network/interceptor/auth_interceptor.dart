@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../utils/services/app_auth_local_service.dart';
 
-class AuthInterceptor extends Interceptor {
+final class AuthInterceptor extends Interceptor {
   final Dio _dio;
   final IAuthLocalService _authLocalService;
   Future<String?>? _refreshFuture;
@@ -184,9 +184,7 @@ class _UnauthorizedBottomSheet extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 t.common.ok,
-                style: Typographies.labelLarge.copyWith(
-                  color: AppColors.white,
-                ),
+                style: Typographies.labelLarge.copyWith(color: AppColors.white),
               ),
             ),
           ),

@@ -2,7 +2,7 @@ import 'package:brandface/data/models/ai_matching/ai_match_result_model.dart';
 import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
 import 'package:brandface/domain/entities/brand_analytics_entity.dart';
 
-class BrandAnalyticsModel extends BrandAnalyticsEntity {
+final class BrandAnalyticsModel extends BrandAnalyticsEntity {
   const BrandAnalyticsModel({
     required super.totalSearchesDone,
     required super.totalOffersCreated,

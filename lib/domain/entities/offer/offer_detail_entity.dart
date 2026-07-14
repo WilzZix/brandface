@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class OfferDetailEntity extends Equatable {
+base class OfferDetailEntity extends Equatable {
   final int id;
   final String title;
   final String brandName;

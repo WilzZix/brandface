@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 /// fayllari (iOS: GoogleService-Info.plist, Android: google-services.json)
 /// hali joylashtirilmagan bo'lsa, init muvaffaqiyatsiz bo'ladi va appni crash
 /// qildirmasdan log'ga yozadi — Firebase xizmatlari oddiy "no-op" bo'lib turadi.
-class FirebaseBootstrap {
+final class FirebaseBootstrap {
   FirebaseBootstrap._();
 
   static bool _initialized = false;

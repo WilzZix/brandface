@@ -3,7 +3,7 @@ import 'package:brandface/domain/entities/profile/profile_entity.dart';
 import 'package:brandface/domain/entities/profile/review_entity.dart';
 import 'package:equatable/equatable.dart';
 
-class AmbassadorDetailEntity extends Equatable {
+base class AmbassadorDetailEntity extends Equatable {
   final int id;
   final String? displayName;
   final String? avatarUrl;

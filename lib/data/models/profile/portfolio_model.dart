@@ -1,7 +1,7 @@
 import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 
-class PortfolioModel extends PortfolioItemEntity {
+final class PortfolioModel extends PortfolioItemEntity {
   const PortfolioModel({
     required super.id,
     required super.name,
@@ -61,7 +61,7 @@ class PortfolioModel extends PortfolioItemEntity {
   }
 }
 
-class PortfolioImageModel extends PortfolioImageEntity {
+final class PortfolioImageModel extends PortfolioImageEntity {
   const PortfolioImageModel({
     required super.id,
     required super.imageId,
@@ -81,7 +81,7 @@ class PortfolioImageModel extends PortfolioImageEntity {
   }
 }
 
-class UploadedFileModel extends UploadedFileEntity {
+final class UploadedFileModel extends UploadedFileEntity {
   const UploadedFileModel({required super.id, required super.fileUrl});
 
   factory UploadedFileModel.fromJson(Map<String, dynamic> json) {

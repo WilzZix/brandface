@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class SocialMediaAccountStatsEntity extends Equatable {
+base class SocialMediaAccountStatsEntity extends Equatable {
   final String platform;
   final String username;
   final String? displayName;

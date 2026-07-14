@@ -4,7 +4,7 @@ import 'package:brandface/domain/repository/offer_repository.dart';
 import 'package:brandface/domain/usecase/login/send_otp_usecase.dart';
 import 'package:dart_either/dart_either.dart';
 
-class GetRecommendedOffersUseCase
+final class GetRecommendedOffersUseCase
     implements UseCase<List<OfferSummaryEntity>, Object?> {
   final IOfferRepository repository;
 

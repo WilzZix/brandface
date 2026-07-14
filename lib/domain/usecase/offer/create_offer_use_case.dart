@@ -3,7 +3,7 @@ import 'package:brandface/domain/entities/offer/create_offer_params.dart';
 import 'package:brandface/domain/repository/offer_repository.dart';
 import 'package:dart_either/dart_either.dart';
 
-class CreateOfferUseCase {
+final class CreateOfferUseCase {
   final IOfferRepository repository;
 
   CreateOfferUseCase({required this.repository});

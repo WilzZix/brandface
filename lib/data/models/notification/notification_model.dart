@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:brandface/domain/entities/notification/notification_entity.dart';
 
-class NotificationModel extends NotificationEntity {
+final class NotificationModel extends NotificationEntity {
   const NotificationModel({
     required super.id,
     required super.notificationType,

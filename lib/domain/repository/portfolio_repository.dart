@@ -2,7 +2,7 @@ import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:dart_either/dart_either.dart';
 
-abstract class IPortfolioRepository {
+abstract interface class IPortfolioRepository {
   Future<Either<Failure, List<PortfolioItemEntity>>> getMyPortfolios();
   Future<Either<Failure, PortfolioItemEntity>> getPortfolioDetail({
     required int id,

@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
 
-class BrandAnalyticsEntity {
+base class BrandAnalyticsEntity {
   // ── Activity summary ────────────────────────────────────────────────────
   final int totalSearchesDone;
   final int totalOffersCreated;
@@ -69,7 +69,7 @@ class BrandAnalyticsEntity {
   });
 }
 
-class OfferDayStat {
+base class OfferDayStat {
   final String day;   // "Mon", "Tue", ...
   final int views;
   final int applications;

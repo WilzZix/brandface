@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class LanguageEntity extends Equatable {
+base class LanguageEntity extends Equatable {
   final int id;
   final String name;
   final String code;

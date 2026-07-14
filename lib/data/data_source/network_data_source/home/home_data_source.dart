@@ -3,7 +3,7 @@ import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/models/home/home_dashboard_model.dart';
 import 'package:brandface/data/models/profile/catalog/influencer_profile_information_model.dart';
 
-abstract class HomeDataSource {
+abstract interface class HomeDataSource {
   Future<InfluencerProfileInformationModel> getMyProfile();
 
   Future<int> getUnreadNotificationsCount();
@@ -15,7 +15,7 @@ abstract class HomeDataSource {
   Future<List<RecommendedHomeOfferModel>> getRecommendedOffers();
 }
 
-class HomeDataSourceImpl implements HomeDataSource {
+final class HomeDataSourceImpl implements HomeDataSource {
   final DioClient _dioClient;
 
   HomeDataSourceImpl(this._dioClient);

@@ -8,7 +8,7 @@ import 'package:brandface/domain/repository/offer_repository.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 
-class OfferRepositoryImpl implements IOfferRepository {
+final class OfferRepositoryImpl implements IOfferRepository {
   final OfferDataSource _dataSource;
 
   OfferRepositoryImpl({required OfferDataSource dataSource})

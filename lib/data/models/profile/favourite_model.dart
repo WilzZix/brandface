@@ -1,6 +1,6 @@
 import 'package:brandface/domain/entities/profile/favourite_entity.dart';
 
-class FavouriteModel extends FavouriteEntity {
+final class FavouriteModel extends FavouriteEntity {
   const FavouriteModel({
     required super.favouriteId,
     required super.id,

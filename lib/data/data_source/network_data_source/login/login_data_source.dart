@@ -7,7 +7,7 @@ import '../../../../core/network/dio_client.dart';
 import '../../../models/login/otp_model.dart';
 import '../../../models/login/verifying_otp_model.dart';
 
-abstract class LoginRemoteDataSource {
+abstract interface class LoginRemoteDataSource {
   Future<OtpModel> sendOtp({required String phone});
 
   Future<VerifyOtpModel> verifyOtp({required VerifyOtpParams params});
@@ -17,7 +17,7 @@ abstract class LoginRemoteDataSource {
   Future<void> deleteAccount();
 }
 
-class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
+final class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   final DioClient _dioClient;
 
   LoginRemoteDataSourceImpl(this._dioClient);
