@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -48,7 +49,7 @@ class AmbassadorPortfolioDetailsPage extends StatelessWidget {
         scrolledUnderElevation: 0,
         backgroundColor: AppColors.lightBg,
         titleSpacing: 4,
-        title: Text('Portfolio details', style: Typographies.titleLarge),
+        title: Text(t.ambassador.portfolio_details, style: Typographies.titleLarge),
       ),
       body: SafeArea(
         top: false,
@@ -72,14 +73,14 @@ class AmbassadorPortfolioDetailsPage extends StatelessWidget {
                 child: _HeroImage(imageUrl: item.heroImageUrl),
               ),
               const SizedBox(height: 16),
-              Text('Information', style: Typographies.titleSmall),
+              Text(t.ambassador.information, style: Typographies.titleSmall),
               const SizedBox(height: 8),
               AppContainer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Description',
+                      t.offer.description,
                       style: Typographies.titleSmall.copyWith(
                         color: AppColors.mutedBlack,
                       ),
@@ -87,7 +88,7 @@ class AmbassadorPortfolioDetailsPage extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       item.description.isEmpty
-                          ? 'No description'
+                          ? t.ambassador.no_description
                           : item.description,
                       style: Typographies.bodyMedium,
                     ),
@@ -95,12 +96,12 @@ class AmbassadorPortfolioDetailsPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Text('Links', style: Typographies.titleSmall),
+              Text(t.ambassador.links, style: Typographies.titleSmall),
               const SizedBox(height: 8),
               AppContainer(
                 child: item.links.isEmpty
                     ? Text(
-                        'No links added.',
+                        t.ambassador.no_links_added,
                         style: Typographies.bodyMedium.copyWith(
                           color: AppColors.mutedBlack,
                         ),
@@ -124,7 +125,7 @@ class AmbassadorPortfolioDetailsPage extends StatelessWidget {
                       ),
               ),
               const SizedBox(height: 16),
-              Text('Portfolio images', style: Typographies.titleSmall),
+              Text(t.ambassador.portfolio_images, style: Typographies.titleSmall),
               const SizedBox(height: 8),
               AppContainer(
                 child: SizedBox(
@@ -132,7 +133,7 @@ class AmbassadorPortfolioDetailsPage extends StatelessWidget {
                   child: item.images.isEmpty
                       ? Center(
                           child: Text(
-                            'No images added.',
+                            t.ambassador.no_images_added,
                             style: Typographies.bodyMedium.copyWith(
                               color: AppColors.mutedBlack,
                             ),

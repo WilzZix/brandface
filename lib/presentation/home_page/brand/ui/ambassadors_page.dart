@@ -298,7 +298,7 @@ class _AmbassadorCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      'TOP',
+                      t.brand.top_label,
                       style: Typographies.labelSmall.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
@@ -33,7 +34,7 @@ class BrandPlanPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: AppColors.lightBg,
           scrolledUnderElevation: 0,
-          title: Text('Plan', style: Typographies.titleMedium),
+          title: Text(t.billing.plan_tab, style: Typographies.titleMedium),
           centerTitle: false,
         ),
         body: BlocBuilder<BillingCubit, BillingState>(
@@ -48,13 +49,13 @@ class BrandPlanPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(state.failure?.message ?? 'Error loading plan',
+                    Text(state.failure?.message ?? t.billing_ui.error_loading_plan,
                         style: Typographies.bodyMedium),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () =>
                           context.read<BillingCubit>().loadBilling(force: true),
-                      child: const Text('Retry'),
+                      child: Text(t.common.try_again),
                     ),
                   ],
                 ),
@@ -143,7 +144,7 @@ class _PlanContentState extends State<_PlanContent> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
       children: [
-        Text('Current plan', style: Typographies.titleSmall),
+        Text(t.billing.current_plan, style: Typographies.titleSmall),
         const SizedBox(height: 12),
         _buildPlanCard(context),
       ],
@@ -164,7 +165,7 @@ class _PlanContentState extends State<_PlanContent> {
           _StatusBadge(
             isPremiumActive: _isPremiumActive,
             isPremiumInactive: _isPremiumInactive,
-            planName: _plan?.name ?? 'Minimal',
+            planName: _plan?.name ?? t.billing_ui.minimal,
           ),
           const SizedBox(height: 16),
           const Divider(height: 1),
@@ -225,18 +226,18 @@ class _PlanContentState extends State<_PlanContent> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Deactivate plan?'),
-        content: const Text(
-          'Your subscription will be cancelled. You can reactivate at any time.',
+        title: Text(t.billing_ui.deactivate_plan_question),
+        content: Text(
+          t.billing_ui.deactivate_plan_message,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
+            child: Text(t.common.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text('Deactivate',
+            child: Text(t.billing_ui.deactivate,
                 style: TextStyle(color: AppColors.red)),
           ),
         ],
@@ -285,13 +286,13 @@ class _PlanContentState extends State<_PlanContent> {
     return _defaultFeatures();
   }
 
-  List<String> _defaultFeatures() => const [
-        'Browse offers & ambassadors (limited)',
-        'Create 1 Offer / month',
-        'Up to 3 Invites / month',
-        'AI recommendations: Top 5 matches',
-        'Shortlist up to 10 profiles',
-        'Basic analytics (views, invites)',
+  List<String> _defaultFeatures() => [
+        t.billing_ui.feature_browse_offers,
+        t.billing_ui.feature_create_offer,
+        t.billing_ui.feature_invites,
+        t.billing_ui.feature_ai_recommendations,
+        t.billing_ui.feature_shortlist,
+        t.billing_ui.feature_basic_analytics,
       ];
 }
 
@@ -316,15 +317,15 @@ class _StatusBadge extends StatelessWidget {
     late Color fg;
 
     if (isPremiumActive) {
-      label = 'PREMIUM';
+      label = t.billing_ui.premium;
       bg = AppColors.primary;
       fg = AppColors.black;
     } else if (isPremiumInactive) {
-      label = 'Deactivated';
+      label = t.billing_ui.deactivated;
       bg = AppColors.red;
       fg = AppColors.white;
     } else {
-      label = 'Minimal';
+      label = t.billing_ui.minimal;
       bg = AppColors.mutedBlack;
       fg = AppColors.white;
     }
@@ -358,12 +359,12 @@ class _PriceRow extends StatelessWidget {
   String _formatPrice() {
     final p = plan?.priceMonthlyUsd?.trim();
     if (p == null || p.isEmpty || p == '0' || p == '0.00') return '\$0';
-    return '\$$p/month';
+    return '\$$p${t.billing.per_month}';
   }
 
   String _uzs() {
     // Show UZS sub-label from price field or default
-    return '35 000 UZS/month';
+    return '35 000 UZS${t.billing.per_month}';
   }
 
   String _formatDate(DateTime? dt) {
@@ -377,7 +378,8 @@ class _PriceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateLabel = isPremiumActive ? 'Renewal date' : 'Start date';
+    final dateLabel =
+        isPremiumActive ? t.billing_ui.renewal_date : t.billing.start_date;
     final date = isPremiumActive
         ? subscription?.expiresAt
         : subscription?.startedAt;
@@ -398,7 +400,7 @@ class _PriceRow extends StatelessWidget {
                 GestureDetector(
                   onTap: onDeactivate,
                   child: Text(
-                    'Deactivate',
+                    t.billing_ui.deactivate,
                     style: Typographies.bodySmall.copyWith(color: AppColors.red),
                   ),
                 ),
@@ -451,12 +453,15 @@ class _CardRowState extends State<_CardRow> {
               Text(
                 card != null
                     ? '${_cardLabel(card.cardType)} • ${card.name}'
-                    : 'No card added',
+                    : t.billing_ui.no_card_added,
                 style: Typographies.bodyMedium,
               ),
               if (card != null)
                 Text(
-                  'Expiry ${card.expiryMonth.toString().padLeft(2, '0')}/${card.expiryYear}',
+                  t.billing.card_expiry(
+                    month: card.expiryMonth.toString().padLeft(2, '0'),
+                    year: card.expiryYear,
+                  ),
                   style: Typographies.bodySmall
                       .copyWith(color: AppColors.mutedBlack),
                 ),
@@ -475,7 +480,7 @@ class _CardRowState extends State<_CardRow> {
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             const SizedBox(width: 4),
-            Text('Auto-renewal', style: Typographies.bodySmall),
+            Text(t.billing_ui.auto_renewal, style: Typographies.bodySmall),
           ],
         ),
       ],
@@ -484,7 +489,7 @@ class _CardRowState extends State<_CardRow> {
 
   String _cardLabel(String type) {
     final n = type.trim().toLowerCase();
-    if (n.isEmpty) return 'Card';
+    if (n.isEmpty) return t.billing_ui.card;
     return n[0].toUpperCase() + n.substring(1);
   }
 }
@@ -502,7 +507,7 @@ class _CouponRow extends StatelessWidget {
             controller: controller,
             style: Typographies.bodyMedium,
             decoration: InputDecoration(
-              hintText: 'Coupon code',
+              hintText: t.billing_ui.coupon_code,
               hintStyle:
                   Typographies.bodyMedium.copyWith(color: AppColors.grey),
               contentPadding:
@@ -573,7 +578,7 @@ class _ActivateRow extends StatelessWidget {
 
   static String _cardLabel(String type) {
     final n = type.trim().toLowerCase();
-    if (n.isEmpty) return 'Card';
+    if (n.isEmpty) return t.billing_ui.card;
     return n[0].toUpperCase() + n.substring(1);
   }
 
@@ -657,7 +662,7 @@ class _ActivateRow extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    'Activate',
+                    t.billing_ui.activate,
                     style: Typographies.labelLarge
                         .copyWith(color: AppColors.black),
                   ),
@@ -700,7 +705,7 @@ class _PaymentMethodSheet extends StatelessWidget {
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Payment method', style: Typographies.titleMedium),
+            child: Text(t.billing_ui.payment_method, style: Typographies.titleMedium),
           ),
           const SizedBox(height: 8),
           ...methods.map((m) {
@@ -894,16 +899,19 @@ class _PayAsYouGo extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
-            'Pay-as-you-go add-ons (transparent)',
+            t.billing.pay_as_you_go,
             style: Typographies.labelSmall.copyWith(color: AppColors.black),
           ),
         ),
         const SizedBox(height: 12),
         if (contactPrice.isNotEmpty)
-          _AddOnRow(label: 'Contact unlock:', value: contactPrice),
+          _AddOnRow(label: t.billing.contact_unlock, value: contactPrice),
         if (boostLabel.isNotEmpty)
-          _AddOnRow(label: 'Profile / Offer boost:', value: boostLabel),
-        _AddOnRow(label: 'Extra invites / applies:', value: 'from \$5'),
+          _AddOnRow(label: t.billing.profile_offer_boost, value: boostLabel),
+        _AddOnRow(
+          label: t.billing_ui.extra_invites_applies,
+          value: t.billing_ui.extra_invites_price,
+        ),
       ],
     );
   }

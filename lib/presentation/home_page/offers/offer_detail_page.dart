@@ -73,7 +73,7 @@ class OfferDetailPage extends StatelessWidget {
             final offer = state.offer;
             if (offer == null) {
               return _OfferDetailErrorState(
-                title: 'Offer not found.',
+                title: t.offer.not_found,
                 subtitle: t.offer.no_detail_data,
               );
             }

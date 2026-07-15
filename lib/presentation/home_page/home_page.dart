@@ -440,25 +440,25 @@ class _HomeProfileTitle extends StatelessWidget {
     switch (status) {
       case _ProfileStatus.verified:
         return _ProfileStatusConfig(
-          label: 'Verified',
+          label: t.analytics.status_verified,
           icon: Icons.verified,
           color: AppColors.primaryDark,
         );
       case _ProfileStatus.rejected:
         return _ProfileStatusConfig(
-          label: 'Rejected',
+          label: t.analytics.status_rejected,
           icon: Icons.cancel,
           color: AppColors.red,
         );
       case _ProfileStatus.blocked:
         return _ProfileStatusConfig(
-          label: 'Blocked',
+          label: t.analytics.status_blocked,
           icon: Icons.block,
           color: AppColors.red,
         );
       case _ProfileStatus.pending:
         return _ProfileStatusConfig(
-          label: 'Pending',
+          label: t.analytics.status_pending,
           icon: Icons.schedule,
           color: AppColors.orange,
         );

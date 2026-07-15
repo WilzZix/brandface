@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/message/conversation_entity.dart';
 import 'package:brandface/presentation/home_page/messages/bloc/messages_cubit.dart';
 import 'package:brandface/presentation/home_page/messages/bloc/messages_state.dart';
@@ -37,7 +38,7 @@ class MessagesPage extends StatelessWidget {
           backgroundColor: AppColors.lightBg,
 
           titleSpacing: 4,
-          title: Text('Messages', style: Typographies.titleLarge),
+          title: Text(t.common.messages, style: Typographies.titleLarge),
         ),
         body: SafeArea(
           top: false,
@@ -54,7 +55,7 @@ class MessagesPage extends StatelessWidget {
                   conversations.isEmpty) {
                 return _MessagesErrorState(
                   message:
-                      state.failure?.message ?? 'Messages could not be loaded.',
+                      state.failure?.message ?? t.collab.messages_error_load,
                   onRetry: () =>
                       context.read<MessagesCubit>().loadMessages(force: true),
                 );
@@ -65,12 +66,14 @@ class MessagesPage extends StatelessWidget {
                 onRefresh: () =>
                     context.read<MessagesCubit>().loadMessages(force: true),
                 child: conversations.isEmpty
-                    ? const CustomScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
+                    ? CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         slivers: [
                           SliverFillRemaining(
                             hasScrollBody: false,
-                            child: AppEmptyState(title: 'No messages found'),
+                            child: AppEmptyState(
+                              title: t.collab.no_messages_found,
+                            ),
                           ),
                         ],
                       )
@@ -84,7 +87,9 @@ class MessagesPage extends StatelessWidget {
                         ),
                         children: [
                           Text(
-                            '${conversations.length} Messages found',
+                            t.collab.messages_found(
+                              count: conversations.length,
+                            ),
                             style: Typographies.titleMedium,
                           ),
                           const SizedBox(height: 16),
@@ -170,7 +175,7 @@ class _MessageCard extends StatelessWidget {
               Text(
                 participant?.phoneNumber.trim().isNotEmpty == true
                     ? participant!.phoneNumber
-                    : 'No phone',
+                    : t.collab.no_phone,
                 style: Typographies.bodyMedium,
               ),
             ],
@@ -186,7 +191,7 @@ class _MessageCard extends StatelessWidget {
           GestureDetector(
             onTap: onDelete,
             child: Text(
-              'Delete',
+              t.common.delete,
               style: Typographies.labelLarge.copyWith(color: AppColors.red),
             ),
           ),
@@ -198,18 +203,20 @@ class _MessageCard extends StatelessWidget {
   String _buildHeader(ConversationParticipantEntity? participant) {
     final role = participant?.role.trim().toLowerCase();
     if (role == null || role.isEmpty) {
-      return 'Participant';
+      return t.collab.participant;
     }
 
     if (role == 'brand') {
-      return 'Brand contact';
+      return t.collab.brand_contact;
     }
 
     if (role == 'influencer') {
-      return 'Influencer contact';
+      return t.collab.influencer_contact;
     }
 
-    return '${role[0].toUpperCase()}${role.substring(1)} contact';
+    return t.collab.role_contact(
+      role: '${role[0].toUpperCase()}${role.substring(1)}',
+    );
   }
 
   String _buildSubheader(
@@ -217,23 +224,23 @@ class _MessageCard extends StatelessWidget {
     ConversationParticipantEntity? participant,
   ) {
     if (item.offerId != null) {
-      return 'Offer #${item.offerId}';
+      return t.collab.offer_number(id: item.offerId!);
     }
 
     final role = participant?.role.trim().toLowerCase();
     if (role == 'brand') {
-      return 'Brand conversation';
+      return t.collab.brand_conversation;
     }
 
     if (role == 'influencer') {
-      return 'Influencer conversation';
+      return t.collab.influencer_conversation;
     }
 
     if (participant != null) {
-      return 'Conversation #${participant.id}';
+      return t.collab.conversation_number(id: participant.id);
     }
 
-    return 'Conversation';
+    return t.collab.conversation;
   }
 
   String _buildPreview(ConversationEntity item) {
@@ -242,7 +249,7 @@ class _MessageCard extends StatelessWidget {
       return text;
     }
 
-    return 'No messages yet in this conversation.';
+    return t.collab.no_messages_yet;
   }
 }
 
@@ -267,14 +274,17 @@ class _MessagesErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
+              child: AppButtons.primary(
+                title: t.common.try_again,
+                onTap: onRetry,
+              ),
             ),
           ],
         ),

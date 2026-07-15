@@ -46,23 +46,19 @@ final class RegistrationDataSourceImpl implements RegistrationDataSource {
   Future<RegistrationModel> registration({
     required RegistrationParams params,
   }) async {
-    try {
-      final response = await _dioClient.post(
-        ApiRoutes.registration,
-        data: params.toJson(),
-      );
+    final response = await _dioClient.post(
+      ApiRoutes.registration,
+      data: params.toJson(),
+    );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return RegistrationModel.fromJson(response.data);
-      } else {
-        throw DioException(
-          requestOptions: response.requestOptions,
-          response: response,
-          type: DioExceptionType.badResponse,
-        );
-      }
-    } catch (e) {
-      rethrow;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return RegistrationModel.fromJson(response.data);
+    } else {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        type: DioExceptionType.badResponse,
+      );
     }
   }
 
@@ -70,22 +66,18 @@ final class RegistrationDataSourceImpl implements RegistrationDataSource {
   Future<RegistrationModel> brandRegistration({
     required BrandRegistrationParams params,
   }) async {
-    try {
-      final response = await _dioClient.post(
-        ApiRoutes.brandRegistration,
-        data: params.toJson(),
+    final response = await _dioClient.post(
+      ApiRoutes.brandRegistration,
+      data: params.toJson(),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return RegistrationModel.fromJson(response.data);
+    } else {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        type: DioExceptionType.badResponse,
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return RegistrationModel.fromJson(response.data);
-      } else {
-        throw DioException(
-          requestOptions: response.requestOptions,
-          response: response,
-          type: DioExceptionType.badResponse,
-        );
-      }
-    } catch (e) {
-      rethrow;
     }
   }
 
@@ -94,15 +86,11 @@ final class RegistrationDataSourceImpl implements RegistrationDataSource {
     required FillInfluencerProfileParam params,
     required String profileId,
   }) async {
-    try {
-      final response = await _dioClient.patch(
-        ApiRoutes.fillProfile(profileId),
-        data: params.toJson(),
-      );
-      if (kDebugMode) debugPrint(response.toString());
-    } catch (e) {
-      rethrow;
-    }
+    final response = await _dioClient.patch(
+      ApiRoutes.fillProfile(profileId),
+      data: params.toJson(),
+    );
+    if (kDebugMode) debugPrint(response.toString());
   }
 
   @override
@@ -110,30 +98,22 @@ final class RegistrationDataSourceImpl implements RegistrationDataSource {
     required FillBrandProfileParam params,
     required String profileId,
   }) async {
-    try {
-      final response = await _dioClient.patch(
-        ApiRoutes.fillBrandProfile(profileId),
-        data: params.toJson(),
-      );
-      if (kDebugMode) debugPrint(response.toString());
-    } catch (e) {
-      rethrow;
-    }
+    final response = await _dioClient.patch(
+      ApiRoutes.fillBrandProfile(profileId),
+      data: params.toJson(),
+    );
+    if (kDebugMode) debugPrint(response.toString());
   }
 
   @override
   Future<void> updateMyInfluencerProfile({
     required FillInfluencerProfileParam params,
   }) async {
-    try {
-      final response = await _dioClient.patch(
-        ApiRoutes.myProfile,
-        data: params.toJson(),
-      );
-      if (kDebugMode) debugPrint(response.toString());
-    } catch (e) {
-      rethrow;
-    }
+    final response = await _dioClient.patch(
+      ApiRoutes.myProfile,
+      data: params.toJson(),
+    );
+    if (kDebugMode) debugPrint(response.toString());
   }
 
   @override
@@ -141,11 +121,7 @@ final class RegistrationDataSourceImpl implements RegistrationDataSource {
     required String url,
     required Map<String, dynamic> payload,
   }) async {
-    try {
-      final response = await _dioClient.patch(url, data: payload);
-      if (kDebugMode) debugPrint(response.toString());
-    } catch (e) {
-      rethrow;
-    }
+    final response = await _dioClient.patch(url, data: payload);
+    if (kDebugMode) debugPrint(response.toString());
   }
 }

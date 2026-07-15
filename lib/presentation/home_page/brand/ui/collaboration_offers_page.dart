@@ -341,7 +341,7 @@ class _SortBottomSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Text('Sort by', style: Typographies.titleMedium),
+            Text(t.brand.sort_by, style: Typographies.titleMedium),
             const SizedBox(height: 8),
             _SortTile(
               label: t.brand.sort_by_views,

@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/influencer_analytics_entity.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/stats/stats_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/stats/stats_state.dart';
@@ -27,7 +28,7 @@ class _StatsPageState extends State<StatsPage> {
         scrolledUnderElevation: 0,
         backgroundColor: AppColors.lightBg,
         titleSpacing: 4,
-        title: Text('Analytics', style: Typographies.titleLarge),
+        title: Text(t.brand.analytics, style: Typographies.titleLarge),
       ),
       body: SafeArea(
         top: false,
@@ -39,7 +40,7 @@ class _StatsPageState extends State<StatsPage> {
               StatsStatus.failure => _FailureView(
                 message:
                     state.failure?.message ??
-                    'Analytics ma\'lumotlarini yuklab bo\'lmadi.',
+                    t.analytics.analytics_load_failed,
                 onRetry: () =>
                     context.read<StatsCubit>().loadAnalytics(force: true),
               ),
@@ -113,21 +114,21 @@ class _ContentView extends StatelessWidget {
 
     final summaryCards = <_MetricCardData>[
       _MetricCardData(
-        title: 'Average rating',
+        title: t.analytics.average_rating,
         value: analytics.averageRating == 0
             ? '0.0'
             : analytics.averageRating.toStringAsFixed(1),
       ),
       _MetricCardData(
-        title: 'Total reviews',
+        title: t.analytics.total_reviews,
         value: analytics.totalReviews.toString(),
       ),
       _MetricCardData(
-        title: 'Applications',
+        title: t.brand.applications,
         value: analytics.totalApplicationsSubmitted.toString(),
       ),
       _MetricCardData(
-        title: 'Selected period',
+        title: t.analytics.selected_period,
         value: _formatNumber(currentViews),
       ),
     ];
@@ -141,7 +142,7 @@ class _ContentView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Profile views',
+              t.analytics.profile_views,
               style: Typographies.titleLarge.copyWith(
                 fontSize: 28,
                 height: 1.15,
@@ -149,7 +150,7 @@ class _ContentView extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'Period',
+              t.analytics.period,
               style: Typographies.titleSmall.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 8),
@@ -198,8 +199,8 @@ class _ContentView extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     selectedPeriod == _PeriodOption.last30Days
-                        ? 'Profile views in the last 30 days'
-                        : 'Total profile views',
+                        ? t.analytics.profile_views_last_30_days
+                        : t.analytics.total_profile_views,
                     style: Typographies.bodySmall.copyWith(
                       fontSize: 14,
                       color: AppColors.mutedBlack,
@@ -251,7 +252,7 @@ class _ContentView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Applications by status',
+                    t.analytics.applications_by_status,
                     style: Typographies.titleMedium,
                   ),
                   const SizedBox(height: 16),
@@ -281,8 +282,8 @@ class _ViewsBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = <_BarItem>[
-      _BarItem(label: '30 days', value: last30DaysViews),
-      _BarItem(label: 'All time', value: totalViews),
+      _BarItem(label: t.analytics.days_30, value: last30DaysViews),
+      _BarItem(label: t.analytics.all_time, value: totalViews),
     ];
     final maxValue = items
         .map((item) => item.value)
@@ -368,7 +369,7 @@ class _ApplicationsBreakdown extends StatelessWidget {
 
     if (orderedStatuses.isEmpty) {
       return Text(
-        'No applications yet.',
+        t.analytics.no_applications,
         style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
       );
     }
@@ -471,7 +472,7 @@ class _FailureView extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.black,
               ),
-              child: const Text('Try again'),
+              child: Text(t.common.try_again),
             ),
           ],
         ),
@@ -517,7 +518,7 @@ String _formatNumber(int value) {
 
 String _formatStatus(String status) {
   if (status.isEmpty) {
-    return 'Unknown';
+    return t.common.unknown;
   }
 
   return status

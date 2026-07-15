@@ -38,9 +38,9 @@ class ChooseCurrency extends StatefulWidget {
 }
 
 class _ChooseCurrencyState extends State<ChooseCurrency> {
-  static const List<_Currency> _currencies = [
-    _Currency(id: 0, code: 'UZS', name: 'Uzbekistani som', symbol: "so'm"),
-    _Currency(id: 1, code: 'USD', name: 'US Dollar', symbol: r'$'),
+  List<_Currency> get _currencies => [
+    _Currency(id: 0, code: 'UZS', name: t.misc.currency_uzs, symbol: "so'm"),
+    _Currency(id: 1, code: 'USD', name: t.misc.currency_usd, symbol: r'$'),
   ];
 
   _Currency? _selected;

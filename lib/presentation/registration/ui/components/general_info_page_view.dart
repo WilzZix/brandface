@@ -101,7 +101,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
           },
           failure: (_) {
             context.showAppSnackBar(
-              'Image upload failed',
+              t.misc.image_upload_failed,
               type: AppSnackBarType.error,
             );
           },
@@ -265,7 +265,7 @@ class _GeneralInfoPageViewState extends State<GeneralInfoPageView>
             SizedBox(height: 24),
             ChooseDateOfBirthday(
               initialValue: widget.initialParam?.birthDate,
-              title: 'DD.MM.YYYY',
+              title: t.common.date_format_hint,
               label: t.registration.date_of_birth,
               onItemSelected: (DateTime date) {
                 _fillInfluencerProfileParam =

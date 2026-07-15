@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -106,13 +107,13 @@ class _SmsOtpPageState extends State<SmsOtpPage> {
               child: Column(
                 children: [
                   Text(
-                    'SMS confirmation',
+                    t.login.sms_confirmation,
                     style: Typographies.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'We have sent SMS code to your phone number **8877,\nplease enter this code',
+                    t.login.sms_sent_to(phoneEnd: '8877'),
                     style: Typographies.bodyMedium
                         .copyWith(color: AppColors.mutedBlack),
                     textAlign: TextAlign.center,
@@ -184,7 +185,7 @@ class _SmsOtpPageState extends State<SmsOtpPage> {
               child: Text(
                 _secondsLeft > 0
                     ? '00:${_secondsLeft.toString().padLeft(2, '0')}'
-                    : 'Resend code',
+                    : t.login.send_code_again,
                 style: Typographies.bodyMedium.copyWith(
                   color: _secondsLeft > 0
                       ? AppColors.mutedBlack
@@ -211,7 +212,7 @@ class _SmsOtpPageState extends State<SmsOtpPage> {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    'Continue',
+                    t.common.continue_label,
                     style: Typographies.labelLarge,
                   ),
                 ),

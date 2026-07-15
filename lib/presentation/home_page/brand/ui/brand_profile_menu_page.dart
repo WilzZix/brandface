@@ -63,7 +63,7 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
             ),
             Divider(color: AppColors.borderColor),
             _menuItem(
-              title: 'Plan',
+              title: t.billing.plan_tab,
               onTap: () => context.pushNamed(BrandPlanPage.tag),
             ),
             Divider(color: AppColors.borderColor),

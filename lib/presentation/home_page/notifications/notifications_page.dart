@@ -91,10 +91,10 @@ class NotificationsPage extends StatelessWidget {
                     .loadNotifications(force: true),
                 child: CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: const [
+                  slivers: [
                     SliverFillRemaining(
                       hasScrollBody: false,
-                      child: AppEmptyState(title: 'No notifications found'),
+                      child: AppEmptyState(title: t.notifications.no_notifications),
                     ),
                   ],
                 ),

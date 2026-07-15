@@ -408,7 +408,7 @@ class _AudienceAndFollowersPageViewState
       children: [
         Expanded(
           child: Text(
-            '${data.followers} followers',
+            t.brand.followers_count(count: data.followers ?? 0),
             style: Typographies.bodySmall,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -417,7 +417,7 @@ class _AudienceAndFollowersPageViewState
         const SizedBox(width: 12),
         Expanded(
           child: Text(
-            '${data.engagementRate}% engagement rate',
+            t.misc.engagement_rate_value(rate: data.engagementRate ?? 0),
             style: Typographies.bodySmall,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

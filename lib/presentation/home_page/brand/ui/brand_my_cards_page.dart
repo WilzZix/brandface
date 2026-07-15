@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/presentation/home_page/brand/ui/add_payment_method_page.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
@@ -38,7 +39,7 @@ class BrandMyCardsPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: AppColors.lightBg,
           scrolledUnderElevation: 0,
-          title: Text('My cards', style: Typographies.titleMedium),
+          title: Text(t.billing.my_cards_tab, style: Typographies.titleMedium),
           centerTitle: false,
           actions: [
             GestureDetector(
@@ -76,7 +77,7 @@ class BrandMyCardsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'No cards added yet',
+                      t.billing_ui.no_cards_added_yet,
                       style: Typographies.bodyMedium.copyWith(
                         color: AppColors.mutedBlack,
                       ),
@@ -94,7 +95,7 @@ class BrandMyCardsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
-                          'Add new card',
+                          t.billing.add_new_card,
                           style: Typographies.labelLarge,
                         ),
                       ),
@@ -137,7 +138,7 @@ class _CardTile extends StatelessWidget {
 
   String _cardLabel(String type) {
     final n = type.trim().toLowerCase();
-    if (n.isEmpty) return 'Card';
+    if (n.isEmpty) return t.billing_ui.card;
     return n[0].toUpperCase() + n.substring(1);
   }
 
@@ -165,7 +166,10 @@ class _CardTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Expiry ${card.expiryMonth.toString().padLeft(2, '0')}/${card.expiryYear}',
+                      t.billing.card_expiry(
+                        month: card.expiryMonth.toString().padLeft(2, '0'),
+                        year: card.expiryYear,
+                      ),
                       style: Typographies.bodySmall.copyWith(
                         color: AppColors.mutedBlack,
                       ),
@@ -186,7 +190,7 @@ class _CardTile extends StatelessWidget {
                     ? null
                     : () => context.read<CardsCubit>().deleteCard(card.id),
                 child: Text(
-                  'Delete',
+                  t.billing.delete_card,
                   style: Typographies.labelMedium.copyWith(
                     color: AppColors.red,
                   ),
@@ -198,7 +202,9 @@ class _CardTile extends StatelessWidget {
                     ? null
                     : () => context.read<CardsCubit>().setDefaultCard(card.id),
                 child: Text(
-                  card.isDefault ? 'Default' : 'Set default',
+                  card.isDefault
+                      ? t.billing.default_card
+                      : t.billing.set_default_card,
                   style: Typographies.labelMedium.copyWith(
                     color: card.isDefault
                         ? AppColors.primaryDark

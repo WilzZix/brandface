@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/brand_analytics_entity.dart';
 import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_analytics/brand_analytics_cubit.dart';
@@ -25,7 +26,7 @@ class BrandAnalyticsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.lightBg,
         scrolledUnderElevation: 0,
-        title: Text('Analytics', style: Typographies.titleMedium),
+        title: Text(t.brand.analytics, style: Typographies.titleMedium),
         centerTitle: false,
       ),
       body: BlocBuilder<BrandAnalyticsCubit, BrandAnalyticsState>(
@@ -42,7 +43,7 @@ class BrandAnalyticsPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => context.read<BrandAnalyticsCubit>().load(),
-                    child: const Text('Retry'),
+                    child: Text(t.common.try_again),
                   ),
                 ],
               ),
@@ -72,20 +73,20 @@ class _AnalyticsContent extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
       children: [
         // ── 1. Activity Summary ──────────────────────────────────────
-        _SectionHeader(title: 'Brand Activity Summary'),
+        _SectionHeader(title: t.analytics.brand_activity_summary),
         const SizedBox(height: 12),
         _ActivitySummaryGrid(data: data),
         const SizedBox(height: 24),
 
         // ── 2. Search Insights ───────────────────────────────────────
-        _SectionHeader(title: 'Search Insights'),
+        _SectionHeader(title: t.analytics.search_insights),
         const SizedBox(height: 12),
         _SearchInsightsCard(data: data),
         const SizedBox(height: 24),
 
         // ── 3. Most Viewed Ambassadors ───────────────────────────────
         if (data.mostViewedAmbassadors.isNotEmpty) ...[
-          _SectionHeader(title: 'Most Searched Ambassadors'),
+          _SectionHeader(title: t.analytics.most_searched_ambassadors),
           const SizedBox(height: 12),
           _AmbassadorHorizontalList(
             items: data.mostViewedAmbassadors,
@@ -98,20 +99,20 @@ class _AnalyticsContent extends StatelessWidget {
         ],
 
         // ── 4. Offer Performance ─────────────────────────────────────
-        _SectionHeader(title: 'Offer Performance'),
+        _SectionHeader(title: t.analytics.offer_performance),
         const SizedBox(height: 12),
         _OfferPerformanceCard(data: data),
         const SizedBox(height: 24),
 
         // ── 5. AI Matching Insights ──────────────────────────────────
-        _SectionHeader(title: 'AI Matching Insights'),
+        _SectionHeader(title: t.analytics.ai_matching_insights),
         const SizedBox(height: 12),
         _AiInsightsCard(data: data),
         const SizedBox(height: 16),
 
         // ── 6. Top Recommended Ambassadors ──────────────────────────
         if (data.topRecommendedAmbassadors.isNotEmpty) ...[
-          _SectionHeader(title: 'Top Recommended Ambassadors'),
+          _SectionHeader(title: t.analytics.top_recommended_ambassadors),
           const SizedBox(height: 12),
           ...data.topRecommendedAmbassadors.take(4).map(
                 (a) => Padding(
@@ -129,7 +130,7 @@ class _AnalyticsContent extends StatelessWidget {
         ],
 
         // ── 7. Audience Insights ─────────────────────────────────────
-        _SectionHeader(title: 'Audience Insights'),
+        _SectionHeader(title: t.analytics.audience_insights),
         const SizedBox(height: 12),
         _AudienceInsightsCard(data: data),
       ],
@@ -163,12 +164,12 @@ class _ActivitySummaryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      _StatItem('Total Searches', data.totalSearchesDone.toString()),
-      _StatItem('Total Offers', data.totalOffersCreated.toString()),
-      _StatItem('Active Offers', data.activeOffers.toString()),
-      _StatItem('Invitations Sent', data.invitationsSent.toString()),
-      _StatItem('Ambassador Apps', data.totalAmbassadorApplications.toString()),
-      _StatItem('Influencer Apps', data.totalInfluencerApplications.toString()),
+      _StatItem(t.analytics.total_searches, data.totalSearchesDone.toString()),
+      _StatItem(t.analytics.total_offers, data.totalOffersCreated.toString()),
+      _StatItem(t.common.active_offers, data.activeOffers.toString()),
+      _StatItem(t.analytics.invitations_sent, data.invitationsSent.toString()),
+      _StatItem(t.analytics.ambassador_apps, data.totalAmbassadorApplications.toString()),
+      _StatItem(t.analytics.influencer_apps, data.totalInfluencerApplications.toString()),
     ];
     return GridView.count(
       crossAxisCount: 3,
@@ -245,7 +246,7 @@ class _SearchInsightsCard extends StatelessWidget {
               Icon(Icons.search_rounded, size: 18, color: AppColors.primary),
               const SizedBox(width: 6),
               Text(
-                '${data.totalSearchesPerformed} searches performed',
+                t.analytics.searches_performed(count: data.totalSearchesPerformed),
                 style: Typographies.bodyMedium,
               ),
             ],
@@ -253,7 +254,7 @@ class _SearchInsightsCard extends StatelessWidget {
           if (data.topSearchFilters.isNotEmpty) ...[
             const SizedBox(height: 10),
             Text(
-              'Top filters used',
+              t.analytics.top_filters_used,
               style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
             ),
             const SizedBox(height: 6),
@@ -355,15 +356,15 @@ class _OfferPerformanceCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Last 7 Days', style: Typographies.bodyMedium),
+                Text(t.analytics.last_7_days, style: Typographies.bodyMedium),
                 const SizedBox(height: 12),
                 _BarChart(stats: data.performanceChart),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    _LegendDot(color: AppColors.primary, label: 'Views'),
+                    _LegendDot(color: AppColors.primary, label: t.brand.views),
                     const SizedBox(width: 16),
-                    _LegendDot(color: AppColors.orange, label: 'Applications'),
+                    _LegendDot(color: AppColors.orange, label: t.brand.applications),
                   ],
                 ),
               ],
@@ -377,7 +378,7 @@ class _OfferPerformanceCard extends StatelessWidget {
           children: [
             Expanded(
               child: _LabelCountList(
-                title: 'Top Niches',
+                title: t.analytics.top_niches,
                 items: data.topNiches,
                 color: AppColors.primary,
               ),
@@ -385,7 +386,7 @@ class _OfferPerformanceCard extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _LabelCountList(
-                title: 'Top Regions',
+                title: t.analytics.top_regions,
                 items: data.topRegions,
                 color: AppColors.orange,
               ),
@@ -569,10 +570,10 @@ class _OfferStatsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      _StatItem('Viewed Offer', data.viewedOffer.toString()),
-      _StatItem('Opened Details', data.openedDetails.toString()),
-      _StatItem('Applicants', data.applicants.toString()),
-      _StatItem('Approved', data.approved.toString()),
+      _StatItem(t.analytics.viewed_offer, data.viewedOffer.toString()),
+      _StatItem(t.analytics.opened_details, data.openedDetails.toString()),
+      _StatItem(t.analytics.applicants, data.applicants.toString()),
+      _StatItem(t.analytics.approved, data.approved.toString()),
     ];
     return GridView.count(
       crossAxisCount: 2,
@@ -637,13 +638,13 @@ class _AiInsightsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (data.nicheFit.isNotEmpty)
-                      _FitChip(label: 'Niche Fit', value: data.nicheFit),
+                      _FitChip(label: t.analytics.niche_fit, value: data.nicheFit),
                     const SizedBox(height: 4),
                     if (data.audienceFit.isNotEmpty)
-                      _FitChip(label: 'Audience Fit', value: data.audienceFit),
+                      _FitChip(label: t.analytics.audience_fit, value: data.audienceFit),
                     const SizedBox(height: 4),
                     if (data.platformFit.isNotEmpty)
-                      _FitChip(label: 'Platform Fit', value: data.platformFit),
+                      _FitChip(label: t.analytics.platform_fit, value: data.platformFit),
                   ],
                 ),
               ),
@@ -756,7 +757,10 @@ class _RecommendedAmbassadorCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '${_formatFollowers(item.totalFollowers)} followers  •  ${item.region}',
+                    t.analytics.followers_region(
+                      followers: _formatFollowers(item.totalFollowers),
+                      region: item.region,
+                    ),
                     style: Typographies.bodySmall
                         .copyWith(color: AppColors.mutedBlack),
                     maxLines: 1,
@@ -825,7 +829,7 @@ class _AudienceInsightsCard extends StatelessWidget {
                 Icon(Icons.people_alt_rounded, size: 16, color: AppColors.mutedBlack),
                 const SizedBox(width: 6),
                 Text(
-                  'Top age group: ',
+                  t.analytics.top_age_group,
                   style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
                 ),
                 Text(data.topAgeGroup, style: Typographies.bodySmall),
@@ -836,7 +840,7 @@ class _AudienceInsightsCard extends StatelessWidget {
 
           // Top countries
           if (data.topCountries.isNotEmpty) ...[
-            Text('Top Countries', style: Typographies.bodyMedium),
+            Text(t.analytics.top_countries, style: Typographies.bodyMedium),
             const SizedBox(height: 8),
             ...data.topCountries.take(5).map(
                   (c) => Padding(
@@ -867,7 +871,7 @@ class _GenderBar extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Gender Distribution', style: Typographies.bodyMedium),
+        Text(t.analytics.gender_distribution, style: Typographies.bodyMedium),
         const SizedBox(height: 8),
         ClipRRect(
           borderRadius: BorderRadius.circular(999),
@@ -890,11 +894,15 @@ class _GenderBar extends StatelessWidget {
           children: [
             _LegendDot(
               color: AppColors.primary,
-              label: 'Female ${femalePercent.toStringAsFixed(0)}%',
+              label: t.analytics.female_percent(
+                percent: femalePercent.toStringAsFixed(0),
+              ),
             ),
             _LegendDot(
               color: AppColors.orange,
-              label: 'Male ${malePercent.toStringAsFixed(0)}%',
+              label: t.analytics.male_percent(
+                percent: malePercent.toStringAsFixed(0),
+              ),
             ),
           ],
         ),

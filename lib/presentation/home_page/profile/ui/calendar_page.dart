@@ -1,6 +1,7 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case.dart';
@@ -21,19 +22,19 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  static const List<String> _monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+  List<String> get _monthNames => [
+    t.collab.month_january,
+    t.collab.month_february,
+    t.collab.month_march,
+    t.collab.month_april,
+    t.collab.month_may,
+    t.collab.month_june,
+    t.collab.month_july,
+    t.collab.month_august,
+    t.collab.month_september,
+    t.collab.month_october,
+    t.collab.month_november,
+    t.collab.month_december,
   ];
 
   bool _isLoading = true;
@@ -76,7 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
         backgroundColor: AppColors.lightBg,
 
         titleSpacing: 4,
-        title: Text('Calendar', style: Typographies.titleLarge),
+        title: Text(t.profile.calendar, style: Typographies.titleLarge),
         actions: [
           if (_hasPendingChanges && !_isLoading)
             Padding(
@@ -90,7 +91,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(
-                        'Save',
+                        t.collab.save,
                         style: Typographies.labelLarge.copyWith(
                           color: AppColors.primaryDark,
                         ),
@@ -151,7 +152,7 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Available dates ($availableCount)',
+                t.collab.available_dates(count: availableCount),
                 style: Typographies.titleMedium,
               ),
             ],
@@ -256,7 +257,7 @@ class _CalendarPageState extends State<CalendarPage> {
         type: AppSnackBarType.error,
       );
     } else {
-      context.showAppSnackBar('Calendar updated');
+      context.showAppSnackBar(t.collab.calendar_updated);
     }
     await _loadCalendar();
   }
@@ -386,7 +387,7 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  static String _formatMonth(DateTime date) {
+  String _formatMonth(DateTime date) {
     return '${_monthNames[date.month - 1]}, ${date.year}';
   }
 }
@@ -547,14 +548,17 @@ class _CalendarErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
+              child: AppButtons.primary(
+                title: t.common.try_again,
+                onTap: onRetry,
+              ),
             ),
           ],
         ),

@@ -87,114 +87,78 @@ final class ProfileDataSourceImpl implements ProfileDataSource {
 
   @override
   Future<CategoryModel> getCategories() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.niches);
-      return CategoryModel.fromJson(result.data);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.niches);
+    return CategoryModel.fromJson(result.data);
   }
 
   @override
   Future<ServiceTypeModel> getServices() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.serviceType);
-      return ServiceTypeModel.fromJson(result.data);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.serviceType);
+    return ServiceTypeModel.fromJson(result.data);
   }
 
   @override
   Future<List<RegionModel>> getRegions() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.regions);
-      final List<dynamic> data = result.data['data'];
+    final result = await _dioClient.get(ApiRoutes.regions);
+    final List<dynamic> data = result.data['data'];
 
-      return data.map((json) => RegionModel.fromJson(json)).toList();
-    } catch (e) {
-      rethrow;
-    }
+    return data.map((json) => RegionModel.fromJson(json)).toList();
   }
 
   @override
   Future<List<CityModel>> getCities() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.cities);
-      final List<dynamic> data = result.data['data'];
-      return data.map((json) => CityModel.fromJson(json)).toList();
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.cities);
+    final List<dynamic> data = result.data['data'];
+    return data.map((json) => CityModel.fromJson(json)).toList();
   }
 
   @override
   Future<List<SphereModel>> getSpheres() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.spheres);
-      final List<dynamic> data = result.data['data'];
-      return data.map((json) => SphereModel.fromJson(json)).toList();
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.spheres);
+    final List<dynamic> data = result.data['data'];
+    return data.map((json) => SphereModel.fromJson(json)).toList();
   }
 
   @override
   Future<ProfileModel> getProfile({required String profileId}) async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.profile(profileId));
-      return ProfileModel.fromJson(result.data['data']);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.profile(profileId));
+    return ProfileModel.fromJson(result.data['data']);
   }
 
   @override
   Future<InfluencerProfileInformationModel> getInfluencerProfile() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.myProfile);
-      return InfluencerProfileInformationModel.fromJson(result.data['data']);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.myProfile);
+    return InfluencerProfileInformationModel.fromJson(result.data['data']);
   }
 
   @override
   Future<LanguageModel> getLanguages() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.languages);
-      return LanguageModel.fromJson(result.data);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.languages);
+    return LanguageModel.fromJson(result.data);
   }
 
   @override
   Future<List<BrandShortModel>> getBrands() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.brands);
-      final payload = result.data;
+    final result = await _dioClient.get(ApiRoutes.brands);
+    final payload = result.data;
 
-      List<dynamic> list;
-      if (payload is List) {
-        list = payload;
-      } else if (payload is Map) {
-        final inner = payload['data'] ?? payload['results'];
-        list = inner is List ? inner : [];
-      } else {
-        list = [];
-      }
-
-      return list
-          .map((item) => BrandShortModel.fromJson(
-                item is Map<String, dynamic>
-                    ? item
-                    : Map<String, dynamic>.from(item as Map),
-              ))
-          .toList();
-    } catch (e) {
-      rethrow;
+    List<dynamic> list;
+    if (payload is List) {
+      list = payload;
+    } else if (payload is Map) {
+      final inner = payload['data'] ?? payload['results'];
+      list = inner is List ? inner : [];
+    } else {
+      list = [];
     }
+
+    return list
+        .map((item) => BrandShortModel.fromJson(
+              item is Map<String, dynamic>
+                  ? item
+                  : Map<String, dynamic>.from(item as Map),
+            ))
+        .toList();
   }
 
   @override
@@ -202,87 +166,67 @@ final class ProfileDataSourceImpl implements ProfileDataSource {
     required String platform,
     required String username,
   }) async {
-    try {
-      final result = await _dioClient.post(
-        ApiRoutes.socialProfileStats,
-        data: {'platform': platform, 'username': username},
-      );
-      return SocialMediaAccountStatsModel.fromJson(result.data['data']);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.post(
+      ApiRoutes.socialProfileStats,
+      data: {'platform': platform, 'username': username},
+    );
+    return SocialMediaAccountStatsModel.fromJson(result.data['data']);
   }
 
   @override
   Future<InfluencerAnalyticsModel> getInfluencerAnalytics() async {
-    try {
-      final result = await _dioClient.get(ApiRoutes.influencerAnalytics);
-      return InfluencerAnalyticsModel.fromApiJson(result.data);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.get(ApiRoutes.influencerAnalytics);
+    return InfluencerAnalyticsModel.fromApiJson(result.data);
   }
 
   @override
   Future<List<ReviewModel>> getInfluencerReviews({
     required int influencerId,
   }) async {
-    try {
-      final result = await _dioClient.get(
-        ApiRoutes.influencerReviews(influencerId),
-      );
-      final payload = result.data;
+    final result = await _dioClient.get(
+      ApiRoutes.influencerReviews(influencerId),
+    );
+    final payload = result.data;
 
-      if (payload is List) {
-        return payload
-            .map(
-              (item) => ReviewModel.fromJson(Map<String, dynamic>.from(item)),
-            )
-            .toList();
-      }
-
-      final root = payload is Map<String, dynamic>
-          ? payload
-          : payload is Map
-          ? Map<String, dynamic>.from(payload)
-          : <String, dynamic>{};
-
-      final data = root['data'];
-      if (data is List) {
-        return data
-            .map(
-              (item) => ReviewModel.fromJson(Map<String, dynamic>.from(item)),
-            )
-            .toList();
-      }
-
-      return const [];
-    } catch (e) {
-      rethrow;
+    if (payload is List) {
+      return payload
+          .map(
+            (item) => ReviewModel.fromJson(Map<String, dynamic>.from(item)),
+          )
+          .toList();
     }
+
+    final root = payload is Map<String, dynamic>
+        ? payload
+        : payload is Map
+        ? Map<String, dynamic>.from(payload)
+        : <String, dynamic>{};
+
+    final data = root['data'];
+    if (data is List) {
+      return data
+          .map(
+            (item) => ReviewModel.fromJson(Map<String, dynamic>.from(item)),
+          )
+          .toList();
+    }
+
+    return const [];
   }
 
   @override
   Future<AwardEntity> createAward({required String title}) async {
-    try {
-      final result = await _dioClient.post(
-        ApiRoutes.myAwards,
-        data: {'title': title},
-      );
-      final data = result.data['data'] ?? result.data;
-      return AwardEntity(id: data['id'], title: data['title']);
-    } catch (e) {
-      rethrow;
-    }
+    final result = await _dioClient.post(
+      ApiRoutes.myAwards,
+      data: {'title': title},
+    );
+    final data = result.data['data'] ?? result.data;
+    return AwardEntity(id: data['id'], title: data['title']);
   }
 
   @override
   Future<void> deleteAward({required int awardId}) async {
-    try {
-      await _dioClient.delete(ApiRoutes.deleteAward(awardId));
-    } catch (e) {
-      rethrow;
-    }
+    await _dioClient.delete(ApiRoutes.deleteAward(awardId));
   }
 
   @override
@@ -291,37 +235,29 @@ final class ProfileDataSourceImpl implements ProfileDataSource {
     required String dateTo,
     String? note,
   }) async {
-    try {
-      final response = await _dioClient.post(
-        ApiRoutes.myAvailableDates,
-        data: {
-          'date_from': dateFrom,
-          'date_to': dateTo,
-          if (note != null && note.isNotEmpty) 'note': note,
-        },
-      );
-      final payload = response.data;
-      final map = payload is Map
-          ? Map<String, dynamic>.from(payload)
-          : <String, dynamic>{};
-      return AvailableDateItem(
-        id: (map['id'] as num?)?.toInt() ?? 0,
-        dateFrom: map['date_from']?.toString() ?? dateFrom,
-        dateTo: map['date_to']?.toString() ?? dateTo,
-        note: map['note']?.toString(),
-      );
-    } catch (e) {
-      rethrow;
-    }
+    final response = await _dioClient.post(
+      ApiRoutes.myAvailableDates,
+      data: {
+        'date_from': dateFrom,
+        'date_to': dateTo,
+        if (note != null && note.isNotEmpty) 'note': note,
+      },
+    );
+    final payload = response.data;
+    final map = payload is Map
+        ? Map<String, dynamic>.from(payload)
+        : <String, dynamic>{};
+    return AvailableDateItem(
+      id: (map['id'] as num?)?.toInt() ?? 0,
+      dateFrom: map['date_from']?.toString() ?? dateFrom,
+      dateTo: map['date_to']?.toString() ?? dateTo,
+      note: map['note']?.toString(),
+    );
   }
 
   @override
   Future<void> deleteAvailableDate({required int dateId}) async {
-    try {
-      await _dioClient.delete(ApiRoutes.myAvailableDate(dateId));
-    } catch (e) {
-      rethrow;
-    }
+    await _dioClient.delete(ApiRoutes.myAvailableDate(dateId));
   }
 
   @override
@@ -343,73 +279,65 @@ final class ProfileDataSourceImpl implements ProfileDataSource {
     int? pricePerHourTo,
     String? role,
   }) async {
-    try {
-      // NOTE: Query parameter names below assume DRF/REST conventions.
-      // Adjust if backend uses different keys (e.g. `min_age` vs `age_from`).
-      final queryParams = <String, dynamic>{};
-      if (ordering != null) queryParams['ordering'] = ordering;
-      if (categoryId != null) queryParams['category_id'] = categoryId;
-      if (regionId != null) queryParams['region_id'] = regionId;
-      if (languageId != null) queryParams['language_id'] = languageId;
-      if (gender != null && gender != 'any') queryParams['gender'] = gender;
-      if (ageFrom != null) queryParams['age_from'] = ageFrom;
-      if (ageTo != null) queryParams['age_to'] = ageTo;
-      if (isTop == true) queryParams['is_top'] = true;
-      if (isVip == true) queryParams['is_vip'] = true;
-      if (followersFrom != null) queryParams['followers_from'] = followersFrom;
-      if (followersTo != null) queryParams['followers_to'] = followersTo;
-      if (availableDate != null) queryParams['available_date'] = availableDate;
-      if (currency != null) queryParams['currency'] = currency;
-      if (pricePerHourFrom != null) {
-        queryParams['price_per_hour_from'] = pricePerHourFrom;
-      }
-      if (pricePerHourTo != null) {
-        queryParams['price_per_hour_to'] = pricePerHourTo;
-      }
-      if (role != null && role.isNotEmpty) queryParams['role'] = role;
-
-      final response = await _dioClient.get(
-        ApiRoutes.ambassadors,
-        queryParameters: queryParams.isEmpty ? null : queryParams,
-      );
-      final payload = response.data;
-
-      List<dynamic> list;
-      if (payload is List) {
-        list = payload;
-      } else if (payload is Map) {
-        final inner = payload['results'] ?? payload['data'];
-        list = inner is List ? inner : [];
-      } else {
-        list = [];
-      }
-
-      return list.map((item) {
-        final map = item is Map<String, dynamic>
-            ? item
-            : Map<String, dynamic>.from(item as Map);
-        return AmbassadorModel.fromJson(map);
-      }).toList();
-    } catch (e) {
-      rethrow;
+    // NOTE: Query parameter names below assume DRF/REST conventions.
+    // Adjust if backend uses different keys (e.g. `min_age` vs `age_from`).
+    final queryParams = <String, dynamic>{};
+    if (ordering != null) queryParams['ordering'] = ordering;
+    if (categoryId != null) queryParams['category_id'] = categoryId;
+    if (regionId != null) queryParams['region_id'] = regionId;
+    if (languageId != null) queryParams['language_id'] = languageId;
+    if (gender != null && gender != 'any') queryParams['gender'] = gender;
+    if (ageFrom != null) queryParams['age_from'] = ageFrom;
+    if (ageTo != null) queryParams['age_to'] = ageTo;
+    if (isTop == true) queryParams['is_top'] = true;
+    if (isVip == true) queryParams['is_vip'] = true;
+    if (followersFrom != null) queryParams['followers_from'] = followersFrom;
+    if (followersTo != null) queryParams['followers_to'] = followersTo;
+    if (availableDate != null) queryParams['available_date'] = availableDate;
+    if (currency != null) queryParams['currency'] = currency;
+    if (pricePerHourFrom != null) {
+      queryParams['price_per_hour_from'] = pricePerHourFrom;
     }
+    if (pricePerHourTo != null) {
+      queryParams['price_per_hour_to'] = pricePerHourTo;
+    }
+    if (role != null && role.isNotEmpty) queryParams['role'] = role;
+
+    final response = await _dioClient.get(
+      ApiRoutes.ambassadors,
+      queryParameters: queryParams.isEmpty ? null : queryParams,
+    );
+    final payload = response.data;
+
+    List<dynamic> list;
+    if (payload is List) {
+      list = payload;
+    } else if (payload is Map) {
+      final inner = payload['results'] ?? payload['data'];
+      list = inner is List ? inner : [];
+    } else {
+      list = [];
+    }
+
+    return list.map((item) {
+      final map = item is Map<String, dynamic>
+          ? item
+          : Map<String, dynamic>.from(item as Map);
+      return AmbassadorModel.fromJson(map);
+    }).toList();
   }
 
   @override
   Future<AmbassadorDetailModel> getAmbassadorDetail({
     required int ambassadorId,
   }) async {
-    try {
-      final response = await _dioClient.get(
-        ApiRoutes.profile(ambassadorId.toString()),
-      );
-      final payload = response.data;
-      final data = payload is Map && payload['data'] is Map
-          ? Map<String, dynamic>.from(payload['data'] as Map)
-          : Map<String, dynamic>.from(payload as Map);
-      return AmbassadorDetailModel.fromJson(data);
-    } catch (e) {
-      rethrow;
-    }
+    final response = await _dioClient.get(
+      ApiRoutes.profile(ambassadorId.toString()),
+    );
+    final payload = response.data;
+    final data = payload is Map && payload['data'] is Map
+        ? Map<String, dynamic>.from(payload['data'] as Map)
+        : Map<String, dynamic>.from(payload as Map);
+    return AmbassadorDetailModel.fromJson(data);
   }
 }

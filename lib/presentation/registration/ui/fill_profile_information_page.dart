@@ -115,12 +115,12 @@ class _FillProfileInformationPageState
     switch (widget.registrationEntity.role.toLowerCase()) {
       case 'influencer':
         titles = [
-          'General info',
-          'Niche',
-          'Services',
-          'Audience and followers',
-          'Experience',
-          'My Pricing/Tariffs',
+          t.profile.general_info,
+          t.misc.niche,
+          t.registration.services,
+          t.profile.audience_and_followers,
+          t.profile.experience,
+          t.misc.my_pricing_tariffs,
         ];
         widgets = [
           MultiBlocProvider(
@@ -213,12 +213,12 @@ class _FillProfileInformationPageState
 
       case 'ambassador':
         titles = [
-          'General info',
-          'Niche',
-          'Services',
-          'Audience & followers',
-          'Experience',
-          'Contract',
+          t.profile.general_info,
+          t.misc.niche,
+          t.registration.services,
+          t.profile.audience_and_followers,
+          t.profile.experience,
+          t.misc.contract,
         ];
         widgets = [
           MultiBlocProvider(
@@ -315,12 +315,12 @@ class _FillProfileInformationPageState
 
       case 'brandface':
         titles = [
-          'General info',
-          'Niche',
-          'Services',
-          'Audience and followers',
-          'Camera experience',
-          'My Pricing/Tariffs',
+          t.profile.general_info,
+          t.misc.niche,
+          t.registration.services,
+          t.profile.audience_and_followers,
+          t.misc.camera_experience,
+          t.misc.my_pricing_tariffs,
         ];
         widgets = [
           MultiBlocProvider(
@@ -417,7 +417,7 @@ class _FillProfileInformationPageState
         ];
 
       case 'brand':
-        titles = ['General info', 'Categories'];
+        titles = [t.profile.general_info, t.registration.categories];
         final initialCategoryItems = _initialBrandCategories;
         widgets = [
           MultiBlocProvider(
@@ -498,8 +498,10 @@ class _FillProfileInformationPageState
     final title = (_currentPage < _pageTitles.length)
         ? _pageTitles[_currentPage]
         : '';
-    if (title == 'Audience and followers') return MyProfileSection.audience;
-    if (title == 'My Pricing/Tariffs') return MyProfileSection.pricing;
+    if (title == t.profile.audience_and_followers) {
+      return MyProfileSection.audience;
+    }
+    if (title == t.misc.my_pricing_tariffs) return MyProfileSection.pricing;
     return MyProfileSection.general;
   }
 
@@ -675,7 +677,7 @@ class _FillProfileInformationPageState
                       GestureDetector(
                         onTap: _saveAndContinueLater,
                         child: Text(
-                          'Save and continue later',
+                          t.misc.save_and_continue_later,
                           style: Typographies.labelLarge,
                         ),
                       ),
@@ -710,7 +712,7 @@ class _FillProfileInformationPageState
                   children: [
                     SizedBox(height: 16 + MediaQuery.of(context).padding.top),
                     Text(
-                      'Fill profile information',
+                      t.misc.fill_profile_information,
                       style: Typographies.headlineSmall,
                     ),
                     SizedBox(height: 16),

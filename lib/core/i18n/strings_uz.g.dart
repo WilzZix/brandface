@@ -54,6 +54,12 @@ class TranslationsUz with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsNotificationsUz notifications = _TranslationsNotificationsUz._(_root);
 	@override late final _TranslationsBillingUz billing = _TranslationsBillingUz._(_root);
 	@override late final _TranslationsErrorsUz errors = _TranslationsErrorsUz._(_root);
+	@override late final _TranslationsAnalyticsUz analytics = _TranslationsAnalyticsUz._(_root);
+	@override late final _TranslationsBillingUiUz billing_ui = _TranslationsBillingUiUz._(_root);
+	@override late final _TranslationsAmbassadorUz ambassador = _TranslationsAmbassadorUz._(_root);
+	@override late final _TranslationsPortfolioUiUz portfolio_ui = _TranslationsPortfolioUiUz._(_root);
+	@override late final _TranslationsCollabUz collab = _TranslationsCollabUz._(_root);
+	@override late final _TranslationsMiscUz misc = _TranslationsMiscUz._(_root);
 }
 
 // Path: splash
@@ -543,6 +549,302 @@ class _TranslationsErrorsUz implements TranslationsErrorsEn {
 	@override late final _TranslationsErrorsServerUz server = _TranslationsErrorsServerUz._(_root);
 }
 
+// Path: analytics
+class _TranslationsAnalyticsUz implements TranslationsAnalyticsEn {
+	_TranslationsAnalyticsUz._(this._root);
+
+	final TranslationsUz _root; // ignore: unused_field
+
+	// Translations
+	@override String get brand_activity_summary => 'Brend faoliyati xulosasi';
+	@override String get search_insights => 'Qidiruv tahlili';
+	@override String get most_searched_ambassadors => 'Eng ko\'p qidirilgan ambassadorlar';
+	@override String get offer_performance => 'Taklif samaradorligi';
+	@override String get ai_matching_insights => 'AI moslashtirish tahlili';
+	@override String get top_recommended_ambassadors => 'Eng tavsiya etilgan ambassadorlar';
+	@override String get audience_insights => 'Auditoriya tahlili';
+	@override String get total_searches => 'Jami qidiruvlar';
+	@override String get total_offers => 'Jami takliflar';
+	@override String get invitations_sent => 'Yuborilgan takliflar';
+	@override String get ambassador_apps => 'Ambassador arizalari';
+	@override String get influencer_apps => 'Influenser arizalari';
+	@override String searches_performed({required Object count}) => '${count} ta qidiruv amalga oshirilgan';
+	@override String get top_filters_used => 'Eng ko\'p ishlatilgan filtrlar';
+	@override String get last_7_days => 'Oxirgi 7 kun';
+	@override String get top_niches => 'Eng yaxshi nishalar';
+	@override String get top_regions => 'Eng yaxshi hududlar';
+	@override String get viewed_offer => 'Taklifni ko\'rgan';
+	@override String get opened_details => 'Tafsilotlarni ochgan';
+	@override String get applicants => 'Arizachilar';
+	@override String get approved => 'Tasdiqlangan';
+	@override String get niche_fit => 'Nishaga mosligi';
+	@override String get audience_fit => 'Auditoriyaga mosligi';
+	@override String get platform_fit => 'Platformaga mosligi';
+	@override String followers_region({required Object followers, required Object region}) => '${followers} obunachi  •  ${region}';
+	@override String get top_age_group => 'Eng faol yosh guruhi: ';
+	@override String get gender_distribution => 'Jins bo\'yicha taqsimot';
+	@override String get top_countries => 'Eng yaxshi davlatlar';
+	@override String female_percent({required Object percent}) => 'Ayol ${percent}%';
+	@override String male_percent({required Object percent}) => 'Erkak ${percent}%';
+	@override String get analytics_load_failed => 'Analitika ma\'lumotlarini yuklab bo\'lmadi.';
+	@override String get average_rating => 'O\'rtacha reyting';
+	@override String get total_reviews => 'Jami sharhlar';
+	@override String get selected_period => 'Tanlangan davr';
+	@override String get profile_views => 'Profil ko\'rishlari';
+	@override String get period => 'Davr';
+	@override String get profile_views_last_30_days => 'Oxirgi 30 kundagi profil ko\'rishlari';
+	@override String get total_profile_views => 'Jami profil ko\'rishlari';
+	@override String get days_30 => '30 kun';
+	@override String get all_time => 'Butun davr';
+	@override String get applications_by_status => 'Holat bo\'yicha arizalar';
+	@override String get no_applications => 'Hozircha arizalar yo\'q.';
+	@override String get my_campaigns => 'Mening kampaniyalarim';
+	@override String get active_campaigns => 'Faol kampaniyalar';
+	@override String get influencers_hired => 'Yollangan influenserlar';
+	@override String get recent_activity => 'So\'nggi faoliyat';
+	@override String get campaign_title_placeholder => 'Kampaniya nomi shu yerda';
+	@override String get campaigns => 'Kampaniyalar';
+	@override String get find_influencers => 'Influenserlarni topish';
+	@override String influencer_number({required Object id}) => 'Influenser #${id}';
+	@override String engagement_rate_short({required Object rate}) => '${rate}% ER';
+	@override String get status_verified => 'Tasdiqlangan';
+	@override String get status_rejected => 'Rad etilgan';
+	@override String get status_blocked => 'Bloklangan';
+	@override String get status_pending => 'Kutilmoqda';
+}
+
+// Path: billing_ui
+class _TranslationsBillingUiUz implements TranslationsBillingUiEn {
+	_TranslationsBillingUiUz._(this._root);
+
+	final TranslationsUz _root; // ignore: unused_field
+
+	// Translations
+	@override String get error_loading_plan => 'Rejani yuklashda xatolik';
+	@override String get minimal => 'Minimal';
+	@override String get deactivate_plan_question => 'Reja o\'chirilsinmi?';
+	@override String get deactivate_plan_message => 'Obunangiz bekor qilinadi. Istalgan vaqtda qayta faollashtirishingiz mumkin.';
+	@override String get deactivate => 'O\'chirish';
+	@override String get premium => 'PREMIUM';
+	@override String get deactivated => 'O\'chirilgan';
+	@override String get renewal_date => 'Yangilanish sanasi';
+	@override String get no_card_added => 'Karta qo\'shilmagan';
+	@override String get auto_renewal => 'Avtomatik yangilash';
+	@override String get card => 'Karta';
+	@override String get coupon_code => 'Kupon kodi';
+	@override String get activate => 'Faollashtirish';
+	@override String get payment_method => 'To\'lov usuli';
+	@override String get extra_invites_applies => 'Qo\'shimcha takliflar / arizalar:';
+	@override String get extra_invites_price => '\$5 dan';
+	@override String get feature_browse_offers => 'Takliflar va ambassadorlarni ko\'rish (cheklangan)';
+	@override String get feature_create_offer => 'Oyiga 1 ta taklif yaratish';
+	@override String get feature_invites => 'Oyiga 3 tagacha taklifnoma';
+	@override String get feature_ai_recommendations => 'AI tavsiyalari: eng yaxshi 5 ta moslik';
+	@override String get feature_shortlist => '10 tagacha profilni saralash';
+	@override String get feature_basic_analytics => 'Asosiy tahlillar (ko\'rishlar, takliflar)';
+	@override String max_offers_per_month({required Object count}) => 'Oyiga maksimal takliflar: ${count}';
+	@override String max_finds_per_month({required Object count}) => 'Oyiga maksimal qidiruvlar: ${count}';
+	@override String ai_matches_count({required Object count}) => 'AI mosliklar soni: ${count}';
+	@override String max_shortlist({required Object count}) => 'Maksimal saralash: ${count}';
+	@override String get full_contact_access => 'To\'liq kontaktga kirish';
+	@override String get advanced_analytics => 'Kengaytirilgan tahlillar';
+	@override String get priority_support => 'Ustuvor qo\'llab-quvvatlash';
+	@override String get add_new_payment_method => 'Yangi to\'lov usulini qo\'shish';
+	@override String get card_holder => 'Karta egasi';
+	@override String get write_card_holder_name => 'Karta egasining ismini kiriting';
+	@override String get required => 'Majburiy';
+	@override String get card_number => 'Karta raqami';
+	@override String get write_card_number => 'Karta raqamini kiriting';
+	@override String get enter_valid_16_digit_card => '16 xonali to\'g\'ri karta raqamini kiriting';
+	@override String get expire_date => 'Amal qilish muddati';
+	@override String get mm_yy => 'OO/YY';
+	@override String get invalid_month => 'Noto\'g\'ri oy';
+	@override String get ccv => 'CCV';
+	@override String get invalid => 'Noto\'g\'ri';
+	@override String get could_not_send_sms_code => 'SMS kodni yuborib bo\'lmadi';
+	@override String get enter_valid_card_number => 'To\'g\'ri karta raqamini kiriting';
+	@override String get edit_card => 'Kartani tahrirlash';
+	@override String get no_cards_added_yet => 'Hali karta qo\'shilmagan';
+	@override String get card_added => 'Karta qo\'shildi';
+	@override String get enter_sms_code_card_phone => 'Kartangiz telefon raqamiga yuborilgan SMS kodni kiriting';
+	@override String sms_code_sent_to({required Object phone}) => '${phone} raqamiga SMS kod yubordik,\nuni quyida kiriting';
+	@override String get payment => 'To\'lov';
+}
+
+// Path: ambassador
+class _TranslationsAmbassadorUz implements TranslationsAmbassadorEn {
+	_TranslationsAmbassadorUz._(this._root);
+
+	final TranslationsUz _root; // ignore: unused_field
+
+	// Translations
+	@override String get ambassador_details => 'Ambassador tafsilotlari';
+	@override String get information => 'Ma\'lumot';
+	@override String get no_information_provided => 'Ma\'lumot berilmagan.';
+	@override String get niche => 'Yo\'nalish';
+	@override String get available_dates => 'Mavjud sanalar';
+	@override String age_range_suffix({required Object from, required Object to}) => ', yosh ${from} – ${to}';
+	@override String get engagement_level => 'Faollik darajasi';
+	@override String get total_number_of_followers => 'Obunachilarning umumiy soni';
+	@override String years_value({required Object years}) => '${years} yil';
+	@override String get list_of_partners => 'Hamkorlar ro\'yxati';
+	@override String get no_comment => 'Izoh yo\'q';
+	@override String get no_portfolio_items => 'Portfolio elementlari yo\'q.';
+	@override String get no_pricing_info => 'Narx haqida ma\'lumot mavjud emas.';
+	@override String get hourly_uzs => 'Soatlik (UZS)';
+	@override String get hourly_usd => 'Soatlik (USD)';
+	@override String get project_by => 'Loyiha bo\'yicha';
+	@override String get monthly_exclusivity_fee => 'Oylik eksklyuzivlik to\'lovi';
+	@override String get monthly_content_capacity => 'Oylik kontent hajmi';
+	@override String content_capacity_posts({required Object count}) => '${count} ta post';
+	@override String get added_to_favourites => 'Sevimlilarga qo\'shildi';
+	@override String get add_to_favourites => 'Sevimlilarga qo\'shish';
+	@override String get send_enquiry => 'So\'rov yuborish';
+	@override String get portfolio_details => 'Portfolio tafsilotlari';
+	@override String get no_description => 'Tavsif yo\'q';
+	@override String get links => 'Havolalar';
+	@override String get no_links_added => 'Havolalar qo\'shilmagan.';
+	@override String get portfolio_images => 'Portfolio rasmlari';
+	@override String get no_images_added => 'Rasmlar qo\'shilmagan.';
+	@override String get language => 'Til';
+	@override String get age => 'Yosh';
+	@override String get auditory => 'Auditoriya';
+	@override String get available_date => 'Mavjud sana';
+	@override String get price_range_per_hour => 'Narx oralig\'i (soatiga)';
+	@override String get from => 'Dan';
+	@override String get to => 'Gacha';
+	@override String get no_favourites_yet => 'Hozircha sevimlilar yo\'q.';
+	@override String items_found({required Object count}) => '${count} ta topildi';
+}
+
+// Path: portfolio_ui
+class _TranslationsPortfolioUiUz implements TranslationsPortfolioUiEn {
+	_TranslationsPortfolioUiUz._(this._root);
+
+	final TranslationsUz _root; // ignore: unused_field
+
+	// Translations
+	@override String get fill_profile_information => 'Profil ma\'lumotlarini to\'ldiring';
+	@override String get upload_thumbnail_picture => 'Kichik rasmni yuklang';
+	@override String get choose_files => 'Fayllarni tanlang';
+	@override String get portfolio_name => 'Portfolio nomi';
+	@override String get portfolio_name_hint => 'Portfolio nomini kiriting';
+	@override String get add_links => 'Havolalar qo\'shing';
+	@override String get save_and_continue_later => 'Saqlab, keyinroq davom eting';
+	@override String get upload_not_available => 'Fayl tanlash oynasi hali ulanmagan. Ma\'lumotlarni saqlash ishlaydi.';
+	@override String get general_info_step => 'Umumiy ma\'lumot (1/6)';
+	@override String get details_load_failed => 'Portfolio tafsilotlarini yuklab bo\'lmadi.';
+	@override String get portfolio_details_title => 'Portfolio tafsilotlari';
+	@override String get information => 'Ma\'lumot';
+	@override String get no_description => 'Tavsif yo\'q';
+	@override String get links => 'Havolalar';
+	@override String get no_links_added => 'Havolalar qo\'shilmagan.';
+	@override String get portfolio_images => 'Portfolio rasmlari';
+	@override String get no_images_added => 'Rasmlar qo\'shilmagan.';
+	@override String get list_load_failed => 'Portfolio ma\'lumotlarini yuklab bo\'lmadi.';
+	@override String get no_portfolio_found => 'Portfolio topilmadi';
+	@override String get top_is_active => 'TOP faol';
+	@override String get top_not_activated => 'TOP faollashtirilmagan';
+	@override String get select_payment_method => 'To\'lov usulini tanlang';
+	@override String get activate => 'Faollashtirish';
+	@override String get vip_is_active => 'VIP faol';
+	@override String get vip_not_activated => 'VIP faollashtirilmagan';
+	@override String invoice_number({required Object id}) => 'Hisob-faktura #${id}';
+	@override String get billing_transaction => 'To\'lov tranzaksiyasi';
+	@override String get receipt => 'Kvitansiya';
+	@override String get download => 'Yuklab olish';
+	@override String get select_top_package_first => 'Avval TOP paketni tanlang.';
+	@override String get select_payment_method_first => 'Avval to\'lov usulini tanlang.';
+	@override String get select_vip_plan_first => 'Avval VIP tarifni tanlang.';
+	@override String boost_package_label({required Object days, required Object amount}) => '${days} kun / ${amount}';
+	@override String get expiration_date => 'Amal qilish muddati';
+	@override String get top_profile_load_failed => 'TOP profil ma\'lumotlarini yuklab bo\'lmadi.';
+}
+
+// Path: collab
+class _TranslationsCollabUz implements TranslationsCollabEn {
+	_TranslationsCollabUz._(this._root);
+
+	final TranslationsUz _root; // ignore: unused_field
+
+	// Translations
+	@override String get required => 'Majburiy';
+	@override String get send_enquiry => 'So‘rov yuborish';
+	@override String get enquiry_sent => 'So‘rov yuborildi';
+	@override String get contact_name => 'Kontakt ismi';
+	@override String get write_contact_name => 'Kontakt ismini yozing';
+	@override String get company_name => 'Kompaniya nomi';
+	@override String get write_company_name => 'Kompaniya nomini yozing';
+	@override String get contact_number => 'Kontakt raqami';
+	@override String get write_contact_number => 'Kontakt raqamini yozing';
+	@override String get message => 'Xabar';
+	@override String get write_message_here => 'Xabarni shu yerga yozing';
+	@override String get sending => 'Yuborilmoqda...';
+	@override String get no_active_offers_found => 'Faol takliflar topilmadi.';
+	@override String results_found({required Object count}) => '${count} ta topildi';
+	@override String no_matches_yet({required Object offerTitle}) => 'Hozircha "${offerTitle}" uchun moslik yo‘q';
+	@override String get run_ai_matching_subtitle => 'Eng yaxshi influenserlarni topish uchun AI moslashtirishni ishga tushiring.';
+	@override String get run_ai_matching => 'AI moslashtirishni ishga tushirish';
+	@override String influencer_number({required Object id}) => 'Influenser #${id}';
+	@override String get messages_error_load => 'Xabarlarni yuklab bo‘lmadi.';
+	@override String get no_messages_found => 'Xabarlar topilmadi';
+	@override String messages_found({required Object count}) => '${count} ta xabar topildi';
+	@override String get no_phone => 'Telefon yo‘q';
+	@override String get no_messages_yet => 'Bu suhbatda hali xabarlar yo‘q.';
+	@override String get participant => 'Ishtirokchi';
+	@override String get brand_contact => 'Brend kontakti';
+	@override String get influencer_contact => 'Influenser kontakti';
+	@override String role_contact({required Object role}) => '${role} kontakti';
+	@override String offer_number({required Object id}) => 'Taklif #${id}';
+	@override String get brand_conversation => 'Brend suhbati';
+	@override String get influencer_conversation => 'Influenser suhbati';
+	@override String conversation_number({required Object id}) => 'Suhbat #${id}';
+	@override String get conversation => 'Suhbat';
+	@override String get save => 'Saqlash';
+	@override String available_dates({required Object count}) => 'Mavjud sanalar (${count})';
+	@override String get calendar_updated => 'Kalendar yangilandi';
+	@override String get month_january => 'Yanvar';
+	@override String get month_february => 'Fevral';
+	@override String get month_march => 'Mart';
+	@override String get month_april => 'Aprel';
+	@override String get month_may => 'May';
+	@override String get month_june => 'Iyun';
+	@override String get month_july => 'Iyul';
+	@override String get month_august => 'Avgust';
+	@override String get month_september => 'Sentabr';
+	@override String get month_october => 'Oktabr';
+	@override String get month_november => 'Noyabr';
+	@override String get month_december => 'Dekabr';
+}
+
+// Path: misc
+class _TranslationsMiscUz implements TranslationsMiscEn {
+	_TranslationsMiscUz._(this._root);
+
+	final TranslationsUz _root; // ignore: unused_field
+
+	// Translations
+	@override String get notification_details_title => 'Bildirishnoma tafsilotlari';
+	@override String get notification_no_additional_details => 'Qo\'shimcha tafsilotlar yo\'q.';
+	@override String engagement_rate_value({required Object rate}) => '${rate}% jalb qilish darajasi';
+	@override String get segment_luxury => 'Hashamatli';
+	@override String get segment_premium => 'Premium';
+	@override String get segment_mass_market => 'Ommaviy bozor';
+	@override String get segment_budget => 'Byudjet';
+	@override String get niche => 'Nisha';
+	@override String get my_pricing_tariffs => 'Mening narxlarim/Tariflarim';
+	@override String get contract => 'Shartnoma';
+	@override String get camera_experience => 'Kamera tajribasi';
+	@override String get save_and_continue_later => 'Saqlab, keyinroq davom etish';
+	@override String get fill_profile_information => 'Profil ma\'lumotlarini to\'ldiring';
+	@override String get image_upload_failed => 'Rasmni yuklab bo\'lmadi';
+	@override String get currency_uzs => 'O\'zbek so\'mi';
+	@override String get currency_usd => 'AQSh dollari';
+	@override String get profile_section_readonly => 'Bu bo\'limni faqat profilingiz tasdiqlangandan keyin tahrirlashingiz mumkin.';
+	@override String followers_and_engagement({required Object followers, required Object rate}) => '${followers} obunachi, ${rate}% jalb qilish darajasi';
+	@override String get terms_of_use_title => 'Foydalanish shartlari';
+}
+
 // Path: errors.server
 class _TranslationsErrorsServerUz implements TranslationsErrorsServerEn {
 	_TranslationsErrorsServerUz._(this._root);
@@ -903,6 +1205,250 @@ extension on TranslationsUz {
 			'errors.server.unauthorized' => 'Seans muddati tugadi, qaytadan kiring',
 			'errors.server.notFound' => 'Ma\'lumot topilmadi',
 			'errors.server.userExists' => 'Bunday emailga ega foydalanuvchi allaqachon mavjud',
+			'analytics.brand_activity_summary' => 'Brend faoliyati xulosasi',
+			'analytics.search_insights' => 'Qidiruv tahlili',
+			'analytics.most_searched_ambassadors' => 'Eng ko\'p qidirilgan ambassadorlar',
+			'analytics.offer_performance' => 'Taklif samaradorligi',
+			'analytics.ai_matching_insights' => 'AI moslashtirish tahlili',
+			'analytics.top_recommended_ambassadors' => 'Eng tavsiya etilgan ambassadorlar',
+			'analytics.audience_insights' => 'Auditoriya tahlili',
+			'analytics.total_searches' => 'Jami qidiruvlar',
+			'analytics.total_offers' => 'Jami takliflar',
+			'analytics.invitations_sent' => 'Yuborilgan takliflar',
+			'analytics.ambassador_apps' => 'Ambassador arizalari',
+			'analytics.influencer_apps' => 'Influenser arizalari',
+			'analytics.searches_performed' => ({required Object count}) => '${count} ta qidiruv amalga oshirilgan',
+			'analytics.top_filters_used' => 'Eng ko\'p ishlatilgan filtrlar',
+			'analytics.last_7_days' => 'Oxirgi 7 kun',
+			'analytics.top_niches' => 'Eng yaxshi nishalar',
+			'analytics.top_regions' => 'Eng yaxshi hududlar',
+			'analytics.viewed_offer' => 'Taklifni ko\'rgan',
+			'analytics.opened_details' => 'Tafsilotlarni ochgan',
+			'analytics.applicants' => 'Arizachilar',
+			'analytics.approved' => 'Tasdiqlangan',
+			'analytics.niche_fit' => 'Nishaga mosligi',
+			'analytics.audience_fit' => 'Auditoriyaga mosligi',
+			'analytics.platform_fit' => 'Platformaga mosligi',
+			'analytics.followers_region' => ({required Object followers, required Object region}) => '${followers} obunachi  •  ${region}',
+			'analytics.top_age_group' => 'Eng faol yosh guruhi: ',
+			'analytics.gender_distribution' => 'Jins bo\'yicha taqsimot',
+			'analytics.top_countries' => 'Eng yaxshi davlatlar',
+			'analytics.female_percent' => ({required Object percent}) => 'Ayol ${percent}%',
+			'analytics.male_percent' => ({required Object percent}) => 'Erkak ${percent}%',
+			'analytics.analytics_load_failed' => 'Analitika ma\'lumotlarini yuklab bo\'lmadi.',
+			'analytics.average_rating' => 'O\'rtacha reyting',
+			'analytics.total_reviews' => 'Jami sharhlar',
+			'analytics.selected_period' => 'Tanlangan davr',
+			'analytics.profile_views' => 'Profil ko\'rishlari',
+			'analytics.period' => 'Davr',
+			'analytics.profile_views_last_30_days' => 'Oxirgi 30 kundagi profil ko\'rishlari',
+			'analytics.total_profile_views' => 'Jami profil ko\'rishlari',
+			'analytics.days_30' => '30 kun',
+			'analytics.all_time' => 'Butun davr',
+			'analytics.applications_by_status' => 'Holat bo\'yicha arizalar',
+			'analytics.no_applications' => 'Hozircha arizalar yo\'q.',
+			'analytics.my_campaigns' => 'Mening kampaniyalarim',
+			'analytics.active_campaigns' => 'Faol kampaniyalar',
+			'analytics.influencers_hired' => 'Yollangan influenserlar',
+			'analytics.recent_activity' => 'So\'nggi faoliyat',
+			'analytics.campaign_title_placeholder' => 'Kampaniya nomi shu yerda',
+			'analytics.campaigns' => 'Kampaniyalar',
+			'analytics.find_influencers' => 'Influenserlarni topish',
+			'analytics.influencer_number' => ({required Object id}) => 'Influenser #${id}',
+			'analytics.engagement_rate_short' => ({required Object rate}) => '${rate}% ER',
+			'analytics.status_verified' => 'Tasdiqlangan',
+			'analytics.status_rejected' => 'Rad etilgan',
+			'analytics.status_blocked' => 'Bloklangan',
+			'analytics.status_pending' => 'Kutilmoqda',
+			'billing_ui.error_loading_plan' => 'Rejani yuklashda xatolik',
+			'billing_ui.minimal' => 'Minimal',
+			'billing_ui.deactivate_plan_question' => 'Reja o\'chirilsinmi?',
+			'billing_ui.deactivate_plan_message' => 'Obunangiz bekor qilinadi. Istalgan vaqtda qayta faollashtirishingiz mumkin.',
+			'billing_ui.deactivate' => 'O\'chirish',
+			'billing_ui.premium' => 'PREMIUM',
+			'billing_ui.deactivated' => 'O\'chirilgan',
+			'billing_ui.renewal_date' => 'Yangilanish sanasi',
+			'billing_ui.no_card_added' => 'Karta qo\'shilmagan',
+			'billing_ui.auto_renewal' => 'Avtomatik yangilash',
+			'billing_ui.card' => 'Karta',
+			'billing_ui.coupon_code' => 'Kupon kodi',
+			'billing_ui.activate' => 'Faollashtirish',
+			'billing_ui.payment_method' => 'To\'lov usuli',
+			'billing_ui.extra_invites_applies' => 'Qo\'shimcha takliflar / arizalar:',
+			'billing_ui.extra_invites_price' => '\$5 dan',
+			'billing_ui.feature_browse_offers' => 'Takliflar va ambassadorlarni ko\'rish (cheklangan)',
+			'billing_ui.feature_create_offer' => 'Oyiga 1 ta taklif yaratish',
+			'billing_ui.feature_invites' => 'Oyiga 3 tagacha taklifnoma',
+			'billing_ui.feature_ai_recommendations' => 'AI tavsiyalari: eng yaxshi 5 ta moslik',
+			'billing_ui.feature_shortlist' => '10 tagacha profilni saralash',
+			'billing_ui.feature_basic_analytics' => 'Asosiy tahlillar (ko\'rishlar, takliflar)',
+			'billing_ui.max_offers_per_month' => ({required Object count}) => 'Oyiga maksimal takliflar: ${count}',
+			'billing_ui.max_finds_per_month' => ({required Object count}) => 'Oyiga maksimal qidiruvlar: ${count}',
+			'billing_ui.ai_matches_count' => ({required Object count}) => 'AI mosliklar soni: ${count}',
+			'billing_ui.max_shortlist' => ({required Object count}) => 'Maksimal saralash: ${count}',
+			'billing_ui.full_contact_access' => 'To\'liq kontaktga kirish',
+			'billing_ui.advanced_analytics' => 'Kengaytirilgan tahlillar',
+			'billing_ui.priority_support' => 'Ustuvor qo\'llab-quvvatlash',
+			'billing_ui.add_new_payment_method' => 'Yangi to\'lov usulini qo\'shish',
+			'billing_ui.card_holder' => 'Karta egasi',
+			'billing_ui.write_card_holder_name' => 'Karta egasining ismini kiriting',
+			'billing_ui.required' => 'Majburiy',
+			'billing_ui.card_number' => 'Karta raqami',
+			'billing_ui.write_card_number' => 'Karta raqamini kiriting',
+			'billing_ui.enter_valid_16_digit_card' => '16 xonali to\'g\'ri karta raqamini kiriting',
+			'billing_ui.expire_date' => 'Amal qilish muddati',
+			'billing_ui.mm_yy' => 'OO/YY',
+			'billing_ui.invalid_month' => 'Noto\'g\'ri oy',
+			'billing_ui.ccv' => 'CCV',
+			'billing_ui.invalid' => 'Noto\'g\'ri',
+			'billing_ui.could_not_send_sms_code' => 'SMS kodni yuborib bo\'lmadi',
+			'billing_ui.enter_valid_card_number' => 'To\'g\'ri karta raqamini kiriting',
+			'billing_ui.edit_card' => 'Kartani tahrirlash',
+			'billing_ui.no_cards_added_yet' => 'Hali karta qo\'shilmagan',
+			'billing_ui.card_added' => 'Karta qo\'shildi',
+			'billing_ui.enter_sms_code_card_phone' => 'Kartangiz telefon raqamiga yuborilgan SMS kodni kiriting',
+			'billing_ui.sms_code_sent_to' => ({required Object phone}) => '${phone} raqamiga SMS kod yubordik,\nuni quyida kiriting',
+			'billing_ui.payment' => 'To\'lov',
+			'ambassador.ambassador_details' => 'Ambassador tafsilotlari',
+			'ambassador.information' => 'Ma\'lumot',
+			'ambassador.no_information_provided' => 'Ma\'lumot berilmagan.',
+			'ambassador.niche' => 'Yo\'nalish',
+			'ambassador.available_dates' => 'Mavjud sanalar',
+			'ambassador.age_range_suffix' => ({required Object from, required Object to}) => ', yosh ${from} – ${to}',
+			'ambassador.engagement_level' => 'Faollik darajasi',
+			'ambassador.total_number_of_followers' => 'Obunachilarning umumiy soni',
+			'ambassador.years_value' => ({required Object years}) => '${years} yil',
+			'ambassador.list_of_partners' => 'Hamkorlar ro\'yxati',
+			'ambassador.no_comment' => 'Izoh yo\'q',
+			'ambassador.no_portfolio_items' => 'Portfolio elementlari yo\'q.',
+			'ambassador.no_pricing_info' => 'Narx haqida ma\'lumot mavjud emas.',
+			'ambassador.hourly_uzs' => 'Soatlik (UZS)',
+			'ambassador.hourly_usd' => 'Soatlik (USD)',
+			'ambassador.project_by' => 'Loyiha bo\'yicha',
+			'ambassador.monthly_exclusivity_fee' => 'Oylik eksklyuzivlik to\'lovi',
+			'ambassador.monthly_content_capacity' => 'Oylik kontent hajmi',
+			'ambassador.content_capacity_posts' => ({required Object count}) => '${count} ta post',
+			'ambassador.added_to_favourites' => 'Sevimlilarga qo\'shildi',
+			'ambassador.add_to_favourites' => 'Sevimlilarga qo\'shish',
+			'ambassador.send_enquiry' => 'So\'rov yuborish',
+			'ambassador.portfolio_details' => 'Portfolio tafsilotlari',
+			'ambassador.no_description' => 'Tavsif yo\'q',
+			'ambassador.links' => 'Havolalar',
+			'ambassador.no_links_added' => 'Havolalar qo\'shilmagan.',
+			'ambassador.portfolio_images' => 'Portfolio rasmlari',
+			'ambassador.no_images_added' => 'Rasmlar qo\'shilmagan.',
+			'ambassador.language' => 'Til',
+			'ambassador.age' => 'Yosh',
+			'ambassador.auditory' => 'Auditoriya',
+			'ambassador.available_date' => 'Mavjud sana',
+			'ambassador.price_range_per_hour' => 'Narx oralig\'i (soatiga)',
+			'ambassador.from' => 'Dan',
+			'ambassador.to' => 'Gacha',
+			'ambassador.no_favourites_yet' => 'Hozircha sevimlilar yo\'q.',
+			'ambassador.items_found' => ({required Object count}) => '${count} ta topildi',
+			'portfolio_ui.fill_profile_information' => 'Profil ma\'lumotlarini to\'ldiring',
+			'portfolio_ui.upload_thumbnail_picture' => 'Kichik rasmni yuklang',
+			'portfolio_ui.choose_files' => 'Fayllarni tanlang',
+			'portfolio_ui.portfolio_name' => 'Portfolio nomi',
+			'portfolio_ui.portfolio_name_hint' => 'Portfolio nomini kiriting',
+			'portfolio_ui.add_links' => 'Havolalar qo\'shing',
+			'portfolio_ui.save_and_continue_later' => 'Saqlab, keyinroq davom eting',
+			'portfolio_ui.upload_not_available' => 'Fayl tanlash oynasi hali ulanmagan. Ma\'lumotlarni saqlash ishlaydi.',
+			'portfolio_ui.general_info_step' => 'Umumiy ma\'lumot (1/6)',
+			'portfolio_ui.details_load_failed' => 'Portfolio tafsilotlarini yuklab bo\'lmadi.',
+			'portfolio_ui.portfolio_details_title' => 'Portfolio tafsilotlari',
+			'portfolio_ui.information' => 'Ma\'lumot',
+			'portfolio_ui.no_description' => 'Tavsif yo\'q',
+			'portfolio_ui.links' => 'Havolalar',
+			'portfolio_ui.no_links_added' => 'Havolalar qo\'shilmagan.',
+			'portfolio_ui.portfolio_images' => 'Portfolio rasmlari',
+			'portfolio_ui.no_images_added' => 'Rasmlar qo\'shilmagan.',
+			'portfolio_ui.list_load_failed' => 'Portfolio ma\'lumotlarini yuklab bo\'lmadi.',
+			'portfolio_ui.no_portfolio_found' => 'Portfolio topilmadi',
+			'portfolio_ui.top_is_active' => 'TOP faol',
+			'portfolio_ui.top_not_activated' => 'TOP faollashtirilmagan',
+			'portfolio_ui.select_payment_method' => 'To\'lov usulini tanlang',
+			'portfolio_ui.activate' => 'Faollashtirish',
+			'portfolio_ui.vip_is_active' => 'VIP faol',
+			'portfolio_ui.vip_not_activated' => 'VIP faollashtirilmagan',
+			'portfolio_ui.invoice_number' => ({required Object id}) => 'Hisob-faktura #${id}',
+			'portfolio_ui.billing_transaction' => 'To\'lov tranzaksiyasi',
+			'portfolio_ui.receipt' => 'Kvitansiya',
+			'portfolio_ui.download' => 'Yuklab olish',
+			'portfolio_ui.select_top_package_first' => 'Avval TOP paketni tanlang.',
+			'portfolio_ui.select_payment_method_first' => 'Avval to\'lov usulini tanlang.',
+			'portfolio_ui.select_vip_plan_first' => 'Avval VIP tarifni tanlang.',
+			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} kun / ${amount}',
+			_ => null,
+		} ?? switch (path) {
+			'portfolio_ui.expiration_date' => 'Amal qilish muddati',
+			'portfolio_ui.top_profile_load_failed' => 'TOP profil ma\'lumotlarini yuklab bo\'lmadi.',
+			'collab.required' => 'Majburiy',
+			'collab.send_enquiry' => 'So‘rov yuborish',
+			'collab.enquiry_sent' => 'So‘rov yuborildi',
+			'collab.contact_name' => 'Kontakt ismi',
+			'collab.write_contact_name' => 'Kontakt ismini yozing',
+			'collab.company_name' => 'Kompaniya nomi',
+			'collab.write_company_name' => 'Kompaniya nomini yozing',
+			'collab.contact_number' => 'Kontakt raqami',
+			'collab.write_contact_number' => 'Kontakt raqamini yozing',
+			'collab.message' => 'Xabar',
+			'collab.write_message_here' => 'Xabarni shu yerga yozing',
+			'collab.sending' => 'Yuborilmoqda...',
+			'collab.no_active_offers_found' => 'Faol takliflar topilmadi.',
+			'collab.results_found' => ({required Object count}) => '${count} ta topildi',
+			'collab.no_matches_yet' => ({required Object offerTitle}) => 'Hozircha "${offerTitle}" uchun moslik yo‘q',
+			'collab.run_ai_matching_subtitle' => 'Eng yaxshi influenserlarni topish uchun AI moslashtirishni ishga tushiring.',
+			'collab.run_ai_matching' => 'AI moslashtirishni ishga tushirish',
+			'collab.influencer_number' => ({required Object id}) => 'Influenser #${id}',
+			'collab.messages_error_load' => 'Xabarlarni yuklab bo‘lmadi.',
+			'collab.no_messages_found' => 'Xabarlar topilmadi',
+			'collab.messages_found' => ({required Object count}) => '${count} ta xabar topildi',
+			'collab.no_phone' => 'Telefon yo‘q',
+			'collab.no_messages_yet' => 'Bu suhbatda hali xabarlar yo‘q.',
+			'collab.participant' => 'Ishtirokchi',
+			'collab.brand_contact' => 'Brend kontakti',
+			'collab.influencer_contact' => 'Influenser kontakti',
+			'collab.role_contact' => ({required Object role}) => '${role} kontakti',
+			'collab.offer_number' => ({required Object id}) => 'Taklif #${id}',
+			'collab.brand_conversation' => 'Brend suhbati',
+			'collab.influencer_conversation' => 'Influenser suhbati',
+			'collab.conversation_number' => ({required Object id}) => 'Suhbat #${id}',
+			'collab.conversation' => 'Suhbat',
+			'collab.save' => 'Saqlash',
+			'collab.available_dates' => ({required Object count}) => 'Mavjud sanalar (${count})',
+			'collab.calendar_updated' => 'Kalendar yangilandi',
+			'collab.month_january' => 'Yanvar',
+			'collab.month_february' => 'Fevral',
+			'collab.month_march' => 'Mart',
+			'collab.month_april' => 'Aprel',
+			'collab.month_may' => 'May',
+			'collab.month_june' => 'Iyun',
+			'collab.month_july' => 'Iyul',
+			'collab.month_august' => 'Avgust',
+			'collab.month_september' => 'Sentabr',
+			'collab.month_october' => 'Oktabr',
+			'collab.month_november' => 'Noyabr',
+			'collab.month_december' => 'Dekabr',
+			'misc.notification_details_title' => 'Bildirishnoma tafsilotlari',
+			'misc.notification_no_additional_details' => 'Qo\'shimcha tafsilotlar yo\'q.',
+			'misc.engagement_rate_value' => ({required Object rate}) => '${rate}% jalb qilish darajasi',
+			'misc.segment_luxury' => 'Hashamatli',
+			'misc.segment_premium' => 'Premium',
+			'misc.segment_mass_market' => 'Ommaviy bozor',
+			'misc.segment_budget' => 'Byudjet',
+			'misc.niche' => 'Nisha',
+			'misc.my_pricing_tariffs' => 'Mening narxlarim/Tariflarim',
+			'misc.contract' => 'Shartnoma',
+			'misc.camera_experience' => 'Kamera tajribasi',
+			'misc.save_and_continue_later' => 'Saqlab, keyinroq davom etish',
+			'misc.fill_profile_information' => 'Profil ma\'lumotlarini to\'ldiring',
+			'misc.image_upload_failed' => 'Rasmni yuklab bo\'lmadi',
+			'misc.currency_uzs' => 'O\'zbek so\'mi',
+			'misc.currency_usd' => 'AQSh dollari',
+			'misc.profile_section_readonly' => 'Bu bo\'limni faqat profilingiz tasdiqlangandan keyin tahrirlashingiz mumkin.',
+			'misc.followers_and_engagement' => ({required Object followers, required Object rate}) => '${followers} obunachi, ${rate}% jalb qilish darajasi',
+			'misc.terms_of_use_title' => 'Foydalanish shartlari',
 			_ => null,
 		};
 	}
