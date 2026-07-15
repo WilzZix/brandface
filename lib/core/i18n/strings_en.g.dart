@@ -57,6 +57,12 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsNotificationsEn notifications = TranslationsNotificationsEn._(_root);
 	late final TranslationsBillingEn billing = TranslationsBillingEn._(_root);
 	late final TranslationsErrorsEn errors = TranslationsErrorsEn._(_root);
+	late final TranslationsAnalyticsEn analytics = TranslationsAnalyticsEn._(_root);
+	late final TranslationsBillingUiEn billing_ui = TranslationsBillingUiEn._(_root);
+	late final TranslationsAmbassadorEn ambassador = TranslationsAmbassadorEn._(_root);
+	late final TranslationsPortfolioUiEn portfolio_ui = TranslationsPortfolioUiEn._(_root);
+	late final TranslationsCollabEn collab = TranslationsCollabEn._(_root);
+	late final TranslationsMiscEn misc = TranslationsMiscEn._(_root);
 }
 
 // Path: splash
@@ -1213,6 +1219,786 @@ class TranslationsErrorsEn {
 	late final TranslationsErrorsServerEn server = TranslationsErrorsServerEn._(_root);
 }
 
+// Path: analytics
+class TranslationsAnalyticsEn {
+	TranslationsAnalyticsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Brand Activity Summary'
+	String get brand_activity_summary => 'Brand Activity Summary';
+
+	/// en: 'Search Insights'
+	String get search_insights => 'Search Insights';
+
+	/// en: 'Most Searched Ambassadors'
+	String get most_searched_ambassadors => 'Most Searched Ambassadors';
+
+	/// en: 'Offer Performance'
+	String get offer_performance => 'Offer Performance';
+
+	/// en: 'AI Matching Insights'
+	String get ai_matching_insights => 'AI Matching Insights';
+
+	/// en: 'Top Recommended Ambassadors'
+	String get top_recommended_ambassadors => 'Top Recommended Ambassadors';
+
+	/// en: 'Audience Insights'
+	String get audience_insights => 'Audience Insights';
+
+	/// en: 'Total Searches'
+	String get total_searches => 'Total Searches';
+
+	/// en: 'Total Offers'
+	String get total_offers => 'Total Offers';
+
+	/// en: 'Invitations Sent'
+	String get invitations_sent => 'Invitations Sent';
+
+	/// en: 'Ambassador Apps'
+	String get ambassador_apps => 'Ambassador Apps';
+
+	/// en: 'Influencer Apps'
+	String get influencer_apps => 'Influencer Apps';
+
+	/// en: '$count searches performed'
+	String searches_performed({required Object count}) => '${count} searches performed';
+
+	/// en: 'Top filters used'
+	String get top_filters_used => 'Top filters used';
+
+	/// en: 'Last 7 Days'
+	String get last_7_days => 'Last 7 Days';
+
+	/// en: 'Top Niches'
+	String get top_niches => 'Top Niches';
+
+	/// en: 'Top Regions'
+	String get top_regions => 'Top Regions';
+
+	/// en: 'Viewed Offer'
+	String get viewed_offer => 'Viewed Offer';
+
+	/// en: 'Opened Details'
+	String get opened_details => 'Opened Details';
+
+	/// en: 'Applicants'
+	String get applicants => 'Applicants';
+
+	/// en: 'Approved'
+	String get approved => 'Approved';
+
+	/// en: 'Niche Fit'
+	String get niche_fit => 'Niche Fit';
+
+	/// en: 'Audience Fit'
+	String get audience_fit => 'Audience Fit';
+
+	/// en: 'Platform Fit'
+	String get platform_fit => 'Platform Fit';
+
+	/// en: '$followers followers • $region'
+	String followers_region({required Object followers, required Object region}) => '${followers} followers  •  ${region}';
+
+	/// en: 'Top age group: '
+	String get top_age_group => 'Top age group: ';
+
+	/// en: 'Gender Distribution'
+	String get gender_distribution => 'Gender Distribution';
+
+	/// en: 'Top Countries'
+	String get top_countries => 'Top Countries';
+
+	/// en: 'Female $percent%'
+	String female_percent({required Object percent}) => 'Female ${percent}%';
+
+	/// en: 'Male $percent%'
+	String male_percent({required Object percent}) => 'Male ${percent}%';
+
+	/// en: 'Analytics data could not be loaded.'
+	String get analytics_load_failed => 'Analytics data could not be loaded.';
+
+	/// en: 'Average rating'
+	String get average_rating => 'Average rating';
+
+	/// en: 'Total reviews'
+	String get total_reviews => 'Total reviews';
+
+	/// en: 'Selected period'
+	String get selected_period => 'Selected period';
+
+	/// en: 'Profile views'
+	String get profile_views => 'Profile views';
+
+	/// en: 'Period'
+	String get period => 'Period';
+
+	/// en: 'Profile views in the last 30 days'
+	String get profile_views_last_30_days => 'Profile views in the last 30 days';
+
+	/// en: 'Total profile views'
+	String get total_profile_views => 'Total profile views';
+
+	/// en: '30 days'
+	String get days_30 => '30 days';
+
+	/// en: 'All time'
+	String get all_time => 'All time';
+
+	/// en: 'Applications by status'
+	String get applications_by_status => 'Applications by status';
+
+	/// en: 'No applications yet.'
+	String get no_applications => 'No applications yet.';
+
+	/// en: 'My campaigns'
+	String get my_campaigns => 'My campaigns';
+
+	/// en: 'Active campaigns'
+	String get active_campaigns => 'Active campaigns';
+
+	/// en: 'Influencers hired'
+	String get influencers_hired => 'Influencers hired';
+
+	/// en: 'Recent activity'
+	String get recent_activity => 'Recent activity';
+
+	/// en: 'Campaign title here'
+	String get campaign_title_placeholder => 'Campaign title here';
+
+	/// en: 'Campaigns'
+	String get campaigns => 'Campaigns';
+
+	/// en: 'Find influencers'
+	String get find_influencers => 'Find influencers';
+
+	/// en: 'Influencer #$id'
+	String influencer_number({required Object id}) => 'Influencer #${id}';
+
+	/// en: '$rate% ER'
+	String engagement_rate_short({required Object rate}) => '${rate}% ER';
+
+	/// en: 'Verified'
+	String get status_verified => 'Verified';
+
+	/// en: 'Rejected'
+	String get status_rejected => 'Rejected';
+
+	/// en: 'Blocked'
+	String get status_blocked => 'Blocked';
+
+	/// en: 'Pending'
+	String get status_pending => 'Pending';
+}
+
+// Path: billing_ui
+class TranslationsBillingUiEn {
+	TranslationsBillingUiEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Error loading plan'
+	String get error_loading_plan => 'Error loading plan';
+
+	/// en: 'Minimal'
+	String get minimal => 'Minimal';
+
+	/// en: 'Deactivate plan?'
+	String get deactivate_plan_question => 'Deactivate plan?';
+
+	/// en: 'Your subscription will be cancelled. You can reactivate at any time.'
+	String get deactivate_plan_message => 'Your subscription will be cancelled. You can reactivate at any time.';
+
+	/// en: 'Deactivate'
+	String get deactivate => 'Deactivate';
+
+	/// en: 'PREMIUM'
+	String get premium => 'PREMIUM';
+
+	/// en: 'Deactivated'
+	String get deactivated => 'Deactivated';
+
+	/// en: 'Renewal date'
+	String get renewal_date => 'Renewal date';
+
+	/// en: 'No card added'
+	String get no_card_added => 'No card added';
+
+	/// en: 'Auto-renewal'
+	String get auto_renewal => 'Auto-renewal';
+
+	/// en: 'Card'
+	String get card => 'Card';
+
+	/// en: 'Coupon code'
+	String get coupon_code => 'Coupon code';
+
+	/// en: 'Activate'
+	String get activate => 'Activate';
+
+	/// en: 'Payment method'
+	String get payment_method => 'Payment method';
+
+	/// en: 'Extra invites / applies:'
+	String get extra_invites_applies => 'Extra invites / applies:';
+
+	/// en: 'from \$5'
+	String get extra_invites_price => 'from \$5';
+
+	/// en: 'Browse offers & ambassadors (limited)'
+	String get feature_browse_offers => 'Browse offers & ambassadors (limited)';
+
+	/// en: 'Create 1 Offer / month'
+	String get feature_create_offer => 'Create 1 Offer / month';
+
+	/// en: 'Up to 3 Invites / month'
+	String get feature_invites => 'Up to 3 Invites / month';
+
+	/// en: 'AI recommendations: Top 5 matches'
+	String get feature_ai_recommendations => 'AI recommendations: Top 5 matches';
+
+	/// en: 'Shortlist up to 10 profiles'
+	String get feature_shortlist => 'Shortlist up to 10 profiles';
+
+	/// en: 'Basic analytics (views, invites)'
+	String get feature_basic_analytics => 'Basic analytics (views, invites)';
+
+	/// en: 'Max offers / month: $count'
+	String max_offers_per_month({required Object count}) => 'Max offers / month: ${count}';
+
+	/// en: 'Max finds / month: $count'
+	String max_finds_per_month({required Object count}) => 'Max finds / month: ${count}';
+
+	/// en: 'AI matches count: $count'
+	String ai_matches_count({required Object count}) => 'AI matches count: ${count}';
+
+	/// en: 'Max shortlist: $count'
+	String max_shortlist({required Object count}) => 'Max shortlist: ${count}';
+
+	/// en: 'Full contact access'
+	String get full_contact_access => 'Full contact access';
+
+	/// en: 'Advanced analytics'
+	String get advanced_analytics => 'Advanced analytics';
+
+	/// en: 'Priority support'
+	String get priority_support => 'Priority support';
+
+	/// en: 'Add new payment method'
+	String get add_new_payment_method => 'Add new payment method';
+
+	/// en: 'Card holder'
+	String get card_holder => 'Card holder';
+
+	/// en: 'Write card holder name'
+	String get write_card_holder_name => 'Write card holder name';
+
+	/// en: 'Required'
+	String get required => 'Required';
+
+	/// en: 'Card number'
+	String get card_number => 'Card number';
+
+	/// en: 'Write card number'
+	String get write_card_number => 'Write card number';
+
+	/// en: 'Enter a valid 16-digit card number'
+	String get enter_valid_16_digit_card => 'Enter a valid 16-digit card number';
+
+	/// en: 'Expire date'
+	String get expire_date => 'Expire date';
+
+	/// en: 'MM/YY'
+	String get mm_yy => 'MM/YY';
+
+	/// en: 'Invalid month'
+	String get invalid_month => 'Invalid month';
+
+	/// en: 'CCV'
+	String get ccv => 'CCV';
+
+	/// en: 'Invalid'
+	String get invalid => 'Invalid';
+
+	/// en: 'Could not send the SMS code'
+	String get could_not_send_sms_code => 'Could not send the SMS code';
+
+	/// en: 'Enter valid card number'
+	String get enter_valid_card_number => 'Enter valid card number';
+
+	/// en: 'Edit card'
+	String get edit_card => 'Edit card';
+
+	/// en: 'No cards added yet'
+	String get no_cards_added_yet => 'No cards added yet';
+
+	/// en: 'Card added'
+	String get card_added => 'Card added';
+
+	/// en: 'Enter the SMS code sent to your card's phone number'
+	String get enter_sms_code_card_phone => 'Enter the SMS code sent to your card\'s phone number';
+
+	/// en: 'We sent an SMS code to $phone, please enter it below'
+	String sms_code_sent_to({required Object phone}) => 'We sent an SMS code to ${phone},\nplease enter it below';
+
+	/// en: 'Payment'
+	String get payment => 'Payment';
+}
+
+// Path: ambassador
+class TranslationsAmbassadorEn {
+	TranslationsAmbassadorEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Ambassador details'
+	String get ambassador_details => 'Ambassador details';
+
+	/// en: 'Information'
+	String get information => 'Information';
+
+	/// en: 'No information provided.'
+	String get no_information_provided => 'No information provided.';
+
+	/// en: 'Niche'
+	String get niche => 'Niche';
+
+	/// en: 'Available dates'
+	String get available_dates => 'Available dates';
+
+	/// en: ', age $from – $to'
+	String age_range_suffix({required Object from, required Object to}) => ', age ${from} – ${to}';
+
+	/// en: 'Engagement level'
+	String get engagement_level => 'Engagement level';
+
+	/// en: 'Total number of followers'
+	String get total_number_of_followers => 'Total number of followers';
+
+	/// en: '$years years'
+	String years_value({required Object years}) => '${years} years';
+
+	/// en: 'List of partners'
+	String get list_of_partners => 'List of partners';
+
+	/// en: 'No comment'
+	String get no_comment => 'No comment';
+
+	/// en: 'No portfolio items.'
+	String get no_portfolio_items => 'No portfolio items.';
+
+	/// en: 'No pricing information available.'
+	String get no_pricing_info => 'No pricing information available.';
+
+	/// en: 'Hourly (UZS)'
+	String get hourly_uzs => 'Hourly (UZS)';
+
+	/// en: 'Hourly (USD)'
+	String get hourly_usd => 'Hourly (USD)';
+
+	/// en: 'Project by'
+	String get project_by => 'Project by';
+
+	/// en: 'Monthly exclusivity fee'
+	String get monthly_exclusivity_fee => 'Monthly exclusivity fee';
+
+	/// en: 'Monthly content capacity'
+	String get monthly_content_capacity => 'Monthly content capacity';
+
+	/// en: '$count posts'
+	String content_capacity_posts({required Object count}) => '${count} posts';
+
+	/// en: 'Added to favourites'
+	String get added_to_favourites => 'Added to favourites';
+
+	/// en: 'Add to favourites'
+	String get add_to_favourites => 'Add to favourites';
+
+	/// en: 'Send enquiry'
+	String get send_enquiry => 'Send enquiry';
+
+	/// en: 'Portfolio details'
+	String get portfolio_details => 'Portfolio details';
+
+	/// en: 'No description'
+	String get no_description => 'No description';
+
+	/// en: 'Links'
+	String get links => 'Links';
+
+	/// en: 'No links added.'
+	String get no_links_added => 'No links added.';
+
+	/// en: 'Portfolio images'
+	String get portfolio_images => 'Portfolio images';
+
+	/// en: 'No images added.'
+	String get no_images_added => 'No images added.';
+
+	/// en: 'Language'
+	String get language => 'Language';
+
+	/// en: 'Age'
+	String get age => 'Age';
+
+	/// en: 'Auditory'
+	String get auditory => 'Auditory';
+
+	/// en: 'Available date'
+	String get available_date => 'Available date';
+
+	/// en: 'Price range (per hour)'
+	String get price_range_per_hour => 'Price range (per hour)';
+
+	/// en: 'From'
+	String get from => 'From';
+
+	/// en: 'To'
+	String get to => 'To';
+
+	/// en: 'No favourites yet.'
+	String get no_favourites_yet => 'No favourites yet.';
+
+	/// en: '$count found'
+	String items_found({required Object count}) => '${count} found';
+}
+
+// Path: portfolio_ui
+class TranslationsPortfolioUiEn {
+	TranslationsPortfolioUiEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Fill profile information'
+	String get fill_profile_information => 'Fill profile information';
+
+	/// en: 'Upload thumbnail picture'
+	String get upload_thumbnail_picture => 'Upload thumbnail picture';
+
+	/// en: 'Choose files'
+	String get choose_files => 'Choose files';
+
+	/// en: 'Portfolio name'
+	String get portfolio_name => 'Portfolio name';
+
+	/// en: 'Portfolio name here'
+	String get portfolio_name_hint => 'Portfolio name here';
+
+	/// en: 'Add links'
+	String get add_links => 'Add links';
+
+	/// en: 'Save and continue later'
+	String get save_and_continue_later => 'Save and continue later';
+
+	/// en: 'The file picker is not connected yet. Saving details still works.'
+	String get upload_not_available => 'The file picker is not connected yet. Saving details still works.';
+
+	/// en: 'General info (1/6)'
+	String get general_info_step => 'General info (1/6)';
+
+	/// en: 'Portfolio details could not be loaded.'
+	String get details_load_failed => 'Portfolio details could not be loaded.';
+
+	/// en: 'Portfolio details'
+	String get portfolio_details_title => 'Portfolio details';
+
+	/// en: 'Information'
+	String get information => 'Information';
+
+	/// en: 'No description'
+	String get no_description => 'No description';
+
+	/// en: 'Links'
+	String get links => 'Links';
+
+	/// en: 'No links added.'
+	String get no_links_added => 'No links added.';
+
+	/// en: 'Portfolio images'
+	String get portfolio_images => 'Portfolio images';
+
+	/// en: 'No images added.'
+	String get no_images_added => 'No images added.';
+
+	/// en: 'Portfolio could not be loaded.'
+	String get list_load_failed => 'Portfolio could not be loaded.';
+
+	/// en: 'No portfolio found'
+	String get no_portfolio_found => 'No portfolio found';
+
+	/// en: 'TOP is active'
+	String get top_is_active => 'TOP is active';
+
+	/// en: 'TOP is not activated'
+	String get top_not_activated => 'TOP is not activated';
+
+	/// en: 'Select payment method'
+	String get select_payment_method => 'Select payment method';
+
+	/// en: 'Activate'
+	String get activate => 'Activate';
+
+	/// en: 'VIP is active'
+	String get vip_is_active => 'VIP is active';
+
+	/// en: 'VIP is not activated'
+	String get vip_not_activated => 'VIP is not activated';
+
+	/// en: 'Invoice #$id'
+	String invoice_number({required Object id}) => 'Invoice #${id}';
+
+	/// en: 'Billing transaction'
+	String get billing_transaction => 'Billing transaction';
+
+	/// en: 'Receipt'
+	String get receipt => 'Receipt';
+
+	/// en: 'Download'
+	String get download => 'Download';
+
+	/// en: 'Select a TOP package first.'
+	String get select_top_package_first => 'Select a TOP package first.';
+
+	/// en: 'Select a payment method first.'
+	String get select_payment_method_first => 'Select a payment method first.';
+
+	/// en: 'Select a VIP plan first.'
+	String get select_vip_plan_first => 'Select a VIP plan first.';
+
+	/// en: '$days days / $amount'
+	String boost_package_label({required Object days, required Object amount}) => '${days} days / ${amount}';
+
+	/// en: 'Expiration date'
+	String get expiration_date => 'Expiration date';
+
+	/// en: 'TOP profile data could not be loaded.'
+	String get top_profile_load_failed => 'TOP profile data could not be loaded.';
+}
+
+// Path: collab
+class TranslationsCollabEn {
+	TranslationsCollabEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Required'
+	String get required => 'Required';
+
+	/// en: 'Send enquiry'
+	String get send_enquiry => 'Send enquiry';
+
+	/// en: 'Enquiry sent'
+	String get enquiry_sent => 'Enquiry sent';
+
+	/// en: 'Contact name'
+	String get contact_name => 'Contact name';
+
+	/// en: 'Write Contact name'
+	String get write_contact_name => 'Write Contact name';
+
+	/// en: 'Company name'
+	String get company_name => 'Company name';
+
+	/// en: 'Write Company name'
+	String get write_company_name => 'Write Company name';
+
+	/// en: 'Contact number'
+	String get contact_number => 'Contact number';
+
+	/// en: 'Write Contact number'
+	String get write_contact_number => 'Write Contact number';
+
+	/// en: 'Message'
+	String get message => 'Message';
+
+	/// en: 'Write message here'
+	String get write_message_here => 'Write message here';
+
+	/// en: 'Sending...'
+	String get sending => 'Sending...';
+
+	/// en: 'No active offers found.'
+	String get no_active_offers_found => 'No active offers found.';
+
+	/// en: '$count found'
+	String results_found({required Object count}) => '${count} found';
+
+	/// en: 'No matches yet for "$offerTitle"'
+	String no_matches_yet({required Object offerTitle}) => 'No matches yet for "${offerTitle}"';
+
+	/// en: 'Run AI matching to find the best influencers.'
+	String get run_ai_matching_subtitle => 'Run AI matching to find the best influencers.';
+
+	/// en: 'Run AI Matching'
+	String get run_ai_matching => 'Run AI Matching';
+
+	/// en: 'Influencer #$id'
+	String influencer_number({required Object id}) => 'Influencer #${id}';
+
+	/// en: 'Messages could not be loaded.'
+	String get messages_error_load => 'Messages could not be loaded.';
+
+	/// en: 'No messages found'
+	String get no_messages_found => 'No messages found';
+
+	/// en: '$count Messages found'
+	String messages_found({required Object count}) => '${count} Messages found';
+
+	/// en: 'No phone'
+	String get no_phone => 'No phone';
+
+	/// en: 'No messages yet in this conversation.'
+	String get no_messages_yet => 'No messages yet in this conversation.';
+
+	/// en: 'Participant'
+	String get participant => 'Participant';
+
+	/// en: 'Brand contact'
+	String get brand_contact => 'Brand contact';
+
+	/// en: 'Influencer contact'
+	String get influencer_contact => 'Influencer contact';
+
+	/// en: '$role contact'
+	String role_contact({required Object role}) => '${role} contact';
+
+	/// en: 'Offer #$id'
+	String offer_number({required Object id}) => 'Offer #${id}';
+
+	/// en: 'Brand conversation'
+	String get brand_conversation => 'Brand conversation';
+
+	/// en: 'Influencer conversation'
+	String get influencer_conversation => 'Influencer conversation';
+
+	/// en: 'Conversation #$id'
+	String conversation_number({required Object id}) => 'Conversation #${id}';
+
+	/// en: 'Conversation'
+	String get conversation => 'Conversation';
+
+	/// en: 'Save'
+	String get save => 'Save';
+
+	/// en: 'Available dates ($count)'
+	String available_dates({required Object count}) => 'Available dates (${count})';
+
+	/// en: 'Calendar updated'
+	String get calendar_updated => 'Calendar updated';
+
+	/// en: 'January'
+	String get month_january => 'January';
+
+	/// en: 'February'
+	String get month_february => 'February';
+
+	/// en: 'March'
+	String get month_march => 'March';
+
+	/// en: 'April'
+	String get month_april => 'April';
+
+	/// en: 'May'
+	String get month_may => 'May';
+
+	/// en: 'June'
+	String get month_june => 'June';
+
+	/// en: 'July'
+	String get month_july => 'July';
+
+	/// en: 'August'
+	String get month_august => 'August';
+
+	/// en: 'September'
+	String get month_september => 'September';
+
+	/// en: 'October'
+	String get month_october => 'October';
+
+	/// en: 'November'
+	String get month_november => 'November';
+
+	/// en: 'December'
+	String get month_december => 'December';
+}
+
+// Path: misc
+class TranslationsMiscEn {
+	TranslationsMiscEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Notification details'
+	String get notification_details_title => 'Notification details';
+
+	/// en: 'No additional details.'
+	String get notification_no_additional_details => 'No additional details.';
+
+	/// en: '$rate% engagement rate'
+	String engagement_rate_value({required Object rate}) => '${rate}% engagement rate';
+
+	/// en: 'Luxury'
+	String get segment_luxury => 'Luxury';
+
+	/// en: 'Premium'
+	String get segment_premium => 'Premium';
+
+	/// en: 'Mass market'
+	String get segment_mass_market => 'Mass market';
+
+	/// en: 'Budget'
+	String get segment_budget => 'Budget';
+
+	/// en: 'Niche'
+	String get niche => 'Niche';
+
+	/// en: 'My Pricing/Tariffs'
+	String get my_pricing_tariffs => 'My Pricing/Tariffs';
+
+	/// en: 'Contract'
+	String get contract => 'Contract';
+
+	/// en: 'Camera experience'
+	String get camera_experience => 'Camera experience';
+
+	/// en: 'Save and continue later'
+	String get save_and_continue_later => 'Save and continue later';
+
+	/// en: 'Fill profile information'
+	String get fill_profile_information => 'Fill profile information';
+
+	/// en: 'Image upload failed'
+	String get image_upload_failed => 'Image upload failed';
+
+	/// en: 'Uzbekistani som'
+	String get currency_uzs => 'Uzbekistani som';
+
+	/// en: 'US Dollar'
+	String get currency_usd => 'US Dollar';
+
+	/// en: 'You can edit this section only after your profile is approved.'
+	String get profile_section_readonly => 'You can edit this section only after your profile is approved.';
+
+	/// en: '$followers followers, $rate% engagement rate'
+	String followers_and_engagement({required Object followers, required Object rate}) => '${followers} followers, ${rate}% engagement rate';
+
+	/// en: 'Terms of use'
+	String get terms_of_use_title => 'Terms of use';
+}
+
 // Path: errors.server
 class TranslationsErrorsServerEn {
 	TranslationsErrorsServerEn._(this._root);
@@ -1583,6 +2369,250 @@ extension on Translations {
 			'errors.server.unauthorized' => 'Session expired, please log in again',
 			'errors.server.notFound' => 'Resource not found',
 			'errors.server.userExists' => 'User with this email already exists',
+			'analytics.brand_activity_summary' => 'Brand Activity Summary',
+			'analytics.search_insights' => 'Search Insights',
+			'analytics.most_searched_ambassadors' => 'Most Searched Ambassadors',
+			'analytics.offer_performance' => 'Offer Performance',
+			'analytics.ai_matching_insights' => 'AI Matching Insights',
+			'analytics.top_recommended_ambassadors' => 'Top Recommended Ambassadors',
+			'analytics.audience_insights' => 'Audience Insights',
+			'analytics.total_searches' => 'Total Searches',
+			'analytics.total_offers' => 'Total Offers',
+			'analytics.invitations_sent' => 'Invitations Sent',
+			'analytics.ambassador_apps' => 'Ambassador Apps',
+			'analytics.influencer_apps' => 'Influencer Apps',
+			'analytics.searches_performed' => ({required Object count}) => '${count} searches performed',
+			'analytics.top_filters_used' => 'Top filters used',
+			'analytics.last_7_days' => 'Last 7 Days',
+			'analytics.top_niches' => 'Top Niches',
+			'analytics.top_regions' => 'Top Regions',
+			'analytics.viewed_offer' => 'Viewed Offer',
+			'analytics.opened_details' => 'Opened Details',
+			'analytics.applicants' => 'Applicants',
+			'analytics.approved' => 'Approved',
+			'analytics.niche_fit' => 'Niche Fit',
+			'analytics.audience_fit' => 'Audience Fit',
+			'analytics.platform_fit' => 'Platform Fit',
+			'analytics.followers_region' => ({required Object followers, required Object region}) => '${followers} followers  •  ${region}',
+			'analytics.top_age_group' => 'Top age group: ',
+			'analytics.gender_distribution' => 'Gender Distribution',
+			'analytics.top_countries' => 'Top Countries',
+			'analytics.female_percent' => ({required Object percent}) => 'Female ${percent}%',
+			'analytics.male_percent' => ({required Object percent}) => 'Male ${percent}%',
+			'analytics.analytics_load_failed' => 'Analytics data could not be loaded.',
+			'analytics.average_rating' => 'Average rating',
+			'analytics.total_reviews' => 'Total reviews',
+			'analytics.selected_period' => 'Selected period',
+			'analytics.profile_views' => 'Profile views',
+			'analytics.period' => 'Period',
+			'analytics.profile_views_last_30_days' => 'Profile views in the last 30 days',
+			'analytics.total_profile_views' => 'Total profile views',
+			'analytics.days_30' => '30 days',
+			'analytics.all_time' => 'All time',
+			'analytics.applications_by_status' => 'Applications by status',
+			'analytics.no_applications' => 'No applications yet.',
+			'analytics.my_campaigns' => 'My campaigns',
+			'analytics.active_campaigns' => 'Active campaigns',
+			'analytics.influencers_hired' => 'Influencers hired',
+			'analytics.recent_activity' => 'Recent activity',
+			'analytics.campaign_title_placeholder' => 'Campaign title here',
+			'analytics.campaigns' => 'Campaigns',
+			'analytics.find_influencers' => 'Find influencers',
+			'analytics.influencer_number' => ({required Object id}) => 'Influencer #${id}',
+			'analytics.engagement_rate_short' => ({required Object rate}) => '${rate}% ER',
+			'analytics.status_verified' => 'Verified',
+			'analytics.status_rejected' => 'Rejected',
+			'analytics.status_blocked' => 'Blocked',
+			'analytics.status_pending' => 'Pending',
+			'billing_ui.error_loading_plan' => 'Error loading plan',
+			'billing_ui.minimal' => 'Minimal',
+			'billing_ui.deactivate_plan_question' => 'Deactivate plan?',
+			'billing_ui.deactivate_plan_message' => 'Your subscription will be cancelled. You can reactivate at any time.',
+			'billing_ui.deactivate' => 'Deactivate',
+			'billing_ui.premium' => 'PREMIUM',
+			'billing_ui.deactivated' => 'Deactivated',
+			'billing_ui.renewal_date' => 'Renewal date',
+			'billing_ui.no_card_added' => 'No card added',
+			'billing_ui.auto_renewal' => 'Auto-renewal',
+			'billing_ui.card' => 'Card',
+			'billing_ui.coupon_code' => 'Coupon code',
+			'billing_ui.activate' => 'Activate',
+			'billing_ui.payment_method' => 'Payment method',
+			'billing_ui.extra_invites_applies' => 'Extra invites / applies:',
+			'billing_ui.extra_invites_price' => 'from \$5',
+			'billing_ui.feature_browse_offers' => 'Browse offers & ambassadors (limited)',
+			'billing_ui.feature_create_offer' => 'Create 1 Offer / month',
+			'billing_ui.feature_invites' => 'Up to 3 Invites / month',
+			'billing_ui.feature_ai_recommendations' => 'AI recommendations: Top 5 matches',
+			'billing_ui.feature_shortlist' => 'Shortlist up to 10 profiles',
+			'billing_ui.feature_basic_analytics' => 'Basic analytics (views, invites)',
+			'billing_ui.max_offers_per_month' => ({required Object count}) => 'Max offers / month: ${count}',
+			'billing_ui.max_finds_per_month' => ({required Object count}) => 'Max finds / month: ${count}',
+			'billing_ui.ai_matches_count' => ({required Object count}) => 'AI matches count: ${count}',
+			'billing_ui.max_shortlist' => ({required Object count}) => 'Max shortlist: ${count}',
+			'billing_ui.full_contact_access' => 'Full contact access',
+			'billing_ui.advanced_analytics' => 'Advanced analytics',
+			'billing_ui.priority_support' => 'Priority support',
+			'billing_ui.add_new_payment_method' => 'Add new payment method',
+			'billing_ui.card_holder' => 'Card holder',
+			'billing_ui.write_card_holder_name' => 'Write card holder name',
+			'billing_ui.required' => 'Required',
+			'billing_ui.card_number' => 'Card number',
+			'billing_ui.write_card_number' => 'Write card number',
+			'billing_ui.enter_valid_16_digit_card' => 'Enter a valid 16-digit card number',
+			'billing_ui.expire_date' => 'Expire date',
+			'billing_ui.mm_yy' => 'MM/YY',
+			'billing_ui.invalid_month' => 'Invalid month',
+			'billing_ui.ccv' => 'CCV',
+			'billing_ui.invalid' => 'Invalid',
+			'billing_ui.could_not_send_sms_code' => 'Could not send the SMS code',
+			'billing_ui.enter_valid_card_number' => 'Enter valid card number',
+			'billing_ui.edit_card' => 'Edit card',
+			'billing_ui.no_cards_added_yet' => 'No cards added yet',
+			'billing_ui.card_added' => 'Card added',
+			'billing_ui.enter_sms_code_card_phone' => 'Enter the SMS code sent to your card\'s phone number',
+			'billing_ui.sms_code_sent_to' => ({required Object phone}) => 'We sent an SMS code to ${phone},\nplease enter it below',
+			'billing_ui.payment' => 'Payment',
+			'ambassador.ambassador_details' => 'Ambassador details',
+			'ambassador.information' => 'Information',
+			'ambassador.no_information_provided' => 'No information provided.',
+			'ambassador.niche' => 'Niche',
+			'ambassador.available_dates' => 'Available dates',
+			'ambassador.age_range_suffix' => ({required Object from, required Object to}) => ', age ${from} – ${to}',
+			'ambassador.engagement_level' => 'Engagement level',
+			'ambassador.total_number_of_followers' => 'Total number of followers',
+			'ambassador.years_value' => ({required Object years}) => '${years} years',
+			'ambassador.list_of_partners' => 'List of partners',
+			'ambassador.no_comment' => 'No comment',
+			'ambassador.no_portfolio_items' => 'No portfolio items.',
+			'ambassador.no_pricing_info' => 'No pricing information available.',
+			'ambassador.hourly_uzs' => 'Hourly (UZS)',
+			'ambassador.hourly_usd' => 'Hourly (USD)',
+			'ambassador.project_by' => 'Project by',
+			'ambassador.monthly_exclusivity_fee' => 'Monthly exclusivity fee',
+			'ambassador.monthly_content_capacity' => 'Monthly content capacity',
+			'ambassador.content_capacity_posts' => ({required Object count}) => '${count} posts',
+			'ambassador.added_to_favourites' => 'Added to favourites',
+			'ambassador.add_to_favourites' => 'Add to favourites',
+			'ambassador.send_enquiry' => 'Send enquiry',
+			'ambassador.portfolio_details' => 'Portfolio details',
+			'ambassador.no_description' => 'No description',
+			'ambassador.links' => 'Links',
+			'ambassador.no_links_added' => 'No links added.',
+			'ambassador.portfolio_images' => 'Portfolio images',
+			'ambassador.no_images_added' => 'No images added.',
+			'ambassador.language' => 'Language',
+			'ambassador.age' => 'Age',
+			'ambassador.auditory' => 'Auditory',
+			'ambassador.available_date' => 'Available date',
+			'ambassador.price_range_per_hour' => 'Price range (per hour)',
+			'ambassador.from' => 'From',
+			'ambassador.to' => 'To',
+			'ambassador.no_favourites_yet' => 'No favourites yet.',
+			'ambassador.items_found' => ({required Object count}) => '${count} found',
+			'portfolio_ui.fill_profile_information' => 'Fill profile information',
+			'portfolio_ui.upload_thumbnail_picture' => 'Upload thumbnail picture',
+			'portfolio_ui.choose_files' => 'Choose files',
+			'portfolio_ui.portfolio_name' => 'Portfolio name',
+			'portfolio_ui.portfolio_name_hint' => 'Portfolio name here',
+			'portfolio_ui.add_links' => 'Add links',
+			'portfolio_ui.save_and_continue_later' => 'Save and continue later',
+			'portfolio_ui.upload_not_available' => 'The file picker is not connected yet. Saving details still works.',
+			'portfolio_ui.general_info_step' => 'General info (1/6)',
+			'portfolio_ui.details_load_failed' => 'Portfolio details could not be loaded.',
+			'portfolio_ui.portfolio_details_title' => 'Portfolio details',
+			'portfolio_ui.information' => 'Information',
+			'portfolio_ui.no_description' => 'No description',
+			'portfolio_ui.links' => 'Links',
+			'portfolio_ui.no_links_added' => 'No links added.',
+			'portfolio_ui.portfolio_images' => 'Portfolio images',
+			'portfolio_ui.no_images_added' => 'No images added.',
+			'portfolio_ui.list_load_failed' => 'Portfolio could not be loaded.',
+			'portfolio_ui.no_portfolio_found' => 'No portfolio found',
+			'portfolio_ui.top_is_active' => 'TOP is active',
+			'portfolio_ui.top_not_activated' => 'TOP is not activated',
+			'portfolio_ui.select_payment_method' => 'Select payment method',
+			'portfolio_ui.activate' => 'Activate',
+			'portfolio_ui.vip_is_active' => 'VIP is active',
+			'portfolio_ui.vip_not_activated' => 'VIP is not activated',
+			'portfolio_ui.invoice_number' => ({required Object id}) => 'Invoice #${id}',
+			'portfolio_ui.billing_transaction' => 'Billing transaction',
+			'portfolio_ui.receipt' => 'Receipt',
+			'portfolio_ui.download' => 'Download',
+			'portfolio_ui.select_top_package_first' => 'Select a TOP package first.',
+			'portfolio_ui.select_payment_method_first' => 'Select a payment method first.',
+			'portfolio_ui.select_vip_plan_first' => 'Select a VIP plan first.',
+			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} days / ${amount}',
+			_ => null,
+		} ?? switch (path) {
+			'portfolio_ui.expiration_date' => 'Expiration date',
+			'portfolio_ui.top_profile_load_failed' => 'TOP profile data could not be loaded.',
+			'collab.required' => 'Required',
+			'collab.send_enquiry' => 'Send enquiry',
+			'collab.enquiry_sent' => 'Enquiry sent',
+			'collab.contact_name' => 'Contact name',
+			'collab.write_contact_name' => 'Write Contact name',
+			'collab.company_name' => 'Company name',
+			'collab.write_company_name' => 'Write Company name',
+			'collab.contact_number' => 'Contact number',
+			'collab.write_contact_number' => 'Write Contact number',
+			'collab.message' => 'Message',
+			'collab.write_message_here' => 'Write message here',
+			'collab.sending' => 'Sending...',
+			'collab.no_active_offers_found' => 'No active offers found.',
+			'collab.results_found' => ({required Object count}) => '${count} found',
+			'collab.no_matches_yet' => ({required Object offerTitle}) => 'No matches yet for "${offerTitle}"',
+			'collab.run_ai_matching_subtitle' => 'Run AI matching to find the best influencers.',
+			'collab.run_ai_matching' => 'Run AI Matching',
+			'collab.influencer_number' => ({required Object id}) => 'Influencer #${id}',
+			'collab.messages_error_load' => 'Messages could not be loaded.',
+			'collab.no_messages_found' => 'No messages found',
+			'collab.messages_found' => ({required Object count}) => '${count} Messages found',
+			'collab.no_phone' => 'No phone',
+			'collab.no_messages_yet' => 'No messages yet in this conversation.',
+			'collab.participant' => 'Participant',
+			'collab.brand_contact' => 'Brand contact',
+			'collab.influencer_contact' => 'Influencer contact',
+			'collab.role_contact' => ({required Object role}) => '${role} contact',
+			'collab.offer_number' => ({required Object id}) => 'Offer #${id}',
+			'collab.brand_conversation' => 'Brand conversation',
+			'collab.influencer_conversation' => 'Influencer conversation',
+			'collab.conversation_number' => ({required Object id}) => 'Conversation #${id}',
+			'collab.conversation' => 'Conversation',
+			'collab.save' => 'Save',
+			'collab.available_dates' => ({required Object count}) => 'Available dates (${count})',
+			'collab.calendar_updated' => 'Calendar updated',
+			'collab.month_january' => 'January',
+			'collab.month_february' => 'February',
+			'collab.month_march' => 'March',
+			'collab.month_april' => 'April',
+			'collab.month_may' => 'May',
+			'collab.month_june' => 'June',
+			'collab.month_july' => 'July',
+			'collab.month_august' => 'August',
+			'collab.month_september' => 'September',
+			'collab.month_october' => 'October',
+			'collab.month_november' => 'November',
+			'collab.month_december' => 'December',
+			'misc.notification_details_title' => 'Notification details',
+			'misc.notification_no_additional_details' => 'No additional details.',
+			'misc.engagement_rate_value' => ({required Object rate}) => '${rate}% engagement rate',
+			'misc.segment_luxury' => 'Luxury',
+			'misc.segment_premium' => 'Premium',
+			'misc.segment_mass_market' => 'Mass market',
+			'misc.segment_budget' => 'Budget',
+			'misc.niche' => 'Niche',
+			'misc.my_pricing_tariffs' => 'My Pricing/Tariffs',
+			'misc.contract' => 'Contract',
+			'misc.camera_experience' => 'Camera experience',
+			'misc.save_and_continue_later' => 'Save and continue later',
+			'misc.fill_profile_information' => 'Fill profile information',
+			'misc.image_upload_failed' => 'Image upload failed',
+			'misc.currency_uzs' => 'Uzbekistani som',
+			'misc.currency_usd' => 'US Dollar',
+			'misc.profile_section_readonly' => 'You can edit this section only after your profile is approved.',
+			'misc.followers_and_engagement' => ({required Object followers, required Object rate}) => '${followers} followers, ${rate}% engagement rate',
+			'misc.terms_of_use_title' => 'Terms of use',
 			_ => null,
 		};
 	}

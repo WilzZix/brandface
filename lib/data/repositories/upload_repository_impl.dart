@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:brandface/core/error/exception_mapper.dart';
 import 'package:brandface/core/error/failures.dart';
 import 'package:dart_either/dart_either.dart';
-import 'package:dio/dio.dart';
 
 import '../../domain/entities/upload/uploaded_file_entity.dart';
 import '../../domain/repository/upload_repository.dart';
@@ -17,25 +17,14 @@ final class UploadRepositoryImpl implements IUploadRepository {
   @override
   Future<Either<Failure, UploadedFileEntity>> uploadFile({
     required File file,
-  }) async {
-    try {
+  }) {
+    return guard(() async {
       final response = await _dataSource.uploadFile(file: file);
       final data = response['data'] as Map<String, dynamic>;
-      return Right(
-        UploadedFileEntity(
-          id: data['id'] as int,
-          fileUrl: data['file'] as String,
-        ),
+      return UploadedFileEntity(
+        id: data['id'] as int,
+        fileUrl: data['file'] as String,
       );
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?.toString() ?? e.message ?? 'Upload failed',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
+    });
   }
 }

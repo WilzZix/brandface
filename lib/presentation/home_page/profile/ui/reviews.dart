@@ -85,9 +85,9 @@ class _ReviewsState extends State<Reviews> {
                       child: state.reviews.isEmpty
                           ? ListView(
                               physics: const AlwaysScrollableScrollPhysics(),
-                              children: const [
-                                SizedBox(height: 120),
-                                Center(child: Text('No reviews yet.')),
+                              children: [
+                                const SizedBox(height: 120),
+                                Center(child: Text(t.reviews.no_reviews)),
                               ],
                             )
                           : ListView.separated(

@@ -54,6 +54,12 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsNotificationsRu notifications = _TranslationsNotificationsRu._(_root);
 	@override late final _TranslationsBillingRu billing = _TranslationsBillingRu._(_root);
 	@override late final _TranslationsErrorsRu errors = _TranslationsErrorsRu._(_root);
+	@override late final _TranslationsAnalyticsRu analytics = _TranslationsAnalyticsRu._(_root);
+	@override late final _TranslationsBillingUiRu billing_ui = _TranslationsBillingUiRu._(_root);
+	@override late final _TranslationsAmbassadorRu ambassador = _TranslationsAmbassadorRu._(_root);
+	@override late final _TranslationsPortfolioUiRu portfolio_ui = _TranslationsPortfolioUiRu._(_root);
+	@override late final _TranslationsCollabRu collab = _TranslationsCollabRu._(_root);
+	@override late final _TranslationsMiscRu misc = _TranslationsMiscRu._(_root);
 }
 
 // Path: splash
@@ -543,6 +549,302 @@ class _TranslationsErrorsRu implements TranslationsErrorsEn {
 	@override late final _TranslationsErrorsServerRu server = _TranslationsErrorsServerRu._(_root);
 }
 
+// Path: analytics
+class _TranslationsAnalyticsRu implements TranslationsAnalyticsEn {
+	_TranslationsAnalyticsRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get brand_activity_summary => 'Сводка активности бренда';
+	@override String get search_insights => 'Аналитика поиска';
+	@override String get most_searched_ambassadors => 'Самые искомые амбассадоры';
+	@override String get offer_performance => 'Эффективность предложений';
+	@override String get ai_matching_insights => 'Аналитика AI-подбора';
+	@override String get top_recommended_ambassadors => 'Топ рекомендованных амбассадоров';
+	@override String get audience_insights => 'Аналитика аудитории';
+	@override String get total_searches => 'Всего поисков';
+	@override String get total_offers => 'Всего предложений';
+	@override String get invitations_sent => 'Отправлено приглашений';
+	@override String get ambassador_apps => 'Заявки амбассадоров';
+	@override String get influencer_apps => 'Заявки инфлюенсеров';
+	@override String searches_performed({required Object count}) => 'Выполнено поисков: ${count}';
+	@override String get top_filters_used => 'Самые используемые фильтры';
+	@override String get last_7_days => 'Последние 7 дней';
+	@override String get top_niches => 'Топ ниш';
+	@override String get top_regions => 'Топ регионов';
+	@override String get viewed_offer => 'Просмотрели предложение';
+	@override String get opened_details => 'Открыли детали';
+	@override String get applicants => 'Кандидаты';
+	@override String get approved => 'Одобрено';
+	@override String get niche_fit => 'Соответствие нише';
+	@override String get audience_fit => 'Соответствие аудитории';
+	@override String get platform_fit => 'Соответствие платформе';
+	@override String followers_region({required Object followers, required Object region}) => '${followers} подписчиков  •  ${region}';
+	@override String get top_age_group => 'Основная возрастная группа: ';
+	@override String get gender_distribution => 'Распределение по полу';
+	@override String get top_countries => 'Топ стран';
+	@override String female_percent({required Object percent}) => 'Женщины ${percent}%';
+	@override String male_percent({required Object percent}) => 'Мужчины ${percent}%';
+	@override String get analytics_load_failed => 'Не удалось загрузить данные аналитики.';
+	@override String get average_rating => 'Средний рейтинг';
+	@override String get total_reviews => 'Всего отзывов';
+	@override String get selected_period => 'Выбранный период';
+	@override String get profile_views => 'Просмотры профиля';
+	@override String get period => 'Период';
+	@override String get profile_views_last_30_days => 'Просмотры профиля за последние 30 дней';
+	@override String get total_profile_views => 'Всего просмотров профиля';
+	@override String get days_30 => '30 дней';
+	@override String get all_time => 'За все время';
+	@override String get applications_by_status => 'Заявки по статусу';
+	@override String get no_applications => 'Заявок пока нет.';
+	@override String get my_campaigns => 'Мои кампании';
+	@override String get active_campaigns => 'Активные кампании';
+	@override String get influencers_hired => 'Нанятые инфлюенсеры';
+	@override String get recent_activity => 'Недавняя активность';
+	@override String get campaign_title_placeholder => 'Название кампании здесь';
+	@override String get campaigns => 'Кампании';
+	@override String get find_influencers => 'Найти инфлюенсеров';
+	@override String influencer_number({required Object id}) => 'Инфлюенсер №${id}';
+	@override String engagement_rate_short({required Object rate}) => '${rate}% ER';
+	@override String get status_verified => 'Подтвержден';
+	@override String get status_rejected => 'Отклонен';
+	@override String get status_blocked => 'Заблокирован';
+	@override String get status_pending => 'На рассмотрении';
+}
+
+// Path: billing_ui
+class _TranslationsBillingUiRu implements TranslationsBillingUiEn {
+	_TranslationsBillingUiRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get error_loading_plan => 'Ошибка загрузки плана';
+	@override String get minimal => 'Минимальный';
+	@override String get deactivate_plan_question => 'Отключить план?';
+	@override String get deactivate_plan_message => 'Ваша подписка будет отменена. Вы можете возобновить её в любое время.';
+	@override String get deactivate => 'Отключить';
+	@override String get premium => 'PREMIUM';
+	@override String get deactivated => 'Отключено';
+	@override String get renewal_date => 'Дата продления';
+	@override String get no_card_added => 'Карта не добавлена';
+	@override String get auto_renewal => 'Автопродление';
+	@override String get card => 'Карта';
+	@override String get coupon_code => 'Промокод';
+	@override String get activate => 'Активировать';
+	@override String get payment_method => 'Способ оплаты';
+	@override String get extra_invites_applies => 'Доп. приглашения / заявки:';
+	@override String get extra_invites_price => 'от \$5';
+	@override String get feature_browse_offers => 'Просмотр офферов и амбассадоров (ограничено)';
+	@override String get feature_create_offer => 'Создание 1 оффера в месяц';
+	@override String get feature_invites => 'До 3 приглашений в месяц';
+	@override String get feature_ai_recommendations => 'AI-рекомендации: топ-5 совпадений';
+	@override String get feature_shortlist => 'Шорт-лист до 10 профилей';
+	@override String get feature_basic_analytics => 'Базовая аналитика (просмотры, приглашения)';
+	@override String max_offers_per_month({required Object count}) => 'Макс. офферов в месяц: ${count}';
+	@override String max_finds_per_month({required Object count}) => 'Макс. поисков в месяц: ${count}';
+	@override String ai_matches_count({required Object count}) => 'Количество AI-совпадений: ${count}';
+	@override String max_shortlist({required Object count}) => 'Макс. шорт-лист: ${count}';
+	@override String get full_contact_access => 'Полный доступ к контактам';
+	@override String get advanced_analytics => 'Расширенная аналитика';
+	@override String get priority_support => 'Приоритетная поддержка';
+	@override String get add_new_payment_method => 'Добавить способ оплаты';
+	@override String get card_holder => 'Владелец карты';
+	@override String get write_card_holder_name => 'Введите имя владельца карты';
+	@override String get required => 'Обязательно';
+	@override String get card_number => 'Номер карты';
+	@override String get write_card_number => 'Введите номер карты';
+	@override String get enter_valid_16_digit_card => 'Введите корректный 16-значный номер карты';
+	@override String get expire_date => 'Срок действия';
+	@override String get mm_yy => 'ММ/ГГ';
+	@override String get invalid_month => 'Неверный месяц';
+	@override String get ccv => 'CCV';
+	@override String get invalid => 'Неверно';
+	@override String get could_not_send_sms_code => 'Не удалось отправить SMS-код';
+	@override String get enter_valid_card_number => 'Введите корректный номер карты';
+	@override String get edit_card => 'Редактировать карту';
+	@override String get no_cards_added_yet => 'Карты ещё не добавлены';
+	@override String get card_added => 'Карта добавлена';
+	@override String get enter_sms_code_card_phone => 'Введите SMS-код, отправленный на номер телефона вашей карты';
+	@override String sms_code_sent_to({required Object phone}) => 'Мы отправили SMS-код на ${phone},\nвведите его ниже';
+	@override String get payment => 'Оплата';
+}
+
+// Path: ambassador
+class _TranslationsAmbassadorRu implements TranslationsAmbassadorEn {
+	_TranslationsAmbassadorRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get ambassador_details => 'Детали амбассадора';
+	@override String get information => 'Информация';
+	@override String get no_information_provided => 'Информация не указана.';
+	@override String get niche => 'Ниша';
+	@override String get available_dates => 'Доступные даты';
+	@override String age_range_suffix({required Object from, required Object to}) => ', возраст ${from} – ${to}';
+	@override String get engagement_level => 'Уровень вовлечённости';
+	@override String get total_number_of_followers => 'Общее количество подписчиков';
+	@override String years_value({required Object years}) => '${years} лет';
+	@override String get list_of_partners => 'Список партнёров';
+	@override String get no_comment => 'Без комментария';
+	@override String get no_portfolio_items => 'Нет элементов портфолио.';
+	@override String get no_pricing_info => 'Информация о ценах отсутствует.';
+	@override String get hourly_uzs => 'Почасовая (UZS)';
+	@override String get hourly_usd => 'Почасовая (USD)';
+	@override String get project_by => 'За проект';
+	@override String get monthly_exclusivity_fee => 'Ежемесячная плата за эксклюзивность';
+	@override String get monthly_content_capacity => 'Ежемесячный объём контента';
+	@override String content_capacity_posts({required Object count}) => '${count} публикаций';
+	@override String get added_to_favourites => 'Добавлено в избранное';
+	@override String get add_to_favourites => 'Добавить в избранное';
+	@override String get send_enquiry => 'Отправить запрос';
+	@override String get portfolio_details => 'Детали портфолио';
+	@override String get no_description => 'Нет описания';
+	@override String get links => 'Ссылки';
+	@override String get no_links_added => 'Ссылки не добавлены.';
+	@override String get portfolio_images => 'Изображения портфолио';
+	@override String get no_images_added => 'Изображения не добавлены.';
+	@override String get language => 'Язык';
+	@override String get age => 'Возраст';
+	@override String get auditory => 'Аудитория';
+	@override String get available_date => 'Доступная дата';
+	@override String get price_range_per_hour => 'Диапазон цен (за час)';
+	@override String get from => 'От';
+	@override String get to => 'До';
+	@override String get no_favourites_yet => 'Пока нет избранного.';
+	@override String items_found({required Object count}) => 'Найдено: ${count}';
+}
+
+// Path: portfolio_ui
+class _TranslationsPortfolioUiRu implements TranslationsPortfolioUiEn {
+	_TranslationsPortfolioUiRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get fill_profile_information => 'Заполните информацию профиля';
+	@override String get upload_thumbnail_picture => 'Загрузите миниатюру';
+	@override String get choose_files => 'Выберите файлы';
+	@override String get portfolio_name => 'Название портфолио';
+	@override String get portfolio_name_hint => 'Введите название портфолио';
+	@override String get add_links => 'Добавьте ссылки';
+	@override String get save_and_continue_later => 'Сохранить и продолжить позже';
+	@override String get upload_not_available => 'Выбор файлов пока не подключён. Сохранение данных работает.';
+	@override String get general_info_step => 'Общая информация (1/6)';
+	@override String get details_load_failed => 'Не удалось загрузить детали портфолио.';
+	@override String get portfolio_details_title => 'Детали портфолио';
+	@override String get information => 'Информация';
+	@override String get no_description => 'Нет описания';
+	@override String get links => 'Ссылки';
+	@override String get no_links_added => 'Ссылки не добавлены.';
+	@override String get portfolio_images => 'Изображения портфолио';
+	@override String get no_images_added => 'Изображения не добавлены.';
+	@override String get list_load_failed => 'Не удалось загрузить портфолио.';
+	@override String get no_portfolio_found => 'Портфолио не найдено';
+	@override String get top_is_active => 'TOP активен';
+	@override String get top_not_activated => 'TOP не активирован';
+	@override String get select_payment_method => 'Выберите способ оплаты';
+	@override String get activate => 'Активировать';
+	@override String get vip_is_active => 'VIP активен';
+	@override String get vip_not_activated => 'VIP не активирован';
+	@override String invoice_number({required Object id}) => 'Счёт №${id}';
+	@override String get billing_transaction => 'Платёжная транзакция';
+	@override String get receipt => 'Квитанция';
+	@override String get download => 'Скачать';
+	@override String get select_top_package_first => 'Сначала выберите пакет TOP.';
+	@override String get select_payment_method_first => 'Сначала выберите способ оплаты.';
+	@override String get select_vip_plan_first => 'Сначала выберите VIP-план.';
+	@override String boost_package_label({required Object days, required Object amount}) => '${days} дн. / ${amount}';
+	@override String get expiration_date => 'Дата окончания';
+	@override String get top_profile_load_failed => 'Не удалось загрузить данные TOP-профиля.';
+}
+
+// Path: collab
+class _TranslationsCollabRu implements TranslationsCollabEn {
+	_TranslationsCollabRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get required => 'Обязательно';
+	@override String get send_enquiry => 'Отправить запрос';
+	@override String get enquiry_sent => 'Запрос отправлен';
+	@override String get contact_name => 'Контактное имя';
+	@override String get write_contact_name => 'Введите контактное имя';
+	@override String get company_name => 'Название компании';
+	@override String get write_company_name => 'Введите название компании';
+	@override String get contact_number => 'Контактный номер';
+	@override String get write_contact_number => 'Введите контактный номер';
+	@override String get message => 'Сообщение';
+	@override String get write_message_here => 'Напишите сообщение здесь';
+	@override String get sending => 'Отправка...';
+	@override String get no_active_offers_found => 'Активных предложений не найдено.';
+	@override String results_found({required Object count}) => 'Найдено: ${count}';
+	@override String no_matches_yet({required Object offerTitle}) => 'Пока нет совпадений для "${offerTitle}"';
+	@override String get run_ai_matching_subtitle => 'Запустите AI-подбор, чтобы найти лучших инфлюенсеров.';
+	@override String get run_ai_matching => 'Запустить AI-подбор';
+	@override String influencer_number({required Object id}) => 'Инфлюенсер №${id}';
+	@override String get messages_error_load => 'Не удалось загрузить сообщения.';
+	@override String get no_messages_found => 'Сообщения не найдены';
+	@override String messages_found({required Object count}) => 'Найдено сообщений: ${count}';
+	@override String get no_phone => 'Нет телефона';
+	@override String get no_messages_yet => 'В этом чате пока нет сообщений.';
+	@override String get participant => 'Участник';
+	@override String get brand_contact => 'Контакт бренда';
+	@override String get influencer_contact => 'Контакт инфлюенсера';
+	@override String role_contact({required Object role}) => 'Контакт: ${role}';
+	@override String offer_number({required Object id}) => 'Предложение №${id}';
+	@override String get brand_conversation => 'Разговор с брендом';
+	@override String get influencer_conversation => 'Разговор с инфлюенсером';
+	@override String conversation_number({required Object id}) => 'Разговор №${id}';
+	@override String get conversation => 'Разговор';
+	@override String get save => 'Сохранить';
+	@override String available_dates({required Object count}) => 'Доступные даты (${count})';
+	@override String get calendar_updated => 'Календарь обновлён';
+	@override String get month_january => 'Январь';
+	@override String get month_february => 'Февраль';
+	@override String get month_march => 'Март';
+	@override String get month_april => 'Апрель';
+	@override String get month_may => 'Май';
+	@override String get month_june => 'Июнь';
+	@override String get month_july => 'Июль';
+	@override String get month_august => 'Август';
+	@override String get month_september => 'Сентябрь';
+	@override String get month_october => 'Октябрь';
+	@override String get month_november => 'Ноябрь';
+	@override String get month_december => 'Декабрь';
+}
+
+// Path: misc
+class _TranslationsMiscRu implements TranslationsMiscEn {
+	_TranslationsMiscRu._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get notification_details_title => 'Детали уведомления';
+	@override String get notification_no_additional_details => 'Дополнительных сведений нет.';
+	@override String engagement_rate_value({required Object rate}) => '${rate}% вовлечённость';
+	@override String get segment_luxury => 'Люкс';
+	@override String get segment_premium => 'Премиум';
+	@override String get segment_mass_market => 'Массовый рынок';
+	@override String get segment_budget => 'Бюджетный';
+	@override String get niche => 'Ниша';
+	@override String get my_pricing_tariffs => 'Мои цены/Тарифы';
+	@override String get contract => 'Договор';
+	@override String get camera_experience => 'Опыт работы с камерой';
+	@override String get save_and_continue_later => 'Сохранить и продолжить позже';
+	@override String get fill_profile_information => 'Заполните информацию профиля';
+	@override String get image_upload_failed => 'Не удалось загрузить изображение';
+	@override String get currency_uzs => 'Узбекский сум';
+	@override String get currency_usd => 'Доллар США';
+	@override String get profile_section_readonly => 'Вы можете редактировать этот раздел только после одобрения вашего профиля.';
+	@override String followers_and_engagement({required Object followers, required Object rate}) => '${followers} подписчиков, ${rate}% вовлечённость';
+	@override String get terms_of_use_title => 'Условия использования';
+}
+
 // Path: errors.server
 class _TranslationsErrorsServerRu implements TranslationsErrorsServerEn {
 	_TranslationsErrorsServerRu._(this._root);
@@ -903,6 +1205,250 @@ extension on TranslationsRu {
 			'errors.server.unauthorized' => 'Сессия истекла, войдите снова',
 			'errors.server.notFound' => 'Ресурс не найден',
 			'errors.server.userExists' => 'Пользователь с таким email уже есть',
+			'analytics.brand_activity_summary' => 'Сводка активности бренда',
+			'analytics.search_insights' => 'Аналитика поиска',
+			'analytics.most_searched_ambassadors' => 'Самые искомые амбассадоры',
+			'analytics.offer_performance' => 'Эффективность предложений',
+			'analytics.ai_matching_insights' => 'Аналитика AI-подбора',
+			'analytics.top_recommended_ambassadors' => 'Топ рекомендованных амбассадоров',
+			'analytics.audience_insights' => 'Аналитика аудитории',
+			'analytics.total_searches' => 'Всего поисков',
+			'analytics.total_offers' => 'Всего предложений',
+			'analytics.invitations_sent' => 'Отправлено приглашений',
+			'analytics.ambassador_apps' => 'Заявки амбассадоров',
+			'analytics.influencer_apps' => 'Заявки инфлюенсеров',
+			'analytics.searches_performed' => ({required Object count}) => 'Выполнено поисков: ${count}',
+			'analytics.top_filters_used' => 'Самые используемые фильтры',
+			'analytics.last_7_days' => 'Последние 7 дней',
+			'analytics.top_niches' => 'Топ ниш',
+			'analytics.top_regions' => 'Топ регионов',
+			'analytics.viewed_offer' => 'Просмотрели предложение',
+			'analytics.opened_details' => 'Открыли детали',
+			'analytics.applicants' => 'Кандидаты',
+			'analytics.approved' => 'Одобрено',
+			'analytics.niche_fit' => 'Соответствие нише',
+			'analytics.audience_fit' => 'Соответствие аудитории',
+			'analytics.platform_fit' => 'Соответствие платформе',
+			'analytics.followers_region' => ({required Object followers, required Object region}) => '${followers} подписчиков  •  ${region}',
+			'analytics.top_age_group' => 'Основная возрастная группа: ',
+			'analytics.gender_distribution' => 'Распределение по полу',
+			'analytics.top_countries' => 'Топ стран',
+			'analytics.female_percent' => ({required Object percent}) => 'Женщины ${percent}%',
+			'analytics.male_percent' => ({required Object percent}) => 'Мужчины ${percent}%',
+			'analytics.analytics_load_failed' => 'Не удалось загрузить данные аналитики.',
+			'analytics.average_rating' => 'Средний рейтинг',
+			'analytics.total_reviews' => 'Всего отзывов',
+			'analytics.selected_period' => 'Выбранный период',
+			'analytics.profile_views' => 'Просмотры профиля',
+			'analytics.period' => 'Период',
+			'analytics.profile_views_last_30_days' => 'Просмотры профиля за последние 30 дней',
+			'analytics.total_profile_views' => 'Всего просмотров профиля',
+			'analytics.days_30' => '30 дней',
+			'analytics.all_time' => 'За все время',
+			'analytics.applications_by_status' => 'Заявки по статусу',
+			'analytics.no_applications' => 'Заявок пока нет.',
+			'analytics.my_campaigns' => 'Мои кампании',
+			'analytics.active_campaigns' => 'Активные кампании',
+			'analytics.influencers_hired' => 'Нанятые инфлюенсеры',
+			'analytics.recent_activity' => 'Недавняя активность',
+			'analytics.campaign_title_placeholder' => 'Название кампании здесь',
+			'analytics.campaigns' => 'Кампании',
+			'analytics.find_influencers' => 'Найти инфлюенсеров',
+			'analytics.influencer_number' => ({required Object id}) => 'Инфлюенсер №${id}',
+			'analytics.engagement_rate_short' => ({required Object rate}) => '${rate}% ER',
+			'analytics.status_verified' => 'Подтвержден',
+			'analytics.status_rejected' => 'Отклонен',
+			'analytics.status_blocked' => 'Заблокирован',
+			'analytics.status_pending' => 'На рассмотрении',
+			'billing_ui.error_loading_plan' => 'Ошибка загрузки плана',
+			'billing_ui.minimal' => 'Минимальный',
+			'billing_ui.deactivate_plan_question' => 'Отключить план?',
+			'billing_ui.deactivate_plan_message' => 'Ваша подписка будет отменена. Вы можете возобновить её в любое время.',
+			'billing_ui.deactivate' => 'Отключить',
+			'billing_ui.premium' => 'PREMIUM',
+			'billing_ui.deactivated' => 'Отключено',
+			'billing_ui.renewal_date' => 'Дата продления',
+			'billing_ui.no_card_added' => 'Карта не добавлена',
+			'billing_ui.auto_renewal' => 'Автопродление',
+			'billing_ui.card' => 'Карта',
+			'billing_ui.coupon_code' => 'Промокод',
+			'billing_ui.activate' => 'Активировать',
+			'billing_ui.payment_method' => 'Способ оплаты',
+			'billing_ui.extra_invites_applies' => 'Доп. приглашения / заявки:',
+			'billing_ui.extra_invites_price' => 'от \$5',
+			'billing_ui.feature_browse_offers' => 'Просмотр офферов и амбассадоров (ограничено)',
+			'billing_ui.feature_create_offer' => 'Создание 1 оффера в месяц',
+			'billing_ui.feature_invites' => 'До 3 приглашений в месяц',
+			'billing_ui.feature_ai_recommendations' => 'AI-рекомендации: топ-5 совпадений',
+			'billing_ui.feature_shortlist' => 'Шорт-лист до 10 профилей',
+			'billing_ui.feature_basic_analytics' => 'Базовая аналитика (просмотры, приглашения)',
+			'billing_ui.max_offers_per_month' => ({required Object count}) => 'Макс. офферов в месяц: ${count}',
+			'billing_ui.max_finds_per_month' => ({required Object count}) => 'Макс. поисков в месяц: ${count}',
+			'billing_ui.ai_matches_count' => ({required Object count}) => 'Количество AI-совпадений: ${count}',
+			'billing_ui.max_shortlist' => ({required Object count}) => 'Макс. шорт-лист: ${count}',
+			'billing_ui.full_contact_access' => 'Полный доступ к контактам',
+			'billing_ui.advanced_analytics' => 'Расширенная аналитика',
+			'billing_ui.priority_support' => 'Приоритетная поддержка',
+			'billing_ui.add_new_payment_method' => 'Добавить способ оплаты',
+			'billing_ui.card_holder' => 'Владелец карты',
+			'billing_ui.write_card_holder_name' => 'Введите имя владельца карты',
+			'billing_ui.required' => 'Обязательно',
+			'billing_ui.card_number' => 'Номер карты',
+			'billing_ui.write_card_number' => 'Введите номер карты',
+			'billing_ui.enter_valid_16_digit_card' => 'Введите корректный 16-значный номер карты',
+			'billing_ui.expire_date' => 'Срок действия',
+			'billing_ui.mm_yy' => 'ММ/ГГ',
+			'billing_ui.invalid_month' => 'Неверный месяц',
+			'billing_ui.ccv' => 'CCV',
+			'billing_ui.invalid' => 'Неверно',
+			'billing_ui.could_not_send_sms_code' => 'Не удалось отправить SMS-код',
+			'billing_ui.enter_valid_card_number' => 'Введите корректный номер карты',
+			'billing_ui.edit_card' => 'Редактировать карту',
+			'billing_ui.no_cards_added_yet' => 'Карты ещё не добавлены',
+			'billing_ui.card_added' => 'Карта добавлена',
+			'billing_ui.enter_sms_code_card_phone' => 'Введите SMS-код, отправленный на номер телефона вашей карты',
+			'billing_ui.sms_code_sent_to' => ({required Object phone}) => 'Мы отправили SMS-код на ${phone},\nвведите его ниже',
+			'billing_ui.payment' => 'Оплата',
+			'ambassador.ambassador_details' => 'Детали амбассадора',
+			'ambassador.information' => 'Информация',
+			'ambassador.no_information_provided' => 'Информация не указана.',
+			'ambassador.niche' => 'Ниша',
+			'ambassador.available_dates' => 'Доступные даты',
+			'ambassador.age_range_suffix' => ({required Object from, required Object to}) => ', возраст ${from} – ${to}',
+			'ambassador.engagement_level' => 'Уровень вовлечённости',
+			'ambassador.total_number_of_followers' => 'Общее количество подписчиков',
+			'ambassador.years_value' => ({required Object years}) => '${years} лет',
+			'ambassador.list_of_partners' => 'Список партнёров',
+			'ambassador.no_comment' => 'Без комментария',
+			'ambassador.no_portfolio_items' => 'Нет элементов портфолио.',
+			'ambassador.no_pricing_info' => 'Информация о ценах отсутствует.',
+			'ambassador.hourly_uzs' => 'Почасовая (UZS)',
+			'ambassador.hourly_usd' => 'Почасовая (USD)',
+			'ambassador.project_by' => 'За проект',
+			'ambassador.monthly_exclusivity_fee' => 'Ежемесячная плата за эксклюзивность',
+			'ambassador.monthly_content_capacity' => 'Ежемесячный объём контента',
+			'ambassador.content_capacity_posts' => ({required Object count}) => '${count} публикаций',
+			'ambassador.added_to_favourites' => 'Добавлено в избранное',
+			'ambassador.add_to_favourites' => 'Добавить в избранное',
+			'ambassador.send_enquiry' => 'Отправить запрос',
+			'ambassador.portfolio_details' => 'Детали портфолио',
+			'ambassador.no_description' => 'Нет описания',
+			'ambassador.links' => 'Ссылки',
+			'ambassador.no_links_added' => 'Ссылки не добавлены.',
+			'ambassador.portfolio_images' => 'Изображения портфолио',
+			'ambassador.no_images_added' => 'Изображения не добавлены.',
+			'ambassador.language' => 'Язык',
+			'ambassador.age' => 'Возраст',
+			'ambassador.auditory' => 'Аудитория',
+			'ambassador.available_date' => 'Доступная дата',
+			'ambassador.price_range_per_hour' => 'Диапазон цен (за час)',
+			'ambassador.from' => 'От',
+			'ambassador.to' => 'До',
+			'ambassador.no_favourites_yet' => 'Пока нет избранного.',
+			'ambassador.items_found' => ({required Object count}) => 'Найдено: ${count}',
+			'portfolio_ui.fill_profile_information' => 'Заполните информацию профиля',
+			'portfolio_ui.upload_thumbnail_picture' => 'Загрузите миниатюру',
+			'portfolio_ui.choose_files' => 'Выберите файлы',
+			'portfolio_ui.portfolio_name' => 'Название портфолио',
+			'portfolio_ui.portfolio_name_hint' => 'Введите название портфолио',
+			'portfolio_ui.add_links' => 'Добавьте ссылки',
+			'portfolio_ui.save_and_continue_later' => 'Сохранить и продолжить позже',
+			'portfolio_ui.upload_not_available' => 'Выбор файлов пока не подключён. Сохранение данных работает.',
+			'portfolio_ui.general_info_step' => 'Общая информация (1/6)',
+			'portfolio_ui.details_load_failed' => 'Не удалось загрузить детали портфолио.',
+			'portfolio_ui.portfolio_details_title' => 'Детали портфолио',
+			'portfolio_ui.information' => 'Информация',
+			'portfolio_ui.no_description' => 'Нет описания',
+			'portfolio_ui.links' => 'Ссылки',
+			'portfolio_ui.no_links_added' => 'Ссылки не добавлены.',
+			'portfolio_ui.portfolio_images' => 'Изображения портфолио',
+			'portfolio_ui.no_images_added' => 'Изображения не добавлены.',
+			'portfolio_ui.list_load_failed' => 'Не удалось загрузить портфолио.',
+			'portfolio_ui.no_portfolio_found' => 'Портфолио не найдено',
+			'portfolio_ui.top_is_active' => 'TOP активен',
+			'portfolio_ui.top_not_activated' => 'TOP не активирован',
+			'portfolio_ui.select_payment_method' => 'Выберите способ оплаты',
+			'portfolio_ui.activate' => 'Активировать',
+			'portfolio_ui.vip_is_active' => 'VIP активен',
+			'portfolio_ui.vip_not_activated' => 'VIP не активирован',
+			'portfolio_ui.invoice_number' => ({required Object id}) => 'Счёт №${id}',
+			'portfolio_ui.billing_transaction' => 'Платёжная транзакция',
+			'portfolio_ui.receipt' => 'Квитанция',
+			'portfolio_ui.download' => 'Скачать',
+			'portfolio_ui.select_top_package_first' => 'Сначала выберите пакет TOP.',
+			'portfolio_ui.select_payment_method_first' => 'Сначала выберите способ оплаты.',
+			'portfolio_ui.select_vip_plan_first' => 'Сначала выберите VIP-план.',
+			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} дн. / ${amount}',
+			_ => null,
+		} ?? switch (path) {
+			'portfolio_ui.expiration_date' => 'Дата окончания',
+			'portfolio_ui.top_profile_load_failed' => 'Не удалось загрузить данные TOP-профиля.',
+			'collab.required' => 'Обязательно',
+			'collab.send_enquiry' => 'Отправить запрос',
+			'collab.enquiry_sent' => 'Запрос отправлен',
+			'collab.contact_name' => 'Контактное имя',
+			'collab.write_contact_name' => 'Введите контактное имя',
+			'collab.company_name' => 'Название компании',
+			'collab.write_company_name' => 'Введите название компании',
+			'collab.contact_number' => 'Контактный номер',
+			'collab.write_contact_number' => 'Введите контактный номер',
+			'collab.message' => 'Сообщение',
+			'collab.write_message_here' => 'Напишите сообщение здесь',
+			'collab.sending' => 'Отправка...',
+			'collab.no_active_offers_found' => 'Активных предложений не найдено.',
+			'collab.results_found' => ({required Object count}) => 'Найдено: ${count}',
+			'collab.no_matches_yet' => ({required Object offerTitle}) => 'Пока нет совпадений для "${offerTitle}"',
+			'collab.run_ai_matching_subtitle' => 'Запустите AI-подбор, чтобы найти лучших инфлюенсеров.',
+			'collab.run_ai_matching' => 'Запустить AI-подбор',
+			'collab.influencer_number' => ({required Object id}) => 'Инфлюенсер №${id}',
+			'collab.messages_error_load' => 'Не удалось загрузить сообщения.',
+			'collab.no_messages_found' => 'Сообщения не найдены',
+			'collab.messages_found' => ({required Object count}) => 'Найдено сообщений: ${count}',
+			'collab.no_phone' => 'Нет телефона',
+			'collab.no_messages_yet' => 'В этом чате пока нет сообщений.',
+			'collab.participant' => 'Участник',
+			'collab.brand_contact' => 'Контакт бренда',
+			'collab.influencer_contact' => 'Контакт инфлюенсера',
+			'collab.role_contact' => ({required Object role}) => 'Контакт: ${role}',
+			'collab.offer_number' => ({required Object id}) => 'Предложение №${id}',
+			'collab.brand_conversation' => 'Разговор с брендом',
+			'collab.influencer_conversation' => 'Разговор с инфлюенсером',
+			'collab.conversation_number' => ({required Object id}) => 'Разговор №${id}',
+			'collab.conversation' => 'Разговор',
+			'collab.save' => 'Сохранить',
+			'collab.available_dates' => ({required Object count}) => 'Доступные даты (${count})',
+			'collab.calendar_updated' => 'Календарь обновлён',
+			'collab.month_january' => 'Январь',
+			'collab.month_february' => 'Февраль',
+			'collab.month_march' => 'Март',
+			'collab.month_april' => 'Апрель',
+			'collab.month_may' => 'Май',
+			'collab.month_june' => 'Июнь',
+			'collab.month_july' => 'Июль',
+			'collab.month_august' => 'Август',
+			'collab.month_september' => 'Сентябрь',
+			'collab.month_october' => 'Октябрь',
+			'collab.month_november' => 'Ноябрь',
+			'collab.month_december' => 'Декабрь',
+			'misc.notification_details_title' => 'Детали уведомления',
+			'misc.notification_no_additional_details' => 'Дополнительных сведений нет.',
+			'misc.engagement_rate_value' => ({required Object rate}) => '${rate}% вовлечённость',
+			'misc.segment_luxury' => 'Люкс',
+			'misc.segment_premium' => 'Премиум',
+			'misc.segment_mass_market' => 'Массовый рынок',
+			'misc.segment_budget' => 'Бюджетный',
+			'misc.niche' => 'Ниша',
+			'misc.my_pricing_tariffs' => 'Мои цены/Тарифы',
+			'misc.contract' => 'Договор',
+			'misc.camera_experience' => 'Опыт работы с камерой',
+			'misc.save_and_continue_later' => 'Сохранить и продолжить позже',
+			'misc.fill_profile_information' => 'Заполните информацию профиля',
+			'misc.image_upload_failed' => 'Не удалось загрузить изображение',
+			'misc.currency_uzs' => 'Узбекский сум',
+			'misc.currency_usd' => 'Доллар США',
+			'misc.profile_section_readonly' => 'Вы можете редактировать этот раздел только после одобрения вашего профиля.',
+			'misc.followers_and_engagement' => ({required Object followers, required Object rate}) => '${followers} подписчиков, ${rate}% вовлечённость',
+			'misc.terms_of_use_title' => 'Условия использования',
 			_ => null,
 		};
 	}

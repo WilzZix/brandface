@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_list_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_list_state.dart';
@@ -24,7 +25,7 @@ class PortfolioPage extends StatelessWidget {
         scrolledUnderElevation: 0,
         backgroundColor: AppColors.lightBg,
         titleSpacing: 4,
-        title: Text('Portfolio', style: Typographies.titleLarge),
+        title: Text(t.profile.portfolio, style: Typographies.titleLarge),
       ),
       body: SafeArea(
         top: false,
@@ -43,7 +44,7 @@ class PortfolioPage extends StatelessWidget {
                 PortfolioListStatus.failure => _PortfolioFailureView(
                   message:
                       state.failure?.message ??
-                      'Portfolio ma\'lumotlarini yuklab bo\'lmadi.',
+                      t.portfolio_ui.list_load_failed,
                   onRetry: () => context
                       .read<PortfolioListCubit>()
                       .loadPortfolios(force: true),
@@ -52,7 +53,7 @@ class PortfolioPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Client reviews',
+                      t.reviews.client_reviews,
                       style: Typographies.titleLarge.copyWith(
                         fontSize: 28,
                         height: 1.15,
@@ -65,13 +66,14 @@ class PortfolioPage extends StatelessWidget {
                             .read<PortfolioListCubit>()
                             .loadPortfolios(force: true),
                         child: state.items.isEmpty
-                            ? const CustomScrollView(
-                                physics: AlwaysScrollableScrollPhysics(),
+                            ? CustomScrollView(
+                                physics:
+                                    const AlwaysScrollableScrollPhysics(),
                                 slivers: [
                                   SliverFillRemaining(
                                     hasScrollBody: false,
                                     child: AppEmptyState(
-                                      title: 'No portfolio found',
+                                      title: t.portfolio_ui.no_portfolio_found,
                                     ),
                                   ),
                                 ],
@@ -138,7 +140,7 @@ class _PortfolioFailureView extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.black,
               ),
-              child: const Text('Try again'),
+              child: Text(t.common.try_again),
             ),
           ],
         ),

@@ -45,10 +45,10 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView>
   final TextEditingController _controllerSocial = TextEditingController();
 
   final List<LangItemModel> _segments = [
-    LangItemModel(name: 'Luxury', id: 0),
-    LangItemModel(name: 'Premium', id: 1),
-    LangItemModel(name: 'Mass market', id: 2),
-    LangItemModel(name: 'Budget', id: 3),
+    LangItemModel(name: t.misc.segment_luxury, id: 0),
+    LangItemModel(name: t.misc.segment_premium, id: 1),
+    LangItemModel(name: t.misc.segment_mass_market, id: 2),
+    LangItemModel(name: t.misc.segment_budget, id: 3),
   ];
 
   static const Map<int, String> _segmentCodes = {
@@ -361,7 +361,9 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView>
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        '${stats.followers} followers',
+                                        t.brand.followers_count(
+                                          count: stats.followers ?? 0,
+                                        ),
                                         style: Typographies.bodySmall,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -370,7 +372,9 @@ class _BrandfaceSegmentPageViewState extends State<BrandfaceSegmentPageView>
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
-                                        '${stats.engagementRate}% engagement rate',
+                                        t.misc.engagement_rate_value(
+                                          rate: stats.engagementRate ?? 0,
+                                        ),
                                         style: Typographies.bodySmall,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

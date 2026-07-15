@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
@@ -92,7 +93,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
     if (!mounted) return;
     if (!sent) {
       context.showAppSnackBar(
-        cubit.state.addFailure?.message ?? 'Could not send the SMS code',
+        cubit.state.addFailure?.message ?? t.billing_ui.could_not_send_sms_code,
         type: AppSnackBarType.error,
       );
       return;
@@ -128,7 +129,9 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
           backgroundColor: AppColors.lightBg,
           scrolledUnderElevation: 0,
           title: Text(
-            widget.editCard != null ? 'Edit card' : 'Add new payment method',
+            widget.editCard != null
+                ? t.billing_ui.edit_card
+                : t.billing_ui.add_new_payment_method,
             style: Typographies.titleMedium,
           ),
           centerTitle: false,
@@ -153,14 +156,14 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           // ── Card holder ────────────────────────────
-                          _FieldLabel('Card holder'),
+                          _FieldLabel(t.billing_ui.card_holder),
                           const SizedBox(height: 8),
                           _InputField(
                             controller: _holderCtrl,
-                            hint: 'Write card holder name',
+                            hint: t.billing_ui.write_card_holder_name,
                             textInputAction: TextInputAction.next,
                             validator: (v) => (v == null || v.trim().isEmpty)
-                                ? 'Required'
+                                ? t.billing_ui.required
                                 : null,
                           ),
                           const SizedBox(height: 20),
@@ -168,7 +171,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                           // ── Card number ────────────────────────────
                           Row(
                             children: [
-                              _FieldLabel('Card number'),
+                              _FieldLabel(t.billing_ui.card_number),
                               const Spacer(),
                               ValueListenableBuilder<TextEditingValue>(
                                 valueListenable: _numberCtrl,
@@ -188,7 +191,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                           const SizedBox(height: 8),
                           _InputField(
                             controller: _numberCtrl,
-                            hint: 'Write card number',
+                            hint: t.billing_ui.write_card_number,
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.next,
                             inputFormatters: [
@@ -198,7 +201,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                             validator: (v) {
                               final digits = (v ?? '').replaceAll(' ', '');
                               if (digits.length != 16) {
-                                return 'Enter valid card number';
+                                return t.billing_ui.enter_valid_card_number;
                               }
                               return null;
                             },
@@ -223,11 +226,11 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        _FieldLabel('Expire date'),
+                                        _FieldLabel(t.billing_ui.expire_date),
                                         const SizedBox(height: 8),
                                         _InputField(
                                           controller: _expireCtrl,
-                                          hint: 'MM/YY',
+                                          hint: t.billing_ui.mm_yy,
                                           keyboardType: TextInputType.number,
                                           textInputAction: isLocal
                                               ? TextInputAction.done
@@ -239,7 +242,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                                           ],
                                           validator: (v) {
                                             if (v == null || v.length < 5) {
-                                              return 'MM/YY';
+                                              return t.billing_ui.mm_yy;
                                             }
                                             return null;
                                           },
@@ -254,11 +257,11 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          _FieldLabel('CCV'),
+                                          _FieldLabel(t.billing_ui.ccv),
                                           const SizedBox(height: 8),
                                           _InputField(
                                             controller: _ccvCtrl,
-                                            hint: 'CCV',
+                                            hint: t.billing_ui.ccv,
                                             keyboardType: TextInputType.number,
                                             textInputAction:
                                                 TextInputAction.done,
@@ -272,7 +275,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                                             ],
                                             validator: (v) {
                                               if (v == null || v.length < 3) {
-                                                return 'Invalid';
+                                                return t.billing_ui.invalid;
                                               }
                                               return null;
                                             },
@@ -315,7 +318,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                'Cancel',
+                                t.common.cancel,
                                 style: Typographies.labelLarge,
                               ),
                             ),
@@ -333,7 +336,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                'Confirm',
+                                t.common.confirm,
                                 style: Typographies.labelLarge,
                               ),
                             ),

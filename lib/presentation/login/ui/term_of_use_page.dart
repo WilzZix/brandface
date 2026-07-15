@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class TermOfUsePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Terms of use', style: Typographies.headlineSmall),
+              Text(t.misc.terms_of_use_title, style: Typographies.headlineSmall),
               const SizedBox(height: 16),
               Text(_body, style: Typographies.bodyMedium),
             ],

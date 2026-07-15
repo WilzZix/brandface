@@ -1,5 +1,6 @@
 import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/core/di/app_di.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case.dart';
@@ -129,8 +130,8 @@ class _TopProfilePageState extends State<TopProfilePage> {
   }
 
   String get _appBarTitle => _selectedTab == _TopProfileTab.history
-      ? 'Billing'
-      : 'Make the profile TOP';
+      ? t.profile.billing
+      : t.profile.make_profile_top;
 
   Future<void> _loadProfileStatus() async {
     if (mounted) {
@@ -185,19 +186,19 @@ class _TopProfilePageState extends State<TopProfilePage> {
     return Row(
       children: [
         _TopTabChip(
-          title: 'TOP',
+          title: t.brand.top_label,
           isSelected: _selectedTab == _TopProfileTab.top,
           onTap: () => setState(() => _selectedTab = _TopProfileTab.top),
         ),
         const SizedBox(width: 8),
         _TopTabChip(
-          title: 'VIP',
+          title: t.brand.vip_label,
           isSelected: _selectedTab == _TopProfileTab.vip,
           onTap: () => setState(() => _selectedTab = _TopProfileTab.vip),
         ),
         const SizedBox(width: 8),
         _TopTabChip(
-          title: 'Billing history',
+          title: t.billing.history_tab,
           isSelected: _selectedTab == _TopProfileTab.history,
           onTap: () => setState(() => _selectedTab = _TopProfileTab.history),
         ),
@@ -228,14 +229,14 @@ class _TopProfilePageState extends State<TopProfilePage> {
     return AppContainer(
       child: _isTopActive
           ? _ActiveStatusCard(
-              title: 'TOP is active',
+              title: t.portfolio_ui.top_is_active,
               expirationDate: _formatExpirationDate(_topExpiresAt),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _StatusPill(
-                  title: 'TOP is not activated',
+                  title: t.portfolio_ui.top_not_activated,
                   color: AppColors.red,
                 ),
                 const SizedBox(height: 20),
@@ -256,10 +257,12 @@ class _TopProfilePageState extends State<TopProfilePage> {
                 Divider(height: 32, color: AppColors.borderColor),
                 _BottomActionRow(
                   selectorTitle: _selectedCard == null
-                      ? 'Select payment method'
+                      ? t.portfolio_ui.select_payment_method
                       : _cardDisplayLabel(_selectedCard!),
                   onSelectorTap: () => _pickPaymentMethod(context, dashboard),
-                  buttonTitle: state.isMutating ? 'Processing...' : 'Activate',
+                  buttonTitle: state.isMutating
+                      ? t.billing.processing
+                      : t.portfolio_ui.activate,
                   onButtonTap: state.isMutating
                       ? null
                       : () => _activateTop(context, dashboard),
@@ -280,14 +283,14 @@ class _TopProfilePageState extends State<TopProfilePage> {
     return AppContainer(
       child: isVipActive
           ? _ActiveStatusCard(
-              title: 'VIP is active',
+              title: t.portfolio_ui.vip_is_active,
               expirationDate: _formatExpirationDate(subscription?.expiresAt),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _StatusPill(
-                  title: 'VIP is not activated',
+                  title: t.portfolio_ui.vip_not_activated,
                   color: AppColors.red,
                 ),
                 const SizedBox(height: 20),
@@ -310,10 +313,12 @@ class _TopProfilePageState extends State<TopProfilePage> {
                 Divider(height: 32, color: AppColors.borderColor),
                 _BottomActionRow(
                   selectorTitle: _selectedCard == null
-                      ? 'Select payment method'
+                      ? t.portfolio_ui.select_payment_method
                       : _cardDisplayLabel(_selectedCard!),
                   onSelectorTap: () => _pickPaymentMethod(context, dashboard),
-                  buttonTitle: state.isMutating ? 'Processing...' : 'Activate',
+                  buttonTitle: state.isMutating
+                      ? t.billing.processing
+                      : t.portfolio_ui.activate,
                   onButtonTap: state.isMutating
                       ? null
                       : () => _activateVip(context, dashboard),
@@ -327,9 +332,9 @@ class _TopProfilePageState extends State<TopProfilePage> {
     final transactions = dashboard.transactions;
 
     if (transactions.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.only(top: 120),
-        child: Center(child: Text('No billing history yet.')),
+      return Padding(
+        padding: const EdgeInsets.only(top: 120),
+        child: Center(child: Text(t.billing.no_billing_history)),
       );
     }
 
@@ -343,14 +348,15 @@ class _TopProfilePageState extends State<TopProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Invoice #${item.id}',
+                      t.portfolio_ui.invoice_number(id: item.id),
                       style: Typographies.titleMedium,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       item.description?.trim().isNotEmpty == true
                           ? item.description!
-                          : item.planName ?? 'Billing transaction',
+                          : item.planName ??
+                                t.portfolio_ui.billing_transaction,
                       style: Typographies.bodySmall.copyWith(
                         color: AppColors.mutedBlack,
                       ),
@@ -360,16 +366,16 @@ class _TopProfilePageState extends State<TopProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _HistoryField(
-                          title: 'Issue date',
+                          title: t.billing.issue_date,
                           value: _formatShortDate(item.createdAt),
                         ),
                         _HistoryField(
-                          title: 'Amount',
+                          title: t.billing.amount,
                           value: _formatAmount(item.amount, item.currency),
                         ),
                         _HistoryField(
-                          title: 'Receipt',
-                          value: 'Download',
+                          title: t.portfolio_ui.receipt,
+                          value: t.portfolio_ui.download,
                           valueColor: AppColors.primaryDark,
                         ),
                       ],
@@ -389,7 +395,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
   ) async {
     final cards = context.read<CardsCubit>().state.cards;
     if (cards.isEmpty) {
-      context.showAppSnackBar('Add a payment card first.');
+      context.showAppSnackBar(t.billing.add_payment_card_first);
       return;
     }
 
@@ -406,11 +412,14 @@ class _TopProfilePageState extends State<TopProfilePage> {
                   (card) => ListTile(
                     title: Text(_cardDisplayLabel(card)),
                     subtitle: Text(
-                      'Expiry ${card.expiryMonth.toString().padLeft(2, '0')}/${card.expiryYear}',
+                      t.billing.card_expiry(
+                        month: card.expiryMonth.toString().padLeft(2, '0'),
+                        year: card.expiryYear.toString(),
+                      ),
                     ),
                     trailing: card.isDefault
                         ? Text(
-                            'Default',
+                            t.billing.default_card,
                             style: Typographies.bodySmall.copyWith(
                               color: AppColors.primaryDark,
                             ),
@@ -439,13 +448,13 @@ class _TopProfilePageState extends State<TopProfilePage> {
     BillingDashboardEntity dashboard,
   ) async {
     if (_selectedBoostPackageId == null) {
-      _showMessage(context, 'Select a TOP package first.');
+      _showMessage(context, t.portfolio_ui.select_top_package_first);
       return;
     }
 
     final card = _selectedCard ?? context.read<CardsCubit>().state.defaultCard;
     if (card == null) {
-      _showMessage(context, 'Select a payment method first.');
+      _showMessage(context, t.portfolio_ui.select_payment_method_first);
       return;
     }
 
@@ -464,13 +473,13 @@ class _TopProfilePageState extends State<TopProfilePage> {
     BillingDashboardEntity dashboard,
   ) async {
     if (_selectedVipPlanId == null) {
-      _showMessage(context, 'Select a VIP plan first.');
+      _showMessage(context, t.portfolio_ui.select_vip_plan_first);
       return;
     }
 
     final card = _selectedCard ?? context.read<CardsCubit>().state.defaultCard;
     if (card == null) {
-      _showMessage(context, 'Select a payment method first.');
+      _showMessage(context, t.portfolio_ui.select_payment_method_first);
       return;
     }
 
@@ -495,7 +504,10 @@ class _TopProfilePageState extends State<TopProfilePage> {
         : (fallback != null && fallback.isNotEmpty
               ? '$fallback USD'
               : item.label);
-    return '${item.days} days / $amount';
+    return t.portfolio_ui.boost_package_label(
+      days: item.days,
+      amount: amount,
+    );
   }
 
   static String _formatPlan(BillingPlanEntity item) {
@@ -513,7 +525,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
 
   static String _formatExpirationDate(DateTime? value) {
     if (value == null) {
-      return 'Unknown';
+      return t.common.unknown;
     }
 
     final day = value.day.toString().padLeft(2, '0');
@@ -527,7 +539,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
 
   static String _formatShortDate(DateTime? value) {
     if (value == null) {
-      return 'Unknown';
+      return t.common.unknown;
     }
 
     const monthNames = [
@@ -552,7 +564,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
     final safeAmount = amount?.trim();
     final safeCurrency = currency?.trim();
     if (safeAmount == null || safeAmount.isEmpty) {
-      return 'Unknown';
+      return t.common.unknown;
     }
     if (safeCurrency == null || safeCurrency.isEmpty) {
       return safeAmount;
@@ -747,7 +759,7 @@ class _ActiveStatusCard extends StatelessWidget {
         _StatusPill(title: title, color: AppColors.primaryDark),
         const SizedBox(height: 12),
         Text(
-          'Expiration date',
+          t.portfolio_ui.expiration_date,
           style: Typographies.bodySmall.copyWith(color: AppColors.grey),
         ),
         const SizedBox(height: 4),
@@ -803,20 +815,23 @@ class _TopProfileErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'TOP profile data could not be loaded.',
+              t.portfolio_ui.top_profile_load_failed,
               style: Typographies.titleMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'Pull to refresh or try again.',
+              t.common.pull_refresh_or_retry,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             SizedBox(
               width: 170,
-              child: AppButtons.primary(title: 'Try again', onTap: onRetry),
+              child: AppButtons.primary(
+                title: t.common.try_again,
+                onTap: onRetry,
+              ),
             ),
           ],
         ),

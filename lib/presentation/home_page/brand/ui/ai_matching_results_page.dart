@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_state.dart';
@@ -29,7 +30,7 @@ class _AiMatchingResultsPageState extends State<AiMatchingResultsPage> {
       appBar: AppBar(
         backgroundColor: AppColors.lightBg,
         scrolledUnderElevation: 0,
-        title: Text('AI Matching', style: Typographies.titleMedium),
+        title: Text(t.brand.ai_matching, style: Typographies.titleMedium),
         centerTitle: false,
       ),
       body: Column(
@@ -57,7 +58,7 @@ class _AiMatchingResultsPageState extends State<AiMatchingResultsPage> {
                 if (state is AiMatchingNoOffers) {
                   return Center(
                     child: Text(
-                      'No active offers found.',
+                      t.collab.no_active_offers_found,
                       style: Typographies.bodyMedium
                           .copyWith(color: AppColors.grey),
                     ),
@@ -77,7 +78,7 @@ class _AiMatchingResultsPageState extends State<AiMatchingResultsPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          '${results.length} found',
+                          t.collab.results_found(count: results.length),
                           style: Typographies.bodyMedium
                               .copyWith(color: AppColors.mutedBlack),
                         ),
@@ -127,13 +128,13 @@ class _EmptyState extends StatelessWidget {
             Icon(Icons.search_off_rounded, size: 56, color: AppColors.grey),
             const SizedBox(height: 16),
             Text(
-              'No matches yet for "$offerTitle"',
+              t.collab.no_matches_yet(offerTitle: offerTitle),
               style: Typographies.titleSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'Run AI matching to find the best influencers.',
+              t.collab.run_ai_matching_subtitle,
               style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               textAlign: TextAlign.center,
             ),
@@ -143,7 +144,7 @@ class _EmptyState extends StatelessWidget {
                   .read<AiMatchingCubit>()
                   .runMatching(offerId, offerTitle),
               icon: const Icon(Icons.auto_awesome_rounded, size: 18),
-              label: const Text('Run AI Matching'),
+              label: Text(t.collab.run_ai_matching),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.black,
@@ -209,7 +210,7 @@ class AiMatchCard extends StatelessWidget {
                       child: Text(
                         item.displayName.isNotEmpty
                             ? item.displayName
-                            : 'Influencer #${item.influencerId}',
+                            : t.collab.influencer_number(id: item.influencerId),
                         style: Typographies.titleSmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -245,7 +246,9 @@ class AiMatchCard extends StatelessWidget {
                           style: Typographies.bodySmall
                               .copyWith(color: AppColors.mutedBlack)),
                       Text(
-                        '${_formatFollowers(item.totalFollowers)} followers',
+                        t.brand.followers_count(
+                          count: _formatFollowers(item.totalFollowers),
+                        ),
                         style: Typographies.bodySmall
                             .copyWith(color: AppColors.mutedBlack),
                       ),

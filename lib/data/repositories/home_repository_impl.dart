@@ -1,3 +1,4 @@
+import 'package:brandface/core/error/exception_mapper.dart';
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/data/data_source/network_data_source/home/home_data_source.dart';
 import 'package:brandface/data/models/home/home_dashboard_model.dart';
@@ -21,8 +22,8 @@ final class HomeRepositoryImpl implements IHomeRepository {
 
   @override
   Future<Either<Failure, HomeDashboardEntity>>
-  getInfluencerHomeDashboard() async {
-    try {
+  getInfluencerHomeDashboard() {
+    return guard(() async {
       final profile = await _dataSource.getMyProfile();
 
       final unreadCountFuture = _loadOptionalSection<int>(
@@ -48,37 +49,16 @@ final class HomeRepositoryImpl implements IHomeRepository {
       final statuses = await statusesFuture;
       final recommendations = await recommendationsFuture;
 
-      return Right(
-        HomeDashboardModel(
-          profile: profile,
-          unreadNotificationsCount: unreadCount,
-          activeOffersCount: statuses
-              .where((status) => _activeStatuses.contains(status))
-              .length,
-          messagesCount: conversationsCount,
-          recommendations: recommendations,
-        ),
+      return HomeDashboardModel(
+        profile: profile,
+        unreadNotificationsCount: unreadCount,
+        activeOffersCount: statuses
+            .where((status) => _activeStatuses.contains(status))
+            .length,
+        messagesCount: conversationsCount,
+        recommendations: recommendations,
       );
-    } on DioException catch (e) {
-      final responseData = e.response?.data;
-      String message = e.message ?? 'Serverda xatolik yuz berdi';
-
-      if (responseData is Map && responseData['message'] != null) {
-        message = responseData['message'].toString();
-      } else if (responseData is Map && responseData['detail'] != null) {
-        message = responseData['detail'].toString();
-      }
-
-      return Left(
-        ServerFailure(
-          message,
-          statusCode: e.response?.statusCode,
-          errorData: responseData,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+    });
   }
 
   Future<T> _loadOptionalSection<T>({

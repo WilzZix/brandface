@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,7 @@ class _PaylovWebViewPageState extends State<PaylovWebViewPage> {
           icon: Icon(Icons.close, color: AppColors.black),
           onPressed: () => Navigator.of(context).pop(false),
         ),
-        title: Text('Payment', style: Typographies.titleMedium),
+        title: Text(t.billing_ui.payment, style: Typographies.titleMedium),
         centerTitle: false,
       ),
       body: Stack(

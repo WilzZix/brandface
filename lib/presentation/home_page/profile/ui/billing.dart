@@ -393,9 +393,9 @@ class _BillingState extends State<Billing> {
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: const [
-          SizedBox(height: 140),
-          Center(child: Text('No billing history yet.')),
+        children: [
+          const SizedBox(height: 140),
+          Center(child: Text(t.billing.no_billing_history)),
         ],
       );
     }
@@ -559,13 +559,13 @@ class _BillingState extends State<Billing> {
     }
 
     return [
-      'Max offers / month: ${plan.maxOffersPerMonth}',
-      'Max finds / month: ${plan.maxFindsPerMonth}',
-      'AI matches count: ${plan.aiMatchesCount}',
-      'Max shortlist: ${plan.maxShortlist}',
-      if (plan.hasFullContactAccess) 'Full contact access',
-      if (plan.hasAdvancedAnalytics) 'Advanced analytics',
-      if (plan.hasPrioritySupport) 'Priority support',
+      t.billing_ui.max_offers_per_month(count: plan.maxOffersPerMonth),
+      t.billing_ui.max_finds_per_month(count: plan.maxFindsPerMonth),
+      t.billing_ui.ai_matches_count(count: plan.aiMatchesCount),
+      t.billing_ui.max_shortlist(count: plan.maxShortlist),
+      if (plan.hasFullContactAccess) t.billing_ui.full_contact_access,
+      if (plan.hasAdvancedAnalytics) t.billing_ui.advanced_analytics,
+      if (plan.hasPrioritySupport) t.billing_ui.priority_support,
     ];
   }
 
@@ -634,7 +634,7 @@ class _BillingState extends State<Billing> {
                   (item) => ListTile(
                     title: Text(item.label),
                     subtitle: Text(
-                      '${_formatUsd(item.priceUsd)} • ${item.days} days',
+                      '${_formatUsd(item.priceUsd)} • ${t.billing.days(days: item.days)}',
                     ),
                     onTap: () => Navigator.of(bottomSheetContext).pop(item),
                   ),
@@ -732,7 +732,7 @@ class _BillingState extends State<Billing> {
   static String _cardLabel(String type) {
     final normalized = type.trim().toLowerCase();
     if (normalized.isEmpty) {
-      return 'Card';
+      return t.billing_ui.card;
     }
 
     return _capitalize(normalized);
@@ -853,7 +853,8 @@ class _AddCardPageState extends State<_AddCardPage> {
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         titleSpacing: 0,
-        title: Text('Add new payment method', style: Typographies.titleLarge),
+        title: Text(t.billing_ui.add_new_payment_method,
+            style: Typographies.titleLarge),
       ),
       // Tap outside any input to dismiss the keyboard.
       body: GestureDetector(
@@ -877,13 +878,13 @@ class _AddCardPageState extends State<_AddCardPage> {
                         children: [
                           _cardField(
                             controller: _holderController,
-                            label: 'Card holder',
-                            hintText: 'Write card holder name',
+                            label: t.billing_ui.card_holder,
+                            hintText: t.billing_ui.write_card_holder_name,
                             textCapitalization: TextCapitalization.words,
                             textInputAction: TextInputAction.next,
                             validator: (value) {
                               if ((value ?? '').trim().isEmpty) {
-                                return 'Required';
+                                return t.billing_ui.required;
                               }
                               return null;
                             },
@@ -891,8 +892,8 @@ class _AddCardPageState extends State<_AddCardPage> {
                           const SizedBox(height: 24),
                           _cardField(
                             controller: _cardNumberController,
-                            label: 'Card number',
-                            hintText: 'Write card number',
+                            label: t.billing_ui.card_number,
+                            hintText: t.billing_ui.write_card_number,
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.next,
                             inputFormatters: [
@@ -902,10 +903,10 @@ class _AddCardPageState extends State<_AddCardPage> {
                             validator: (value) {
                               final digits = _digitsOnlyText(value ?? '');
                               if (digits.isEmpty) {
-                                return 'Required';
+                                return t.billing_ui.required;
                               }
                               if (digits.length != 16) {
-                                return 'Enter a valid 16-digit card number';
+                                return t.billing_ui.enter_valid_16_digit_card;
                               }
                               return null;
                             },
@@ -932,8 +933,8 @@ class _AddCardPageState extends State<_AddCardPage> {
                                   Expanded(
                                     child: _cardField(
                                       controller: _expiryController,
-                                      label: 'Expire date',
-                                      hintText: 'MM/YY',
+                                      label: t.billing_ui.expire_date,
+                                      hintText: t.billing_ui.mm_yy,
                                       keyboardType: TextInputType.number,
                                       textInputAction: isLocal
                                           ? TextInputAction.done
@@ -947,10 +948,10 @@ class _AddCardPageState extends State<_AddCardPage> {
                                           value ?? '',
                                         );
                                         if (digits.isEmpty) {
-                                          return 'Required';
+                                          return t.billing_ui.required;
                                         }
                                         if (digits.length != 4) {
-                                          return 'MM/YY';
+                                          return t.billing_ui.mm_yy;
                                         }
                                         final month = int.tryParse(
                                           digits.substring(0, 2),
@@ -958,7 +959,7 @@ class _AddCardPageState extends State<_AddCardPage> {
                                         if (month == null ||
                                             month < 1 ||
                                             month > 12) {
-                                          return 'Invalid month';
+                                          return t.billing_ui.invalid_month;
                                         }
                                         return null;
                                       },
@@ -969,8 +970,8 @@ class _AddCardPageState extends State<_AddCardPage> {
                                     Expanded(
                                       child: _cardField(
                                         controller: _ccvController,
-                                        label: 'CCV',
-                                        hintText: 'CCV',
+                                        label: t.billing_ui.ccv,
+                                        hintText: t.billing_ui.ccv,
                                         keyboardType: TextInputType.number,
                                         textInputAction: TextInputAction.done,
                                         inputFormatters: [
@@ -983,10 +984,10 @@ class _AddCardPageState extends State<_AddCardPage> {
                                             value ?? '',
                                           );
                                           if (digits.isEmpty) {
-                                            return 'Required';
+                                            return t.billing_ui.required;
                                           }
                                           if (digits.length < 3) {
-                                            return 'Invalid';
+                                            return t.billing_ui.invalid;
                                           }
                                           return null;
                                         },
@@ -1019,7 +1020,7 @@ class _AddCardPageState extends State<_AddCardPage> {
                                 shape: const StadiumBorder(),
                               ),
                               child: Text(
-                                'Cancel',
+                                t.common.cancel,
                                 style: Typographies.labelLarge,
                               ),
                             ),
@@ -1030,7 +1031,7 @@ class _AddCardPageState extends State<_AddCardPage> {
                           child: SizedBox(
                             height: 56,
                             child: AppButtons.primary(
-                              title: 'Confirm',
+                              title: t.common.confirm,
                               onTap: _submit,
                             ),
                           ),
@@ -1141,7 +1142,7 @@ class _AddCardPageState extends State<_AddCardPage> {
     if (!mounted) return;
     if (!sent) {
       context.showAppSnackBar(
-        cubit.state.addFailure?.message ?? 'Could not send the SMS code',
+        cubit.state.addFailure?.message ?? t.billing_ui.could_not_send_sms_code,
         type: AppSnackBarType.error,
       );
       return;

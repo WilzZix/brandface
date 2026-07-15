@@ -143,7 +143,7 @@ class _BrandInfoPageViewState extends State<BrandInfoPageView>
           },
           failure: (_) {
             context.showAppSnackBar(
-              'Image upload failed',
+              t.misc.image_upload_failed,
               type: AppSnackBarType.error,
             );
           },

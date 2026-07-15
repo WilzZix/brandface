@@ -156,7 +156,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
-                    label: 'Language',
+                    label: t.ambassador.language,
                     value: _languageName,
                     onTap: () => _pickLanguage(context),
                   ),
@@ -168,7 +168,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
-                    label: 'Age',
+                    label: t.ambassador.age,
                     value: _ageLabel,
                     onTap: _pickAge,
                   ),
@@ -180,25 +180,25 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
-                    label: 'Auditory',
+                    label: t.ambassador.auditory,
                     value: _followersLabel,
                     onTap: _pickFollowers,
                   ),
                   const SizedBox(height: 12),
                   _DateField(
-                    label: 'Available date',
+                    label: t.ambassador.available_date,
                     value: _availableDate,
                     onTap: _pickDate,
                   ),
                   const SizedBox(height: 12),
                   _DropdownField(
-                    label: 'Currency',
+                    label: t.registration.currency,
                     value: _currency,
                     onTap: _pickCurrency,
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Price range (per hour)',
+                    t.ambassador.price_range_per_hour,
                     style: Typographies.bodySmall.copyWith(
                       color: AppColors.mutedBlack,
                     ),
@@ -209,14 +209,14 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
                       Expanded(
                         child: _NumericInput(
                           controller: _priceFromCtrl,
-                          hint: 'From',
+                          hint: t.ambassador.from,
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: _NumericInput(
                           controller: _priceToCtrl,
-                          hint: 'To',
+                          hint: t.ambassador.to,
                         ),
                       ),
                     ],
@@ -369,7 +369,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     if (items.isEmpty) return;
     final result = await _showPicker(
       context: context,
-      title: 'Language',
+      title: t.ambassador.language,
       items: items.map((e) => _PickerItem(id: e.id, name: e.name)).toList(),
     );
     if (result != null) {
@@ -419,7 +419,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     ];
     final result = await _showPicker(
       context: context,
-      title: 'Age',
+      title: t.ambassador.age,
       items: [
         for (var i = 0; i < ranges.length; i++)
           _PickerItem(id: i, name: ranges[i].label),
@@ -445,7 +445,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
     ];
     final result = await _showPicker(
       context: context,
-      title: 'Auditory',
+      title: t.ambassador.auditory,
       items: [
         for (var i = 0; i < ranges.length; i++)
           _PickerItem(id: i, name: ranges[i].label),
@@ -464,7 +464,7 @@ class _AmbassadorsFilterPageState extends State<AmbassadorsFilterPage> {
   Future<void> _pickCurrency() async {
     final result = await _showPicker(
       context: context,
-      title: 'Currency',
+      title: t.registration.currency,
       items: const [
         _PickerItem(id: 0, name: 'UZS'),
         _PickerItem(id: 1, name: 'USD'),
@@ -604,7 +604,7 @@ class _DateField extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  value != null ? _format(value!) : 'DD.MM.YYYY',
+                  value != null ? _format(value!) : t.common.date_format_hint,
                   style: Typographies.bodyMedium.copyWith(
                     color: value != null ? AppColors.black : AppColors.grey,
                   ),

@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/uikit/components/avatar/avatar_placeholder.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -26,12 +27,12 @@ class InfluencerToggle extends StatelessWidget {
       child: Row(
         children: [
           _ToggleTab(
-            label: 'Influencers',
+            label: t.brand.influencers,
             active: selected == 0,
             onTap: () => onChanged(0),
           ),
           _ToggleTab(
-            label: 'Ambassadors',
+            label: t.brand.ambassadors,
             active: selected == 1,
             onTap: () => onChanged(1),
           ),
@@ -116,7 +117,7 @@ class InfluencerAvatar extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'TOP',
+                t.brand.top_label,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,

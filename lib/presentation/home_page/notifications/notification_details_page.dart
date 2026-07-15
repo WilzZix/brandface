@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/notification/notification_entity.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
@@ -17,7 +18,7 @@ class NotificationDetailsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.lightBg,
         scrolledUnderElevation: 0,
-        title: Text('Notification details', style: Typographies.titleMedium),
+        title: Text(t.misc.notification_details_title, style: Typographies.titleMedium),
         centerTitle: false,
       ),
       body: SingleChildScrollView(
@@ -47,7 +48,7 @@ class NotificationDetailsPage extends StatelessWidget {
               )
             else
               Text(
-                'No additional details.',
+                t.misc.notification_no_additional_details,
                 style: Typographies.bodyMedium.copyWith(color: AppColors.grey),
               ),
           ],

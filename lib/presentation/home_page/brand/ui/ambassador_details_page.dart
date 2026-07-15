@@ -1,4 +1,5 @@
 import 'package:brandface/core/di/app_di.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/domain/entities/profile/profile_entity.dart';
@@ -64,7 +65,7 @@ class _DetailsScaffold extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: AppColors.lightBg,
           scrolledUnderElevation: 0,
-          title: Text('Ambassador details', style: Typographies.titleMedium),
+          title: Text(t.ambassador.ambassador_details, style: Typographies.titleMedium),
           centerTitle: false,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(80),
@@ -103,9 +104,9 @@ class _TabPills extends StatelessWidget {
         final selected = controller.index;
         return Row(
           children: [
-            Expanded(child: _PillTab(label: 'Information', isActive: selected == 0, onTap: () => controller.animateTo(0))),
+            Expanded(child: _PillTab(label: t.ambassador.information, isActive: selected == 0, onTap: () => controller.animateTo(0))),
             const SizedBox(width: 8),
-            Expanded(child: _PillTab(label: 'Portfolio', isActive: selected == 1, onTap: () => controller.animateTo(1))),
+            Expanded(child: _PillTab(label: t.profile.portfolio, isActive: selected == 1, onTap: () => controller.animateTo(1))),
           ],
         );
       },
@@ -157,47 +158,47 @@ class _InformationTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionTitle('General Info'),
+          _SectionTitle(t.profile.general_info),
           const SizedBox(height: 8),
           AppContainer(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (detail.contacts.isNotEmpty) ...[
-                  Text('Contact details',
+                  Text(t.registration.contact_details,
                       style: Typographies.titleSmall.copyWith(color: AppColors.mutedBlack)),
                   const SizedBox(height: 8),
                   _ContactList(contacts: detail.contacts),
                   const SizedBox(height: 12),
                 ],
                 if (detail.bio != null && detail.bio!.trim().isNotEmpty) ...[
-                  Text('Profile information',
+                  Text(t.registration.profile_information,
                       style: Typographies.titleSmall.copyWith(color: AppColors.mutedBlack)),
                   const SizedBox(height: 4),
                   Text(detail.bio!, style: Typographies.bodyMedium),
                 ],
                 if (detail.contacts.isEmpty &&
                     (detail.bio == null || detail.bio!.trim().isEmpty))
-                  Text('No information provided.',
+                  Text(t.ambassador.no_information_provided,
                       style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack)),
               ],
             ),
           ),
           if (detail.categories.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _SectionTitle('Niche'),
+            _SectionTitle(t.ambassador.niche),
             const SizedBox(height: 8),
             AppContainer(child: _ChipWrap(items: detail.categories)),
           ],
           if (detail.services.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _SectionTitle('Services'),
+            _SectionTitle(t.registration.services),
             const SizedBox(height: 8),
             AppContainer(child: _ChipWrap(items: detail.services)),
           ],
           if (detail.audience != null) ...[
             const SizedBox(height: 16),
-            _SectionTitle('Audience and followers'),
+            _SectionTitle(t.profile.audience_and_followers),
             const SizedBox(height: 8),
             _AudienceSection(audience: detail.audience!),
           ],
@@ -205,7 +206,7 @@ class _InformationTab extends StatelessWidget {
               detail.partners.isNotEmpty ||
               detail.awards.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _SectionTitle('Experience'),
+            _SectionTitle(t.profile.experience),
             const SizedBox(height: 8),
             _ExperienceSection(detail: detail),
           ],
@@ -214,12 +215,12 @@ class _InformationTab extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _SectionTitle('Reviews'),
+                _SectionTitle(t.reviews.title),
                 TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: Text(
-                    'Read all',
+                    t.notifications.read_all,
                     style: Typographies.bodySmall.copyWith(color: AppColors.primaryDark),
                   ),
                 ),
@@ -229,12 +230,12 @@ class _InformationTab extends StatelessWidget {
             _ReviewsRow(reviews: detail.reviews),
           ],
           const SizedBox(height: 16),
-          _SectionTitle('Pricing / Tariffs'),
+          _SectionTitle(t.profile.pricing_tariffs),
           const SizedBox(height: 8),
           _PricingSection(pricing: detail.pricing),
           if (detail.availableDates.isNotEmpty) ...[
             const SizedBox(height: 16),
-            _SectionTitle('Available dates'),
+            _SectionTitle(t.ambassador.available_dates),
             const SizedBox(height: 8),
             _AvailableDatesSection(dates: detail.availableDates),
           ],
@@ -273,7 +274,7 @@ class _NameRow extends StatelessWidget {
               color: AppColors.orange,
               borderRadius: BorderRadius.circular(4),
             ),
-            child: Text('TOP', style: Typographies.labelSmall.copyWith(color: Colors.white)),
+            child: Text(t.brand.top_label, style: Typographies.labelSmall.copyWith(color: Colors.white)),
           ),
         ],
         if (detail.isVip) ...[
@@ -284,7 +285,7 @@ class _NameRow extends StatelessWidget {
               color: AppColors.primaryDark,
               borderRadius: BorderRadius.circular(4),
             ),
-            child: Text('VIP', style: Typographies.labelSmall.copyWith(color: Colors.white)),
+            child: Text(t.brand.vip_label, style: Typographies.labelSmall.copyWith(color: Colors.white)),
           ),
         ],
         const SizedBox(width: 8),
@@ -329,11 +330,11 @@ class _ContactList extends StatelessWidget {
   String _labelFor(String? type) {
     switch (type?.toLowerCase()) {
       case 'phone':
-        return 'Phone';
+        return t.contact.phone;
       case 'instagram':
-        return 'Instagram';
+        return t.contact.instagram;
       case 'telegram':
-        return 'Telegram';
+        return t.contact.telegram;
       case 'linkedin':
         return 'LinkedIn';
       case 'youtube':
@@ -403,36 +404,36 @@ class _AudienceSection extends StatelessWidget {
           if (hasDemographics) ...[
             if (audience.malePercent != null)
               _DemoRow(
-                label: 'Male',
+                label: t.registration.male,
                 value: '${audience.malePercent}%'
-                    '${audience.menAgeFrom != null && audience.menAgeTo != null ? ', age ${audience.menAgeFrom} – ${audience.menAgeTo}' : ''}',
+                    '${audience.menAgeFrom != null && audience.menAgeTo != null ? t.ambassador.age_range_suffix(from: audience.menAgeFrom!, to: audience.menAgeTo!) : ''}',
               ),
             if (audience.femalePercent != null) ...[
               const SizedBox(height: 6),
               _DemoRow(
-                label: 'Female',
+                label: t.registration.female,
                 value: '${audience.femalePercent}%'
-                    '${audience.womenAgeFrom != null && audience.womenAgeTo != null ? ', age ${audience.womenAgeFrom} – ${audience.womenAgeTo}' : ''}',
+                    '${audience.womenAgeFrom != null && audience.womenAgeTo != null ? t.ambassador.age_range_suffix(from: audience.womenAgeFrom!, to: audience.womenAgeTo!) : ''}',
               ),
             ],
             const SizedBox(height: 10),
           ],
           if (hasGeo) ...[
-            Text('Geography',
+            Text(t.registration.geography,
                 style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
             const SizedBox(height: 4),
             Text(audience.geography!.join(', '), style: Typographies.bodyMedium),
             const SizedBox(height: 10),
           ],
           if (hasEngagement) ...[
-            Text('Engagement level',
+            Text(t.ambassador.engagement_level,
                 style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
             const SizedBox(height: 4),
             Text(audience.engagementRate!, style: Typographies.bodyMedium),
             const SizedBox(height: 10),
           ],
           if (hasFollowers) ...[
-            Text('Total number of followers',
+            Text(t.ambassador.total_number_of_followers,
                 style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
             const SizedBox(height: 4),
             Text(_formatFollowers(audience.totalFollowers!),
@@ -487,14 +488,14 @@ class _ExperienceSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (detail.yearsOfExperience != null) ...[
-            Text('Years of experience',
+            Text(t.registration.years_of_experience,
                 style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
             const SizedBox(height: 4),
-            Text('${detail.yearsOfExperience} years', style: Typographies.bodyMedium),
+            Text(t.ambassador.years_value(years: detail.yearsOfExperience!), style: Typographies.bodyMedium),
             const SizedBox(height: 12),
           ],
           if (detail.partners.isNotEmpty) ...[
-            Text('List of partners',
+            Text(t.ambassador.list_of_partners,
                 style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
             const SizedBox(height: 4),
             ...detail.partners.map((p) => Padding(
@@ -504,7 +505,7 @@ class _ExperienceSection extends StatelessWidget {
             const SizedBox(height: 12),
           ],
           if (detail.awards.isNotEmpty) ...[
-            Text('Awards',
+            Text(t.profile.awards,
                 style: Typographies.bodySmall.copyWith(color: AppColors.mutedBlack)),
             const SizedBox(height: 4),
             ...detail.awards.map((a) => Padding(
@@ -574,7 +575,7 @@ class _ReviewCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            review.text.isEmpty ? 'No comment' : review.text,
+            review.text.isEmpty ? t.ambassador.no_comment : review.text,
             style: Typographies.bodySmall,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
@@ -608,7 +609,7 @@ class _PortfolioTab extends StatelessWidget {
           if (state.items.isEmpty) {
             return Center(
               child: Text(
-                'No portfolio items.',
+                t.ambassador.no_portfolio_items,
                 style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
               ),
             );
@@ -644,7 +645,7 @@ class _PricingSection extends StatelessWidget {
     if (p == null) {
       return AppContainer(
         child: Text(
-          'No pricing information available.',
+          t.ambassador.no_pricing_info,
           style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
         ),
       );
@@ -669,27 +670,28 @@ class _PricingSection extends StatelessWidget {
     if (p.hourlyRateMinUzs != null || p.hourlyRateMaxUzs != null) {
       final min = p.hourlyRateMinUzs ?? '—';
       final max = p.hourlyRateMaxUzs ?? '—';
-      addRow('Hourly (UZS)', '$min – $max');
+      addRow(t.ambassador.hourly_uzs, '$min – $max');
     }
     if (p.hourlyRateMinUsd != null || p.hourlyRateMaxUsd != null) {
       final min = p.hourlyRateMinUsd ?? '—';
       final max = p.hourlyRateMaxUsd ?? '—';
-      addRow('Hourly (USD)', '\$$min – \$$max');
+      addRow(t.ambassador.hourly_usd, '\$$min – \$$max');
     }
     if (p.campaignFee != null) {
       final currency = p.campaignFeeCurrency ?? '';
-      addRow('Project by', '${p.campaignFee} $currency'.trim());
+      addRow(t.ambassador.project_by, '${p.campaignFee} $currency'.trim());
     }
-    addRow('Event appearance fee', p.eventAppearanceFee);
-    addRow('Monthly exclusivity fee', p.monthlyExclusivityFee);
+    addRow(t.optional_items.event_appearance_fee, p.eventAppearanceFee);
+    addRow(t.ambassador.monthly_exclusivity_fee, p.monthlyExclusivityFee);
     if (p.monthlyContentCapacity != null) {
-      addRow('Monthly content capacity', '${p.monthlyContentCapacity} posts');
+      addRow(t.ambassador.monthly_content_capacity,
+          t.ambassador.content_capacity_posts(count: p.monthlyContentCapacity!));
     }
 
     if (rows.isEmpty) {
       return AppContainer(
         child: Text(
-          'No pricing information available.',
+          t.ambassador.no_pricing_info,
           style: Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
         ),
       );
@@ -760,7 +762,7 @@ class _BottomButtonsState extends State<_BottomButtons> {
         f.message,
         type: AppSnackBarType.error,
       ),
-      ifRight: (_) => context.showAppSnackBar('Added to favourites'),
+      ifRight: (_) => context.showAppSnackBar(t.ambassador.added_to_favourites),
     );
   }
 
@@ -791,7 +793,7 @@ class _BottomButtonsState extends State<_BottomButtons> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Icon(Icons.favorite_border, size: 18, color: AppColors.mutedBlack),
-              label: Text('Add to favourites', style: Typographies.labelLarge),
+              label: Text(t.ambassador.add_to_favourites, style: Typographies.labelLarge),
             ),
           ),
           const SizedBox(width: 12),
@@ -811,7 +813,7 @@ class _BottomButtonsState extends State<_BottomButtons> {
               icon: Icon(Icons.chat_bubble_outline,
                   size: 18, color: AppColors.black),
               label: Text(
-                'Send enquiry',
+                t.ambassador.send_enquiry,
                 style: Typographies.labelLarge.copyWith(color: AppColors.black),
               ),
             ),

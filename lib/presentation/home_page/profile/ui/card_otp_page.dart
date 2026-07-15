@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -107,7 +108,8 @@ class _CardOtpPageState extends State<CardOtpPage> {
         if (wasConfirming &&
             state.addStage == AddCardStage.idle &&
             state.addFailure == null) {
-          context.showAppSnackBar('Card added', type: AppSnackBarType.success);
+          context.showAppSnackBar(t.billing_ui.card_added,
+              type: AppSnackBarType.success);
           Navigator.of(context).pop(true);
           return;
         }
@@ -145,15 +147,15 @@ class _CardOtpPageState extends State<CardOtpPage> {
                     child: Column(
                       children: [
                         Text(
-                          'SMS confirmation',
+                          t.login.sms_confirmation,
                           style: Typographies.headlineMedium,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 12),
                         Text(
                           phone == null || phone.isEmpty
-                              ? 'Enter the SMS code sent to your card\'s phone number'
-                              : 'We sent an SMS code to $phone,\nplease enter it below',
+                              ? t.billing_ui.enter_sms_code_card_phone
+                              : t.billing_ui.sms_code_sent_to(phone: phone),
                           style: Typographies.bodyMedium.copyWith(
                             color: AppColors.mutedBlack,
                           ),
@@ -217,7 +219,7 @@ class _CardOtpPageState extends State<CardOtpPage> {
                     child: Text(
                       _secondsLeft > 0
                           ? '00:${_secondsLeft.toString().padLeft(2, '0')}'
-                          : 'Resend code',
+                          : t.login.send_code_again,
                       style: Typographies.bodyMedium.copyWith(
                         color: _secondsLeft > 0
                             ? AppColors.mutedBlack
@@ -249,7 +251,8 @@ class _CardOtpPageState extends State<CardOtpPage> {
                                   color: AppColors.black,
                                 ),
                               )
-                            : Text('Continue', style: Typographies.labelLarge),
+                            : Text(t.common.continue_label,
+                                style: Typographies.labelLarge),
                       ),
                     ),
                   ),

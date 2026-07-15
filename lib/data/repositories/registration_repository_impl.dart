@@ -1,3 +1,4 @@
+import 'package:brandface/core/error/exception_mapper.dart';
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/data/data_source/network_data_source/registration/registration_data_source.dart';
 
@@ -8,8 +9,7 @@ import 'package:brandface/domain/usecase/registration/params/fill_influencer_pro
 
 import 'package:brandface/domain/usecase/registration/params/registration_params.dart';
 
-import 'package:dart_either/src/dart_either.dart';
-import 'package:dio/dio.dart';
+import 'package:dart_either/dart_either.dart';
 
 import '../../domain/repository/registration_repository.dart';
 
@@ -22,125 +22,62 @@ final class RegistrationRepositoryImpl implements IRegistrationRepository {
   @override
   Future<Either<Failure, RegistrationEntity>> registration({
     required RegistrationParams params,
-  }) async {
-    try {
+  }) {
+    return guard(() async {
       final registrationData = await _dataSource.registration(params: params);
-      return Right(registrationData.toEntity());
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return registrationData.toEntity();
+    });
   }
 
   @override
   Future<Either<Failure, RegistrationEntity>> brandRegistration({
     required BrandRegistrationParams params,
-  }) async {
-    try {
+  }) {
+    return guard(() async {
       final registrationData = await _dataSource.brandRegistration(
         params: params,
       );
-      return Right(registrationData.toEntity());
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return registrationData.toEntity();
+    });
   }
 
   @override
   Future<Either<Failure, void>> fillProfileInfo({
     required FillInfluencerProfileParam params,
     required String profileId,
-  }) async {
-    try {
-      final registrationData = await _dataSource.fillProfileInfo(
-        params: params,
-        profileId: profileId,
-      );
-      return Right(registrationData);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+  }) {
+    return guard(
+      () => _dataSource.fillProfileInfo(params: params, profileId: profileId),
+    );
   }
 
   @override
   Future<Either<Failure, void>> fillBrandProfileInfo({
     required FillBrandProfileParam params,
     required String profileId,
-  }) async {
-    try {
-      final result = await _dataSource.fillBrandProfileInfo(
+  }) {
+    return guard(
+      () => _dataSource.fillBrandProfileInfo(
         params: params,
         profileId: profileId,
-      );
-      return Right(result);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      ),
+    );
   }
 
   @override
   Future<Either<Failure, void>> updateMyProfile({
     required FillInfluencerProfileParam params,
-  }) async {
-    try {
-      await _dataSource.updateMyInfluencerProfile(params: params);
-      return const Right(null);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+  }) {
+    return guard(() => _dataSource.updateMyInfluencerProfile(params: params));
   }
 
   @override
   Future<Either<Failure, void>> updateMyProfileSection({
     required String url,
     required Map<String, dynamic> payload,
-  }) async {
-    try {
-      await _dataSource.updateMyProfileSection(url: url, payload: payload);
-      return const Right(null);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+  }) {
+    return guard(
+      () => _dataSource.updateMyProfileSection(url: url, payload: payload),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/api_routes.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/favourite_entity.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/favourites/favourites_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/favourites/favourites_state.dart';
@@ -29,7 +30,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
       appBar: AppBar(
         backgroundColor: AppColors.lightBg,
         scrolledUnderElevation: 0,
-        title: Text('Favourites', style: Typographies.titleMedium),
+        title: Text(t.brand.favourites, style: Typographies.titleMedium),
         centerTitle: false,
       ),
       body: Column(
@@ -58,7 +59,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                   if (state.items.isEmpty) {
                     return Center(
                       child: Text(
-                        'No favourites yet.',
+                        t.ambassador.no_favourites_yet,
                         style: Typographies.bodyMedium
                             .copyWith(color: AppColors.grey),
                       ),
@@ -70,7 +71,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          '${state.items.length} found',
+                          t.ambassador.items_found(count: state.items.length),
                           style: Typographies.bodyMedium
                               .copyWith(color: AppColors.mutedBlack),
                         ),
@@ -197,7 +198,8 @@ class _FavouriteCard extends StatelessWidget {
                             style: Typographies.bodySmall
                                 .copyWith(color: AppColors.mutedBlack)),
                         Text(
-                          '${_formatFollowers(item.totalFollowers)} followers',
+                          t.brand.followers_count(
+                              count: _formatFollowers(item.totalFollowers)),
                           style: Typographies.bodySmall
                               .copyWith(color: AppColors.mutedBlack),
                         ),
@@ -207,7 +209,8 @@ class _FavouriteCard extends StatelessWidget {
                             style: Typographies.bodySmall
                                 .copyWith(color: AppColors.mutedBlack)),
                         Text(
-                          '${item.yearsOfExperience} years exp.',
+                          t.brand.years_experience(
+                              count: item.yearsOfExperience!),
                           style: Typographies.bodySmall
                               .copyWith(color: AppColors.mutedBlack),
                         ),

@@ -363,7 +363,10 @@ class _SocialMediaStatsSectionState extends State<_SocialMediaStatsSection> {
                   )
                 else if (stats != null)
                   Text(
-                    '${_formatFollowers(stats.followers)} followers, ${stats.engagementRate}% engagement rate',
+                    t.misc.followers_and_engagement(
+                      followers: _formatFollowers(stats.followers),
+                      rate: stats.engagementRate ?? 0,
+                    ),
                     style: Typographies.bodySmall,
                   ),
               ],

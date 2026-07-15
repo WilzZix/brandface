@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/bloc/home_cubit.dart';
 import 'package:brandface/presentation/home_page/bloc/home_state.dart';
 import 'package:brandface/uikit/components/ui_components/profile_image.dart';
@@ -35,7 +36,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
       return displayName;
     }
 
-    return 'Brand';
+    return t.brand.title;
   }
 
   @override
@@ -111,7 +112,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                     SliverToBoxAdapter(child: SizedBox(height: 32)),
                     SliverToBoxAdapter(
                       child: Text(
-                        'My campaigns',
+                        t.analytics.my_campaigns,
                         style: Typographies.titleLarge,
                       ),
                     ),
@@ -122,14 +123,14 @@ class _BrandHomePageState extends State<BrandHomePage> {
                           Expanded(
                             child: _BrandStatCard(
                               title: '0',
-                              description: 'Active campaigns',
+                              description: t.analytics.active_campaigns,
                             ),
                           ),
                           SizedBox(width: 8),
                           Expanded(
                             child: _BrandStatCard(
                               title: '0',
-                              description: 'Influencers hired',
+                              description: t.analytics.influencers_hired,
                             ),
                           ),
                         ],
@@ -138,7 +139,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                     SliverToBoxAdapter(child: SizedBox(height: 32)),
                     SliverToBoxAdapter(
                       child: Text(
-                        'Recent activity',
+                        t.analytics.recent_activity,
                         style: Typographies.titleLarge,
                       ),
                     ),
@@ -159,12 +160,12 @@ class _BrandHomePageState extends State<BrandHomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Campaign title here',
+                                t.analytics.campaign_title_placeholder,
                                 style: Typographies.titleMedium,
                               ),
                               SizedBox(height: 8),
                               Text(
-                                'No active campaigns yet',
+                                t.brand.no_active_campaigns_yet,
                                 style: Typographies.bodySmall.copyWith(
                                   color: AppColors.grey,
                                 ),
@@ -201,12 +202,12 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       SizedBox(height: 56 + MediaQuery.of(context).padding.top),
                       Center(child: SvgPicture.asset(AppAssets.icLogo)),
                       SizedBox(height: 24),
-                      Text('Menu', style: Typographies.headlineSmall),
+                      Text(t.common.menu, style: Typographies.headlineSmall),
                       SizedBox(height: 32),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Campaigns', style: Typographies.titleMedium),
+                          Text(t.analytics.campaigns, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),
@@ -216,7 +217,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Find influencers',
+                            t.analytics.find_influencers,
                             style: Typographies.titleMedium,
                           ),
                           SvgPicture.asset(AppAssets.icChevronRight),
@@ -227,7 +228,7 @@ class _BrandHomePageState extends State<BrandHomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Messages', style: Typographies.titleMedium),
+                          Text(t.common.messages, style: Typographies.titleMedium),
                           SvgPicture.asset(AppAssets.icChevronRight),
                         ],
                       ),

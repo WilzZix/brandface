@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/profile/portfolio_entity.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_item_state.dart';
@@ -108,14 +109,14 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Fill profile information',
+                        t.portfolio_ui.fill_profile_information,
                         style: Typographies.titleLarge.copyWith(fontSize: 24),
                       ),
                       const SizedBox(height: 16),
                       _StepHeader(onBack: () => context.pop()),
                       const SizedBox(height: 24),
                       Text(
-                        'Upload thumbnail picture',
+                        t.portfolio_ui.upload_thumbnail_picture,
                         style: Typographies.titleMedium,
                       ),
                       const SizedBox(height: 16),
@@ -133,12 +134,12 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                               children: [
                                 _ActionPillButton(
                                   iconPath: AppAssets.icAttachFile,
-                                  label: 'Choose files',
+                                  label: t.portfolio_ui.choose_files,
                                   onTap: isBusy ? null : _pickCoverImage,
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'SVG, PNG, JPG or GIF (MAX. 800×400px).',
+                                  t.registration.file_format_hint,
                                   style: Typographies.bodySmall.copyWith(
                                     color: AppColors.grey,
                                   ),
@@ -149,14 +150,20 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      Text('Portfolio name', style: Typographies.titleMedium),
+                      Text(
+                        t.portfolio_ui.portfolio_name,
+                        style: Typographies.titleMedium,
+                      ),
                       const SizedBox(height: 8),
                       CredInputField(
                         controller: _titleController,
-                        label: 'Portfolio name here',
+                        label: t.portfolio_ui.portfolio_name_hint,
                       ),
                       const SizedBox(height: 24),
-                      Text('Add links', style: Typographies.titleSmall),
+                      Text(
+                        t.portfolio_ui.add_links,
+                        style: Typographies.titleSmall,
+                      ),
                       const SizedBox(height: 8),
                       _SelectorPill(
                         title: _selectedPlatform,
@@ -168,7 +175,7 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                           Expanded(
                             child: _OutlinedField(
                               controller: _linkController,
-                              hintText: 'Paste link',
+                              hintText: t.registration.paste_link_here,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -190,7 +197,7 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                               GestureDetector(
                                 onTap: () => _deleteLink(link),
                                 child: Text(
-                                  'Delete',
+                                  t.common.delete,
                                   style: Typographies.labelLarge.copyWith(
                                     color: AppColors.red,
                                   ),
@@ -202,18 +209,18 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Upload profile picture',
+                        t.registration.upload_profile_picture,
                         style: Typographies.titleMedium,
                       ),
                       const SizedBox(height: 16),
                       _ActionPillButton(
                         iconPath: AppAssets.icAttachFile,
-                        label: 'Choose files',
+                        label: t.portfolio_ui.choose_files,
                         onTap: isBusy ? null : _pickGalleryImage,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'SVG, PNG, JPG or GIF (MAX. 800×400px).',
+                        t.registration.file_format_hint,
                         style: Typographies.bodySmall.copyWith(
                           color: AppColors.grey,
                         ),
@@ -238,14 +245,14 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      Text('Description', style: Typographies.titleSmall),
+                      Text(t.offer.description, style: Typographies.titleSmall),
                       const SizedBox(height: 8),
                       _DescriptionField(controller: _descriptionController),
                       const SizedBox(height: 32),
                       SizedBox(
                         width: double.infinity,
                         child: AppButtons.primary(
-                          title: 'Continue',
+                          title: t.common.continue_label,
                           onTap: isBusy ? null : _savePortfolio,
                         ),
                       ),
@@ -254,7 +261,7 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
                         child: GestureDetector(
                           onTap: isBusy ? null : _savePortfolio,
                           child: Text(
-                            'Save and continue later',
+                            t.portfolio_ui.save_and_continue_later,
                             style: Typographies.labelLarge,
                           ),
                         ),
@@ -377,9 +384,7 @@ class _EditPortfolioPageState extends State<EditPortfolioPage> {
   }
 
   void _showUploadUnavailableMessage() {
-    context.showAppSnackBar(
-      'File picker UI hali ulanmagan. Metadata save ishlaydi.',
-    );
+    context.showAppSnackBar(t.portfolio_ui.upload_not_available);
   }
 }
 
@@ -403,7 +408,7 @@ class _StepHeader extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: Text(
-              'General info (1/6)',
+              t.portfolio_ui.general_info_step,
               style: Typographies.labelMedium.copyWith(color: AppColors.white),
             ),
           ),
@@ -526,7 +531,7 @@ class _ApplyButton extends StatelessWidget {
           children: [
             SvgPicture.asset(AppAssets.icCheck),
             const SizedBox(width: 8),
-            Text('Apply', style: Typographies.bodyLarge),
+            Text(t.common.apply, style: Typographies.bodyLarge),
           ],
         ),
       ),
@@ -579,7 +584,7 @@ class _DescriptionField extends StatelessWidget {
       controller: controller,
       maxLines: 7,
       decoration: InputDecoration(
-        hintText: 'Write text here ...',
+        hintText: t.common.write_text_here,
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

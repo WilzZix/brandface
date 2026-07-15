@@ -1,3 +1,4 @@
+import 'package:brandface/core/error/exception_mapper.dart';
 import 'package:brandface/core/error/failures.dart';
 import 'package:brandface/domain/entities/profile/ambassador_detail_entity.dart';
 import 'package:brandface/domain/entities/profile/ambassador_entity.dart';
@@ -17,7 +18,6 @@ import 'package:brandface/domain/entities/profile/review_entity.dart';
 import 'package:brandface/domain/repository/profile_repository.dart';
 import 'package:brandface/utils/services/app_catalog_service.dart';
 import 'package:dart_either/dart_either.dart';
-import 'package:dio/dio.dart';
 
 import '../../utils/services/profile_service.dart';
 import '../data_source/network_data_source/profile/profile_data_source.dart';
@@ -38,15 +38,13 @@ final class ProfileRepositoryImpl implements IProfileRepository {
        _dataSource = dataSource;
 
   @override
-  Future<Either<Failure, List<CategoryItemEntity>>> getCategories() async {
-    try {
+  Future<Either<Failure, List<CategoryItemEntity>>> getCategories() {
+    return guard(() async {
       final List<CategoryData> cachedCategories = _catalogLocalService
           .getCategories();
 
       if (cachedCategories.isNotEmpty) {
-        return Right(
-          cachedCategories.map((model) => model.toEntity()).toList(),
-        );
+        return cachedCategories.map((model) => model.toEntity()).toList();
       }
 
       final categoryResponse = await _dataSource.getCategories();
@@ -54,163 +52,86 @@ final class ProfileRepositoryImpl implements IProfileRepository {
       if (categoryResponse.data != null && categoryResponse.data!.isNotEmpty) {
         await _catalogLocalService.saveCategories(categoryResponse.data!);
 
-        final List<CategoryItemEntity> entities = categoryResponse.data!
+        return categoryResponse.data!
             .map((model) => model.toEntity())
             .toList();
-        return Right(entities);
       } else {
-        return const Right([]);
+        return <CategoryItemEntity>[];
       }
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+    });
   }
 
   @override
-  Future<Either<Failure, List<ServiceTypeEntity>>> getServices() async {
-    try {
+  Future<Either<Failure, List<ServiceTypeEntity>>> getServices() {
+    return guard(() async {
       final servicesData = await _dataSource.getServices();
-      final List<ServiceTypeEntity> entities = servicesData.data!
-          .map((model) => model.toEntity())
-          .toList();
-      return Right(entities);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return servicesData.data!.map((model) => model.toEntity()).toList();
+    });
   }
 
   @override
-  Future<Either<Failure, List<RegionEntity>>> getRegions() async {
-    try {
+  Future<Either<Failure, List<RegionEntity>>> getRegions() {
+    return guard(() async {
       final servicesData = await _dataSource.getRegions();
-      final List<RegionEntity> entities = servicesData
-          .map((model) => model.toEntity())
-          .toList();
-      return Right(entities);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return servicesData.map((model) => model.toEntity()).toList();
+    });
   }
 
   @override
-  Future<Either<Failure, List<CityEntity>>> getCities() async {
-    try {
+  Future<Either<Failure, List<CityEntity>>> getCities() {
+    return guard(() async {
       final data = await _dataSource.getCities();
-      final List<CityEntity> entities = data
-          .map((model) => model.toEntity())
-          .toList();
-      return Right(entities);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return data.map((model) => model.toEntity()).toList();
+    });
   }
 
   @override
-  Future<Either<Failure, List<SphereEntity>>> getSpheres() async {
-    try {
+  Future<Either<Failure, List<SphereEntity>>> getSpheres() {
+    return guard(() async {
       final data = await _dataSource.getSpheres();
-      final List<SphereEntity> entities = data
-          .map((model) => model.toEntity())
-          .toList();
-      return Right(entities);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return data.map((model) => model.toEntity()).toList();
+    });
   }
 
   @override
   Future<Either<Failure, ProfileEntity>> getProfile({
     required String profileId,
-  }) async {
-    try {
+  }) {
+    return guard(() async {
       final profileData = await _dataSource.getProfile(profileId: profileId);
-      return Right(profileData.toEntity());
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return profileData.toEntity();
+    });
   }
 
   @override
   Future<Either<Failure, InfluencerProfileInformationEntity>>
-  getInfluencerProfile() async {
-    try {
-      final profileId = _profileService.getProfileId();
+  getInfluencerProfile() {
+    final profileId = _profileService.getProfileId();
 
-      if (profileId == null) {
-        return const Left(
+    if (profileId == null) {
+      return Future.value(
+        const Left(
           ServerFailure('Profile ID topilmadi. Iltimos, qayta kiring.'),
-        );
-      }
-
-      final profileModel = await _dataSource.getInfluencerProfile();
-
-      return Right(profileModel.toEntity());
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['message'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
         ),
       );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
     }
+
+    return guard(() async {
+      final profileModel = await _dataSource.getInfluencerProfile();
+      return profileModel.toEntity();
+    });
   }
 
   @override
-  Future<Either<Failure, List<LanguageEntity>>> getLanguages() async {
-    try {
+  Future<Either<Failure, List<LanguageEntity>>> getLanguages() {
+    return guard(() async {
       // 1. Birinchi navbatda local keshdan tekshiramiz
       final List<LanguageData> cachedLangs = _catalogLocalService
           .getSpokenLanguages();
 
       if (cachedLangs.isNotEmpty) {
         // Agar keshda ma'lumot bo'lsa, serverga chiqmasdan qaytaramiz
-        return Right(cachedLangs.map((model) => model.toEntity()).toList());
+        return cachedLangs.map((model) => model.toEntity()).toList();
       }
 
       // 2. Kesh bo'sh bo'lsa, serverdan olamiz
@@ -220,40 +141,21 @@ final class ProfileRepositoryImpl implements IProfileRepository {
         // 3. Serverdan kelgan ma'lumotni keshga yozib qo'yamiz
         await _catalogLocalService.saveSpokenLanguages(languageResponse.data!);
 
-        final List<LanguageEntity> entities = languageResponse.data!
+        return languageResponse.data!
             .map((model) => model.toEntity())
             .toList();
-        return Right(entities);
       } else {
-        return const Right([]);
+        return <LanguageEntity>[];
       }
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+    });
   }
 
   @override
-  Future<Either<Failure, List<BrandShortEntity>>> getBrands() async {
-    try {
+  Future<Either<Failure, List<BrandShortEntity>>> getBrands() {
+    return guard(() async {
       final brands = await _dataSource.getBrands();
-      return Right(brands.map((m) => m.toEntity()).toList());
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          statusCode: e.response?.statusCode,
-          e.message ?? 'Serverda kutilmagan xatolik',
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizimda xatolik yuz berdi: ${e.toString()}'));
-    }
+      return brands.map((m) => m.toEntity()).toList();
+    });
   }
 
   @override
@@ -261,111 +163,39 @@ final class ProfileRepositoryImpl implements IProfileRepository {
   getSocialMediaAccountStats({
     required String platform,
     required String username,
-  }) async {
-    try {
+  }) {
+    return guard(() async {
       final socialAccountStats = await _dataSource.getSocialMediaStats(
         platform: platform,
         username: username,
       );
 
-      return Right(socialAccountStats.toEntity());
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['message'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+      return socialAccountStats.toEntity();
+    });
   }
 
   @override
-  Future<Either<Failure, InfluencerAnalyticsEntity>>
-  getInfluencerAnalytics() async {
-    try {
-      final analytics = await _dataSource.getInfluencerAnalytics();
-      return Right(analytics);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['message'] ??
-              e.response?.data?['detail'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+  Future<Either<Failure, InfluencerAnalyticsEntity>> getInfluencerAnalytics() {
+    return guard(() => _dataSource.getInfluencerAnalytics());
   }
 
   @override
   Future<Either<Failure, List<ReviewEntity>>> getInfluencerReviews({
     required int influencerId,
-  }) async {
-    try {
-      final reviews = await _dataSource.getInfluencerReviews(
-        influencerId: influencerId,
-      );
-      return Right(reviews);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['message'] ??
-              e.response?.data?['detail'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+  }) {
+    return guard(
+      () => _dataSource.getInfluencerReviews(influencerId: influencerId),
+    );
   }
 
   @override
-  Future<Either<Failure, AwardEntity>> createAward({
-    required String title,
-  }) async {
-    try {
-      final award = await _dataSource.createAward(title: title);
-      return Right(award);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['message'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+  Future<Either<Failure, AwardEntity>> createAward({required String title}) {
+    return guard(() => _dataSource.createAward(title: title));
   }
 
   @override
-  Future<Either<Failure, void>> deleteAward({required int awardId}) async {
-    try {
-      await _dataSource.deleteAward(awardId: awardId);
-      return const Right(null);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['message'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+  Future<Either<Failure, void>> deleteAward({required int awardId}) {
+    return guard(() => _dataSource.deleteAward(awardId: awardId));
   }
 
   @override
@@ -373,49 +203,19 @@ final class ProfileRepositoryImpl implements IProfileRepository {
     required String dateFrom,
     required String dateTo,
     String? note,
-  }) async {
-    try {
-      final created = await _dataSource.addAvailableDate(
+  }) {
+    return guard(
+      () => _dataSource.addAvailableDate(
         dateFrom: dateFrom,
         dateTo: dateTo,
         note: note,
-      );
-      return Right(created);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['detail'] ??
-              e.response?.data?['message'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+      ),
+    );
   }
 
   @override
-  Future<Either<Failure, void>> deleteAvailableDate({
-    required int dateId,
-  }) async {
-    try {
-      await _dataSource.deleteAvailableDate(dateId: dateId);
-      return const Right(null);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['detail'] ??
-              e.response?.data?['message'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+  Future<Either<Failure, void>> deleteAvailableDate({required int dateId}) {
+    return guard(() => _dataSource.deleteAvailableDate(dateId: dateId));
   }
 
   @override
@@ -436,9 +236,9 @@ final class ProfileRepositoryImpl implements IProfileRepository {
     int? pricePerHourFrom,
     int? pricePerHourTo,
     String? role,
-  }) async {
-    try {
-      final data = await _dataSource.getAmbassadors(
+  }) {
+    return guard(
+      () => _dataSource.getAmbassadors(
         ordering: ordering,
         categoryId: categoryId,
         regionId: regionId,
@@ -455,43 +255,16 @@ final class ProfileRepositoryImpl implements IProfileRepository {
         pricePerHourFrom: pricePerHourFrom,
         pricePerHourTo: pricePerHourTo,
         role: role,
-      );
-      return Right(data);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['detail'] ??
-              e.response?.data?['message'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+      ),
+    );
   }
 
   @override
   Future<Either<Failure, AmbassadorDetailEntity>> getAmbassadorDetail({
     required int ambassadorId,
-  }) async {
-    try {
-      final detail = await _dataSource.getAmbassadorDetail(
-        ambassadorId: ambassadorId,
-      );
-      return Right(detail);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(
-          e.response?.data?['detail'] ??
-              e.message ??
-              'Serverda xatolik yuz berdi',
-          statusCode: e.response?.statusCode,
-        ),
-      );
-    } catch (e) {
-      return Left(ServerFailure('Tizim xatoligi: ${e.toString()}'));
-    }
+  }) {
+    return guard(
+      () => _dataSource.getAmbassadorDetail(ambassadorId: ambassadorId),
+    );
   }
 }

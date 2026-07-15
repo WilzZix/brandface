@@ -1,4 +1,5 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_item_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/portfolio/portfolio_item_state.dart';
 import 'package:brandface/presentation/home_page/profile/ui/edit_portfolio_page.dart';
@@ -39,7 +40,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                   children: [
                     Text(
                       state.failure?.message ??
-                          'Portfolio detail ma\'lumotlarini yuklab bo\'lmadi.',
+                          t.portfolio_ui.details_load_failed,
                       style: Typographies.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -48,7 +49,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                       onPressed: () => context
                           .read<PortfolioItemCubit>()
                           .loadPortfolio(portfolioId, force: true),
-                      child: const Text('Try again'),
+                      child: Text(t.common.try_again),
                     ),
                   ],
                 ),
@@ -65,7 +66,10 @@ class PortfolioDetailsPage extends StatelessWidget {
             scrolledUnderElevation: 0,
             backgroundColor: AppColors.lightBg,
             titleSpacing: 4,
-            title: Text('Portfolio details', style: Typographies.titleLarge),
+            title: Text(
+              t.portfolio_ui.portfolio_details_title,
+              style: Typographies.titleLarge,
+            ),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -119,14 +123,17 @@ class PortfolioDetailsPage extends StatelessWidget {
                     const SizedBox(height: 16),
                     _HeroImage(imageUrl: item.heroImageUrl),
                     const SizedBox(height: 16),
-                    Text('Information', style: Typographies.titleSmall),
+                    Text(
+                      t.portfolio_ui.information,
+                      style: Typographies.titleSmall,
+                    ),
                     const SizedBox(height: 8),
                     AppContainer(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Description',
+                            t.offer.description,
                             style: Typographies.titleSmall.copyWith(
                               color: AppColors.mutedBlack,
                             ),
@@ -134,7 +141,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                           const SizedBox(height: 8),
                           Text(
                             item.description.isEmpty
-                                ? 'No description'
+                                ? t.portfolio_ui.no_description
                                 : item.description,
                             style: Typographies.bodyMedium,
                           ),
@@ -142,12 +149,12 @@ class PortfolioDetailsPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Text('Links', style: Typographies.titleSmall),
+                    Text(t.portfolio_ui.links, style: Typographies.titleSmall),
                     const SizedBox(height: 8),
                     AppContainer(
                       child: item.links.isEmpty
                           ? Text(
-                              'No links added.',
+                              t.portfolio_ui.no_links_added,
                               style: Typographies.bodyMedium.copyWith(
                                 color: AppColors.mutedBlack,
                               ),
@@ -170,7 +177,10 @@ class PortfolioDetailsPage extends StatelessWidget {
                             ),
                     ),
                     const SizedBox(height: 16),
-                    Text('Portfolio images', style: Typographies.titleSmall),
+                    Text(
+                      t.portfolio_ui.portfolio_images,
+                      style: Typographies.titleSmall,
+                    ),
                     const SizedBox(height: 8),
                     AppContainer(
                       child: SizedBox(
@@ -178,7 +188,7 @@ class PortfolioDetailsPage extends StatelessWidget {
                         child: item.images.isEmpty
                             ? Center(
                                 child: Text(
-                                  'No images added.',
+                                  t.portfolio_ui.no_images_added,
                                   style: Typographies.bodyMedium.copyWith(
                                     color: AppColors.mutedBlack,
                                   ),

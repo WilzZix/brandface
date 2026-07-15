@@ -1,5 +1,6 @@
 import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/error/failures.dart';
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/send_enquiry/send_enquiry_cubit.dart';
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
@@ -70,20 +71,20 @@ class _SendEnquiryViewState extends State<_SendEnquiryView> {
   }
 
   String? _required(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Required';
+    if (value == null || value.trim().isEmpty) return t.collab.required;
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Send enquiry'), centerTitle: false),
+      appBar: AppBar(title: Text(t.collab.send_enquiry), centerTitle: false),
       body: BlocListener<SendEnquiryCubit, SendEnquiryState>(
         listener: (context, state) {
           state.maybeWhen(
             sent: () {
               context.showAppSnackBar(
-                'Enquiry sent',
+                t.collab.enquiry_sent,
                 type: AppSnackBarType.success,
               );
               context.pop();
@@ -110,34 +111,34 @@ class _SendEnquiryViewState extends State<_SendEnquiryView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _label('Contact name'),
+                      _label(t.collab.contact_name),
                       CredInputField(
                         controller: _contactNameController,
-                        label: 'Write Contact name',
+                        label: t.collab.write_contact_name,
                         validator: _required,
                       ),
                       const SizedBox(height: 16),
-                      _label('Company name'),
+                      _label(t.collab.company_name),
                       CredInputField(
                         controller: _companyNameController,
-                        label: 'Write Company name',
+                        label: t.collab.write_company_name,
                         validator: _required,
                       ),
                       const SizedBox(height: 16),
-                      _label('Contact number'),
+                      _label(t.collab.contact_number),
                       CredInputField(
                         controller: _contactNumberController,
-                        label: 'Write Contact number',
+                        label: t.collab.write_contact_number,
                         validator: _required,
                       ),
                       const SizedBox(height: 16),
-                      _label('Message'),
+                      _label(t.collab.message),
                       TextFormField(
                         controller: _messageController,
                         maxLines: 5,
                         validator: _required,
                         decoration: InputDecoration(
-                          hintText: 'Write message here',
+                          hintText: t.collab.write_message_here,
                           hintStyle: Typographies.bodyMedium.copyWith(
                             color: AppColors.grey,
                           ),
@@ -208,14 +209,14 @@ class _Footer extends StatelessWidget {
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  child: Text('Cancel', style: Typographies.titleMedium),
+                  child: Text(t.common.cancel, style: Typographies.titleMedium),
                 ),
               ),
               const Spacer(),
               SizedBox(
                 width: 180,
                 child: AppButtons.primary(
-                  title: isSending ? 'Sending...' : 'Submit',
+                  title: isSending ? t.collab.sending : t.common.submit,
                   onTap: isSending ? null : onSubmit,
                 ),
               ),

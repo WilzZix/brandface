@@ -706,7 +706,7 @@ class _AiMatchItem extends StatelessWidget {
                     child: Text(
                       item.displayName.isNotEmpty
                           ? item.displayName
-                          : 'Influencer #${item.influencerId}',
+                          : t.analytics.influencer_number(id: item.influencerId),
                       style: Typographies.titleMedium,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -745,7 +745,7 @@ class _AiMatchItem extends StatelessWidget {
                   if (item.totalFollowers.isNotEmpty &&
                       item.totalFollowers != '0')
                     Text(
-                      '${item.totalFollowers} followers',
+                      t.brand.followers_count(count: item.totalFollowers),
                       style: Typographies.bodySmall.copyWith(
                         color: AppColors.mutedBlack,
                       ),
@@ -754,7 +754,7 @@ class _AiMatchItem extends StatelessWidget {
                       item.engagementRate != '0') ...[
                     Text('·'),
                     Text(
-                      '${item.engagementRate}% ER',
+                      t.analytics.engagement_rate_short(rate: item.engagementRate),
                       style: Typographies.bodySmall.copyWith(
                         color: AppColors.mutedBlack,
                       ),

@@ -1,3 +1,4 @@
+import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../uikit/tokens/colors.dart';
@@ -22,7 +23,7 @@ class ProfileSectionReadOnlyBanner extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Bu bo\'limni faqat profile approved bo\'lgandan keyin tahrir qila olasiz.',
+              t.misc.profile_section_readonly,
               style: Typographies.bodySmall.copyWith(color: AppColors.grey),
             ),
           ),
