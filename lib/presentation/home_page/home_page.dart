@@ -224,7 +224,9 @@ class _HomePageState extends State<HomePage> {
             onRetry: () => context.read<HomeCubit>().loadHome(),
           ),
         ),
-      SliverToBoxAdapter(child: SizedBox(height: 16 + bottomPadding)),
+      // Clear the floating menu button (≈56px + its 16px bottom margin) so the
+      // last card isn't hidden behind it.
+      SliverToBoxAdapter(child: SizedBox(height: 88 + bottomPadding)),
     ];
   }
 

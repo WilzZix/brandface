@@ -97,7 +97,12 @@ class _ServicesPageViewState extends State<ServicesPageView>
                     height: 32,
                     child: Center(child: LinearProgressIndicator()),
                   ),
-                  serviceTypeLoaded: (serviceTypes) {
+                  serviceTypeLoaded: (allServiceTypes) {
+                    // Backend can return service types with an empty name;
+                    // don't render blank, unusable chips for those.
+                    final serviceTypes = allServiceTypes
+                        .where((s) => s.name.trim().isNotEmpty)
+                        .toList();
                     if (serviceTypes.isEmpty) return const SizedBox.shrink();
                     return SizedBox(
                       height: 32,

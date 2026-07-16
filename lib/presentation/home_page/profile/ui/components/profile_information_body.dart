@@ -126,7 +126,7 @@ class ProfileInformationBody extends StatelessWidget {
               ),
               SizedBox(height: 16),
               TitleDescriptionWidget(
-                title: t.registration.female,
+                title: t.registration.women,
                 descriptionItem: Text(
                   t.profile.age_range(
                     from: data.audience?.womenAgeFrom ?? '',
