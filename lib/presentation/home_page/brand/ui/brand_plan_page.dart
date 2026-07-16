@@ -5,7 +5,9 @@ import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/ui/components/payment_redirect_listener.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
+import 'package:brandface/utils/extansions/plan_features_x.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,8 @@ class BrandPlanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BillingCubit, BillingState>(
+    return PaymentRedirectListener(
+      child: BlocListener<BillingCubit, BillingState>(
       listenWhen: (prev, curr) => prev.failure != curr.failure,
       listener: (context, state) {
         if (state.failure != null) {
@@ -82,6 +85,7 @@ class BrandPlanPage extends StatelessWidget {
             );
           },
         ),
+      ),
       ),
     );
   }
@@ -208,8 +212,11 @@ class _PlanContentState extends State<_PlanContent> {
           const Divider(height: 1),
           const SizedBox(height: 20),
 
-          // ── Features list ───────────────────────────────────────────
-          ..._featuresList(_plan).map((f) => _FeatureRow(text: f)),
+          // ── Features list (from API) ────────────────────────────────
+          if (_featuresList(_plan).isEmpty)
+            _FeatureRow(text: t.billing.no_feature_details)
+          else
+            ..._featuresList(_plan).map((f) => _FeatureRow(text: f)),
 
           const SizedBox(height: 4),
 
@@ -266,34 +273,18 @@ class _PlanContentState extends State<_PlanContent> {
             planId: premiumPlan.id,
             paymentMethod: _selectedPaymentMethod,
             cardId: cardId,
+            // No saved card → backend returns a checkout link; return_url lets
+            // PaymentRedirectListener intercept the WebView completion.
+            returnUrl: kPaylovReturnUrl,
           ),
         );
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  List<String> _featuresList(BillingPlanEntity? plan) {
-    if (plan == null) return _defaultFeatures();
-    final raw = (plan.features ?? '')
-        .replaceAll('\n', ',')
-        .replaceAll(';', ',')
-        .replaceAll('|', ',')
-        .split(',')
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
-    if (raw.isNotEmpty) return raw;
-    return _defaultFeatures();
-  }
-
-  List<String> _defaultFeatures() => [
-        t.billing_ui.feature_browse_offers,
-        t.billing_ui.feature_create_offer,
-        t.billing_ui.feature_invites,
-        t.billing_ui.feature_ai_recommendations,
-        t.billing_ui.feature_shortlist,
-        t.billing_ui.feature_basic_analytics,
-      ];
+  // Features come straight from the plan (API); no hardcoded fallback list.
+  List<String> _featuresList(BillingPlanEntity? plan) =>
+      plan?.featureList ?? const [];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -363,8 +354,11 @@ class _PriceRow extends StatelessWidget {
   }
 
   String _uzs() {
-    // Show UZS sub-label from price field or default
-    return '35 000 UZS${t.billing.per_month}';
+    // UZS sub-label comes from the plan (Paylov charges in UZS); empty when the
+    // plan has no/zero UZS price so we don't show a fake amount.
+    final uzs = plan?.priceMonthlyUzs?.trim();
+    if (uzs == null || uzs.isEmpty || uzs == '0' || uzs == '0.00') return '';
+    return '$uzs UZS${t.billing.per_month}';
   }
 
   String _formatDate(DateTime? dt) {
@@ -392,9 +386,10 @@ class _PriceRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(_formatPrice(), style: Typographies.titleLarge),
-              Text(_uzs(),
-                  style: Typographies.bodySmall
-                      .copyWith(color: AppColors.mutedBlack)),
+              if (_uzs().isNotEmpty)
+                Text(_uzs(),
+                    style: Typographies.bodySmall
+                        .copyWith(color: AppColors.mutedBlack)),
               if (isPremiumActive) ...[
                 const SizedBox(height: 6),
                 GestureDetector(

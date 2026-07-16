@@ -3,9 +3,12 @@ import 'package:brandface/core/i18n/strings.g.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/presentation/home_page/brand/ui/add_payment_method_page.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
+import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/card_brand_logo.dart';
+import 'package:brandface/uikit/components/default_card_badge.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/card_mask_x.dart';
 import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -161,7 +164,7 @@ class _CardTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${_cardLabel(card.cardType)} • ${card.name}',
+                      '${_cardLabel(card.cardType)} • ${card.maskedNumber}',
                       style: Typographies.titleSmall,
                     ),
                     const SizedBox(height: 2),
@@ -185,33 +188,27 @@ class _CardTile extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              GestureDetector(
+              AppTextButton(
+                title: t.billing.delete_card,
+                color: AppColors.red,
+                textStyle: Typographies.labelMedium,
                 onTap: isMutating
                     ? null
                     : () => context.read<CardsCubit>().deleteCard(card.id),
-                child: Text(
-                  t.billing.delete_card,
-                  style: Typographies.labelMedium.copyWith(
-                    color: AppColors.red,
-                  ),
-                ),
               ),
-              const SizedBox(width: 20),
-              GestureDetector(
-                onTap: isMutating || card.isDefault
-                    ? null
-                    : () => context.read<CardsCubit>().setDefaultCard(card.id),
-                child: Text(
-                  card.isDefault
-                      ? t.billing.default_card
-                      : t.billing.set_default_card,
-                  style: Typographies.labelMedium.copyWith(
-                    color: card.isDefault
-                        ? AppColors.primaryDark
-                        : AppColors.mutedBlack,
-                  ),
+              const SizedBox(width: 8),
+              if (card.isDefault)
+                const DefaultCardBadge()
+              else
+                AppTextButton(
+                  title: t.billing.set_default_card,
+                  color: AppColors.mutedBlack,
+                  textStyle: Typographies.labelMedium,
+                  onTap: isMutating
+                      ? null
+                      : () =>
+                            context.read<CardsCubit>().setDefaultCard(card.id),
                 ),
-              ),
             ],
           ),
         ],

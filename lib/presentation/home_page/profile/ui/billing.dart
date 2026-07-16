@@ -6,13 +6,16 @@ import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cu
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/ui/card_otp_page.dart';
-import 'package:brandface/presentation/home_page/profile/ui/paylov_webview_page.dart';
+import 'package:brandface/presentation/home_page/profile/ui/components/payment_redirect_listener.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/card_brand_logo.dart';
+import 'package:brandface/uikit/components/default_card_badge.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/components/ui_components/title_description_widget.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
+import 'package:brandface/utils/extansions/card_mask_x.dart';
+import 'package:brandface/utils/extansions/plan_features_x.dart';
 import 'package:brandface/utils/extansions/snackbar_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,32 +47,26 @@ class _BillingState extends State<Billing> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<BillingCubit, BillingState>(
-          listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
-          listener: (context, state) => context.showAppSnackBar(
-            state.failure!.message,
-            type: AppSnackBarType.error,
+    return PaymentRedirectListener(
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<BillingCubit, BillingState>(
+            listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
+            listener: (context, state) => context.showAppSnackBar(
+              state.failure!.message,
+              type: AppSnackBarType.error,
+            ),
           ),
-        ),
-        BlocListener<BillingCubit, BillingState>(
-          listenWhen: (p, c) =>
-              p.paymentRedirect != c.paymentRedirect &&
-              c.paymentRedirect != null,
-          listener: (context, state) =>
-              _handlePaymentRedirect(context, state.paymentRedirect!),
-        ),
-        BlocListener<CardsCubit, CardsState>(
-          listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
-          listener: (context, state) => context.showAppSnackBar(
-            state.failure!.message,
-            type: AppSnackBarType.error,
+          BlocListener<CardsCubit, CardsState>(
+            listenWhen: (p, c) => p.failure != c.failure && c.failure != null,
+            listener: (context, state) => context.showAppSnackBar(
+              state.failure!.message,
+              type: AppSnackBarType.error,
+            ),
           ),
-        ),
-      ],
-      child: Scaffold(
-        backgroundColor: Colors.white,
+        ],
+        child: Scaffold(
+          backgroundColor: Colors.white,
         appBar: AppBar(title: Text(t.profile.billing), centerTitle: false),
         body: BlocBuilder<BillingCubit, BillingState>(
           builder: (context, state) {
@@ -115,6 +112,7 @@ class _BillingState extends State<Billing> {
               ],
             );
           },
+          ),
         ),
       ),
     );
@@ -248,17 +246,14 @@ class _BillingState extends State<Billing> {
                 ),
               if (subscription != null) ...[
                 const SizedBox(height: 12),
-                GestureDetector(
-                  onTap: state.isMutating
-                      ? null
-                      : () => context.read<BillingCubit>().cancelSubscription(),
-                  child: Center(
-                    child: Text(
-                      t.billing.cancel_subscription,
-                      style: Typographies.labelLarge.copyWith(
-                        color: AppColors.red,
-                      ),
-                    ),
+                Center(
+                  child: AppTextButton(
+                    title: t.billing.cancel_subscription,
+                    color: AppColors.red,
+                    onTap: state.isMutating
+                        ? null
+                        : () =>
+                              context.read<BillingCubit>().cancelSubscription(),
                   ),
                 ),
               ],
@@ -293,20 +288,13 @@ class _BillingState extends State<Billing> {
         if (index == cards.length) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: GestureDetector(
-              onTap: state.isMutating ? null : () => _openAddCardPage(context),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(AppAssets.icAdd),
-                    const SizedBox(width: 8),
-                    Text(
-                      t.billing.add_new_card,
-                      style: Typographies.labelLarge,
-                    ),
-                  ],
-                ),
+            child: Center(
+              child: AppTextButton(
+                title: t.billing.add_new_card,
+                leading: SvgPicture.asset(AppAssets.icAdd),
+                onTap: state.isMutating
+                    ? null
+                    : () => _openAddCardPage(context),
               ),
             ),
           );
@@ -323,7 +311,7 @@ class _BillingState extends State<Billing> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${_cardLabel(card.cardType)} • ${card.name}',
+                        '${_cardLabel(card.cardType)} • ${card.maskedNumber}',
                         style: Typographies.titleMedium,
                       ),
                       const SizedBox(height: 4),
@@ -346,34 +334,28 @@ class _BillingState extends State<Billing> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  GestureDetector(
+                  AppTextButton(
+                    title: t.billing.delete_card,
+                    color: AppColors.red,
+                    textStyle: Typographies.titleSmall,
                     onTap: state.isMutating
                         ? null
                         : () => context.read<CardsCubit>().deleteCard(card.id),
-                    child: Text(
-                      t.billing.delete_card,
-                      style: Typographies.titleSmall.copyWith(
-                        color: AppColors.red,
-                      ),
-                    ),
                   ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: state.isMutating || card.isDefault
-                        ? null
-                        : () =>
-                              context.read<CardsCubit>().setDefaultCard(card.id),
-                    child: Text(
-                      card.isDefault
-                          ? t.billing.default_card
-                          : t.billing.set_default_card,
-                      style: Typographies.titleSmall.copyWith(
-                        color: card.isDefault
-                            ? AppColors.primaryDark
-                            : AppColors.black,
-                      ),
+                  const SizedBox(width: 8),
+                  if (card.isDefault)
+                    const DefaultCardBadge()
+                  else
+                    AppTextButton(
+                      title: t.billing.set_default_card,
+                      color: AppColors.black,
+                      textStyle: Typographies.titleSmall,
+                      onTap: state.isMutating
+                          ? null
+                          : () => context
+                                .read<CardsCubit>()
+                                .setDefaultCard(card.id),
                     ),
-                  ),
                 ],
               ),
             ],
@@ -544,15 +526,7 @@ class _BillingState extends State<Billing> {
   }
 
   List<String> _extractFeatures(BillingPlanEntity plan) {
-    final normalized = (plan.features ?? '')
-        .replaceAll('\n', ',')
-        .replaceAll(';', ',')
-        .replaceAll('|', ',');
-    final parsed = normalized
-        .split(',')
-        .map((item) => item.trim())
-        .where((item) => item.isNotEmpty)
-        .toList();
+    final parsed = plan.featureList;
 
     if (parsed.isNotEmpty) {
       return parsed;
@@ -590,29 +564,6 @@ class _BillingState extends State<Billing> {
       );
     } finally {
       if (mounted) _isOpeningAddCard = false;
-    }
-  }
-
-  /// Opens the Paylov checkout in a WebView, then polls the transaction so the
-  /// UI reflects the payment once the webhook lands.
-  Future<void> _handlePaymentRedirect(
-    BuildContext context,
-    PaymentRedirect redirect,
-  ) async {
-    final billingCubit = context.read<BillingCubit>();
-    final reached = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: '/billing/paylov'),
-        builder: (_) => PaylovWebViewPage(
-          paymentUrl: redirect.paymentUrl,
-          returnUrl: kPaylovReturnUrl,
-        ),
-      ),
-    );
-    if (reached == true) {
-      await billingCubit.pollPaymentStatus(redirect.transactionId);
-    } else {
-      await billingCubit.loadBilling(force: true);
     }
   }
 
@@ -1013,15 +964,11 @@ class _AddCardPageState extends State<_AddCardPage> {
                         Expanded(
                           child: SizedBox(
                             height: 56,
-                            child: TextButton(
-                              onPressed: () => Navigator.of(context).maybePop(),
-                              style: TextButton.styleFrom(
-                                foregroundColor: AppColors.black,
-                                shape: const StadiumBorder(),
-                              ),
-                              child: Text(
-                                t.common.cancel,
-                                style: Typographies.labelLarge,
+                            child: Center(
+                              child: AppTextButton(
+                                title: t.common.cancel,
+                                color: AppColors.black,
+                                onTap: () => Navigator.of(context).maybePop(),
                               ),
                             ),
                           ),

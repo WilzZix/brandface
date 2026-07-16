@@ -160,7 +160,12 @@ final class BillingDataSourceImpl implements BillingDataSource {
 
   @override
   Future<BillingCardModel> setDefaultCard(int cardId) async {
-    final response = await _dioClient.patch(ApiRoutes.billingCard(cardId));
+    // Backend marks the card as default from this flag; a bodyless PATCH is a
+    // no-op, so the payload must carry it explicitly.
+    final response = await _dioClient.patch(
+      ApiRoutes.billingCard(cardId),
+      data: {'is_default': true},
+    );
     return BillingCardModel.fromJson(_extractMap(response.data));
   }
 

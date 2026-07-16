@@ -7,6 +7,7 @@ import 'package:brandface/domain/usecase/profile/get_influencer_profile_use_case
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_state.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/my_cards/cards_cubit.dart';
+import 'package:brandface/presentation/home_page/profile/ui/components/payment_redirect_listener.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/ui_components/app_container.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
@@ -44,7 +45,8 @@ class _TopProfilePageState extends State<TopProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BillingCubit, BillingState>(
+    return PaymentRedirectListener(
+      child: BlocListener<BillingCubit, BillingState>(
       listenWhen: (previous, current) =>
           previous.failure != current.failure ||
           (previous.isMutating && !current.isMutating),
@@ -125,6 +127,7 @@ class _TopProfilePageState extends State<TopProfilePage> {
             );
           },
         ),
+      ),
       ),
     );
   }
@@ -452,17 +455,15 @@ class _TopProfilePageState extends State<TopProfilePage> {
       return;
     }
 
+    // No saved card → pay via Paylov checkout link (opened by
+    // PaymentRedirectListener). With a card, it's charged immediately.
     final card = _selectedCard ?? context.read<CardsCubit>().state.defaultCard;
-    if (card == null) {
-      _showMessage(context, t.portfolio_ui.select_payment_method_first);
-      return;
-    }
 
     await context.read<BillingCubit>().boostProfile(
       BoostProfileParams(
         packageId: _selectedBoostPackageId!,
         paymentMethod: 'paylov',
-        cardId: card.id,
+        cardId: card?.id,
         returnUrl: kPaylovReturnUrl,
       ),
     );
@@ -477,17 +478,16 @@ class _TopProfilePageState extends State<TopProfilePage> {
       return;
     }
 
+    // No saved card → pay via Paylov checkout link (opened by
+    // PaymentRedirectListener). With a card, it's charged immediately.
     final card = _selectedCard ?? context.read<CardsCubit>().state.defaultCard;
-    if (card == null) {
-      _showMessage(context, t.portfolio_ui.select_payment_method_first);
-      return;
-    }
 
     await context.read<BillingCubit>().subscribeToPlan(
       SubscribeBillingPlanParams(
         planId: _selectedVipPlanId!,
         paymentMethod: 'paylov',
-        cardId: card.id,
+        cardId: card?.id,
+        returnUrl: kPaylovReturnUrl,
       ),
     );
   }

@@ -33,14 +33,28 @@ Failure _mapDioException(DioException e) {
     case DioExceptionType.badResponse:
     case DioExceptionType.unknown:
       final data = e.response?.data;
+      final rawMessage = _extractServerMessage(data);
       return ServerFailure(
-        _extractServerMessage(data) ??
+        (rawMessage == null ? null : _localizeGatewayMessage(rawMessage)) ??
             e.message ??
             'Serverda xatolik yuz berdi',
         statusCode: e.response?.statusCode,
         errorData: data,
       );
   }
+}
+
+/// The payment gateway (Paylov) returns some errors in English regardless of
+/// the app locale. Translate the ones we recognise into Uzbek so users don't
+/// see raw English like "Insufficient funds on the card."; anything unknown is
+/// passed through unchanged.
+String _localizeGatewayMessage(String message) {
+  final lower = message.toLowerCase();
+  if (lower.contains('insufficient funds') ||
+      lower.contains('insufficient balance')) {
+    return 'Kartada mablag\' yetarli emas.';
+  }
+  return message;
 }
 
 /// Pulls the human-readable error out of the backend's response envelope.
