@@ -1,5 +1,7 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/utils/services/profile_service.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
@@ -186,83 +188,181 @@ class _BillingState extends State<Billing> {
     required BillingState state,
   }) {
     final subscription = dashboard.subscription;
-    final plan =
-        subscription?.plan ??
-        (dashboard.plans.isNotEmpty ? dashboard.plans.first : null);
     final boostPackage = dashboard.boostPackages.isNotEmpty
         ? dashboard.boostPackages.first
         : null;
 
+    // Only show plans for the current user's role. The API tags each plan with
+    // an `audience` of 'brand' or 'influencer' (creator-side roles map to
+    // 'influencer'). Cheapest first so Start shows above Pro.
+    final role = sl<ProfileService>().getRole();
+    final audience = role == 'brand' ? 'brand' : 'influencer';
+    final plans =
+        dashboard.plans
+            .where((p) => p.audience == null || p.audience == audience)
+            .toList()
+          ..sort((a, b) => _priceValue(a).compareTo(_priceValue(b)));
+
+    if (plans.isEmpty) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          const SizedBox(height: 120),
+          Center(child: Text(t.billing.no_plan)),
+        ],
+      );
+    }
+
+    // The plan the user is on (or the cheapest as a sensible default).
+    final currentPlanId = subscription?.plan?.id ?? plans.first.id;
+
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
-        Text(t.billing.current_plan, style: Typographies.titleSmall),
+        Text(t.profile.pricing_tariffs, style: Typographies.titleSmall),
         const SizedBox(height: 12),
-        AppContainer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _statusBadge(plan?.name ?? t.billing.no_plan),
-              const SizedBox(height: 16),
-              const Divider(height: 1),
-              const SizedBox(height: 16),
-              _priceHeader(
-                _formatUsd(plan?.priceMonthlyUsd),
-                _buildMonthlySubtitle(plan),
-                _formatDate(subscription?.startedAt),
-              ),
-              const SizedBox(height: 16),
-              const Divider(height: 1),
-              const SizedBox(height: 20),
-              ..._buildFeatureItems(plan),
-              if (_buildFeatureItems(plan).isEmpty) ...[
-                _checkItem(t.billing.no_feature_details),
-              ],
-              const SizedBox(height: 20),
-              _payAsYouGoBanner(),
-              const SizedBox(height: 16),
-              _priceRow(
-                t.billing.contact_unlock,
-                _formatUsd(plan?.contactPriceUsd),
-              ),
-              _priceRow(
-                t.billing.profile_offer_boost,
-                boostPackage == null
-                    ? _formatUsd(plan?.boostPriceUsd)
-                    : '${_formatUsd(boostPackage.priceUsd)} / ${t.billing.days(days: boostPackage.days)}',
-              ),
-              const SizedBox(height: 20),
-              if (boostPackage != null)
-                SizedBox(
-                  width: double.infinity,
-                  child: AppButtons.primary(
-                    title: state.isMutating
-                        ? t.billing.processing
-                        : t.billing.boost_profile,
-                    onTap: state.isMutating
-                        ? null
-                        : () => _showBoostPackages(context, dashboard),
-                  ),
-                ),
-              if (subscription != null) ...[
-                const SizedBox(height: 12),
-                Center(
-                  child: AppTextButton(
-                    title: t.billing.cancel_subscription,
-                    color: AppColors.red,
-                    onTap: state.isMutating
-                        ? null
-                        : () =>
-                              context.read<BillingCubit>().cancelSubscription(),
-                  ),
-                ),
-              ],
-            ],
+        for (final plan in plans) ...[
+          _planCard(
+            context,
+            plan: plan,
+            isCurrent: plan.id == currentPlanId,
+            subscription: subscription,
+            boostPackage: boostPackage,
+            dashboard: dashboard,
+            state: state,
           ),
-        ),
+          const SizedBox(height: 12),
+        ],
       ],
     );
   }
+
+  Widget _planCard(
+    BuildContext context, {
+    required BillingPlanEntity plan,
+    required bool isCurrent,
+    required BillingSubscriptionEntity? subscription,
+    required BillingBoostPackageEntity? boostPackage,
+    required BillingDashboardEntity dashboard,
+    required BillingState state,
+  }) {
+    final features = _buildFeatureItems(plan);
+    final isFree = _priceValue(plan) == 0;
+    final hasActiveSub = subscription != null && subscription.isActive;
+
+    return AppContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _statusBadge(plan.name),
+              if (isCurrent) ...[const SizedBox(width: 8), _currentBadge()],
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Divider(height: 1),
+          const SizedBox(height: 16),
+          _priceHeader(
+            _formatUsd(plan.priceMonthlyUsd),
+            _buildMonthlySubtitle(plan),
+            isCurrent ? _formatDate(subscription?.startedAt) : '',
+          ),
+          const SizedBox(height: 16),
+          const Divider(height: 1),
+          const SizedBox(height: 20),
+          if (features.isEmpty)
+            _checkItem(t.billing.no_feature_details)
+          else
+            ...features,
+          // Pay-as-you-go add-ons only on the current plan to keep the other
+          // cards focused on comparison.
+          if (isCurrent) ...[
+            const SizedBox(height: 20),
+            _payAsYouGoBanner(),
+            const SizedBox(height: 16),
+            _priceRow(t.billing.contact_unlock, _formatUsd(plan.contactPriceUsd)),
+            _priceRow(
+              t.billing.profile_offer_boost,
+              boostPackage == null
+                  ? _formatUsd(plan.boostPriceUsd)
+                  : '${_formatUsd(boostPackage.priceUsd)} / ${t.billing.days(days: boostPackage.days)}',
+            ),
+          ],
+          const SizedBox(height: 20),
+          if (isCurrent) ...[
+            if (boostPackage != null)
+              SizedBox(
+                width: double.infinity,
+                child: AppButtons.primary(
+                  title: state.isMutating
+                      ? t.billing.processing
+                      : t.billing.boost_profile,
+                  onTap: state.isMutating
+                      ? null
+                      : () => _showBoostPackages(context, dashboard),
+                ),
+              ),
+            if (hasActiveSub) ...[
+              const SizedBox(height: 12),
+              Center(
+                child: AppTextButton(
+                  title: t.billing.cancel_subscription,
+                  color: AppColors.red,
+                  onTap: state.isMutating
+                      ? null
+                      : () =>
+                            context.read<BillingCubit>().cancelSubscription(),
+                ),
+              ),
+            ],
+          ] else if (!isFree)
+            SizedBox(
+              width: double.infinity,
+              child: AppButtons.primary(
+                title: state.isMutating ? t.billing.processing : t.common.select,
+                onTap: state.isMutating
+                    ? null
+                    : () => _subscribeToPlan(context, plan),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _currentBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        t.billing.current_plan,
+        style: Typographies.labelSmall.copyWith(color: AppColors.primaryDark),
+      ),
+    );
+  }
+
+  Future<void> _subscribeToPlan(
+    BuildContext context,
+    BillingPlanEntity plan,
+  ) async {
+    final defaultCard = context.read<CardsCubit>().state.defaultCard;
+    await context.read<BillingCubit>().subscribeToPlan(
+      SubscribeBillingPlanParams(
+        planId: plan.id,
+        paymentMethod: 'paylov',
+        cardId: defaultCard?.id,
+        returnUrl: kPaylovReturnUrl,
+      ),
+    );
+  }
+
+  static double _priceValue(BillingPlanEntity plan) =>
+      double.tryParse(plan.priceMonthlyUsd ?? '') ?? 0;
 
   Widget _buildMyCardsSection(
     BuildContext context, {
