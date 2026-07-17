@@ -626,6 +626,7 @@ class _TranslationsBillingUiRu implements TranslationsBillingUiEn {
 	@override String get deactivate_plan_message => 'Ваша подписка будет отменена. Вы можете возобновить её в любое время.';
 	@override String get deactivate => 'Отключить';
 	@override String get premium => 'PREMIUM';
+	@override String get upgrade_to_pro => 'Перейти на Pro';
 	@override String get deactivated => 'Отключено';
 	@override String get renewal_date => 'Дата продления';
 	@override String get no_card_added => 'Карта не добавлена';
@@ -1266,6 +1267,7 @@ extension on TranslationsRu {
 			'billing_ui.deactivate_plan_message' => 'Ваша подписка будет отменена. Вы можете возобновить её в любое время.',
 			'billing_ui.deactivate' => 'Отключить',
 			'billing_ui.premium' => 'PREMIUM',
+			'billing_ui.upgrade_to_pro' => 'Перейти на Pro',
 			'billing_ui.deactivated' => 'Отключено',
 			'billing_ui.renewal_date' => 'Дата продления',
 			'billing_ui.no_card_added' => 'Карта не добавлена',
@@ -1378,9 +1380,9 @@ extension on TranslationsRu {
 			'portfolio_ui.select_top_package_first' => 'Сначала выберите пакет TOP.',
 			'portfolio_ui.select_payment_method_first' => 'Сначала выберите способ оплаты.',
 			'portfolio_ui.select_vip_plan_first' => 'Сначала выберите VIP-план.',
-			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} дн. / ${amount}',
 			_ => null,
 		} ?? switch (path) {
+			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} дн. / ${amount}',
 			'portfolio_ui.expiration_date' => 'Дата окончания',
 			'portfolio_ui.top_profile_load_failed' => 'Не удалось загрузить данные TOP-профиля.',
 			'collab.required' => 'Обязательно',

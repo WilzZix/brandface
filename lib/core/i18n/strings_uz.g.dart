@@ -626,6 +626,7 @@ class _TranslationsBillingUiUz implements TranslationsBillingUiEn {
 	@override String get deactivate_plan_message => 'Obunangiz bekor qilinadi. Istalgan vaqtda qayta faollashtirishingiz mumkin.';
 	@override String get deactivate => 'O\'chirish';
 	@override String get premium => 'PREMIUM';
+	@override String get upgrade_to_pro => 'Pro\'ga o\'tish';
 	@override String get deactivated => 'O\'chirilgan';
 	@override String get renewal_date => 'Yangilanish sanasi';
 	@override String get no_card_added => 'Karta qo\'shilmagan';
@@ -1266,6 +1267,7 @@ extension on TranslationsUz {
 			'billing_ui.deactivate_plan_message' => 'Obunangiz bekor qilinadi. Istalgan vaqtda qayta faollashtirishingiz mumkin.',
 			'billing_ui.deactivate' => 'O\'chirish',
 			'billing_ui.premium' => 'PREMIUM',
+			'billing_ui.upgrade_to_pro' => 'Pro\'ga o\'tish',
 			'billing_ui.deactivated' => 'O\'chirilgan',
 			'billing_ui.renewal_date' => 'Yangilanish sanasi',
 			'billing_ui.no_card_added' => 'Karta qo\'shilmagan',
@@ -1378,9 +1380,9 @@ extension on TranslationsUz {
 			'portfolio_ui.select_top_package_first' => 'Avval TOP paketni tanlang.',
 			'portfolio_ui.select_payment_method_first' => 'Avval to\'lov usulini tanlang.',
 			'portfolio_ui.select_vip_plan_first' => 'Avval VIP tarifni tanlang.',
-			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} kun / ${amount}',
 			_ => null,
 		} ?? switch (path) {
+			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} kun / ${amount}',
 			'portfolio_ui.expiration_date' => 'Amal qilish muddati',
 			'portfolio_ui.top_profile_load_failed' => 'TOP profil ma\'lumotlarini yuklab bo\'lmadi.',
 			'collab.required' => 'Majburiy',

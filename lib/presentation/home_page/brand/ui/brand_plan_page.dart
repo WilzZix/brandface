@@ -1,5 +1,7 @@
 import 'package:brandface/core/constants/app_assets.dart';
+import 'package:brandface/core/di/app_di.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
+import 'package:brandface/utils/services/profile_service.dart';
 import 'package:brandface/domain/entities/billing/billing_entities.dart';
 import 'package:brandface/domain/repository/billing_repository.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/billing/billing_cubit.dart';
@@ -113,6 +115,11 @@ class _PlanContentState extends State<_PlanContent> {
   final _couponController = TextEditingController();
   String _selectedPaymentMethod = 'payme';
 
+  /// When the free (Minimal) user taps "Pro'ga o'tish" the card switches to the
+  /// Pro plan in activate mode (coupon + payment + Activate) — no subscription
+  /// exists yet. Resetting it returns to the Minimal view.
+  bool _showProUpgrade = false;
+
   BillingCardEntity? get _defaultCard {
     for (final card in widget.cards) {
       if (card.isDefault) return card;
@@ -127,9 +134,26 @@ class _PlanContentState extends State<_PlanContent> {
   }
 
   BillingSubscriptionEntity? get _sub => widget.dashboard.subscription;
-  BillingPlanEntity? get _plan =>
-      _sub?.plan ??
-      (widget.dashboard.plans.isNotEmpty ? widget.dashboard.plans.first : null);
+
+  static double _priceOf(BillingPlanEntity p) =>
+      double.tryParse(p.priceMonthlyUsd ?? '') ?? 0;
+
+  /// Plans for the current user's role only, cheapest first. The API tags each
+  /// plan with an `audience` ('brand' / 'influencer').
+  List<BillingPlanEntity> get _rolePlans {
+    final role = sl<ProfileService>().getRole();
+    final audience = role == 'brand' ? 'brand' : 'influencer';
+    return widget.dashboard.plans
+        .where((p) => p.audience == null || p.audience == audience)
+        .toList()
+      ..sort((a, b) => _priceOf(a).compareTo(_priceOf(b)));
+  }
+
+  BillingPlanEntity? get _plan {
+    if (_sub?.plan != null) return _sub!.plan;
+    final plans = _rolePlans;
+    return plans.isNotEmpty ? plans.first : null;
+  }
 
   // ── State helpers ─────────────────────────────────────────────────────────
   bool _isPremiumPlan(BillingPlanEntity? p) =>
@@ -142,6 +166,22 @@ class _PlanContentState extends State<_PlanContent> {
 
   bool get _isPremiumInactive =>
       _sub != null && !_sub!.isActive && _isPremiumPlan(_plan);
+
+  /// The paid plan for this role (Pro), if any.
+  BillingPlanEntity? get _proPlan {
+    for (final p in _rolePlans) {
+      if (_isPremiumPlan(p)) return p;
+    }
+    return null;
+  }
+
+  /// The plan shown in the card: the Pro plan while previewing an upgrade,
+  /// otherwise the current plan.
+  BillingPlanEntity? get _displayPlan => _showProUpgrade ? _proPlan : _plan;
+
+  /// Show the activate flow (coupon + payment method + Activate) — either for a
+  /// deactivated Pro subscription or while previewing a Pro upgrade.
+  bool get _showActivateFlow => _isPremiumInactive || _showProUpgrade;
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +196,12 @@ class _PlanContentState extends State<_PlanContent> {
   }
 
   Widget _buildPlanCard(BuildContext context) {
+    final plan = _displayPlan;
+    // Offer the upgrade CTA only on the plain Minimal view when a Pro plan
+    // exists to upgrade to.
+    final showUpgradeCta = !_isPremiumActive &&
+        !_showActivateFlow &&
+        _proPlan != null;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -165,11 +211,12 @@ class _PlanContentState extends State<_PlanContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Status badge ────────────────────────────────────────────
+          // ── Status badge: Premium while active or previewing an upgrade;
+          //    Deactivated for a real inactive sub; else Minimal ──────────
           _StatusBadge(
-            isPremiumActive: _isPremiumActive,
-            isPremiumInactive: _isPremiumInactive,
-            planName: _plan?.name ?? t.billing_ui.minimal,
+            isPremiumActive: _isPremiumActive || _showProUpgrade,
+            isPremiumInactive: _isPremiumInactive && !_showProUpgrade,
+            planName: plan?.name ?? t.billing_ui.minimal,
           ),
           const SizedBox(height: 16),
           const Divider(height: 1),
@@ -177,7 +224,7 @@ class _PlanContentState extends State<_PlanContent> {
 
           // ── Price row ───────────────────────────────────────────────
           _PriceRow(
-            plan: _plan,
+            plan: plan,
             subscription: _sub,
             isPremiumActive: _isPremiumActive,
             onDeactivate: widget.isMutating
@@ -193,8 +240,9 @@ class _PlanContentState extends State<_PlanContent> {
             _CardRow(card: _defaultCard),
           ],
 
-          // ── Inactive: coupon + payment + activate ───────────────────
-          if (_isPremiumInactive) ...[
+          // ── Activate flow: coupon + payment + activate (deactivated sub
+          //    or Pro upgrade preview) ────────────────────────────────────
+          if (_showActivateFlow) ...[
             const SizedBox(height: 16),
             _CouponRow(controller: _couponController),
             const SizedBox(height: 12),
@@ -206,6 +254,20 @@ class _PlanContentState extends State<_PlanContent> {
                   setState(() => _selectedPaymentMethod = v),
               onActivate: () => _activate(context),
             ),
+            if (_showProUpgrade) ...[
+              const SizedBox(height: 8),
+              Center(
+                child: GestureDetector(
+                  onTap: () => setState(() => _showProUpgrade = false),
+                  child: Text(
+                    t.common.cancel,
+                    style: Typographies.labelLarge.copyWith(
+                      color: AppColors.mutedBlack,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
 
           const SizedBox(height: 20),
@@ -213,15 +275,41 @@ class _PlanContentState extends State<_PlanContent> {
           const SizedBox(height: 20),
 
           // ── Features list (from API) ────────────────────────────────
-          if (_featuresList(_plan).isEmpty)
+          if (_featuresList(plan).isEmpty)
             _FeatureRow(text: t.billing.no_feature_details)
           else
-            ..._featuresList(_plan).map((f) => _FeatureRow(text: f)),
+            ..._featuresList(plan).map((f) => _FeatureRow(text: f)),
 
           const SizedBox(height: 4),
 
           // ── Pay-as-you-go add-ons ────────────────────────────────────
-          _PayAsYouGo(plan: _plan, dashboard: widget.dashboard),
+          _PayAsYouGo(plan: plan, dashboard: widget.dashboard),
+
+          // ── Upgrade CTA (Minimal → Pro) ─────────────────────────────
+          if (showUpgradeCta) ...[
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: GestureDetector(
+                onTap: () => setState(() => _showProUpgrade = true),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      t.billing_ui.upgrade_to_pro,
+                      style: Typographies.labelLarge.copyWith(
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -256,14 +344,13 @@ class _PlanContentState extends State<_PlanContent> {
   }
 
   Future<void> _activate(BuildContext context) async {
-    final premiumPlan = widget.dashboard.plans.firstWhere(
-      (p) =>
-          p.priceMonthlyUsd != null &&
-          double.tryParse(p.priceMonthlyUsd!) != 0,
-      orElse: () =>
-          widget.dashboard.plans.isNotEmpty
-              ? widget.dashboard.plans.last
-              : const BillingPlanEntity(id: 0, name: ''),
+    // Pick the paid plan for this role (Pro), not just any plan in the list.
+    final rolePlans = _rolePlans;
+    final premiumPlan = rolePlans.firstWhere(
+      (p) => _isPremiumPlan(p),
+      orElse: () => rolePlans.isNotEmpty
+          ? rolePlans.last
+          : const BillingPlanEntity(id: 0, name: ''),
     );
     if (premiumPlan.id == 0) return;
 

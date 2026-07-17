@@ -1419,6 +1419,9 @@ class TranslationsBillingUiEn {
 	/// en: 'PREMIUM'
 	String get premium => 'PREMIUM';
 
+	/// en: 'Upgrade to Pro'
+	String get upgrade_to_pro => 'Upgrade to Pro';
+
 	/// en: 'Deactivated'
 	String get deactivated => 'Deactivated';
 
@@ -2430,6 +2433,7 @@ extension on Translations {
 			'billing_ui.deactivate_plan_message' => 'Your subscription will be cancelled. You can reactivate at any time.',
 			'billing_ui.deactivate' => 'Deactivate',
 			'billing_ui.premium' => 'PREMIUM',
+			'billing_ui.upgrade_to_pro' => 'Upgrade to Pro',
 			'billing_ui.deactivated' => 'Deactivated',
 			'billing_ui.renewal_date' => 'Renewal date',
 			'billing_ui.no_card_added' => 'No card added',
@@ -2542,9 +2546,9 @@ extension on Translations {
 			'portfolio_ui.select_top_package_first' => 'Select a TOP package first.',
 			'portfolio_ui.select_payment_method_first' => 'Select a payment method first.',
 			'portfolio_ui.select_vip_plan_first' => 'Select a VIP plan first.',
-			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} days / ${amount}',
 			_ => null,
 		} ?? switch (path) {
+			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} days / ${amount}',
 			'portfolio_ui.expiration_date' => 'Expiration date',
 			'portfolio_ui.top_profile_load_failed' => 'TOP profile data could not be loaded.',
 			'collab.required' => 'Required',

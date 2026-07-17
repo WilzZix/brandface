@@ -157,6 +157,9 @@ class _BrandHomePageState extends State<BrandHomePage> {
                               child: _BrandStatCard(
                                 title: activeOffers,
                                 description: t.common.active_offers,
+                                onTap: () => context.pushNamed(
+                                  CollaborationOffersPage.tag,
+                                ),
                               ),
                             ),
                             SizedBox(width: 8),
@@ -164,6 +167,9 @@ class _BrandHomePageState extends State<BrandHomePage> {
                               child: _BrandStatCard(
                                 title: applications,
                                 description: t.brand.new_applications,
+                                onTap: () => context.pushNamed(
+                                  CollaborationOffersPage.tag,
+                                ),
                               ),
                             ),
                           ],
@@ -491,27 +497,36 @@ class _BrandAvatar extends StatelessWidget {
 }
 
 class _BrandStatCard extends StatelessWidget {
-  const _BrandStatCard({required this.title, required this.description});
+  const _BrandStatCard({
+    required this.title,
+    required this.description,
+    this.onTap,
+  });
 
   final String title;
   final String description;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      decoration: BoxDecoration(
-        color: AppColors.lightBg3,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title, style: Typographies.headlineMedium),
-          const SizedBox(height: 8),
-          Text(description, style: Typographies.bodyMedium),
-        ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        decoration: BoxDecoration(
+          color: AppColors.lightBg3,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(title, style: Typographies.headlineMedium),
+            const SizedBox(height: 8),
+            Text(description, style: Typographies.bodyMedium),
+          ],
+        ),
       ),
     );
   }
