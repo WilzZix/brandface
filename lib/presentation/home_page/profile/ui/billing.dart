@@ -25,11 +25,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Billing extends StatefulWidget {
-  const Billing({super.key, this.initialTab = 0});
+  const Billing({super.key, this.initialTab = 0, this.historyOnly = false});
 
   static const String tag = '/billing';
 
   final int initialTab;
+
+  /// When true, show only the payments history — no Plan / My cards tabs.
+  /// Used by roles (e.g. brand) whose profile menu links Plan and My cards to
+  /// their own dedicated pages, so "Billing history" should be just the list.
+  final bool historyOnly;
 
   @override
   State<Billing> createState() => _BillingState();
@@ -69,7 +74,12 @@ class _BillingState extends State<Billing> {
         ],
         child: Scaffold(
           backgroundColor: Colors.white,
-        appBar: AppBar(title: Text(t.profile.billing), centerTitle: false),
+        appBar: AppBar(
+          title: Text(
+            widget.historyOnly ? t.billing.history_tab : t.profile.billing,
+          ),
+          centerTitle: false,
+        ),
         body: BlocBuilder<BillingCubit, BillingState>(
           builder: (context, state) {
             final dashboard = state.dashboard;
@@ -89,11 +99,13 @@ class _BillingState extends State<Billing> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _buildTabSelector(),
-                ),
-                const SizedBox(height: 30),
+                if (!widget.historyOnly) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: _buildTabSelector(),
+                  ),
+                  const SizedBox(height: 30),
+                ],
                 if (state.status == BillingStatus.loading)
                   const Padding(
                     padding: EdgeInsets.only(bottom: 12),
@@ -104,11 +116,16 @@ class _BillingState extends State<Billing> {
                     color: AppColors.black,
                     onRefresh: () =>
                         context.read<BillingCubit>().loadBilling(force: true),
-                    child: _buildCurrentContent(
-                      context,
-                      state: state,
-                      dashboard: dashboard ?? const BillingDashboardEntity(),
-                    ),
+                    child: widget.historyOnly
+                        ? _buildBillingHistorySection(
+                            dashboard ?? const BillingDashboardEntity(),
+                          )
+                        : _buildCurrentContent(
+                            context,
+                            state: state,
+                            dashboard:
+                                dashboard ?? const BillingDashboardEntity(),
+                          ),
                   ),
                 ),
               ],

@@ -344,21 +344,27 @@ class _PlanContentState extends State<_PlanContent> {
   }
 
   Future<void> _activate(BuildContext context) async {
-    // Pick the paid plan for this role (Pro), not just any plan in the list.
-    final rolePlans = _rolePlans;
-    final premiumPlan = rolePlans.firstWhere(
-      (p) => _isPremiumPlan(p),
-      orElse: () => rolePlans.isNotEmpty
-          ? rolePlans.last
-          : const BillingPlanEntity(id: 0, name: ''),
-    );
-    if (premiumPlan.id == 0) return;
+    // Pick the paid plan for this role (Pro). Uses a loop-based getter rather
+    // than firstWhere+orElse: `_rolePlans` is a List<BillingPlanModel> at
+    // runtime, so an orElse returning a bare BillingPlanEntity would throw a
+    // "not a subtype" type error.
+    final premiumPlan = _proPlan;
+    if (premiumPlan == null) return;
 
-    final cardId = _defaultCard?.id;
+    // The selector encodes a saved card as `card_<id>`. The backend expects
+    // payment_method 'paylov' + card_id (immediate charge) — NOT the internal
+    // `card_<id>` token (which 400s: "card_12 is not a valid choice"). Any
+    // non-card selection falls back to a Paylov checkout link (no card_id).
+    final sel = _selectedPaymentMethod;
+    final isSavedCard = sel.startsWith('card_');
+    final cardId = isSavedCard
+        ? int.tryParse(sel.substring('card_'.length))
+        : null;
+
     context.read<BillingCubit>().subscribeToPlan(
           SubscribeBillingPlanParams(
             planId: premiumPlan.id,
-            paymentMethod: _selectedPaymentMethod,
+            paymentMethod: 'paylov',
             cardId: cardId,
             // No saved card → backend returns a checkout link; return_url lets
             // PaymentRedirectListener intercept the WebView completion.

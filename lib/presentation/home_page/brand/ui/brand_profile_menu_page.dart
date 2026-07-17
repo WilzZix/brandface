@@ -74,7 +74,7 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
             Divider(color: AppColors.borderColor),
             _menuItem(
               title: t.billing.history_tab,
-              onTap: () => _openBilling(context, initialTab: 2),
+              onTap: () => _openBilling(context, historyOnly: true),
             ),
             Divider(color: AppColors.borderColor),
             GestureDetector(
@@ -141,7 +141,11 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
     );
   }
 
-  void _openBilling(BuildContext context, {required int initialTab}) {
+  void _openBilling(
+    BuildContext context, {
+    int initialTab = 0,
+    bool historyOnly = false,
+  }) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => MultiBlocProvider(
@@ -149,7 +153,7 @@ class _BrandProfileMenuPageState extends State<BrandProfileMenuPage> {
             BlocProvider(create: (_) => sl<BillingCubit>()..loadBilling()),
             BlocProvider(create: (_) => sl<CardsCubit>()..loadCards()),
           ],
-          child: Billing(initialTab: initialTab),
+          child: Billing(initialTab: initialTab, historyOnly: historyOnly),
         ),
       ),
     );
