@@ -20,11 +20,12 @@ class AmbassadorsPageArguments {
 }
 
 class AmbassadorsPage extends StatefulWidget {
-  const AmbassadorsPage({super.key, this.title});
+  const AmbassadorsPage({super.key, this.title, this.role});
 
   static const String tag = '/ambassadors';
 
   final String? title;
+  final String? role;
 
   @override
   State<AmbassadorsPage> createState() => _AmbassadorsPageState();
@@ -55,6 +56,19 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
         return '-years_of_experience';
     }
   }
+
+  /// Role-aware count label. `widget.title` is the localized plural noun
+  /// (Influencers / Ambassadors / Brandfaces), so the label matches the role
+  /// instead of always saying "ambassadors".
+  String _countLabel(int count) =>
+      '$count ${widget.title ?? t.brand.ambassadors}';
+
+  /// Role-aware title for the details page opened from this list.
+  String get _detailsTitle => switch (widget.role) {
+    'influencer' => t.ambassador.influencer_details,
+    'brandface' => t.ambassador.brandface_details,
+    _ => t.ambassador.ambassador_details,
+  };
 
   Future<void> _showSortSheet() async {
     final cubit = context.read<AmbassadorsCubit>();
@@ -167,7 +181,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
               builder: (context, state) {
                 if (state is AmbassadorsLoaded) {
                   return Text(
-                    t.brand.ambassadors_found(count: state.ambassadors.length),
+                    _countLabel(state.ambassadors.length),
                     style: Typographies.bodyMedium.copyWith(
                       color: AppColors.mutedBlack,
                     ),
@@ -175,7 +189,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
                 }
                 if (state is AmbassadorsLoading) {
                   return Text(
-                    t.brand.ambassadors_found(count: 0),
+                    _countLabel(0),
                     style: Typographies.bodyMedium.copyWith(
                       color: AppColors.mutedBlack,
                     ),
@@ -218,7 +232,7 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
                     itemBuilder: (context, index) => GestureDetector(
                       onTap: () => context.pushNamed(
                         AmbassadorDetailsPage.tag,
-                        extra: state.ambassadors[index].id,
+                        extra: (state.ambassadors[index].id, _detailsTitle),
                       ),
                       child: _AmbassadorCard(
                         ambassador: state.ambassadors[index],

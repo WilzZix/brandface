@@ -484,6 +484,8 @@
   },
   "ambassador": {
     "ambassador_details": "Ambassador details",
+    "influencer_details": "Influencer details",
+    "brandface_details": "Brandface details",
     "information": "Information",
     "no_information_provided": "No information provided.",
     "niche": "Niche",

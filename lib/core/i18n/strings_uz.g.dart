@@ -680,6 +680,8 @@ class _TranslationsAmbassadorUz implements TranslationsAmbassadorEn {
 
 	// Translations
 	@override String get ambassador_details => 'Ambassador tafsilotlari';
+	@override String get influencer_details => 'Influencer tafsilotlari';
+	@override String get brandface_details => 'Brandface tafsilotlari';
 	@override String get information => 'Ma\'lumot';
 	@override String get no_information_provided => 'Ma\'lumot berilmagan.';
 	@override String get niche => 'Yo\'nalish';
@@ -1312,6 +1314,8 @@ extension on TranslationsUz {
 			'billing_ui.sms_code_sent_to' => ({required Object phone}) => '${phone} raqamiga SMS kod yubordik,\nuni quyida kiriting',
 			'billing_ui.payment' => 'To\'lov',
 			'ambassador.ambassador_details' => 'Ambassador tafsilotlari',
+			'ambassador.influencer_details' => 'Influencer tafsilotlari',
+			'ambassador.brandface_details' => 'Brandface tafsilotlari',
 			'ambassador.information' => 'Ma\'lumot',
 			'ambassador.no_information_provided' => 'Ma\'lumot berilmagan.',
 			'ambassador.niche' => 'Yo\'nalish',
@@ -1378,10 +1382,10 @@ extension on TranslationsUz {
 			'portfolio_ui.receipt' => 'Kvitansiya',
 			'portfolio_ui.download' => 'Yuklab olish',
 			'portfolio_ui.select_top_package_first' => 'Avval TOP paketni tanlang.',
-			'portfolio_ui.select_payment_method_first' => 'Avval to\'lov usulini tanlang.',
-			'portfolio_ui.select_vip_plan_first' => 'Avval VIP tarifni tanlang.',
 			_ => null,
 		} ?? switch (path) {
+			'portfolio_ui.select_payment_method_first' => 'Avval to\'lov usulini tanlang.',
+			'portfolio_ui.select_vip_plan_first' => 'Avval VIP tarifni tanlang.',
 			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} kun / ${amount}',
 			'portfolio_ui.expiration_date' => 'Amal qilish muddati',
 			'portfolio_ui.top_profile_load_failed' => 'TOP profil ma\'lumotlarini yuklab bo\'lmadi.',

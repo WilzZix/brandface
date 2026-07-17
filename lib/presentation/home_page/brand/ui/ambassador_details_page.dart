@@ -20,11 +20,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AmbassadorDetailsPage extends StatelessWidget {
-  const AmbassadorDetailsPage({super.key, required this.ambassadorId});
+  const AmbassadorDetailsPage({
+    super.key,
+    required this.ambassadorId,
+    this.title,
+  });
 
   static const String tag = '/ambassador-details';
 
   final int ambassadorId;
+
+  /// Role-aware AppBar title (e.g. "Influencer details"). Falls back to
+  /// "Ambassador details" when opened from a non-role-specific context.
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +53,17 @@ class AmbassadorDetailsPage extends StatelessWidget {
           );
         }
         final detail = (state as AmbassadorDetailLoaded).detail;
-        return _DetailsScaffold(detail: detail);
+        return _DetailsScaffold(detail: detail, title: title);
       },
     );
   }
 }
 
 class _DetailsScaffold extends StatelessWidget {
-  const _DetailsScaffold({required this.detail});
+  const _DetailsScaffold({required this.detail, this.title});
 
   final AmbassadorDetailEntity detail;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +74,7 @@ class _DetailsScaffold extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: AppColors.lightBg,
           scrolledUnderElevation: 0,
-          title: Text(t.ambassador.ambassador_details, style: Typographies.titleMedium),
+          title: Text(title ?? t.ambassador.ambassador_details, style: Typographies.titleMedium),
           centerTitle: false,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(80),

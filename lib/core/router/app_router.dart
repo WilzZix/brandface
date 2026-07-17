@@ -416,7 +416,7 @@ final class AppRouter {
           final args = state.extra as AmbassadorsPageArguments?;
           return BlocProvider<AmbassadorsCubit>(
             create: (context) => sl<AmbassadorsCubit>()..load(role: args?.role),
-            child: AmbassadorsPage(title: args?.title),
+            child: AmbassadorsPage(title: args?.title, role: args?.role),
           );
         },
       ),
@@ -438,7 +438,18 @@ final class AppRouter {
         path: AmbassadorDetailsPage.tag,
         name: AmbassadorDetailsPage.tag,
         builder: (_, state) {
-          final ambassadorId = state.extra as int;
+          // extra is either a plain int (id) or a (int id, String? title) record
+          // when opened from a role-specific list.
+          final extra = state.extra;
+          final int ambassadorId;
+          final String? title;
+          if (extra is (int, String?)) {
+            ambassadorId = extra.$1;
+            title = extra.$2;
+          } else {
+            ambassadorId = extra as int;
+            title = null;
+          }
           return MultiBlocProvider(
             providers: [
               BlocProvider(
@@ -449,7 +460,10 @@ final class AppRouter {
                     sl<AmbassadorPortfolioCubit>()..load(ambassadorId),
               ),
             ],
-            child: AmbassadorDetailsPage(ambassadorId: ambassadorId),
+            child: AmbassadorDetailsPage(
+              ambassadorId: ambassadorId,
+              title: title,
+            ),
           );
         },
       ),

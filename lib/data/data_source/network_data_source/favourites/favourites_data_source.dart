@@ -34,11 +34,10 @@ final class FavouritesDataSourceImpl implements FavouritesDataSource {
 
   @override
   Future<void> addFavourite({required int influencerId}) async {
-    // NOTE: assumed payload `{"influencer": <id>}` — adjust if backend differs.
-    await _dioClient.post(
-      ApiRoutes.favourites,
-      data: {'influencer': influencerId},
-    );
+    // The list endpoint (`favourites/v1/`) is GET-only (405 on POST). The
+    // favourite is a per-item resource: POST to add, DELETE to remove — both on
+    // `favourites/v1/<id>/`, mirroring [removeFavourite].
+    await _dioClient.post(ApiRoutes.favouriteItem(influencerId));
   }
 
   @override

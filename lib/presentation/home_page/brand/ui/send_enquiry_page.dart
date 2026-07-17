@@ -5,6 +5,7 @@ import 'package:brandface/presentation/home_page/brand/bloc/send_enquiry/send_en
 import 'package:brandface/uikit/components/bottom_sheet/brandface_bottom_sheet.dart';
 import 'package:brandface/uikit/components/buttons/buttons.dart';
 import 'package:brandface/uikit/components/inputs/cred_input_field.dart';
+import 'package:brandface/uikit/components/inputs/phone_input_field.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:brandface/utils/extansions/snackbar_x.dart';
@@ -126,9 +127,9 @@ class _SendEnquiryViewState extends State<_SendEnquiryView> {
                       ),
                       const SizedBox(height: 16),
                       _label(t.collab.contact_number),
-                      CredInputField(
+                      PhoneInputField(
                         controller: _contactNumberController,
-                        label: t.collab.write_contact_number,
+                        labelText: t.collab.write_contact_number,
                         validator: _required,
                       ),
                       const SizedBox(height: 16),
@@ -142,19 +143,31 @@ class _SendEnquiryViewState extends State<_SendEnquiryView> {
                           hintStyle: Typographies.bodyMedium.copyWith(
                             color: AppColors.grey,
                           ),
-                          filled: true,
-                          fillColor: AppColors.lightBg2,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                          // Match the other fields: no grey fill, primary focus
+                          // border (not the default Material purple).
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppColors.borderColor,
-                            ),
+                            borderSide: BorderSide(color: AppColors.borderColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppColors.borderColor,
-                            ),
+                            borderSide: BorderSide(color: AppColors.borderColor),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(color: AppColors.primary),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(color: AppColors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(color: AppColors.red),
                           ),
                         ),
                       ),

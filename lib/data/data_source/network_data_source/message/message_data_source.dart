@@ -34,8 +34,12 @@ final class MessageDataSourceImpl implements MessageDataSource {
       ApiRoutes.conversations,
       data: {'other_user_id': otherUserId},
     );
-    final map = _readMap(response.data);
-    final id = (map['id'] ?? map['conversation_id']) as int?;
+    final root = _readMap(response.data);
+    // The API wraps the conversation in a `data` envelope:
+    // {"message": "...", "data": {"id": 2, ...}} — so the id lives under `data`,
+    // not at the root. Fall back to the root for a flat response.
+    final body = root['data'] is Map ? _readMap(root['data']) : root;
+    final id = (body['id'] ?? body['conversation_id']) as int?;
     if (id == null) {
       throw StateError('Conversation id missing in response');
     }

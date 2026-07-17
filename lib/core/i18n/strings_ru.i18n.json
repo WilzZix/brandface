@@ -484,6 +484,8 @@
   },
   "ambassador": {
     "ambassador_details": "Детали амбассадора",
+    "influencer_details": "Детали инфлюенсера",
+    "brandface_details": "Детали Brandface",
     "information": "Информация",
     "no_information_provided": "Информация не указана.",
     "niche": "Ниша",

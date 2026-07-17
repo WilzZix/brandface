@@ -680,6 +680,8 @@ class _TranslationsAmbassadorRu implements TranslationsAmbassadorEn {
 
 	// Translations
 	@override String get ambassador_details => 'Детали амбассадора';
+	@override String get influencer_details => 'Детали инфлюенсера';
+	@override String get brandface_details => 'Детали Brandface';
 	@override String get information => 'Информация';
 	@override String get no_information_provided => 'Информация не указана.';
 	@override String get niche => 'Ниша';
@@ -1312,6 +1314,8 @@ extension on TranslationsRu {
 			'billing_ui.sms_code_sent_to' => ({required Object phone}) => 'Мы отправили SMS-код на ${phone},\nвведите его ниже',
 			'billing_ui.payment' => 'Оплата',
 			'ambassador.ambassador_details' => 'Детали амбассадора',
+			'ambassador.influencer_details' => 'Детали инфлюенсера',
+			'ambassador.brandface_details' => 'Детали Brandface',
 			'ambassador.information' => 'Информация',
 			'ambassador.no_information_provided' => 'Информация не указана.',
 			'ambassador.niche' => 'Ниша',
@@ -1378,10 +1382,10 @@ extension on TranslationsRu {
 			'portfolio_ui.receipt' => 'Квитанция',
 			'portfolio_ui.download' => 'Скачать',
 			'portfolio_ui.select_top_package_first' => 'Сначала выберите пакет TOP.',
-			'portfolio_ui.select_payment_method_first' => 'Сначала выберите способ оплаты.',
-			'portfolio_ui.select_vip_plan_first' => 'Сначала выберите VIP-план.',
 			_ => null,
 		} ?? switch (path) {
+			'portfolio_ui.select_payment_method_first' => 'Сначала выберите способ оплаты.',
+			'portfolio_ui.select_vip_plan_first' => 'Сначала выберите VIP-план.',
 			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} дн. / ${amount}',
 			'portfolio_ui.expiration_date' => 'Дата окончания',
 			'portfolio_ui.top_profile_load_failed' => 'Не удалось загрузить данные TOP-профиля.',

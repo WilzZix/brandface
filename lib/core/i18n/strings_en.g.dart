@@ -1563,6 +1563,12 @@ class TranslationsAmbassadorEn {
 	/// en: 'Ambassador details'
 	String get ambassador_details => 'Ambassador details';
 
+	/// en: 'Influencer details'
+	String get influencer_details => 'Influencer details';
+
+	/// en: 'Brandface details'
+	String get brandface_details => 'Brandface details';
+
 	/// en: 'Information'
 	String get information => 'Information';
 
@@ -2478,6 +2484,8 @@ extension on Translations {
 			'billing_ui.sms_code_sent_to' => ({required Object phone}) => 'We sent an SMS code to ${phone},\nplease enter it below',
 			'billing_ui.payment' => 'Payment',
 			'ambassador.ambassador_details' => 'Ambassador details',
+			'ambassador.influencer_details' => 'Influencer details',
+			'ambassador.brandface_details' => 'Brandface details',
 			'ambassador.information' => 'Information',
 			'ambassador.no_information_provided' => 'No information provided.',
 			'ambassador.niche' => 'Niche',
@@ -2544,10 +2552,10 @@ extension on Translations {
 			'portfolio_ui.receipt' => 'Receipt',
 			'portfolio_ui.download' => 'Download',
 			'portfolio_ui.select_top_package_first' => 'Select a TOP package first.',
-			'portfolio_ui.select_payment_method_first' => 'Select a payment method first.',
-			'portfolio_ui.select_vip_plan_first' => 'Select a VIP plan first.',
 			_ => null,
 		} ?? switch (path) {
+			'portfolio_ui.select_payment_method_first' => 'Select a payment method first.',
+			'portfolio_ui.select_vip_plan_first' => 'Select a VIP plan first.',
 			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} days / ${amount}',
 			'portfolio_ui.expiration_date' => 'Expiration date',
 			'portfolio_ui.top_profile_load_failed' => 'TOP profile data could not be loaded.',

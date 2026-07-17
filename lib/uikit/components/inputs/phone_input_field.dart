@@ -11,11 +11,19 @@ class PhoneInputField extends StatefulWidget {
     required this.controller,
     this.errorText,
     this.onChanged,
+    this.labelText,
+    this.validator,
   });
 
   final TextEditingController controller;
   final String? errorText;
   final ValueChanged<String>? onChanged;
+
+  /// Floating label / hint. Defaults to the login "phone number" label.
+  final String? labelText;
+
+  /// Optional form validator (so the field participates in `Form.validate`).
+  final String? Function(String?)? validator;
 
   @override
   State<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -31,10 +39,12 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    final label = widget.labelText ?? t.login.phone_number;
+    return TextFormField(
       controller: _controller,
       inputFormatters: [maskFormatter],
       keyboardType: TextInputType.phone,
+      validator: widget.validator,
       onChanged: (value) => widget.onChanged?.call(value),
       decoration: InputDecoration(
         errorText: widget.errorText,
@@ -44,11 +54,11 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           child: Text('+998', style: Typographies.bodyLarge),
         ),
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-        labelText: t.login.phone_number,
+        labelText: label,
         labelStyle: Typographies.bodySmall.copyWith(
           color: AppColors.mutedBlack,
         ),
-        hintText: t.login.phone_number,
+        hintText: label,
         hintStyle: Typographies.bodyLarge.copyWith(color: AppColors.mutedBlack),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),
@@ -63,6 +73,10 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           borderSide: BorderSide(width: 1, color: AppColors.primary),
         ),
         errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(999),
+          borderSide: BorderSide(width: 1, color: AppColors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),
           borderSide: BorderSide(width: 1, color: AppColors.red),
         ),

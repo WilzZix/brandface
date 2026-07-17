@@ -484,6 +484,8 @@
   },
   "ambassador": {
     "ambassador_details": "Ambassador tafsilotlari",
+    "influencer_details": "Influencer tafsilotlari",
+    "brandface_details": "Brandface tafsilotlari",
     "information": "Ma'lumot",
     "no_information_provided": "Ma'lumot berilmagan.",
     "niche": "Yo'nalish",
