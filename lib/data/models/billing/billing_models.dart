@@ -4,6 +4,9 @@ final class BillingPlanModel extends BillingPlanEntity {
   const BillingPlanModel({
     required super.id,
     required super.name,
+    super.audience,
+    super.trialAvailable,
+    super.trialDays,
     super.priceMonthlyUsd,
     super.priceMonthlyUzs,
     super.maxOffersPerMonth,
@@ -23,6 +26,9 @@ final class BillingPlanModel extends BillingPlanEntity {
     return BillingPlanModel(
       id: _toInt(json['id']),
       name: json['name']?.toString() ?? 'Plan',
+      audience: _nullableString(json['audience']),
+      trialAvailable: json['trial_available'] == true,
+      trialDays: _toInt(json['trial_days']),
       priceMonthlyUsd: _nullableString(json['price_monthly_usd']),
       priceMonthlyUzs: _nullableString(json['price_monthly_uzs']),
       maxOffersPerMonth: _toInt(json['max_offers_per_month']),

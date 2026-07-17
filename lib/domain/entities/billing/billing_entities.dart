@@ -3,6 +3,12 @@ import 'package:equatable/equatable.dart';
 base class BillingPlanEntity extends Equatable {
   final int id;
   final String name;
+
+  /// Which role this plan is for: `'brand'` or `'influencer'`. Used to only
+  /// show the plans relevant to the current user's role.
+  final String? audience;
+  final bool trialAvailable;
+  final int trialDays;
   final String? priceMonthlyUsd;
   final String? priceMonthlyUzs;
   final int maxOffersPerMonth;
@@ -20,6 +26,9 @@ base class BillingPlanEntity extends Equatable {
   const BillingPlanEntity({
     required this.id,
     required this.name,
+    this.audience,
+    this.trialAvailable = false,
+    this.trialDays = 0,
     this.priceMonthlyUsd,
     this.priceMonthlyUzs,
     this.maxOffersPerMonth = 0,
@@ -47,6 +56,9 @@ base class BillingPlanEntity extends Equatable {
   List<Object?> get props => [
     id,
     name,
+    audience,
+    trialAvailable,
+    trialDays,
     priceMonthlyUsd,
     priceMonthlyUzs,
     maxOffersPerMonth,
