@@ -24,6 +24,30 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// Ba'zi pluginlar (masalan flutter_facebook_auth) Kotlin'ni Java'dan farqli JVM
+// target bilan kompilyatsiya qiladi ("Inconsistent JVM Target Compatibility").
+// AGP tekshiruvi Kotlin EXTENSION'ining jvmTarget'ini o'qiydi — shuning uchun
+// har bir subproject'da kotlin extension'ni 17 ga tenglashtiramiz (Java 17).
+subprojects {
+    // Java'ni ham 17 ga (ba'zi pluginlar 1.8 deb e'lon qiladi).
+    plugins.withId("com.android.library") {
+        extensions.configure<com.android.build.gradle.LibraryExtension>("android") {
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+        }
+    }
+    // Kotlin extension'ni 17 ga.
+    plugins.withId("org.jetbrains.kotlin.android") {
+        extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension>("kotlin") {
+            compilerOptions {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+            }
+        }
+    }
+}
+
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
