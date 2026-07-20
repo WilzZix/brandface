@@ -11,6 +11,9 @@ abstract final class ApiRoutes {
   static String socialAuth = 'accounts/v1/auth/social/';
   static String linkedinCode = 'accounts/v1/auth/linkedin-code/';
 
+  /// FCM push — qurilma tokenini saqlash/yangilash (PUT) va o'chirish (DELETE).
+  static String deviceToken = 'accounts/v1/auth/device-token/';
+
   ///Registration
   static String registration = 'accounts/v1/register/influencer/';
   static String brandRegistration = 'accounts/v1/register/brand/';

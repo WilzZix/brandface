@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:brandface/domain/entities/otp_entity.dart';
 import 'package:brandface/domain/entities/social_auth_entity.dart';
@@ -13,6 +15,7 @@ import '../../../domain/usecase/login/get_me_use_case.dart';
 import '../../../domain/usecase/login/params/verify_otp_params.dart';
 import '../../../domain/usecase/login/send_otp_usecase.dart';
 import '../../../utils/services/app_auth_local_service.dart';
+import '../../../utils/services/firebase/fcm_service.dart';
 import '../../../utils/services/firebase/firebase_bootstrap.dart';
 import '../../../utils/services/profile_service.dart';
 import '../../../utils/services/social_auth/social_auth_service.dart';
@@ -88,6 +91,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           accessToken: otpEntity.access ?? '',
           refreshToken: otpEntity.refresh ?? '',
         );
+
+        // Access token tayyor — FCM tokenni backendga registratsiya qilamiz.
+        unawaited(FcmService.instance.syncToken());
 
         final meResult = await _getMeUseCase.call(params: null);
 
@@ -169,6 +175,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           accessToken: entity.access ?? '',
           refreshToken: entity.refresh ?? '',
         );
+
+        // Access token tayyor — FCM tokenni backendga registratsiya qilamiz.
+        unawaited(FcmService.instance.syncToken());
 
         final meResult = await _getMeUseCase.call(params: null);
         await meResult.fold(

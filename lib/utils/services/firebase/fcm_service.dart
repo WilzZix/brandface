@@ -20,9 +20,14 @@ final class FcmService {
   StreamSubscription<String>? _tokenRefreshSub;
   bool _started = false;
 
-  /// Backendga FCM tokenini yuborish uchun callback. App auth bo'lgan
-  /// joyda (login muvaffaqiyat / splash) o'rnatiladi.
+  /// Backendga FCM tokenini yuborish uchun callback (PUT device-token).
+  /// App ishga tushganda [start] ichida ulanadi. Faqat user login qilgan
+  /// bo'lsa haqiqiy so'rov yuborishi kerak (guard callback ichida).
   Future<void> Function(String token)? onTokenAvailable;
+
+  /// Backenddan tokenni o'chirish uchun callback (DELETE device-token).
+  /// Logout'dan oldin [unregister] orqali chaqiriladi.
+  Future<void> Function()? onTokenDelete;
 
   /// Push xabar foreground'da kelganda chaqiriladigan callback.
   void Function(RemoteMessage message)? onForegroundMessage;
@@ -89,6 +94,34 @@ final class FcmService {
     } catch (e) {
       debugPrint('[FCM] start failed: $e');
     }
+  }
+
+  /// Joriy FCM tokenni qayta olib backendga yuborish. Login muvaffaqiyatidan
+  /// keyin chaqiriladi — o'sha paytda access token tayyor bo'lgani uchun PUT
+  /// haqiqiy bajariladi (app ochilishidagi [start] user login qilmagan bo'lsa
+  /// tokenni yubormay o'tkazib yuborgan bo'lishi mumkin).
+  Future<void> syncToken() async {
+    if (!FirebaseBootstrap.isInitialized) return;
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        await onTokenAvailable?.call(token);
+      }
+    } catch (e) {
+      debugPrint('[FCM] syncToken failed: $e');
+    }
+  }
+
+  /// Logout'dan oldin chaqiriladi: backenddan qurilma tokenini o'chiradi
+  /// (access token hali amal qilayotganda), so'ng lokal FCM tokenni bekor
+  /// qiladi. Xatolar logout oqimini to'xtatmasligi kerak.
+  Future<void> unregister() async {
+    try {
+      await onTokenDelete?.call();
+    } catch (e) {
+      debugPrint('[FCM] unregister (backend) failed: $e');
+    }
+    await deleteToken();
   }
 
   Future<void> stop() async {

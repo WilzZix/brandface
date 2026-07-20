@@ -15,6 +15,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'core/di/app_di.dart';
 import 'core/router/app_router.dart';
+import 'data/data_source/network_data_source/device_token/device_token_data_source.dart';
+import 'utils/services/app_auth_local_service.dart';
 import 'utils/services/app_language_service.dart';
 import 'utils/services/firebase/fcm_service.dart';
 import 'utils/services/firebase/firebase_bootstrap.dart';
@@ -25,10 +27,37 @@ void main() async {
   await AppDi.init();
   final savedLocale = await AppLanguageService(prefs: sl()).getAppLocale();
   LocaleSettings.setLocale(savedLocale);
+  _wireFcm();
   // FCM background'da ham yoqilsin — login'siz ham push qabul qilish uchun.
   // Token backendga keyinroq (auth bo'lganda) registratsiya qilinadi.
   unawaited(FcmService.instance.start());
   runApp(TranslationProvider(child: const MyApp()));
+}
+
+/// FCM token'ni backend device-token endpoint'i bilan bog'lash.
+///
+/// `onTokenAvailable` — token olinganda yoki aylanganda backendga PUT qiladi,
+/// lekin faqat user login qilgan bo'lsa (aks holda 401 bo'lardi). App ochilib
+/// user allaqachon login bo'lsa, `start()` ichidagi getToken shu callback'ni
+/// ishga tushirib tokenni yuboradi. Login muvaffaqiyatidan keyin esa
+/// `FcmService.instance.syncToken()` alohida chaqiriladi.
+void _wireFcm() {
+  final authLocal = sl<IAuthLocalService>();
+  final deviceTokenDs = sl<DeviceTokenDataSource>();
+
+  FcmService.instance.onTokenAvailable = (token) async {
+    if (!authLocal.isLoggedIn()) return;
+    try {
+      await deviceTokenDs.registerToken(token);
+    } catch (e) {
+      debugPrint('[FCM] registerToken failed: $e');
+    }
+  };
+
+  FcmService.instance.onTokenDelete = () async {
+    if (!authLocal.isLoggedIn()) return;
+    await deviceTokenDs.deleteToken();
+  };
 }
 
 class MyApp extends StatelessWidget {

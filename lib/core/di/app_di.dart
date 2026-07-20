@@ -1,5 +1,6 @@
 import 'package:brandface/core/network/dio_client.dart';
 import 'package:brandface/data/data_source/network_data_source/billing/billing_data_source.dart';
+import 'package:brandface/data/data_source/network_data_source/device_token/device_token_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/home/home_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/login/login_data_source.dart';
 import 'package:brandface/data/data_source/network_data_source/message/message_data_source.dart';
@@ -175,6 +176,9 @@ abstract final class AppDi {
     sl.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(sl()));
     sl.registerLazySingleton<BillingDataSource>(
       () => BillingDataSourceImpl(sl()),
+    );
+    sl.registerLazySingleton<DeviceTokenDataSource>(
+      () => DeviceTokenDataSourceImpl(sl()),
     );
     sl.registerLazySingleton<NotificationDataSource>(
       () => NotificationDataSourceImpl(sl()),
