@@ -59,14 +59,16 @@ final class FcmService {
         sound: true,
       );
 
-      // Token olish.
-      final token = await messaging.getToken();
+      // Token olish (iOS'da APNS tokeni kelguncha kutiladi).
+      final token = await _fetchToken();
       if (token != null) {
         debugPrint('[FCM] token: ${token.substring(0, 16)}…');
         await onTokenAvailable?.call(token);
       }
 
-      // Token yangilanganda backendga qayta yuborish.
+      // Token yangilanganda backendga qayta yuborish. iOS'da APNS tokeni
+      // start paytida hali kelmagan bo'lsa, FCM token keyinroq shu yerda
+      // paydo bo'ladi va backendga yuboriladi.
       _tokenRefreshSub = messaging.onTokenRefresh.listen((t) {
         debugPrint('[FCM] token refreshed: ${t.substring(0, 16)}…');
         onTokenAvailable?.call(t);
@@ -101,15 +103,49 @@ final class FcmService {
   /// haqiqiy bajariladi (app ochilishidagi [start] user login qilmagan bo'lsa
   /// tokenni yubormay o'tkazib yuborgan bo'lishi mumkin).
   Future<void> syncToken() async {
-    if (!FirebaseBootstrap.isInitialized) return;
+    debugPrint('[FCM] syncToken() called');
+    if (!FirebaseBootstrap.isInitialized) {
+      debugPrint('[FCM] syncToken skipped: Firebase not initialized');
+      return;
+    }
     try {
-      final token = await FirebaseMessaging.instance.getToken();
+      final token = await _fetchToken();
+      debugPrint('[FCM] getToken -> ${token == null ? "null" : "${token.substring(0, 16)}…"}');
       if (token != null) {
+        if (onTokenAvailable == null) {
+          debugPrint('[FCM] syncToken: onTokenAvailable callback ULANMAGAN!');
+        }
         await onTokenAvailable?.call(token);
       }
     } catch (e) {
       debugPrint('[FCM] syncToken failed: $e');
     }
+  }
+
+  /// FCM tokenini oladi. iOS'da `getToken()` avval APNS tokenini talab qiladi —
+  /// u odatda app ochilgach bir-necha soniyada keladi. Shuning uchun APNS
+  /// tokeni paydo bo'lguncha qisqa muddat (max ~10s) poll qilamiz.
+  /// Simulyatorda APNS umuman kelmasligi mumkin — u holda `null` qaytadi
+  /// (crash bo'lmaydi) va token keyin `onTokenRefresh` orqali yuboriladi.
+  Future<String?> _fetchToken() async {
+    final messaging = FirebaseMessaging.instance;
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      var apns = await messaging.getAPNSToken();
+      var tries = 0;
+      while (apns == null && tries < 10) {
+        await Future.delayed(const Duration(seconds: 1));
+        apns = await messaging.getAPNSToken();
+        tries++;
+      }
+      debugPrint('[FCM] APNS token: ${apns == null ? "null (kelmadi — simulyator?)" : "bor"}');
+      if (apns == null) return null;
+    }
+    final token = await messaging.getToken();
+    // Firebase Console'dan test push yuborish uchun to'liq token (faqat debug).
+    if (kDebugMode && token != null) {
+      debugPrint('[FCM] FULL TOKEN (test uchun): $token');
+    }
+    return token;
   }
 
   /// Logout'dan oldin chaqiriladi: backenddan qurilma tokenini o'chiradi

@@ -162,6 +162,8 @@ PODS:
   - flutter_facebook_auth (7.1.5):
     - FBSDKLoginKit (= 18.0.2)
     - Flutter
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_secure_storage_darwin (10.0.0):
     - Flutter
     - FlutterMacOS
@@ -278,6 +280,7 @@ DEPENDENCIES:
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - Flutter (from `Flutter`)
   - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_secure_storage_darwin (from `.symlinks/plugins/flutter_secure_storage_darwin/darwin`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
@@ -341,6 +344,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_facebook_auth:
     :path: ".symlinks/plugins/flutter_facebook_auth/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_secure_storage_darwin:
     :path: ".symlinks/plugins/flutter_secure_storage_darwin/darwin"
   google_sign_in_ios:
@@ -386,6 +391,7 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: e17c654ef1f1a616b0b33054e663ad1035c8fd40
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_facebook_auth: 08ab1a6be157d7fce8348b881787e7608f763267
+  flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
   flutter_secure_storage_darwin: 557817588b80e60213cbecb573c45c76b788018d
   google_sign_in_ios: 7411fab6948df90490dc4620ecbcabdc3ca04017
   GoogleAdsOnDeviceConversion: 2be6297a4f048459e0ae17fad9bfd2844e10cf64

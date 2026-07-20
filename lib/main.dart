@@ -20,6 +20,7 @@ import 'utils/services/app_auth_local_service.dart';
 import 'utils/services/app_language_service.dart';
 import 'utils/services/firebase/fcm_service.dart';
 import 'utils/services/firebase/firebase_bootstrap.dart';
+import 'utils/services/firebase/local_notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +28,7 @@ void main() async {
   await AppDi.init();
   final savedLocale = await AppLanguageService(prefs: sl()).getAppLocale();
   LocaleSettings.setLocale(savedLocale);
+  await LocalNotificationService.instance.init();
   _wireFcm();
   // FCM background'da ham yoqilsin — login'siz ham push qabul qilish uchun.
   // Token backendga keyinroq (auth bo'lganda) registratsiya qilinadi.
@@ -46,9 +48,16 @@ void _wireFcm() {
   final deviceTokenDs = sl<DeviceTokenDataSource>();
 
   FcmService.instance.onTokenAvailable = (token) async {
-    if (!authLocal.isLoggedIn()) return;
+    final loggedIn = authLocal.isLoggedIn();
+    debugPrint('[FCM] onTokenAvailable fired (loggedIn=$loggedIn)');
+    if (!loggedIn) {
+      debugPrint('[FCM] PUT o\'tkazib yuborildi: user login qilmagan');
+      return;
+    }
     try {
+      debugPrint('[FCM] PUT device-token ...');
       await deviceTokenDs.registerToken(token);
+      debugPrint('[FCM] PUT device-token OK');
     } catch (e) {
       debugPrint('[FCM] registerToken failed: $e');
     }
@@ -57,6 +66,12 @@ void _wireFcm() {
   FcmService.instance.onTokenDelete = () async {
     if (!authLocal.isLoggedIn()) return;
     await deviceTokenDs.deleteToken();
+  };
+
+  // Foreground push kelganda: Android'da tizim banner'ini ko'rsatamiz
+  // (iOS'da FCM buni o'zi qiladi).
+  FcmService.instance.onForegroundMessage = (message) {
+    LocalNotificationService.instance.showFromMessage(message);
   };
 }
 

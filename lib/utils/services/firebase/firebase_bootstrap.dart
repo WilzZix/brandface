@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brandface/firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -53,8 +54,11 @@ final class FirebaseBootstrap {
   static Future<bool> initialize() async {
     if (_initialized) return true;
     try {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
       _initialized = true;
+      debugPrint('[Firebase] initializeApp OK');
 
       // Crashlytics — har doim yoqilgan. Debug rejimida sinab ko'rish uchun
       // ham xatolar Firebase Console DebugView'ga keladi. Release'da haqiqiy
