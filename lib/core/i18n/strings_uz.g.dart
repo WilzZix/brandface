@@ -611,6 +611,23 @@ class _TranslationsAnalyticsUz implements TranslationsAnalyticsEn {
 	@override String get status_rejected => 'Rad etilgan';
 	@override String get status_blocked => 'Bloklangan';
 	@override String get status_pending => 'Kutilmoqda';
+	@override String get choose_an_offer => 'Taklifni tanlang';
+	@override String get choose => 'Tanlang';
+	@override String get download_as_pdf => 'PDF ko\'rinishida yuklab olish';
+	@override String get total_applications_received => 'Jami qabul qilingan arizalar';
+	@override String get top_3_applicant_niches => 'Arizachilarning top 3 yo\'nalishi';
+	@override String get top_3_applicant_regions => 'Arizachilarning top 3 hududi';
+	@override String get all_applications => 'Barcha arizalar';
+	@override String get ai_match_score => 'AI moslik bahosi';
+	@override String get most_viewed_ambassadors => 'Eng ko\'p ko\'rilgan ambassadorlar';
+	@override String get vip_users => 'VIP foydalanuvchilar';
+	@override String get top_users => 'TOP foydalanuvchilar';
+	@override String get browse_all => 'Barchasini ko\'rish';
+	@override String get female => 'Ayollar';
+	@override String get male => 'Erkaklar';
+	@override String get pdf_coming_soon => 'PDF eksport tez orada';
+	@override String get all_offers => 'Barcha takliflar';
+	@override String get top_age_group_label => 'Asosiy yosh guruhi';
 }
 
 // Path: billing_ui
@@ -1263,6 +1280,23 @@ extension on TranslationsUz {
 			'analytics.status_rejected' => 'Rad etilgan',
 			'analytics.status_blocked' => 'Bloklangan',
 			'analytics.status_pending' => 'Kutilmoqda',
+			'analytics.choose_an_offer' => 'Taklifni tanlang',
+			'analytics.choose' => 'Tanlang',
+			'analytics.download_as_pdf' => 'PDF ko\'rinishida yuklab olish',
+			'analytics.total_applications_received' => 'Jami qabul qilingan arizalar',
+			'analytics.top_3_applicant_niches' => 'Arizachilarning top 3 yo\'nalishi',
+			'analytics.top_3_applicant_regions' => 'Arizachilarning top 3 hududi',
+			'analytics.all_applications' => 'Barcha arizalar',
+			'analytics.ai_match_score' => 'AI moslik bahosi',
+			'analytics.most_viewed_ambassadors' => 'Eng ko\'p ko\'rilgan ambassadorlar',
+			'analytics.vip_users' => 'VIP foydalanuvchilar',
+			'analytics.top_users' => 'TOP foydalanuvchilar',
+			'analytics.browse_all' => 'Barchasini ko\'rish',
+			'analytics.female' => 'Ayollar',
+			'analytics.male' => 'Erkaklar',
+			'analytics.pdf_coming_soon' => 'PDF eksport tez orada',
+			'analytics.all_offers' => 'Barcha takliflar',
+			'analytics.top_age_group_label' => 'Asosiy yosh guruhi',
 			'billing_ui.error_loading_plan' => 'Rejani yuklashda xatolik',
 			'billing_ui.minimal' => 'Minimal',
 			'billing_ui.deactivate_plan_question' => 'Reja o\'chirilsinmi?',
@@ -1365,6 +1399,8 @@ extension on TranslationsUz {
 			'portfolio_ui.portfolio_details_title' => 'Portfolio tafsilotlari',
 			'portfolio_ui.information' => 'Ma\'lumot',
 			'portfolio_ui.no_description' => 'Tavsif yo\'q',
+			_ => null,
+		} ?? switch (path) {
 			'portfolio_ui.links' => 'Havolalar',
 			'portfolio_ui.no_links_added' => 'Havolalar qo\'shilmagan.',
 			'portfolio_ui.portfolio_images' => 'Portfolio rasmlari',
@@ -1382,8 +1418,6 @@ extension on TranslationsUz {
 			'portfolio_ui.receipt' => 'Kvitansiya',
 			'portfolio_ui.download' => 'Yuklab olish',
 			'portfolio_ui.select_top_package_first' => 'Avval TOP paketni tanlang.',
-			_ => null,
-		} ?? switch (path) {
 			'portfolio_ui.select_payment_method_first' => 'Avval to\'lov usulini tanlang.',
 			'portfolio_ui.select_vip_plan_first' => 'Avval VIP tarifni tanlang.',
 			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} kun / ${amount}',

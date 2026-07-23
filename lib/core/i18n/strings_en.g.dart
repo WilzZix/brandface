@@ -1391,6 +1391,57 @@ class TranslationsAnalyticsEn {
 
 	/// en: 'Pending'
 	String get status_pending => 'Pending';
+
+	/// en: 'Choose an offer'
+	String get choose_an_offer => 'Choose an offer';
+
+	/// en: 'Choose'
+	String get choose => 'Choose';
+
+	/// en: 'Download as PDF'
+	String get download_as_pdf => 'Download as PDF';
+
+	/// en: 'Total applications received'
+	String get total_applications_received => 'Total applications received';
+
+	/// en: 'Top 3 applicant niches'
+	String get top_3_applicant_niches => 'Top 3 applicant niches';
+
+	/// en: 'Top 3 applicant regions'
+	String get top_3_applicant_regions => 'Top 3 applicant regions';
+
+	/// en: 'All applications'
+	String get all_applications => 'All applications';
+
+	/// en: 'AI Match Score'
+	String get ai_match_score => 'AI Match Score';
+
+	/// en: 'Most viewed ambassadors'
+	String get most_viewed_ambassadors => 'Most viewed ambassadors';
+
+	/// en: 'VIP users'
+	String get vip_users => 'VIP users';
+
+	/// en: 'TOP users'
+	String get top_users => 'TOP users';
+
+	/// en: 'Browse all'
+	String get browse_all => 'Browse all';
+
+	/// en: 'Female'
+	String get female => 'Female';
+
+	/// en: 'Male'
+	String get male => 'Male';
+
+	/// en: 'PDF export is coming soon'
+	String get pdf_coming_soon => 'PDF export is coming soon';
+
+	/// en: 'All offers'
+	String get all_offers => 'All offers';
+
+	/// en: 'Top age group'
+	String get top_age_group_label => 'Top age group';
 }
 
 // Path: billing_ui
@@ -2433,6 +2484,23 @@ extension on Translations {
 			'analytics.status_rejected' => 'Rejected',
 			'analytics.status_blocked' => 'Blocked',
 			'analytics.status_pending' => 'Pending',
+			'analytics.choose_an_offer' => 'Choose an offer',
+			'analytics.choose' => 'Choose',
+			'analytics.download_as_pdf' => 'Download as PDF',
+			'analytics.total_applications_received' => 'Total applications received',
+			'analytics.top_3_applicant_niches' => 'Top 3 applicant niches',
+			'analytics.top_3_applicant_regions' => 'Top 3 applicant regions',
+			'analytics.all_applications' => 'All applications',
+			'analytics.ai_match_score' => 'AI Match Score',
+			'analytics.most_viewed_ambassadors' => 'Most viewed ambassadors',
+			'analytics.vip_users' => 'VIP users',
+			'analytics.top_users' => 'TOP users',
+			'analytics.browse_all' => 'Browse all',
+			'analytics.female' => 'Female',
+			'analytics.male' => 'Male',
+			'analytics.pdf_coming_soon' => 'PDF export is coming soon',
+			'analytics.all_offers' => 'All offers',
+			'analytics.top_age_group_label' => 'Top age group',
 			'billing_ui.error_loading_plan' => 'Error loading plan',
 			'billing_ui.minimal' => 'Minimal',
 			'billing_ui.deactivate_plan_question' => 'Deactivate plan?',
@@ -2535,6 +2603,8 @@ extension on Translations {
 			'portfolio_ui.portfolio_details_title' => 'Portfolio details',
 			'portfolio_ui.information' => 'Information',
 			'portfolio_ui.no_description' => 'No description',
+			_ => null,
+		} ?? switch (path) {
 			'portfolio_ui.links' => 'Links',
 			'portfolio_ui.no_links_added' => 'No links added.',
 			'portfolio_ui.portfolio_images' => 'Portfolio images',
@@ -2552,8 +2622,6 @@ extension on Translations {
 			'portfolio_ui.receipt' => 'Receipt',
 			'portfolio_ui.download' => 'Download',
 			'portfolio_ui.select_top_package_first' => 'Select a TOP package first.',
-			_ => null,
-		} ?? switch (path) {
 			'portfolio_ui.select_payment_method_first' => 'Select a payment method first.',
 			'portfolio_ui.select_vip_plan_first' => 'Select a VIP plan first.',
 			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} days / ${amount}',

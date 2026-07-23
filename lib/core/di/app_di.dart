@@ -94,6 +94,7 @@ import 'package:brandface/data/data_source/network_data_source/analytics/brand_a
 import 'package:brandface/data/repositories/brand_analytics_repository_impl.dart';
 import 'package:brandface/domain/repository/brand_analytics_repository.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/brand_analytics/brand_analytics_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/people_lists/brand_people_lists_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/bloc/ambassador_detail/ambassador_detail_cubit.dart';
@@ -494,6 +495,11 @@ abstract final class AppDi {
         runMatchingUseCase: sl(),
       ),
     );
-    sl.registerFactory(() => BrandAnalyticsCubit(repository: sl()));
+    sl.registerFactory(
+      () => BrandAnalyticsCubit(repository: sl(), offerRepository: sl()),
+    );
+    sl.registerFactory(
+      () => BrandPeopleListsCubit(getAmbassadorsUseCase: sl()),
+    );
   }
 }

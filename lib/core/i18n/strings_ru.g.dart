@@ -611,6 +611,23 @@ class _TranslationsAnalyticsRu implements TranslationsAnalyticsEn {
 	@override String get status_rejected => 'Отклонен';
 	@override String get status_blocked => 'Заблокирован';
 	@override String get status_pending => 'На рассмотрении';
+	@override String get choose_an_offer => 'Выберите оффер';
+	@override String get choose => 'Выбрать';
+	@override String get download_as_pdf => 'Скачать в PDF';
+	@override String get total_applications_received => 'Всего получено заявок';
+	@override String get top_3_applicant_niches => 'Топ-3 ниши заявителей';
+	@override String get top_3_applicant_regions => 'Топ-3 региона заявителей';
+	@override String get all_applications => 'Все заявки';
+	@override String get ai_match_score => 'AI Match Score';
+	@override String get most_viewed_ambassadors => 'Самые просматриваемые амбассадоры';
+	@override String get vip_users => 'VIP пользователи';
+	@override String get top_users => 'TOP пользователи';
+	@override String get browse_all => 'Смотреть все';
+	@override String get female => 'Женщины';
+	@override String get male => 'Мужчины';
+	@override String get pdf_coming_soon => 'Экспорт в PDF скоро будет доступен';
+	@override String get all_offers => 'Все офферы';
+	@override String get top_age_group_label => 'Основная возрастная группа';
 }
 
 // Path: billing_ui
@@ -1263,6 +1280,23 @@ extension on TranslationsRu {
 			'analytics.status_rejected' => 'Отклонен',
 			'analytics.status_blocked' => 'Заблокирован',
 			'analytics.status_pending' => 'На рассмотрении',
+			'analytics.choose_an_offer' => 'Выберите оффер',
+			'analytics.choose' => 'Выбрать',
+			'analytics.download_as_pdf' => 'Скачать в PDF',
+			'analytics.total_applications_received' => 'Всего получено заявок',
+			'analytics.top_3_applicant_niches' => 'Топ-3 ниши заявителей',
+			'analytics.top_3_applicant_regions' => 'Топ-3 региона заявителей',
+			'analytics.all_applications' => 'Все заявки',
+			'analytics.ai_match_score' => 'AI Match Score',
+			'analytics.most_viewed_ambassadors' => 'Самые просматриваемые амбассадоры',
+			'analytics.vip_users' => 'VIP пользователи',
+			'analytics.top_users' => 'TOP пользователи',
+			'analytics.browse_all' => 'Смотреть все',
+			'analytics.female' => 'Женщины',
+			'analytics.male' => 'Мужчины',
+			'analytics.pdf_coming_soon' => 'Экспорт в PDF скоро будет доступен',
+			'analytics.all_offers' => 'Все офферы',
+			'analytics.top_age_group_label' => 'Основная возрастная группа',
 			'billing_ui.error_loading_plan' => 'Ошибка загрузки плана',
 			'billing_ui.minimal' => 'Минимальный',
 			'billing_ui.deactivate_plan_question' => 'Отключить план?',
@@ -1365,6 +1399,8 @@ extension on TranslationsRu {
 			'portfolio_ui.portfolio_details_title' => 'Детали портфолио',
 			'portfolio_ui.information' => 'Информация',
 			'portfolio_ui.no_description' => 'Нет описания',
+			_ => null,
+		} ?? switch (path) {
 			'portfolio_ui.links' => 'Ссылки',
 			'portfolio_ui.no_links_added' => 'Ссылки не добавлены.',
 			'portfolio_ui.portfolio_images' => 'Изображения портфолио',
@@ -1382,8 +1418,6 @@ extension on TranslationsRu {
 			'portfolio_ui.receipt' => 'Квитанция',
 			'portfolio_ui.download' => 'Скачать',
 			'portfolio_ui.select_top_package_first' => 'Сначала выберите пакет TOP.',
-			_ => null,
-		} ?? switch (path) {
 			'portfolio_ui.select_payment_method_first' => 'Сначала выберите способ оплаты.',
 			'portfolio_ui.select_vip_plan_first' => 'Сначала выберите VIP-план.',
 			'portfolio_ui.boost_package_label' => ({required Object days, required Object amount}) => '${days} дн. / ${amount}',

@@ -12,7 +12,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/registration/registration_entity.dart';
 import '../../presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
-import '../../presentation/home_page/brand/bloc/brand_stats_cubit.dart';
 import '../../presentation/home_page/brand/bloc/collaboration_offers_cubit.dart';
 import '../../presentation/home_page/brand/bloc/create_offer/create_offer_cubit.dart';
 import '../../presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
@@ -34,6 +33,7 @@ import '../../presentation/home_page/brand/ui/favourites_page.dart';
 import '../../presentation/home_page/brand/bloc/favourites/favourites_cubit.dart';
 import '../../presentation/home_page/brand/ui/brand_analytics_page.dart';
 import '../../presentation/home_page/brand/bloc/brand_analytics/brand_analytics_cubit.dart';
+import '../../presentation/home_page/brand/bloc/people_lists/brand_people_lists_cubit.dart';
 import '../../presentation/home_page/brand/ui/brand_plan_page.dart';
 import '../../presentation/home_page/brand/ui/brand_offer_detail_page.dart';
 import '../../presentation/home_page/brand/ui/collaboration_offers_page.dart';
@@ -145,11 +145,11 @@ final class AppRouter {
         name: BrandHomePage.tag,
         builder: (_, _) => MultiBlocProvider(
           providers: [
-            BlocProvider<BrandStatsCubit>(
-              create: (context) => sl<BrandStatsCubit>()..loadStats(),
+            BlocProvider<BrandAnalyticsCubit>(
+              create: (context) => sl<BrandAnalyticsCubit>()..load(),
             ),
-            BlocProvider<AiMatchingCubit>(
-              create: (context) => sl<AiMatchingCubit>()..init(),
+            BlocProvider<BrandPeopleListsCubit>(
+              create: (context) => sl<BrandPeopleListsCubit>()..loadAll(),
             ),
             BlocProvider<ProfileInformationCubit>(
               create: (context) =>
@@ -415,8 +415,13 @@ final class AppRouter {
         builder: (_, state) {
           final args = state.extra as AmbassadorsPageArguments?;
           return BlocProvider<AmbassadorsCubit>(
-            create: (context) => sl<AmbassadorsCubit>()..load(role: args?.role),
-            child: AmbassadorsPage(title: args?.title, role: args?.role),
+            create: (context) => sl<AmbassadorsCubit>()
+              ..load(role: args?.role, filter: args?.filter),
+            child: AmbassadorsPage(
+              title: args?.title,
+              role: args?.role,
+              initialFilter: args?.filter,
+            ),
           );
         },
       ),

@@ -16,16 +16,21 @@ class AmbassadorsPageArguments {
   final String? role;
   final String? title;
 
-  const AmbassadorsPageArguments({this.role, this.title});
+  /// Pre-applied filter, e.g. the brand home page's "Browse all" under VIP or
+  /// TOP users opening the list already narrowed to that rank.
+  final AmbassadorsFilterParams? filter;
+
+  const AmbassadorsPageArguments({this.role, this.title, this.filter});
 }
 
 class AmbassadorsPage extends StatefulWidget {
-  const AmbassadorsPage({super.key, this.title, this.role});
+  const AmbassadorsPage({super.key, this.title, this.role, this.initialFilter});
 
   static const String tag = '/ambassadors';
 
   final String? title;
   final String? role;
+  final AmbassadorsFilterParams? initialFilter;
 
   @override
   State<AmbassadorsPage> createState() => _AmbassadorsPageState();
@@ -37,6 +42,12 @@ class _AmbassadorsPageState extends State<AmbassadorsPage> {
   _SortOption _sortOption = _SortOption.ranking;
   AmbassadorsFilterParams? _filterParams;
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _filterParams = widget.initialFilter;
+  }
 
   @override
   void dispose() {

@@ -2,19 +2,26 @@ import 'package:brandface/core/constants/app_assets.dart';
 import 'package:brandface/uikit/components/avatar/avatar_placeholder.dart';
 import 'package:brandface/core/constants/api_routes.dart';
 import 'package:brandface/core/i18n/strings.g.dart';
-import 'package:brandface/domain/entities/ai_matching/ai_match_result_entity.dart';
-import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_cubit.dart';
-import 'package:brandface/presentation/home_page/brand/bloc/ai_matching/ai_matching_state.dart';
-import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_cubit.dart';
-import 'package:brandface/presentation/home_page/brand/bloc/brand_stats_state.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/ambassadors/ambassadors_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/brand_analytics/brand_analytics_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/brand_analytics/brand_analytics_state.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/people_lists/brand_people_lists_cubit.dart';
+import 'package:brandface/presentation/home_page/brand/bloc/people_lists/brand_people_lists_state.dart';
+import 'package:brandface/presentation/home_page/brand/ui/ambassador_details_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_profile_menu_page.dart';
+import 'package:brandface/presentation/home_page/brand/ui/widgets/ai_insights_section.dart';
+import 'package:brandface/presentation/home_page/brand/ui/widgets/ambassador_row_card.dart';
+import 'package:brandface/presentation/home_page/brand/ui/widgets/audience_insights_section.dart';
+import 'package:brandface/presentation/home_page/brand/ui/widgets/brand_activity_summary.dart';
+import 'package:brandface/presentation/home_page/brand/ui/widgets/brand_home_primitives.dart';
+import 'package:brandface/presentation/home_page/brand/ui/widgets/offer_performance_section.dart';
+import 'package:brandface/presentation/home_page/brand/ui/widgets/people_list_section.dart';
 import 'package:brandface/presentation/home_page/profile/bloc/profile_information/profile_information_cubit.dart';
 import 'package:brandface/presentation/home_page/brand/ui/ai_matching_results_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/favourites_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/ambassadors_page.dart';
 import 'package:brandface/presentation/home_page/brand/ui/brand_analytics_page.dart';
-import 'package:brandface/uikit/components/buttons/buttons.dart';
-import 'package:brandface/uikit/components/ui_components/badge.dart';
+import 'package:brandface/presentation/home_page/brand/ui/shared/influencer_card_widgets.dart';
 import 'package:brandface/uikit/tokens/colors.dart';
 import 'package:brandface/uikit/typography/typography.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +44,35 @@ class BrandHomePage extends StatefulWidget {
 class _BrandHomePageState extends State<BrandHomePage> {
   bool _isOpen = false;
 
+  /// Which side of the AI Matching toggle is showing: 0 influencers,
+  /// 1 ambassadors.
+  int _aiTab = 0;
+
+  static const _sectionGap = SizedBox(height: 40);
+
   void _toggleMenu() {
     setState(() {
       _isOpen = !_isOpen;
     });
+  }
+
+  void _openAmbassador(int id, String title) {
+    context.pushNamed(AmbassadorDetailsPage.tag, extra: (id, title));
+  }
+
+  void _openAmbassadorList({
+    String? role,
+    String? title,
+    AmbassadorsFilterParams? filter,
+  }) {
+    context.pushNamed(
+      AmbassadorsPage.tag,
+      extra: AmbassadorsPageArguments(
+        role: role,
+        title: title ?? t.brand.ambassadors,
+        filter: filter,
+      ),
+    );
   }
 
   @override
@@ -128,140 +160,13 @@ class _BrandHomePageState extends State<BrandHomePage> {
                     SizedBox(width: 16),
                   ],
                 ),
-                SliverToBoxAdapter(child: SizedBox(height: 32)),
-                SliverToBoxAdapter(
-                  child: Text(
-                    t.brand.offers_and_applications,
-                    style: Typographies.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverToBoxAdapter(
-                  child: BlocBuilder<BrandStatsCubit, BrandStatsState>(
-                    builder: (context, state) {
-                      final activeOffers = state is BrandStatsLoaded
-                          ? state.activeOffersCount.toString()
-                          : state is BrandStatsLoading
-                          ? '...'
-                          : '—';
-                      final applications = state is BrandStatsLoaded
-                          ? state.totalApplicationsCount.toString()
-                          : state is BrandStatsLoading
-                          ? '...'
-                          : '—';
-                      return IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(
-                              child: _BrandStatCard(
-                                title: activeOffers,
-                                description: t.common.active_offers,
-                                onTap: () => context.pushNamed(
-                                  CollaborationOffersPage.tag,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: _BrandStatCard(
-                                title: applications,
-                                description: t.brand.new_applications,
-                                onTap: () => context.pushNamed(
-                                  CollaborationOffersPage.tag,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 32)),
-                SliverToBoxAdapter(
-                  child: Text(
-                    t.brand.ai_matching,
-                    style: Typographies.titleLarge,
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverToBoxAdapter(
-                  child: BlocBuilder<AiMatchingCubit, AiMatchingState>(
-                    builder: (context, state) {
-                      if (state is AiMatchingLoaded &&
-                          state.results.isNotEmpty) {
-                        return _AiOfferHeader(
-                          offerTitle: state.offerTitle,
-                          offerId: state.offerId,
-                        );
-                      }
-                      if (state is AiMatchingEmpty) {
-                        return _AiOfferHeader(
-                          offerTitle: state.offerTitle,
-                          offerId: state.offerId,
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 16)),
-                SliverToBoxAdapter(
-                  child: BlocBuilder<AiMatchingCubit, AiMatchingState>(
-                    builder: (context, state) {
-                      if (state is AiMatchingLoading) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 40),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                      if (state is AiMatchingNoOffers) {
-                        return _AiEmptyState(
-                          message: t.brand.no_active_campaigns_yet,
-                        );
-                      }
-                      if (state is AiMatchingFailure) {
-                        return _AiEmptyState(message: state.message);
-                      }
-                      if (state is AiMatchingEmpty) {
-                        return _AiRunMatchSection(
-                          offerId: state.offerId,
-                          offerTitle: state.offerTitle,
-                        );
-                      }
-                      if (state is AiMatchingRunning) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 40),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ),
-                BlocBuilder<AiMatchingCubit, AiMatchingState>(
-                  builder: (context, state) {
-                    if (state is! AiMatchingLoaded) {
-                      return const SliverToBoxAdapter(child: SizedBox.shrink());
-                    }
-                    return SliverList.separated(
-                      itemCount: state.results.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 24),
-                      itemBuilder: (context, index) {
-                        return _AiMatchItem(item: state.results[index]);
-                      },
-                    );
-                  },
-                ),
+                SliverToBoxAdapter(child: SizedBox(height: 24)),
+                SliverToBoxAdapter(child: _analyticsSections()),
+                SliverToBoxAdapter(child: _sectionGap),
+                SliverToBoxAdapter(child: _peopleSections()),
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: 16 + MediaQuery.of(context).padding.bottom,
+                    height: 96 + MediaQuery.of(context).padding.bottom,
                   ),
                 ),
               ],
@@ -310,12 +215,9 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         SizedBox(height: 8),
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: () => context.pushNamed(
-                            AmbassadorsPage.tag,
-                            extra: AmbassadorsPageArguments(
-                              role: 'brandface',
-                              title: t.brand.brandfaces,
-                            ),
+                          onTap: () => _openAmbassadorList(
+                            role: 'brandface',
+                            title: t.brand.brandfaces,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -333,12 +235,9 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         SizedBox(height: 8),
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: () => context.pushNamed(
-                            AmbassadorsPage.tag,
-                            extra: AmbassadorsPageArguments(
-                              role: 'ambassador',
-                              title: t.brand.ambassadors,
-                            ),
+                          onTap: () => _openAmbassadorList(
+                            role: 'ambassador',
+                            title: t.brand.ambassadors,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -356,12 +255,9 @@ class _BrandHomePageState extends State<BrandHomePage> {
                         SizedBox(height: 8),
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: () => context.pushNamed(
-                            AmbassadorsPage.tag,
-                            extra: AmbassadorsPageArguments(
-                              role: 'influencer',
-                              title: t.brand.influencers,
-                            ),
+                          onTap: () => _openAmbassadorList(
+                            role: 'influencer',
+                            title: t.brand.influencers,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -467,6 +363,183 @@ class _BrandHomePageState extends State<BrandHomePage> {
       ),
     );
   }
+
+  /// Activity summary → offer performance → AI insights → recommended →
+  /// audience. All five read the same analytics payload, so they share one
+  /// builder and appear together once it lands.
+  Widget _analyticsSections() {
+    return BlocBuilder<BrandAnalyticsCubit, BrandAnalyticsState>(
+      builder: (context, state) {
+        if (state is BrandAnalyticsFailure) return const SizedBox.shrink();
+        if (state is! BrandAnalyticsLoaded) {
+          return const Column(
+            children: [
+              BrandBlockSkeleton(height: 220),
+              SizedBox(height: 16),
+              BrandBlockSkeleton(height: 320),
+            ],
+          );
+        }
+
+        final data = state.data;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BrandActivitySummary(
+              data: data,
+              onOffersTap: () =>
+                  context.pushNamed(CollaborationOffersPage.tag),
+              onApplicationsTap: () =>
+                  context.pushNamed(CollaborationOffersPage.tag),
+            ),
+            _sectionGap,
+            OfferPerformanceSection(state: state),
+            _sectionGap,
+            AiMatchingInsights(data: data),
+            if (data.topRecommendedAmbassadors.isNotEmpty) ...[
+              _sectionGap,
+              TopRecommendedAmbassadors(
+                items: data.topRecommendedAmbassadors,
+                onTap: (id) => _openAmbassador(id, t.ambassador.ambassador_details),
+              ),
+            ],
+            _sectionGap,
+            AudienceInsightsSection(data: data),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Most viewed (from analytics) followed by the three ambassador-endpoint
+  /// blocks. Each hides itself when it has nothing to show.
+  Widget _peopleSections() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _mostViewedSection(),
+        BlocBuilder<BrandPeopleListsCubit, BrandPeopleListsState>(
+          builder: (context, state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!state.vip.isEmpty) ...[
+                  _sectionGap,
+                  _slotSection(
+                    title: t.analytics.vip_users,
+                    slot: state.vip,
+                    detailsTitle: t.ambassador.ambassador_details,
+                    onBrowseAll: () => _openAmbassadorList(
+                      title: t.analytics.vip_users,
+                      filter: const AmbassadorsFilterParams(isVip: true),
+                    ),
+                  ),
+                ],
+                if (!state.top.isEmpty) ...[
+                  _sectionGap,
+                  _slotSection(
+                    title: t.analytics.top_users,
+                    slot: state.top,
+                    detailsTitle: t.ambassador.ambassador_details,
+                    onBrowseAll: () => _openAmbassadorList(
+                      title: t.analytics.top_users,
+                      filter: const AmbassadorsFilterParams(isTop: true),
+                    ),
+                  ),
+                ],
+                _sectionGap,
+                _aiMatchingSection(state),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _mostViewedSection() {
+    return BlocBuilder<BrandAnalyticsCubit, BrandAnalyticsState>(
+      builder: (context, state) {
+        if (state is! BrandAnalyticsLoaded) return const SizedBox.shrink();
+        final items = state.data.mostViewedAmbassadors;
+        if (items.isEmpty) return const SizedBox.shrink();
+
+        return PeopleListSection(
+          title: t.analytics.most_viewed_ambassadors,
+          rows: items
+              .take(BrandPeopleListsCubit.previewCount)
+              .map(
+                (a) => AmbassadorRowCard.fromMatchResult(
+                  a,
+                  onTap: () => _openAmbassador(
+                    a.influencerId,
+                    t.ambassador.ambassador_details,
+                  ),
+                ),
+              )
+              .toList(),
+          onBrowseAll: () => _openAmbassadorList(
+            role: 'ambassador',
+            title: t.brand.ambassadors,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _slotSection({
+    required String title,
+    required PeopleSlot slot,
+    required String detailsTitle,
+    required VoidCallback onBrowseAll,
+    Widget? header,
+  }) {
+    if (slot.isLoading) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BrandSectionTitle(title),
+          const SizedBox(height: 16),
+          const BrandBlockSkeleton(height: 240),
+        ],
+      );
+    }
+
+    return PeopleListSection(
+      title: title,
+      header: header,
+      rows: slot.items
+          .map(
+            (a) => AmbassadorRowCard.fromAmbassador(
+              a,
+              onTap: () => _openAmbassador(a.id, detailsTitle),
+            ),
+          )
+          .toList(),
+      onBrowseAll: onBrowseAll,
+    );
+  }
+
+  Widget _aiMatchingSection(BrandPeopleListsState state) {
+    final isInfluencers = _aiTab == 0;
+    final slot = isInfluencers ? state.influencers : state.ambassadors;
+    final role = isInfluencers ? 'influencer' : 'ambassador';
+    final listTitle = isInfluencers ? t.brand.influencers : t.brand.ambassadors;
+    final detailsTitle = isInfluencers
+        ? t.ambassador.influencer_details
+        : t.ambassador.ambassador_details;
+
+    return _slotSection(
+      title: t.brand.ai_matching,
+      slot: slot,
+      detailsTitle: detailsTitle,
+      header: InfluencerToggle(
+        selected: _aiTab,
+        onChanged: (value) => setState(() => _aiTab = value),
+      ),
+      onBrowseAll: () => _openAmbassadorList(role: role, title: listTitle),
+    );
+  }
 }
 
 class _BrandAvatar extends StatelessWidget {
@@ -494,355 +567,4 @@ class _BrandAvatar extends StatelessWidget {
 
   Widget _placeholder() =>
       const AvatarPlaceholder(size: 56, borderRadius: 8);
-}
-
-class _BrandStatCard extends StatelessWidget {
-  const _BrandStatCard({
-    required this.title,
-    required this.description,
-    this.onTap,
-  });
-
-  final String title;
-  final String description;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        decoration: BoxDecoration(
-          color: AppColors.lightBg3,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title, style: Typographies.headlineMedium),
-            const SizedBox(height: 8),
-            Text(description, style: Typographies.bodyMedium),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AiOfferHeader extends StatelessWidget {
-  const _AiOfferHeader({required this.offerTitle, required this.offerId});
-
-  final String offerTitle;
-  final int offerId;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.lightBg3,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Icons.auto_awesome, size: 16, color: AppColors.black),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.brand.ai_matching,
-                  style: Typographies.labelSmall
-                      .copyWith(color: AppColors.mutedBlack),
-                ),
-                Text(
-                  offerTitle,
-                  style: Typographies.labelLarge,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AiRunMatchSection extends StatelessWidget {
-  const _AiRunMatchSection({
-    required this.offerId,
-    required this.offerTitle,
-  });
-
-  final int offerId;
-  final String offerTitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        child: Column(
-          children: [
-            SvgPicture.asset(AppAssets.icEmptyData),
-            const SizedBox(height: 16),
-            Text(
-              t.brand.ai_matching,
-              style: Typographies.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              t.brand.no_active_campaigns_yet,
-              style:
-                  Typographies.bodySmall.copyWith(color: AppColors.mutedBlack),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            AppButtons.primary(
-              title: t.brand.ai_matching,
-              onTap: () {
-                context.read<AiMatchingCubit>().runMatching(offerId, offerTitle);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AiEmptyState extends StatelessWidget {
-  const _AiEmptyState({required this.message});
-
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Column(
-          children: [
-            SvgPicture.asset(AppAssets.icEmptyData),
-            const SizedBox(height: 16),
-            Text(
-              message,
-              style:
-                  Typographies.bodyMedium.copyWith(color: AppColors.mutedBlack),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AiMatchItem extends StatelessWidget {
-  const _AiMatchItem({required this.item});
-
-  final AiMatchResultEntity item;
-
-  @override
-  Widget build(BuildContext context) {
-    final categoryList = item.categories
-        .split(',')
-        .map((c) => c.trim())
-        .where((c) => c.isNotEmpty)
-        .take(3)
-        .toList();
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: SizedBox(
-                height: 80,
-                width: 80,
-                child: item.avatarUrl.isNotEmpty
-                    ? Image.network(
-                        item.avatarUrl.startsWith('http')
-                            ? item.avatarUrl
-                            : '${ApiRoutes.mediaBaseUrl}${item.avatarUrl}',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stack) => _defaultAvatar(),
-                      )
-                    : _defaultAvatar(),
-              ),
-            ),
-            if (item.isTop)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(12),
-                      bottomRight: Radius.circular(12),
-                    ),
-                    color: AppColors.orange,
-                  ),
-                  child: Text(
-                    t.brand.top_label,
-                    style: Typographies.labelSmall,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-          ],
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      item.displayName.isNotEmpty
-                          ? item.displayName
-                          : t.analytics.influencer_number(id: item.influencerId),
-                      style: Typographies.titleMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  if (item.isVerified) ...[
-                    const SizedBox(width: 4),
-                    SvgPicture.asset(AppAssets.icVerified),
-                  ],
-                  const SizedBox(width: 8),
-                  _ScoreBadge(score: item.score),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Wrap(
-                spacing: 4,
-                runSpacing: 4,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  if (item.averageRating != '0') ...[
-                    SvgPicture.asset(
-                      AppAssets.icStar,
-                      colorFilter: ColorFilter.mode(
-                        AppColors.lightBg2,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    Text(
-                      item.averageRating,
-                      style: Typographies.bodySmall.copyWith(
-                        color: AppColors.mutedBlack,
-                      ),
-                    ),
-                    Text('·'),
-                  ],
-                  if (item.totalFollowers.isNotEmpty &&
-                      item.totalFollowers != '0')
-                    Text(
-                      t.brand.followers_count(count: item.totalFollowers),
-                      style: Typographies.bodySmall.copyWith(
-                        color: AppColors.mutedBlack,
-                      ),
-                    ),
-                  if (item.engagementRate.isNotEmpty &&
-                      item.engagementRate != '0') ...[
-                    Text('·'),
-                    Text(
-                      t.analytics.engagement_rate_short(rate: item.engagementRate),
-                      style: Typographies.bodySmall.copyWith(
-                        color: AppColors.mutedBlack,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-              if (item.city.isNotEmpty || item.region.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_outlined,
-                      size: 12,
-                      color: AppColors.mutedBlack,
-                    ),
-                    const SizedBox(width: 2),
-                    Text(
-                      [item.city, item.region]
-                          .where((s) => s.isNotEmpty)
-                          .join(', '),
-                      style: Typographies.bodySmall.copyWith(
-                        color: AppColors.mutedBlack,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-              if (categoryList.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
-                  children: categoryList
-                      .map((cat) => AppBadge(title: cat))
-                      .toList(),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _defaultAvatar() =>
-      const AvatarPlaceholder(size: 80, borderRadius: 12);
-}
-
-class _ScoreBadge extends StatelessWidget {
-  const _ScoreBadge({required this.score});
-
-  final double score;
-
-  Color get _color {
-    if (score >= 70) return const Color(0xFF497D00);
-    if (score >= 40) return AppColors.orange;
-    return AppColors.mutedBlack;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: _color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: _color.withValues(alpha: 0.4)),
-      ),
-      child: Text(
-        '${score.toStringAsFixed(0)}%',
-        style: Typographies.labelSmall.copyWith(color: _color),
-      ),
-    );
-  }
 }

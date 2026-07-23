@@ -12,7 +12,12 @@ final class BrandAnalyticsRepositoryImpl implements IBrandAnalyticsRepository {
       : _dataSource = dataSource;
 
   @override
-  Future<Either<Failure, BrandAnalyticsEntity>> getBrandAnalytics() {
-    return guard(() => _dataSource.getBrandAnalytics());
+  Future<Either<Failure, BrandAnalyticsEntity>> getBrandAnalytics({
+    int? offerId,
+    String? period,
+  }) {
+    return guard(
+      () => _dataSource.getBrandAnalytics(offerId: offerId, period: period),
+    );
   }
 }

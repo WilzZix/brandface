@@ -6,6 +6,7 @@ base class AmbassadorEntity extends Equatable {
   final String? avatarUrl;
   final bool isVerified;
   final bool isTop;
+  final bool isVip;
   final double? averageRating;
   final int? followersCount;
   final int? yearsOfExperience;
@@ -18,6 +19,7 @@ base class AmbassadorEntity extends Equatable {
     this.avatarUrl,
     required this.isVerified,
     required this.isTop,
+    this.isVip = false,
     this.averageRating,
     this.followersCount,
     this.yearsOfExperience,
@@ -32,6 +34,7 @@ base class AmbassadorEntity extends Equatable {
         avatarUrl,
         isVerified,
         isTop,
+        isVip,
         averageRating,
         followersCount,
         yearsOfExperience,
